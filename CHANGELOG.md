@@ -7,13 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Corrected package description
+
 ## [0.1.0] - 2022-11-23
 
 ### Added
 
 - Created package :tada:
-
-[unreleased]: https://github.com/neolution-ch/react-hook-form-components
 
 [unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.0...HEAD
 [0.1.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.1.0
