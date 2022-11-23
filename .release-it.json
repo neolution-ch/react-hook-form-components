@@ -3,7 +3,7 @@
     "push": true
   },
   "npm": {
-    "publish": false,
+    "publish": true,
     "skipChecks": true
   },
   "github": {
@@ -14,7 +14,7 @@
       "filename": "CHANGELOG.md",
       "addVersionUrl": true,
       "addUnreleased": true,
-      "strictLatest": false
+      "strictLatest": true
     }
   },
   "hooks": {

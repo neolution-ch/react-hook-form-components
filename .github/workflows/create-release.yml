@@ -42,7 +42,7 @@ jobs:
 
       - name: install yarn packages
         run: |
-          yarn
+          yarn --frozen-lockfile
 
       - name: set NPM Token
         run: |

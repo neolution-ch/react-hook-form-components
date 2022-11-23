@@ -16,7 +16,7 @@ it("works with single simple options", () => {
     </Form>,
   );
   cy.get(`#${name}`).click();
-  cy.contains("a", new RegExp(randomOption, "g")).click();
+  cy.get(`a[aria-label='${randomOption}']`).click();
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: randomOption });
 });
@@ -35,7 +35,7 @@ it("works with multiple simple options", () => {
 
   for (const option of randomOptions) {
     cy.get(`#${name}`).click();
-    cy.contains("a", new RegExp(option, "g")).click();
+    cy.get(`a[aria-label='${option}']`).click();
   }
 
   cy.get("input[type=submit]").click({ force: true });
@@ -55,8 +55,7 @@ it("works with single object options", () => {
   );
 
   cy.get(`#${name}`).click();
-  window.console.log(randomOption);
-  cy.contains("a", new RegExp(randomOption.label, "g")).click();
+  cy.get(`a[aria-label='${randomOption.label}']`).click();
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: randomOption.value });
 });
@@ -75,7 +74,7 @@ it("works with multiple object options", () => {
 
   for (const option of randomOptions) {
     cy.get(`#${name}`).click();
-    cy.contains("a", new RegExp(option.label, "g")).click();
+    cy.get(`a[aria-label='${option.label}']`).click();
   }
 
   cy.get("input[type=submit]").click({ force: true });
