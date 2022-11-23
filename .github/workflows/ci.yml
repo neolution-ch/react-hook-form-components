@@ -53,7 +53,7 @@ jobs:
       - run: yarn prettier-check
 
       # Run cypress tests
-      - run: yarn
+      - run: yarn --frozen-lockfile
         working-directory: ./cypress
       # - run: yarn lint
       #   working-directory: ./cypress
