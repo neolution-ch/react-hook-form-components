@@ -42,7 +42,7 @@ jobs:
       - name: set NPM Token
         run: |
           echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
-          echo "//registry.yarnpkg.com/:_authToken=$NPM_TOKEN" > .npmrc
+          echo "//registry.yarnpkg.com/:_authToken=$NPM_TOKEN" >> .npmrc
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN_NEOLUTION }}
 
@@ -53,6 +53,6 @@ jobs:
               params+=(--preRelease=${{ github.event.inputs.pre_release }})
           fi
 
-          yarn release-it --ci "${params[@]}"
+          yarn release-it ${{ github.event.inputs.version_type }} --ci "${params[@]}"
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
