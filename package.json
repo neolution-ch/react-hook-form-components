@@ -1,8 +1,8 @@
 {
   "name": "@neolution-ch/react-hook-form-components",
   "version": "0.0.0",
-  "homepage": "https://neolution-ch.github.io/react-hook-form-components",
   "description": "A small and clean data-table with a lot of integrated functions",
+  "homepage": "https://neolution-ch.github.io/react-hook-form-components",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/neolution-ch/react-hook-form-components"
@@ -17,16 +17,22 @@
   ],
   "scripts": {
     "build": "microbundle --jsx React.createElement --jsxFragment React.Fragment --jsxImportSource react --globals react/jsx-runtime=jsx --tsconfig ./tsconfig.microbundle.json",
+    "build-storybook": "build-storybook",
     "lint": "eslint \"**/*.{ts,tsx}\" --cache --max-warnings 0",
     "prepack": "yarn build",
+    "prepare-pr": "yarn prettier . --write && yarn lint && yarn build && yarn test\"",
     "prettier-check": "prettier --check .",
     "prettier-write": "prettier --write .",
-    "prepare-pr": "yarn prettier . --write && yarn lint && yarn build && yarn test\"",
     "start": "microbundle watch --jsx React.createElement --jsxFragment React.Fragment --jsxImportSource react --globals react/jsx-runtime=jsx --no-compress --tsconfig ./tsconfig.microbundle.json",
     "start-all": "concurrently \"yarn start\" \"yarn start-yalc\"",
     "start-yalc": "yarn nodemon --watch dist -x \"yarn yalc push\"",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "storybook": "start-storybook -p 6006"
+  },
+  "dependencies": {
+    "classnames": "^2.3.2",
+    "react-bootstrap-typeahead": "^6.0.0",
+    "react-datepicker": "^4.8.0",
+    "react-number-format": "^5.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.2",
@@ -78,10 +84,8 @@
   "engines": {
     "node": ">=14"
   },
-  "dependencies": {
-    "classnames": "^2.3.2",
-    "react-bootstrap-typeahead": "^6.0.0",
-    "react-datepicker": "^4.8.0",
-    "react-number-format": "^5.1.1"
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
   }
 }
