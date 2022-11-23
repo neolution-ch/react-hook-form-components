@@ -2,15 +2,19 @@ name: CI
 
 on:
   workflow_dispatch:
-  #push:
-  #branches: [main]
   pull_request:
     branches: [main, develop]
+    types: [opened, synchronize, ready_for_review]
+
+# cancel running actions for current PR if new commits were pushed
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   ci:
+    if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [14.x, 16.x]
