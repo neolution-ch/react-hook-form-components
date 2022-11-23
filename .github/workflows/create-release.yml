@@ -35,6 +35,11 @@ jobs:
         with:
           token: ${{ steps.generate-token.outputs.token }}
 
+      - name: initialize mandatory git config
+        run: |
+          git config user.name "GitHub Release Bot"
+          git config user.email release-bot@neolution.ch
+
       - name: install yarn packages
         run: |
           yarn
