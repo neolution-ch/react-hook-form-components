@@ -1,7 +1,7 @@
 {
   "name": "@neolution-ch/react-hook-form-components",
   "version": "0.0.0",
-  "description": "A small and clean data-table with a lot of integrated functions",
+  "description": "a collection of react hook form components to reduce boilerplate and figuring out how to integrate react hook form with other libraries",
   "homepage": "https://neolution-ch.github.io/react-hook-form-components",
   "repository": {
     "type": "git",
