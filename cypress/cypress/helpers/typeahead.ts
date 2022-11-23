@@ -11,7 +11,7 @@ const generateOptions = (count = 10): GenerateOptionsResult => {
   const objectOptions = faker.helpers.uniqueArray<LabelValueOption>(
     () => ({
       value: faker.datatype.uuid(),
-      label: faker.name.firstName(),
+      label: faker.helpers.unique(faker.name.firstName),
     }),
     count,
   );
@@ -28,7 +28,7 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 const fetchMock = async (options: LabelValueOption[], query: string, simpleOptions = true) => {
   const result = options.filter((x) => x.label.toLowerCase().includes(query.toLowerCase()));
 
-  await delay(faker.datatype.number({ min: 10, max: 2000 }));
+  await delay(faker.datatype.number({ min: 10, max: 1000 }));
 
   if (simpleOptions) {
     return result.map((x) => x.label);
