@@ -1,4 +1,4 @@
-name: On GitHub Release
+name: Notify Slack Channel
 
 on:
   release:
