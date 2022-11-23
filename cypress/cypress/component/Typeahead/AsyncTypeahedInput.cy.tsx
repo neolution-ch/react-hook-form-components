@@ -14,7 +14,7 @@ it("works with single simple options", () => {
     </Form>,
   );
   cy.get(`#${name}`).click().type(randomOption.label);
-  cy.contains("a", new RegExp(randomOption.label, "g")).click();
+  cy.get(`a[aria-label='${randomOption.label}']`).click();
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: randomOption.label });
 });
@@ -33,7 +33,7 @@ it("works with multiple simple options", () => {
 
   for (const randomOption of randomOptions) {
     cy.get(`#${name}`).click().type(randomOption.label);
-    cy.contains("a", new RegExp(randomOption.label, "g")).click();
+    cy.get(`a[aria-label='${randomOption.label}']`).click();
   }
 
   cy.get("input[type=submit]").click({ force: true });
