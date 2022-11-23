@@ -52,6 +52,6 @@ jobs:
               params+=(--preRelease=${{ github.event.inputs.pre_release }})
           fi
 
-          yarn release-it --dry-run --ci "${params[@]}"
+          yarn release-it --ci "${params[@]}"
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
