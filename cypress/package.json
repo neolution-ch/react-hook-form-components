@@ -1,0 +1,30 @@
+{
+  "name": "cypress",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint \"**/*.{ts,tsx}\" --cache --max-warnings 0"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^2.9.10",
+    "@types/node": "18.11.9",
+    "@types/react": "18.0.25",
+    "@types/react-dom": "18.0.8",
+    "eslint": "8.27.0",
+    "eslint-config-next": "13.0.2",
+    "next": "13.0.2",
+    "react-hook-form-components": "link:../dist",
+    "typescript": "4.8.4",
+    "yup": "^0.32.11",
+    "react": "link:../node_modules/react",
+    "react-dom": "link:../node_modules/react-dom",
+    "react-hook-form": "link:../node_modules/react-hook-form"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
+    "cypress": "^11.0.0"
+  }
+}

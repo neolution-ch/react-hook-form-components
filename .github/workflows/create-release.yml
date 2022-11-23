@@ -1,0 +1,57 @@
+name: Create Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_type:
+        type: choice
+        description: Semantic Version Type
+        options:
+          - major
+          - minor
+          - patch
+
+      pre_release:
+        type: choice
+        description: Pre Rlease?
+        options:
+          - stable
+          - alpha
+          - beta
+          - rc
+
+jobs:
+  release-it:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: tibdex/github-app-token@v1
+        id: generate-token
+        with:
+          app_id: ${{ secrets.RELEASE_BOT_APP_ID }}
+          private_key: ${{ secrets.RELEASE_BOT_APP_PRIVATE_KEY }}
+
+      - name: checkout
+        uses: actions/checkout@v3
+        with:
+          token: ${{ steps.generate-token.outputs.token }}
+
+      - name: install yarn packages
+        run: |
+          echo "github.ref	${{ github.ref }}"
+          yarn
+
+      - name: set NPM Token
+        run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN_NEOLUTION }}
+
+      - name: run release-it
+        run: |
+          params=()
+          if [[ ${{ github.event.inputs.pre_release }} != "stable" ]]; then
+              params+=(--preRelease=${{ github.event.inputs.pre_release }})
+          fi
+
+          yarn release-it --dry-run --ci "${params[@]}"
+        env:
+          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}

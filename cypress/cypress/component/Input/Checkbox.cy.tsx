@@ -1,0 +1,78 @@
+import { faker } from "@faker-js/faker";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Form, Input } from "react-hook-form-components";
+import * as yup from "yup";
+import { generateOptions } from "../../helpers/typeahead";
+
+it("checkbox works", () => {
+  const name = faker.random.alpha(10);
+  const schema = yup.object().shape({
+    [name]: yup.boolean(),
+  });
+
+  cy.mount(
+    <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
+      <Input inputType="checkbox" name={name} label={name} />
+
+      <input type={"submit"} />
+    </Form>,
+  );
+
+  cy.get("input[type=submit]").click({ force: true });
+  cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: false });
+
+  cy.contains("label", name).click();
+  cy.get("input[type=submit]").click({ force: true });
+  cy.get("@onSubmitSpy").should("have.been.calledWith", { [name]: true });
+  cy.get("@onSubmitSpy").should("have.callCount", 2);
+});
+
+it("multiple checkboxes pass their value", () => {
+  const name = faker.random.alpha(10);
+  const schema = yup.object().shape({
+    [name]: yup.array().of(yup.string()).required(),
+  });
+
+  const { objectOptions, randomSubset } = generateOptions();
+
+  cy.mount(
+    <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
+      {objectOptions.map((option, i) => (
+        <Input inputType="checkbox" key={option.value} name={name} label={option.label} value={option.value} id={`${name}-${i}`} />
+      ))}
+
+      <input type={"submit"} />
+    </Form>,
+  );
+
+  for (const option of randomSubset) {
+    cy.contains("label", option.label).click();
+  }
+
+  cy.get("input[type=submit]").click({ force: true });
+  cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: randomSubset.map((option) => option.value) });
+});
+
+it("switch works", () => {
+  const name = faker.random.alpha(10);
+  const schema = yup.object().shape({
+    [name]: yup.boolean(),
+  });
+
+  cy.mount(
+    <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
+      <Input inputType="switch" name={name} label={name} />
+
+      <input type={"submit"} />
+    </Form>,
+  );
+
+  cy.get("input[type=submit]").click({ force: true });
+  cy.get("@onSubmitSpy")
+    .should("be.calledOnceWith", { [name]: false })
+    .invoke("resetHistory");
+
+  cy.contains("label", name).click();
+  cy.get("input[type=submit]").click({ force: true });
+  cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: true });
+});

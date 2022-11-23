@@ -1,0 +1,6 @@
+# reference: https://prettier.io/docs/en/options.html
+printWidth: 140
+useTabs: false
+tabWidth: 2
+endOfLine: auto
+trailingComma: all

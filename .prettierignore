@@ -1,0 +1,5 @@
+# ignore artifacts
+dist
+node_modules
+storybook-static
+.next
