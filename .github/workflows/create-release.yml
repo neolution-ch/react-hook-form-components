@@ -37,7 +37,6 @@ jobs:
 
       - name: install yarn packages
         run: |
-          echo "github.ref	${{ github.ref }}"
           yarn
 
       - name: set NPM Token
