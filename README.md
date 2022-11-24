@@ -25,8 +25,8 @@ Supported input types:
 ## Installation
 
 ```bash
-npm install react-hook-form-components
-yarn add react-hook-form-components
+npm install @neolution-ch/react-hook-form-components
+yarn add @neolution-ch/react-hook-form-components
 ```
 
 ## Getting started
