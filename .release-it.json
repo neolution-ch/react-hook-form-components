@@ -3,7 +3,7 @@
     "push": true
   },
   "npm": {
-    "publish": false,
+    "publish": true,
     "skipChecks": true
   },
   "github": {
