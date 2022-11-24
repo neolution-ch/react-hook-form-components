@@ -18,6 +18,6 @@
     }
   },
   "hooks": {
-    "before:git:release": "yarn prettier --write CHANGELOG.md"
+    "before:git:release": "yarn prettier --write CHANGELOG.md && git add CHANGELOG.md"
   }
 }
