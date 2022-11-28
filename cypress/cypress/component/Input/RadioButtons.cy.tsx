@@ -14,7 +14,7 @@ it("radio button works", () => {
 
   cy.mount(
     <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
-      <Input inputType="radio" label="hello" name={name} helpText="help" options={options} />
+      <Input type="radio" label="hello" name={name} helpText="help" options={options} />
       <input type={"submit"} />
     </Form>,
   );

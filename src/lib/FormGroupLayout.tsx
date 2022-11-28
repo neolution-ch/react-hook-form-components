@@ -23,7 +23,7 @@ const FormGroupLayout = <T extends FieldValues>(props: FormGroupLayoutProps<T>) 
   const checkboxLayout = layout === "checkbox";
 
   return (
-    <FormGroup switch={switchLayout} check={checkboxLayout}>
+    <FormGroup switch={switchLayout ? true : undefined} check={checkboxLayout ? true : undefined}>
       <Label check={checkboxLayout || switchLayout} for={id}>
         {label}
       </Label>

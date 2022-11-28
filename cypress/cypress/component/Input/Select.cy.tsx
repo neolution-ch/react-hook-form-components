@@ -14,7 +14,7 @@ it("select works", () => {
 
   cy.mount(
     <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
-      <Input inputType="select" name={name} label={name} options={options} />
+      <Input type="select" name={name} label={name} options={options} />
 
       <input type={"submit"} />
     </Form>,
@@ -36,7 +36,7 @@ it("select multiple works", () => {
 
   cy.mount(
     <Form onSubmit={cy.spy().as("onSubmitSpy")}>
-      <Input inputType="select" multiple name={name} label={name} options={options} />
+      <Input type="select" multiple name={name} label={name} options={options} />
 
       <input type={"submit"} />
     </Form>,

@@ -8,7 +8,7 @@ import { CommonInputProps } from "./types/CommonInputProps";
 import { LabelValueOption } from "./types/LabelValueOption";
 
 interface InputProps<T extends FieldValues> extends CommonInputProps<T> {
-  inputType?: InputType;
+  type?: InputType;
   options?: LabelValueOption[];
   multiple?: boolean;
   value?: string;
@@ -17,26 +17,26 @@ interface InputProps<T extends FieldValues> extends CommonInputProps<T> {
 }
 
 const Input = <T extends FieldValues>(props: InputProps<T>) => {
-  if (props.inputType === "radio" && !props.options) {
+  if (props.type === "radio" && !props.options) {
     throw new Error("options must be provided for radio inputs");
   }
-  if (props.inputType === "select" && !props.options) {
+  if (props.type === "select" && !props.options) {
     throw new Error("options must be provided for select inputs");
   }
-  if (props.multiple && props.inputType !== "select") {
+  if (props.multiple && props.type !== "select") {
     throw new Error("multiple can only be used with select inputs");
   }
-  if ((props.rangeMin || props.rangeMax) && props.inputType !== "range") {
+  if ((props.rangeMin || props.rangeMax) && props.type !== "range") {
     throw new Error("rangeMin and rangeMax can only be used with range inputs");
   }
 
-  const { inputType, options } = props;
+  const { type, options } = props;
 
   const formGroupLayout = (() => {
-    if (inputType === "switch") {
+    if (type === "switch") {
       return "switch";
     }
-    if (inputType === "checkbox") {
+    if (type === "checkbox") {
       return "checkbox";
     }
     return undefined;
@@ -46,7 +46,7 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
 
   return (
     <FormGroupLayout {...props} layout={formGroupLayout}>
-      {inputType === "radio" ? (
+      {type === "radio" ? (
         <>
           {options?.map((option, i) => {
             const optionId = `${id}-${i}`;
