@@ -15,8 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added the possibility to pass a function to the `Form` component to allow accessing the form methods
-=======
+- # Added the possibility to pass a function to the `Form` component to allow accessing the form methods
 
 ## [0.1.2] - 2022-11-24
 
