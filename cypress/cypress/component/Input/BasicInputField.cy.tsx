@@ -37,7 +37,7 @@ describe("Input.cy.tsx", () => {
 
     cy.mount(
       <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
-        <Input inputType="number" name={name} label={name} />
+        <Input type="number" name={name} label={name} />
 
         <input type={"submit"} />
       </Form>,
@@ -147,7 +147,7 @@ describe("Input.cy.tsx", () => {
 
     cy.mount(
       <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
-        <Input inputType="textarea" name={name} label={name} />
+        <Input type="textarea" name={name} label={name} />
 
         <input type={"submit"} />
       </Form>,
@@ -170,7 +170,7 @@ describe("Input.cy.tsx", () => {
 
     cy.mount(
       <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
-        <Input inputType="email" name={name} label={name} />
+        <Input type="email" name={name} label={name} />
 
         <input type={"submit"} />
       </Form>,
@@ -195,7 +195,7 @@ describe("Input.cy.tsx", () => {
 
     cy.mount(
       <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
-        <Input inputType="password" name={name} label={name} />
+        <Input type="password" name={name} label={name} />
 
         <input type={"submit"} />
       </Form>,
@@ -219,7 +219,7 @@ describe("Input.cy.tsx", () => {
 
     cy.mount(
       <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
-        <Input inputType="range" name={name} label={name} rangeMin={min} rangeMax={max} />
+        <Input type="range" name={name} label={name} rangeMin={min} rangeMax={max} />
 
         <input type={"submit"} />
       </Form>,

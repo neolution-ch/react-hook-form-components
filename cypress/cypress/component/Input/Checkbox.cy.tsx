@@ -12,7 +12,7 @@ it("checkbox works", () => {
 
   cy.mount(
     <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
-      <Input inputType="checkbox" name={name} label={name} />
+      <Input type="checkbox" name={name} label={name} />
 
       <input type={"submit"} />
     </Form>,
@@ -38,7 +38,7 @@ it("multiple checkboxes pass their value", () => {
   cy.mount(
     <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
       {objectOptions.map((option, i) => (
-        <Input inputType="checkbox" key={option.value} name={name} label={option.label} value={option.value} id={`${name}-${i}`} />
+        <Input type="checkbox" key={option.value} name={name} label={option.label} value={option.value} id={`${name}-${i}`} />
       ))}
 
       <input type={"submit"} />
@@ -61,7 +61,7 @@ it("switch works", () => {
 
   cy.mount(
     <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
-      <Input inputType="switch" name={name} label={name} />
+      <Input type="switch" name={name} label={name} />
 
       <input type={"submit"} />
     </Form>,

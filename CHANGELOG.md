@@ -10,6 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Dependabot: Bump loader-utils from 1.4.1 to 1.4.2
+- Fixed a warning that was being thrown because of the switch layout
+- Renamed `inputType` to `type`
+
+### Added
+
+- Added the possibility to pass a function to the `Form` component to allow accessing the form methods
 
 ## [0.1.2] - 2022-11-24
 

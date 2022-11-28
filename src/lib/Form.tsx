@@ -1,13 +1,14 @@
-import { PropsWithChildren } from "react";
-import { DeepPartial, FieldValues, FormProvider, Resolver, SubmitHandler, useForm } from "react-hook-form";
+import { ReactNode } from "react";
+import { DeepPartial, FieldValues, FormProvider, Resolver, SubmitHandler, useForm, UseFormReturn } from "react-hook-form";
 
 interface FormProps<T extends FieldValues> {
   onSubmit: SubmitHandler<T>;
   resolver?: Resolver<T>;
   defaultValues?: DeepPartial<T>;
+  children: ((formMethods: UseFormReturn<T, unknown>) => ReactNode) | ReactNode;
 }
 
-const Form = <T extends FieldValues>({ children, onSubmit, resolver, defaultValues }: PropsWithChildren<FormProps<T>>) => {
+const Form = <T extends FieldValues>({ children, onSubmit, resolver, defaultValues }: FormProps<T>) => {
   const formMethods = useForm<T>({ resolver, defaultValues });
   const { handleSubmit } = formMethods;
 
@@ -20,7 +21,7 @@ const Form = <T extends FieldValues>({ children, onSubmit, resolver, defaultValu
           })();
         }}
       >
-        {children}
+        {children instanceof Function ? children(formMethods) : children}
       </form>
     </FormProvider>
   );

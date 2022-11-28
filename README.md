@@ -72,7 +72,7 @@ const schema = yup.object({
 ...
 
 <Form<FormInputs> onSubmit={(data) => console.log(data)} resolver={yupResolver(schema)}>
-    <Input<FormInputs> name={"numberInput"} label={"Number Input"} inputType="number" />
+    <Input<FormInputs> name={"numberInput"} label={"Number Input"} type="number" />
     <input type="submit" />
 </Form>
 ```
