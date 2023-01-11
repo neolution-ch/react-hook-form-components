@@ -29,3 +29,19 @@ it("basic example works", () => {
 
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: todayMidnight.toString() });
 });
+
+it("is disabled", () => {
+  const name = faker.random.word();
+
+  cy.mount(
+    <Form
+      onSubmit={() => {
+        // Do nothing
+      }}
+    >
+      <DatePickerInput label={name} name={name} disabled />
+    </Form>,
+  );
+
+  cy.get(`input[name=${name}]`).should("be.disabled");
+});

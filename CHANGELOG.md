@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `disabled` property to the `Input` component.
+- `disabled` property to components sharing `CommonInputProps`.
+- cypress tests for components implementing new `disabled` property.
 
 ### Changed
 
