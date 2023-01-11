@@ -229,7 +229,7 @@ describe("Input.cy.tsx", () => {
     cy.get("input[type=submit]").click({ force: true });
     cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: selectedValue });
   });
-  
+
   it("is disabled", () => {
     const name = faker.random.word();
 
