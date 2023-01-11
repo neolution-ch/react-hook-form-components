@@ -29,6 +29,7 @@ PatternInputExample.args = {
   numericFormat: {
     thousandSeparator: "'",
   },
+  disabled: false,
 } as FormattedInputProps<FormInterface>;
 PatternInputExample.decorators = [
   (StoryComponent) => (
