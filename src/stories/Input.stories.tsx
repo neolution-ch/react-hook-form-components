@@ -26,6 +26,7 @@ export const InputExample = Template.bind({});
 InputExample.args = {
   name: "name",
   label: "Input Label",
+  disabled: false,
 } as InputProps<FormInterface>;
 InputExample.decorators = [
   (StoryComponent) => (
