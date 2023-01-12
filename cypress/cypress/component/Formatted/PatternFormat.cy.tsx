@@ -4,6 +4,12 @@ import { Form, FormattedInput } from "react-hook-form-components";
 import { PatternFormatProps, patternFormatter } from "react-number-format";
 import * as yup from "yup";
 
+const patternFormat: PatternFormatProps = {
+  format: "###-###-####",
+  allowEmptyFormatting: true,
+  mask: "_",
+};
+
 it("pattern format works", () => {
   const name = faker.random.alpha(10);
   const schema = yup.object().shape({
@@ -11,12 +17,6 @@ it("pattern format works", () => {
   });
 
   const randomDigits = faker.random.numeric(10).toString();
-
-  const patternFormat: PatternFormatProps = {
-    format: "###-###-####",
-    allowEmptyFormatting: true,
-    mask: "_",
-  };
 
   cy.mount(
     <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
@@ -30,4 +30,20 @@ it("pattern format works", () => {
   cy.get(`input[id=${name}]`).should("have.value", patternFormatter(randomDigits, patternFormat));
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: patternFormatter(randomDigits, patternFormat) });
+});
+
+it("is disabled", () => {
+  const name = faker.random.word();
+
+  cy.mount(
+    <Form
+      onSubmit={() => {
+        // Do nothing
+      }}
+    >
+      <FormattedInput name={name} label={name} patternFormat={patternFormat} disabled />
+    </Form>,
+  );
+
+  cy.get(`input[name=${name}]`).should("be.disabled");
 });

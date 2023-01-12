@@ -8,6 +8,7 @@ interface CommonInputProps<T extends FieldValues> {
   name: keyof T;
   id?: string;
   helpText?: ReactNode;
+  disabled?: boolean;
 }
 
 export { CommonInputProps };

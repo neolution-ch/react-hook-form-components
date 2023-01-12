@@ -39,3 +39,20 @@ it("works with multiple simple options", () => {
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: randomOptions.map((o) => o.label) });
 });
+
+it("is disabled", () => {
+  const name = faker.random.word();
+  const options = generateOptions(100);
+
+  cy.mount(
+    <Form
+      onSubmit={() => {
+        // Do nothing
+      }}
+    >
+      <AsyncTypeaheadInput name={name} label={name} queryFn={async (query) => await fetchMock(options.objectOptions, query)} disabled />
+    </Form>,
+  );
+
+  cy.get("input.rbt-input-main").should("be.disabled");
+});

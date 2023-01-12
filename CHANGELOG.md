@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `disabled` property to components sharing `CommonInputProps`.
+- cypress tests for components implementing new `disabled` property.
+
 ### Changed
 
 - Dependabot: Bump decode-uri-component from 0.2.0 to 0.2.2
