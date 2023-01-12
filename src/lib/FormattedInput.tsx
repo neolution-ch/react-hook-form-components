@@ -15,7 +15,7 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
     throw new Error("FormattedInput cannot have both patternFormat and numericFormat");
   }
 
-  const { disabled = false, label, helpText, numericFormat, patternFormat, onChange: propsOnChange, onBlur: propsOnBlur } = props;
+  const { disabled, label, helpText, numericFormat, patternFormat, onChange: propsOnChange, onBlur: propsOnBlur } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
   const { control } = useFormContext();
 

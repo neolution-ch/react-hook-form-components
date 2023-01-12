@@ -10,7 +10,7 @@ interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputPr
 }
 
 const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) => {
-  const { disabled = false, label, helpText, datePickerProps } = props;
+  const { disabled, label, helpText, datePickerProps } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
 
   const { control } = useFormContext();

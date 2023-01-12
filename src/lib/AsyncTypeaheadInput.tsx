@@ -13,7 +13,7 @@ interface AsyncTypeaheadProps<T extends FieldValues> extends CommonInputProps<T>
 }
 
 const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T>) => {
-  const { disabled = false, label, helpText } = props;
+  const { disabled, label, helpText } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
 
   const { control } = useFormContext();
