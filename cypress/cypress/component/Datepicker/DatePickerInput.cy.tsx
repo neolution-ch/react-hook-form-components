@@ -29,3 +29,32 @@ it("basic example works", () => {
 
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: todayMidnight.toString() });
 });
+
+it.only("basic example works", () => {
+  const name = faker.random.alpha(10);
+  const schema = yup.object().shape({
+    [name]: yup.string().required(),
+  });
+
+  cy.mount(
+    <Form
+      onSubmit={cy.spy().as("onSubmitSpy")}
+      resolver={yupResolver(schema)}
+      defaultValues={{
+        [name]: "2023-01-27T00:00:00.000Z",
+      }}
+    >
+      <DatePickerInput name={name} label={name} />
+
+      <input type={"submit"} />
+    </Form>,
+  );
+
+  cy.get("input[type=submit]").click({ force: true });
+
+  const todayMidnight = new Date(2023, 0, 27);
+  todayMidnight.setHours(0, 0, 0, 0);
+  todayMidnight.setMinutes(todayMidnight.getMinutes() - todayMidnight.getTimezoneOffset());
+
+  cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: todayMidnight.toString() });
+});
