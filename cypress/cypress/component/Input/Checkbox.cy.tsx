@@ -76,3 +76,22 @@ it("switch works", () => {
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: true });
 });
+
+it("has disabled checkbox variants", () => {
+  const switchName = faker.random.word();
+  const checkboxName = faker.random.word();
+
+  cy.mount(
+    <Form
+      onSubmit={() => {
+        // Do nothing
+      }}
+    >
+      <Input type="switch" name={switchName} label={switchName} disabled />
+      <Input type="checkbox" name={checkboxName} label={checkboxName} disabled />
+    </Form>,
+  );
+
+  cy.get(`input[name=${switchName}]`).should("be.disabled");
+  cy.get(`input[name=${checkboxName}]`).should("be.disabled");
+});

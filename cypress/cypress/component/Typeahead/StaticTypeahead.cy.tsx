@@ -106,3 +106,20 @@ it("Validation works", () => {
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: randomOption });
 });
+
+it("is disabled", () => {
+  const name = faker.random.word();
+  const { simpleOptions } = generateOptions(100);
+
+  cy.mount(
+    <Form
+      onSubmit={() => {
+        // Do nothing
+      }}
+    >
+      <StaticTypeaheadInput name={name} label={name} options={simpleOptions} disabled />
+    </Form>,
+  );
+
+  cy.get("input.rbt-input-main").should("be.disabled");
+});

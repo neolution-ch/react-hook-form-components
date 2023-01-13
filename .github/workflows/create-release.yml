@@ -10,6 +10,7 @@ on:
           - major
           - minor
           - patch
+          - no-version-update
 
       pre_release:
         type: choice
@@ -34,6 +35,8 @@ jobs:
         uses: actions/checkout@v3
         with:
           token: ${{ steps.generate-token.outputs.token }}
+          # we need everything so release-it can compare the current version with the latest tag
+          fetch-depth: 0
 
       - name: initialize mandatory git config
         run: |
@@ -53,10 +56,19 @@ jobs:
       - name: run release-it
         run: |
           params=()
-          if [[ ${{ github.event.inputs.pre_release }} != "stable" ]]; then
-              params+=(--preRelease=${{ github.event.inputs.pre_release }})
+
+          if [[ ${{ github.event.inputs.version_type }} != "no-version-update" ]]; then
+              params+=(${{ github.event.inputs.version_type }})
           fi
 
-          yarn release-it ${{ github.event.inputs.version_type }} --ci "${params[@]}"
+          if [[ ${{ github.event.inputs.pre_release }} != "stable" ]]; then
+              params+=(--preRelease=${{ github.event.inputs.pre_release }})
+              params+=(--plugins.@release-it/keep-a-changelog.keepUnreleased)
+              params+=(--no-plugins.@release-it/keep-a-changelog.strictLatest)
+          fi
+
+          params+=(--ci)
+
+          yarn release-it "${params[@]}"
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}

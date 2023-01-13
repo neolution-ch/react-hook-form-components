@@ -26,6 +26,7 @@ export const DatePickerExample = Template.bind({});
 DatePickerExample.args = {
   name: "name",
   label: "DatePickerInput Label",
+  disabled: false,
 } as DatePickerInputProps<FormInterface>;
 DatePickerExample.decorators = [
   (StoryComponent) => (
