@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Dependabot: Bump json5 from 1.0.1 to 1.0.2
+
 ## [0.3.0] - 2023-01-12
 
 ### Added
