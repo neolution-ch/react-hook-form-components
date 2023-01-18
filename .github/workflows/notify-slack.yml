@@ -8,7 +8,7 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
-      - uses: neolution-ch/action-release-notifier@v1
+      - uses: neolution-ch/action-release-notifier@v1.1.0
         with:
           slack-token: ${{ secrets.SLACK_RELEASE_NOTIFIER_TOKEN }}
           slack-channel-ids: "CQRJECWGY"
