@@ -5,6 +5,7 @@ import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { CommonInputProps } from "./types/CommonInputProps";
 
 interface FormGroupLayoutProps<T extends FieldValues>
+  // todo: add the labelToolTip here to the picked props
   extends PropsWithChildren<Pick<CommonInputProps<T>, "helpText" | "label" | "name" | "id">> {
   layout?: "checkbox" | "switch";
 }
@@ -27,6 +28,7 @@ const FormGroupLayout = <T extends FieldValues>(props: FormGroupLayoutProps<T>) 
       <Label check={checkboxLayout || switchLayout} for={id}>
         {label}
       </Label>
+      {/* todo: render label tooltip here. You can use this component from reactstrap: https://reactstrap.github.io/?path=/docs/components-tooltip--tooltip  */}
       {children}
       <FormFeedback>{errorMessage}</FormFeedback>
       {helpText && <FormText>{helpText}</FormText>}
