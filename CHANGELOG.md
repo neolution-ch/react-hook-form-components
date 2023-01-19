@@ -7,7 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-<!-- todo: add your changes here, so others will know what has changed in this new version :-) -->
+### Added
+
+- `labelToolTip` property to components sharing `FormGroupLayout`.
+- cypress tests for components implementing new `labelToolTip` property.
 
 ### Changed
 
