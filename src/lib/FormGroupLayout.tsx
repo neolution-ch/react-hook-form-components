@@ -1,4 +1,4 @@
-import { PropsWithChildren, useState } from "react";
+import { PropsWithChildren } from "react";
 import { FieldValues, useFormContext } from "react-hook-form";
 import { FormGroup, Label, FormFeedback, FormText, UncontrolledTooltip } from "reactstrap";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
@@ -22,7 +22,7 @@ const FormGroupLayout = <T extends FieldValues>(props: FormGroupLayoutProps<T>) 
 
   const switchLayout = layout === "switch";
   const checkboxLayout = layout === "checkbox";
-  
+
   return (
     <FormGroup switch={switchLayout ? true : undefined} check={checkboxLayout ? true : undefined}>
       <Label check={checkboxLayout || switchLayout} for={id}>
