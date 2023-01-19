@@ -21,4 +21,5 @@ it("label tooltip gets rendered correctly", () => {
 
   cy.get(`#Tooltip-${name}`).trigger("mouseover");
   cy.get("div.tooltip").should("be.visible");
+  cy.get("div.tooltip").should("have.text", labelToolTip);
 });
