@@ -16,6 +16,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-bootstrap-typeahead/css/Typeahead.css";
 import "react-datepicker/dist/react-datepicker.css";
+import "react-hook-form-components/index.css";
 
 // Import commands.js using ES2015 syntax:
 import "./commands";
