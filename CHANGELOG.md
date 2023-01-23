@@ -7,9 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `labelToolTip` property to components sharing `FormGroupLayout`.
+- cypress tests for components implementing new `labelToolTip` property.
+
 ### Changed
 
 - Dependabot: Bump json5 from 1.0.1 to 1.0.2
+- Changed `label` property of `FormGroupLayout` from `string` to `ReactNode`
 
 ## [0.3.0] - 2023-01-12
 

@@ -12,7 +12,7 @@ interface StaticTypeaheadInputProps<T extends FieldValues> extends CommonInputPr
 }
 
 const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInputProps<T>) => {
-  const { disabled, label, helpText } = props;
+  const { disabled, label, helpText, labelToolTip } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
 
   const { control } = useFormContext();
@@ -22,7 +22,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
       control={control}
       name={name}
       render={({ field, fieldState: { error } }) => (
-        <FormGroupLayout helpText={helpText} name={name} id={id} label={label}>
+        <FormGroupLayout helpText={helpText} name={name} id={id} label={label} labelToolTip={labelToolTip}>
           <Typeahead
             {...field}
             multiple={props.multiple}
