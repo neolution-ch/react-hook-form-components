@@ -33,6 +33,7 @@ const fetchMock = async (options: LabelValueOption[], query: string, simpleOptio
   if (simpleOptions) {
     return result.map((x) => x.label);
   }
+
   return result;
 };
 

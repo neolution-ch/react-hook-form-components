@@ -4,16 +4,14 @@ import { Controller, FieldValues, useFormContext } from "react-hook-form";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";
 import { convertTypeaheadOptionsToStringArray } from "./helpers/typeahead";
-import { CommonInputProps } from "./types/CommonInputProps";
-import { TypeaheadOptions } from "./types/Typeahead";
+import { CommonTypeaheadProps, TypeaheadOptions } from "./types/Typeahead";
 
-interface AsyncTypeaheadProps<T extends FieldValues> extends CommonInputProps<T> {
-  multiple?: boolean;
+interface AsyncTypeaheadProps<T extends FieldValues> extends CommonTypeaheadProps<T> {
   queryFn: (query: string) => Promise<TypeaheadOptions>;
 }
 
 const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T>) => {
-  const { disabled, label, helpText, labelToolTip } = props;
+  const { disabled, label, helpText, labelToolTip, defaultSelected } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
 
   const { control } = useFormContext();
@@ -31,6 +29,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
             {...field}
             id={id}
             multiple={props.multiple}
+            defaultSelected={defaultSelected}
             onChange={(e) => {
               const values = convertTypeaheadOptionsToStringArray(e);
               const finalValue = props.multiple ? values : values[0];

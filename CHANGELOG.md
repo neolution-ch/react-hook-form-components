@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added the ability to pass default selected options to the `StaticTypeaheadInput` and `AsyncTypeaheadInput` components
+
 ## [0.4.0] - 2023-01-23
 
 ### Added
