@@ -3,16 +3,14 @@ import { Controller, FieldValues, useFormContext } from "react-hook-form";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";
 import { convertTypeaheadOptionsToStringArray } from "./helpers/typeahead";
-import { CommonInputProps } from "./types/CommonInputProps";
-import { TypeaheadOptions } from "./types/Typeahead";
+import { CommonTypeaheadProps, TypeaheadOptions } from "./types/Typeahead";
 
-interface StaticTypeaheadInputProps<T extends FieldValues> extends CommonInputProps<T> {
-  multiple?: boolean;
+interface StaticTypeaheadInputProps<T extends FieldValues> extends CommonTypeaheadProps<T> {
   options: TypeaheadOptions;
 }
 
 const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInputProps<T>) => {
-  const { label, helpText } = props;
+  const { disabled, label, helpText, labelToolTip, defaultSelected } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
 
   const { control } = useFormContext();
@@ -22,9 +20,10 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
       control={control}
       name={name}
       render={({ field, fieldState: { error } }) => (
-        <FormGroupLayout helpText={helpText} name={name} id={id} label={label}>
+        <FormGroupLayout helpText={helpText} name={name} id={id} label={label} labelToolTip={labelToolTip}>
           <Typeahead
             {...field}
+            defaultSelected={defaultSelected}
             multiple={props.multiple}
             onChange={(e) => {
               const values = convertTypeaheadOptionsToStringArray(e);
@@ -36,6 +35,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
             options={props.options}
             className={error ? "is-invalid" : ""}
             inputProps={{ id }}
+            disabled={disabled}
           />
         </FormGroupLayout>
       )}

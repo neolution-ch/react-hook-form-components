@@ -23,3 +23,25 @@ it("radio button works", () => {
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: selectedOption.value });
 });
+
+it("renders disabled radio buttons", () => {
+  const name = faker.random.word();
+  const options = [...Array<unknown>(5)].map<LabelValueOption>(() => {
+    const randomVal = faker.science.chemicalElement().name;
+    return { label: randomVal, value: randomVal };
+  });
+
+  cy.mount(
+    <Form
+      onSubmit={() => {
+        // Do nothing
+      }}
+    >
+      <Input type="radio" name={name} label={name} options={options} disabled />
+    </Form>,
+  );
+
+  options.forEach(({ value }) => {
+    cy.get(`input[value=${value}]`).should("be.disabled");
+  });
+});

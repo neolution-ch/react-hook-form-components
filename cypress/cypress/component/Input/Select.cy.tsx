@@ -48,3 +48,23 @@ it("select multiple works", () => {
 
   cy.get("@onSubmitSpy").should("be.calledWithMatch", { [name]: randomOptions.map((option) => option.value) });
 });
+
+it("is disabled", () => {
+  const name = faker.random.word();
+  const options = [...Array<unknown>(5)].map<LabelValueOption>(() => {
+    const randomVal = faker.science.chemicalElement().name;
+    return { label: randomVal, value: randomVal };
+  });
+
+  cy.mount(
+    <Form
+      onSubmit={() => {
+        // Do nothing
+      }}
+    >
+      <Input type="select" name={name} label={name} options={options} disabled />
+    </Form>,
+  );
+
+  cy.get(`select[name=${name}]`).should("be.disabled");
+});

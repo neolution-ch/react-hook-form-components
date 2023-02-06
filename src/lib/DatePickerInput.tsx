@@ -10,7 +10,7 @@ interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputPr
 }
 
 const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) => {
-  const { label, helpText, datePickerProps } = props;
+  const { disabled, label, helpText, datePickerProps, labelToolTip } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
 
   const { control } = useFormContext();
@@ -33,13 +33,14 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
         }
 
         return (
-          <FormGroupLayout helpText={helpText} name={name} id={id} label={label}>
+          <FormGroupLayout helpText={helpText} name={name} id={id} label={label} labelToolTip={labelToolTip}>
             <DatePicker
               {...datePickerProps}
               {...field}
               // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
               value={selected}
               id={id}
+              disabled={disabled}
               className="form-control"
               dateFormat={dateFormat}
               calendarStartDay={calendarStartDay}

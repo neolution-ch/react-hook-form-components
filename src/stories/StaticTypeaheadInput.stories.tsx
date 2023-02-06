@@ -27,6 +27,7 @@ StaticTypeaheadInputExample.args = {
   name: "name",
   label: "StaticTypeaheadInput Label",
   options: ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"],
+  disabled: false,
 } as StaticTypeaheadInputProps<FormInterface>;
 StaticTypeaheadInputExample.decorators = [
   (StoryComponent) => (

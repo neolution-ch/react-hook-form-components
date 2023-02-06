@@ -229,4 +229,20 @@ describe("Input.cy.tsx", () => {
     cy.get("input[type=submit]").click({ force: true });
     cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: selectedValue });
   });
+
+  it("is disabled", () => {
+    const name = faker.random.word();
+
+    cy.mount(
+      <Form
+        onSubmit={() => {
+          // Do nothing
+        }}
+      >
+        <Input name={name} label={name} disabled />
+      </Form>,
+    );
+
+    cy.get(`input[name=${name}]`).should("be.disabled");
+  });
 });
