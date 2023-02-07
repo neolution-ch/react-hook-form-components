@@ -43,7 +43,6 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
               void (async () => {
                 setIsLoading(true);
                 const results = await props.queryFn(query);
-                console.log(results, "results");
                 setOptions(results);
                 setIsLoading(false);
               })();

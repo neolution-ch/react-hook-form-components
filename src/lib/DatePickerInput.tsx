@@ -3,6 +3,8 @@ import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";
 import { CommonInputProps } from "./types/CommonInputProps";
 import DatePicker, { ReactDatePickerProps } from "react-datepicker";
+import { useEffect, useState } from "react";
+import { setUtcTimeToZero } from "./helpers/dateUtils";
 
 interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputProps<T>, "onChange"> {
   datePickerProps?: Omit<ReactDatePickerProps, "onChange" | "selected" | "id" | "className" | "onBlur">;
@@ -13,10 +15,21 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
   const { disabled, label, helpText, datePickerProps, labelToolTip } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
 
-  const { control } = useFormContext();
+  const { control, getValues, setValue } = useFormContext();
 
   const dateFormat = datePickerProps?.dateFormat || "dd.MM.yyyy";
   const calendarStartDay = datePickerProps?.calendarStartDay || 1;
+
+  const initialDate = getValues(name) as Date | null;
+  setUtcTimeToZero(initialDate);
+
+  const [selectedDate, setSelectedDate] = useState<Date | null>(initialDate);
+
+  // setting the value here once the component is mounted
+  // so we have the corrected date in the form
+  useEffect(() => {
+    setValue(name, initialDate);
+  }, [initialDate, name, setValue]);
 
   return (
     <Controller
@@ -28,12 +41,12 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
             {...datePickerProps}
             {...field}
             id={id}
+            disabled={disabled}
             className="form-control"
             dateFormat={dateFormat}
             calendarStartDay={calendarStartDay}
             wrapperClassName={error ? "is-invalid" : ""}
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            selected={field.value}
+            selected={selectedDate}
             ref={(elem) => {
               // https://github.com/react-hook-form/react-hook-form/discussions/5413
               // https://codesandbox.io/s/react-hook-form-focus-forked-yyhsi?file=/src/index.js
@@ -45,15 +58,20 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
               field.onBlur();
             }}
             onChange={(date) => {
-              // adding the timezone offset to the date so it's exactly 00:00:00 when converting to UTC
-              // (which JSON.stringify does)
-              if (date) date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+              setSelectedDate(date);
 
-              if (props.onChange) props.onChange(date);
+              const utcTimeZeroDate = date == null ? null : new Date(date.getTime());
 
-              field.onChange(date);
+              // we set the time to utc 0 to avoid timezone issues, so it will be 0Z
+              // when JSON stringified
+              if (utcTimeZeroDate) {
+                setUtcTimeToZero(initialDate);
+              }
+
+              if (props.onChange) props.onChange(utcTimeZeroDate);
+
+              field.onChange(utcTimeZeroDate);
             }}
-            disabled={disabled}
           />
         </FormGroupLayout>
       )}
