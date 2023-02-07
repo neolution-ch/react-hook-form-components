@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import { DeepPartial, FieldValues, FormProvider, Resolver, SubmitHandler, useForm, UseFormReturn } from "react-hook-form";
+import { jsonIsoDateReviver } from "./helpers/dateUtils";
 
 interface FormProps<T extends FieldValues> {
   onSubmit: SubmitHandler<T>;
@@ -9,7 +10,11 @@ interface FormProps<T extends FieldValues> {
 }
 
 const Form = <T extends FieldValues>({ children, onSubmit, resolver, defaultValues }: FormProps<T>) => {
-  const formMethods = useForm<T>({ resolver, defaultValues });
+  const revivedDefaultValues = defaultValues
+    ? (JSON.parse(JSON.stringify(defaultValues), jsonIsoDateReviver) as DeepPartial<T>)
+    : defaultValues;
+
+  const formMethods = useForm<T>({ resolver, defaultValues: revivedDefaultValues });
   const { handleSubmit } = formMethods;
 
   return (

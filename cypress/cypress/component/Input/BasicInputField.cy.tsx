@@ -215,8 +215,6 @@ describe("Input.cy.tsx", () => {
 
     const [min, selectedValue, max] = faker.helpers.uniqueArray(faker.datatype.number, 3).sort((a, b) => a - b);
 
-    console.log(min, selectedValue, max);
-
     cy.mount(
       <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
         <Input type="range" name={name} label={name} rangeMin={min} rangeMax={max} />
