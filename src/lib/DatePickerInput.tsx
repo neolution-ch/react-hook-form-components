@@ -3,7 +3,7 @@ import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";
 import { CommonInputProps } from "./types/CommonInputProps";
 import DatePicker, { ReactDatePickerProps } from "react-datepicker";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { setUtcTimeToZero } from "./helpers/dateUtils";
 
 interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputProps<T>, "onChange"> {
@@ -15,7 +15,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
   const { disabled, label, helpText, datePickerProps, labelToolTip } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
 
-  const { control, getValues } = useFormContext();
+  const { control, getValues, setValue } = useFormContext();
 
   const dateFormat = datePickerProps?.dateFormat || "dd.MM.yyyy";
   const calendarStartDay = datePickerProps?.calendarStartDay || 1;
@@ -24,6 +24,12 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
   setUtcTimeToZero(initialDate);
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(initialDate);
+
+  // setting the value here once the component is mounted
+  // so we have the corrected date in the form
+  useEffect(() => {
+    setValue(name, initialDate);
+  }, [initialDate, name, setValue]);
 
   return (
     <Controller
