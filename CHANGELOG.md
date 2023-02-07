@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Support for iso strings as default values for the `Form` component
+
+### Changed
+
+- Fixed `DatePickerInput` issues
+
 ## [0.5.0] - 2023-01-25
 
 ### Added
