@@ -1,4 +1,5 @@
 import { Typeahead } from "react-bootstrap-typeahead";
+import { TypeaheadComponentProps } from "react-bootstrap-typeahead/types/components/Typeahead";
 import { Controller, FieldValues, useFormContext } from "react-hook-form";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";
@@ -7,10 +8,11 @@ import { CommonTypeaheadProps, TypeaheadOptions } from "./types/Typeahead";
 
 interface StaticTypeaheadInputProps<T extends FieldValues> extends CommonTypeaheadProps<T> {
   options: TypeaheadOptions;
+  reactBootstrapTypeaheadProps?: TypeaheadComponentProps;
 }
 
 const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInputProps<T>) => {
-  const { disabled, label, helpText, labelToolTip, defaultSelected } = props;
+  const { disabled, label, helpText, labelToolTip, defaultSelected, reactBootstrapTypeaheadProps } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
 
   const { control } = useFormContext();
@@ -36,6 +38,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
             className={error ? "is-invalid" : ""}
             inputProps={{ id }}
             disabled={disabled}
+            {...reactBootstrapTypeaheadProps}
           />
         </FormGroupLayout>
       )}
