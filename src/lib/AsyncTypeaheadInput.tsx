@@ -8,7 +8,7 @@ import { CommonTypeaheadProps, TypeaheadOptions } from "./types/Typeahead";
 
 interface AsyncTypeaheadProps<T extends FieldValues> extends CommonTypeaheadProps<T> {
   queryFn: (query: string) => Promise<TypeaheadOptions>;
-  reactBootstrapTypeaheadProps?: UseAsyncProps;
+  reactBootstrapTypeaheadProps?: Partial<UseAsyncProps>;
 }
 
 const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T>) => {

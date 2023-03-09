@@ -8,7 +8,7 @@ import { CommonTypeaheadProps, TypeaheadOptions } from "./types/Typeahead";
 
 interface StaticTypeaheadInputProps<T extends FieldValues> extends CommonTypeaheadProps<T> {
   options: TypeaheadOptions;
-  reactBootstrapTypeaheadProps?: TypeaheadComponentProps;
+  reactBootstrapTypeaheadProps?: Partial<TypeaheadComponentProps>;
 }
 
 const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInputProps<T>) => {
