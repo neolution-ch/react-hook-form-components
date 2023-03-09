@@ -96,7 +96,7 @@ it("works with single object options", () => {
   cy.get("@onSubmitSpy").should("be.calledWith", { [name]: changedOption.value });
 });
 
-it.only("works with multiple object options", () => {
+it("works with multiple object options", () => {
   const options = generateOptions(100);
   const name = faker.random.alpha(10);
   const randomOptions = faker.helpers.arrayElements(options.objectOptions, faker.datatype.number({ min: 2, max: 5 }));
