@@ -68,7 +68,7 @@ describe("Input.cy.tsx", () => {
     cy.contains(helpText);
   });
 
-  it.only("validation works", () => {
+  it("validation works", () => {
     const name = faker.random.alpha(10);
     const errorMessage = faker.random.words();
     const schema = yup.object().shape({
@@ -137,23 +137,26 @@ describe("Input.cy.tsx", () => {
     cy.get("@onBlurSpy").should("be.calledWithMatch", { target: { value: randomWord } });
   });
 
-  it("text area works", () => {
+  it.only("text area works", () => {
     const name = faker.random.alpha(10);
+    const textAreaRows = faker.datatype.number({ min: 6, max: 10 });
     const schema = yup.object().shape({
       [name]: yup.string(),
+      [textAreaRows]: yup.number(),
     });
 
     const randomWords = faker.random.words(25);
 
     cy.mount(
       <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
-        <Input type="textarea" name={name} label={name} />
+        <Input type="textarea" name={name} label={name} textAreaRows={textAreaRows} />
 
         <input type={"submit"} />
       </Form>,
     );
 
     cy.contains("label", name).click().type(randomWords.toString());
+    cy.get("textarea").should("have.attr", "rows", textAreaRows);
     cy.get("input[type=submit]").click({ force: true });
 
     cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: randomWords });
