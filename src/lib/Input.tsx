@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { FieldValues } from "react-hook-form";
 import { FormGroup, Label } from "reactstrap";
 import { InputType } from "reactstrap/types/lib/Input";
@@ -14,6 +15,7 @@ interface InputProps<T extends FieldValues> extends CommonInputProps<T> {
   value?: string;
   rangeMin?: number;
   rangeMax?: number;
+  textAreaRows?: number;
 }
 
 const Input = <T extends FieldValues>(props: InputProps<T>) => {
@@ -28,6 +30,9 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
   }
   if ((props.rangeMin || props.rangeMax) && props.type !== "range") {
     throw new Error("rangeMin and rangeMax can only be used with range inputs");
+  }
+  if (props.textAreaRows && props.type !== "textarea") {
+    throw new Error("textAreaRows can only be used with textarea inputs");
   }
 
   const { type, options } = props;
