@@ -137,7 +137,7 @@ describe("Input.cy.tsx", () => {
     cy.get("@onBlurSpy").should("be.calledWithMatch", { target: { value: randomWord } });
   });
 
-  it.only("text area works", () => {
+  it("text area works", () => {
     const name = faker.random.alpha(10);
     const textAreaRows = faker.datatype.number({ min: 6, max: 10 });
     const schema = yup.object().shape({

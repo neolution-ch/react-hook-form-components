@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.2] - 2023-03-09
+
+### Added
+
+- `textAreaRows` property to set `rows` in `<Input type="textarea" />` components
+
+### Changed
+
+- Text area test to check the new `textAreaRows` property
+
 ## [0.5.1] - 2023-02-07
 
 ### Added
