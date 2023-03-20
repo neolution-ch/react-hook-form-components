@@ -16,6 +16,7 @@ interface InputProps<T extends FieldValues> extends CommonInputProps<T> {
   rangeMin?: number;
   rangeMax?: number;
   textAreaRows?: number;
+  textAreaDefaultValue?: string;
 }
 
 const Input = <T extends FieldValues>(props: InputProps<T>) => {
@@ -31,7 +32,7 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
   if ((props.rangeMin || props.rangeMax) && props.type !== "range") {
     throw new Error("rangeMin and rangeMax can only be used with range inputs");
   }
-  if (props.textAreaRows && props.type !== "textarea") {
+  if ((props.textAreaRows || props.textAreaDefaultValue) && props.type !== "textarea") {
     throw new Error("textAreaRows can only be used with textarea inputs");
   }
 
