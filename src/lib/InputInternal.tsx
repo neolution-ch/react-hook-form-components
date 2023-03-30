@@ -4,7 +4,7 @@ import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { InputProps } from "./Input";
 
 const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
-  const { disabled, type, onBlur, onChange, value, options, multiple, rangeMin, rangeMax } = props;
+  const { disabled, type, onBlur, onChange, value, options, multiple, rangeMin, rangeMax, textAreaRows } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
   const {
     register,
@@ -25,6 +25,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
         innerRef={ref}
         min={rangeMin}
         max={rangeMax}
+        rows={textAreaRows}
         multiple={multiple}
         disabled={disabled}
         {...rest}

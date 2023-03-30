@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { AsyncTypeahead } from "react-bootstrap-typeahead";
+import { AsyncTypeahead, UseAsyncProps } from "react-bootstrap-typeahead";
 import { Controller, FieldValues, useFormContext } from "react-hook-form";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";
@@ -8,10 +8,11 @@ import { CommonTypeaheadProps, TypeaheadOptions } from "./types/Typeahead";
 
 interface AsyncTypeaheadProps<T extends FieldValues> extends CommonTypeaheadProps<T> {
   queryFn: (query: string) => Promise<TypeaheadOptions>;
+  reactBootstrapTypeaheadProps?: Partial<UseAsyncProps>;
 }
 
 const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T>) => {
-  const { disabled, label, helpText, labelToolTip, defaultSelected } = props;
+  const { disabled, label, helpText, labelToolTip, defaultSelected, reactBootstrapTypeaheadProps } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
 
   const { control } = useFormContext();
@@ -39,6 +40,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
             inputProps={{ id }}
             isLoading={isLoading}
             options={options}
+            filterBy={() => true}
             onSearch={(query) => {
               void (async () => {
                 setIsLoading(true);
@@ -48,6 +50,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
               })();
             }}
             disabled={disabled}
+            {...reactBootstrapTypeaheadProps}
           />
         </FormGroupLayout>
       )}
