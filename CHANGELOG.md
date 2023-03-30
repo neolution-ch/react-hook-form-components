@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Security
+
+- Bump saadmk11/github-actions-version-updater from 0.7.3 to 0.7.4
+
 ## [0.7.0] - 2023-03-09
 
 ### Added
