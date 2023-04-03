@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Property `onChange` in order to handle final select value for the  `StaticTypeaheadInput` and `AsyncTypeaheadInput` components
+
 ### Security
 
 - Dependabot: Bump webpack from 5.75.0 to 5.76.0

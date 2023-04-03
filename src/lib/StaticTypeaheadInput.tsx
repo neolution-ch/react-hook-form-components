@@ -12,7 +12,7 @@ interface StaticTypeaheadInputProps<T extends FieldValues> extends CommonTypeahe
 }
 
 const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInputProps<T>) => {
-  const { disabled, label, helpText, labelToolTip, defaultSelected, reactBootstrapTypeaheadProps } = props;
+  const { disabled, label, helpText, labelToolTip, defaultSelected, reactBootstrapTypeaheadProps, onChange } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
 
   const { control } = useFormContext();
@@ -30,6 +30,10 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
             onChange={(e) => {
               const values = convertTypeaheadOptionsToStringArray(e);
               const finalValue = props.multiple ? values : values[0];
+
+              if (onChange) {
+                onChange(finalValue);
+              }
 
               field.onChange(finalValue);
             }}
