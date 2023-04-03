@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Property `onChange` in order to handle final select value for the  `StaticTypeaheadInput` and `AsyncTypeaheadInput` components
+- Property `onChange` in order to handle final select value for the `StaticTypeaheadInput` and `AsyncTypeaheadInput` components
 
 ### Security
 
