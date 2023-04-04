@@ -150,6 +150,34 @@ it("works with single simple option and default selected", () => {
   cy.get("@onSubmitSpy").should("have.been.calledWith", { [name]: changedOption.label });
 });
 
+it("works with the correct value onChange", () => {
+  const options = generateOptions(100);
+  const name = faker.random.alpha(10);
+  const randomOptions = faker.helpers.arrayElements(options.objectOptions, 1);
+
+  const [changedOption] = randomOptions;
+
+  cy.mount(
+    <Form
+      onSubmit={() => {
+        // Nothing to do
+      }}
+    >
+      <AsyncTypeaheadInput
+        name={name}
+        label={name}
+        queryFn={async (query) => await fetchMock(options.objectOptions, query)}
+        onChange={cy.spy().as("OnChangeSpy")}
+      />
+      <input type="submit" />
+    </Form>,
+  );
+
+  cy.get(`#${name}`).clear().click().type(changedOption.label);
+  cy.get(`a[aria-label='${changedOption.label}']`).click();
+  cy.get("@OnChangeSpy").should("have.been.calledWith", changedOption.label);
+});
+
 it("is disabled", () => {
   const name = faker.random.word();
   const options = generateOptions(100);
