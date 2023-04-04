@@ -157,6 +157,27 @@ it("Validation works", () => {
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: randomOption });
 });
 
+it("works with the correct value onChange", () => {
+  const { simpleOptions } = generateOptions();
+  const name = faker.random.alpha(10);
+  const randomOption = faker.helpers.arrayElement(simpleOptions);
+
+  cy.mount(
+    <Form
+      onSubmit={() => {
+        // Nothing to do
+      }}
+    >
+      <StaticTypeaheadInput name={name} label={name} options={simpleOptions} onChange={cy.spy().as("OnChangeSpy")} />
+      <input type="submit" />
+    </Form>,
+  );
+
+  cy.get(`#${name}`).clear().click();
+  cy.get(`a[aria-label='${randomOption}']`).click();
+  cy.get("@OnChangeSpy").should("have.been.calledWith", randomOption);
+});
+
 it("is disabled", () => {
   const name = faker.random.word();
   const { simpleOptions } = generateOptions(100);

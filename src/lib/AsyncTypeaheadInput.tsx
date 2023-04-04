@@ -12,7 +12,7 @@ interface AsyncTypeaheadProps<T extends FieldValues> extends CommonTypeaheadProp
 }
 
 const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T>) => {
-  const { disabled, label, helpText, labelToolTip, defaultSelected, reactBootstrapTypeaheadProps } = props;
+  const { disabled, label, helpText, labelToolTip, defaultSelected, reactBootstrapTypeaheadProps, onChange } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
 
   const { control } = useFormContext();
@@ -34,6 +34,11 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
             onChange={(e) => {
               const values = convertTypeaheadOptionsToStringArray(e);
               const finalValue = props.multiple ? values : values[0];
+
+              if (onChange) {
+                onChange(finalValue);
+              }
+
               field.onChange(finalValue);
             }}
             className={error ? "is-invalid" : ""}
