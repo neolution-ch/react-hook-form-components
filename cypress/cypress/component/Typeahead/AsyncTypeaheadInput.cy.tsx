@@ -166,7 +166,7 @@ it("works with the correct value onChange", () => {
       <AsyncTypeaheadInput
         name={name}
         label={name}
-        queryFn={async (query) => await fetchMock(options.objectOptions, query)}
+        queryFn={async (query) => await fetchMock(options.objectOptions, query, false)}
         onChange={cy.spy().as("OnChangeSpy")}
       />
       <input type="submit" />
@@ -175,7 +175,7 @@ it("works with the correct value onChange", () => {
 
   cy.get(`#${name}`).clear().click().type(changedOption.label);
   cy.get(`a[aria-label='${changedOption.label}']`).click();
-  cy.get("@OnChangeSpy").should("have.been.calledWith", changedOption.label);
+  cy.get("@OnChangeSpy").should("have.been.calledWith", changedOption.value);
 });
 
 it("is disabled", () => {
