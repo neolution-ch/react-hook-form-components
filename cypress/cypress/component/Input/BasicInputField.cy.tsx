@@ -116,7 +116,7 @@ describe("Input.cy.tsx", () => {
       </Form>,
     );
 
-    cy.get(`input[id=${name}]`).type(randomWord).clear();
+    cy.get(`input[id="${name}"]`).type(randomWord).clear();
     cy.get("input[type=submit]").click({ force: true });
     cy.contains(errorMessage);
 
