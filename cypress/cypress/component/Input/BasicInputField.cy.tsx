@@ -95,6 +95,37 @@ describe("Input.cy.tsx", () => {
     cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: randomWord });
   });
 
+  it("validation works for sub-objects", () => {
+    const objectName = faker.random.alpha(10);
+    let name = faker.random.alpha(10);
+    const errorMessage = faker.random.words();
+    const schema = yup.object().shape({
+      [objectName]: yup.object().shape({
+        [name]: yup.string().required(errorMessage),
+      }),
+    });
+
+    name = `${objectName}.${name}`;
+    const randomWord = faker.random.word();
+
+    cy.mount(
+      <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
+        <Input name={name} label={name} />
+
+        <input type={"submit"} />
+      </Form>,
+    );
+
+    cy.get(`input[id=${name}]`).type(randomWord).clear();
+    cy.get("input[type=submit]").click({ force: true });
+    cy.contains(errorMessage);
+
+    cy.contains("label", name).click().type(randomWord.toString());
+    cy.get("input[type=submit]").click({ force: true });
+
+    cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: randomWord });
+  });
+
   it("on change handler gets called", () => {
     const name = faker.random.alpha(10);
     const schema = yup.object().shape({

@@ -3,6 +3,7 @@ import { FieldValues, useFormContext } from "react-hook-form";
 import { FormGroup, Label, FormFeedback, FormText, UncontrolledTooltip } from "reactstrap";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { CommonInputProps } from "./types/CommonInputProps";
+import { getDeepValue } from "./helpers/deepValue";
 import "./styles/FormGroupLayout.css";
 
 interface FormGroupLayoutProps<T extends FieldValues>
@@ -17,7 +18,7 @@ const FormGroupLayout = <T extends FieldValues>(props: FormGroupLayoutProps<T>) 
     formState: { errors },
   } = useFormContext();
 
-  const fieldError = errors[name];
+  const fieldError = getDeepValue(errors, name);
   const errorMessage = String(fieldError?.message);
 
   const switchLayout = layout === "switch";
