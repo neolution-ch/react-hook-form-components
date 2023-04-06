@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react";
-import { FieldValues, useFormContext } from "react-hook-form";
+import { FieldError, FieldValues, get, useFormContext } from "react-hook-form";
 import { FormGroup, Label, FormFeedback, FormText, UncontrolledTooltip } from "reactstrap";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { CommonInputProps } from "./types/CommonInputProps";
@@ -17,7 +17,7 @@ const FormGroupLayout = <T extends FieldValues>(props: FormGroupLayoutProps<T>) 
     formState: { errors },
   } = useFormContext();
 
-  const fieldError = errors[name];
+  const fieldError = get(errors, name) as FieldError | undefined;
   const errorMessage = String(fieldError?.message);
 
   const switchLayout = layout === "switch";
