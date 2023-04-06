@@ -97,15 +97,15 @@ describe("Input.cy.tsx", () => {
 
   it("validation works for sub-objects", () => {
     const objectName = faker.random.alpha(10);
-    let name = faker.random.alpha(10);
+    const propertyName = faker.random.alpha(10);
     const errorMessage = faker.random.words();
     const schema = yup.object().shape({
       [objectName]: yup.object().shape({
-        [name]: yup.string().required(errorMessage),
+        [propertyName]: yup.string().required(errorMessage),
       }),
     });
 
-    name = `${objectName}.${name}`;
+    const name = `${objectName}.${propertyName}`;
     const randomWord = faker.random.word();
 
     cy.mount(
