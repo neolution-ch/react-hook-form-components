@@ -123,7 +123,7 @@ describe("Input.cy.tsx", () => {
     cy.contains("label", name).click().type(randomWord.toString());
     cy.get("input[type=submit]").click({ force: true });
 
-    cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: randomWord });
+    cy.get("@onSubmitSpy").should("be.calledOnceWith", { [objectName]: { [propertyName]: randomWord } });
   });
 
   it("on change handler gets called", () => {
