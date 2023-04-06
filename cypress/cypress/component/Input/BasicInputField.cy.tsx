@@ -95,7 +95,7 @@ describe("Input.cy.tsx", () => {
     cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: randomWord });
   });
 
-  it("validation works for sub-objects", () => {
+  it("validation works for nested fields", () => {
     const objectName = faker.random.alpha(10);
     const propertyName = faker.random.alpha(10);
     const errorMessage = faker.random.words();
