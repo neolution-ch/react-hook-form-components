@@ -49,7 +49,6 @@ it("selecting date and time works", () => {
           timeFormat: " HH:mm",
           timeIntervals: 1,
         }}
-        onChange={(e) => console.log(e)}
       />
 
       <input type={"submit"} />
