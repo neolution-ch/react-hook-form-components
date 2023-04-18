@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import { DatePickerInput, Form, setUtcTimeToZero } from "react-hook-form-components";
+import { DatePickerInput, Form, setUtcTimeToZero, setUtcTime } from "react-hook-form-components";
 import "react-datepicker/dist/react-datepicker.css";
 import { faker } from "@faker-js/faker";
 import * as yup from "yup";
@@ -29,6 +29,44 @@ it("selecting today works", () => {
   cy.get("@onSubmitSpy")
     .its("lastCall.args.0")
     .should("deep.equal", { [name]: todayMidnight });
+});
+
+it("selecting date and time works", () => {
+  const name = faker.random.alpha(10);
+
+  const schema = yup.object().shape({
+    [name]: yup.date().required(),
+  });
+
+  cy.mount(
+    <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
+      <DatePickerInput
+        name={name}
+        label={name}
+        datePickerProps={{
+          showTimeSelect: true,
+          dateFormat: "yyyy:MM:dd HH:mm",
+          timeIntervals: 1,
+        }}
+      />
+
+      <input type={"submit"} />
+    </Form>,
+  );
+
+  cy.contains("label", name).click();
+  cy.get(".react-datepicker__day--today").click();
+  //Click on 12:00 AM
+  cy.get(".react-datepicker__time-list-item--selected").click();
+  cy.get("input[type=submit]").click({ force: true });
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  setUtcTime(today);
+
+  cy.get("@onSubmitSpy")
+    .its("lastCall.args.0")
+    .should("deep.equal", { [name]: today });
 });
 
 it("setting intial value as iso string works", () => {

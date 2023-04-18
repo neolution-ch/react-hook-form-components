@@ -4,7 +4,7 @@ import { FormGroupLayout } from "./FormGroupLayout";
 import { CommonInputProps } from "./types/CommonInputProps";
 import DatePicker, { ReactDatePickerProps } from "react-datepicker";
 import { useEffect, useState } from "react";
-import { setUtcTimeToZero } from "./helpers/dateUtils";
+import { setUtcTimeToZero, setUtcTime } from "./helpers/dateUtils";
 
 interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputProps<T>, "onChange"> {
   datePickerProps?: Omit<ReactDatePickerProps, "onChange" | "selected" | "id" | "className" | "onBlur">;
@@ -19,9 +19,12 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
 
   const dateFormat = datePickerProps?.dateFormat || "dd.MM.yyyy";
   const calendarStartDay = datePickerProps?.calendarStartDay || 1;
-
+  const isTimeIncluded = datePickerProps?.showTimeSelect || datePickerProps?.showTimeSelectOnly;
   const initialDate = getValues(name) as Date | null;
-  setUtcTimeToZero(initialDate);
+
+  if (!isTimeIncluded) {
+    setUtcTimeToZero(initialDate);
+  }
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(initialDate);
 
@@ -65,7 +68,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
               // we set the time to utc 0 to avoid timezone issues, so it will be 0Z
               // when JSON stringified
               if (utcTimeZeroDate) {
-                setUtcTimeToZero(initialDate);
+                isTimeIncluded ? setUtcTime(utcTimeZeroDate) : setUtcTimeToZero(initialDate);
               }
 
               if (props.onChange) props.onChange(utcTimeZeroDate);

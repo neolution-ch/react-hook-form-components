@@ -11,6 +11,12 @@ const jsonIsoDateReviver = (_key: string, value: unknown) => {
   return value;
 };
 
+const setUtcTime = (date: Date | null | undefined) => {
+  if (date && date instanceof Date) {
+    date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
+  }
+};
+
 const setUtcTimeToZero = (date: Date | null | undefined) => {
   if (date && date instanceof Date) {
     date.setHours(0, 0, 0, 0);
@@ -18,4 +24,4 @@ const setUtcTimeToZero = (date: Date | null | undefined) => {
   }
 };
 
-export { jsonIsoDateReviver, setUtcTimeToZero };
+export { jsonIsoDateReviver, setUtcTime, setUtcTimeToZero };
