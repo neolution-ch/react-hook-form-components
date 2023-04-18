@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import { DatePickerInput, Form, setUtcTimeToZero, setUtcTime } from "react-hook-form-components";
+import { DatePickerInput, Form, setUtcTimeToZero } from "react-hook-form-components";
 import "react-datepicker/dist/react-datepicker.css";
 import { faker } from "@faker-js/faker";
 import * as yup from "yup";
@@ -45,9 +45,11 @@ it("selecting date and time works", () => {
         label={name}
         datePickerProps={{
           showTimeSelect: true,
-          dateFormat: "yyyy:MM:dd HH:mm",
+          dateFormat: "dd:MM:yyyy HH:mm",
+          timeFormat: " HH:mm",
           timeIntervals: 1,
         }}
+        onChange={(e) => console.log(e)}
       />
 
       <input type={"submit"} />
@@ -56,13 +58,11 @@ it("selecting date and time works", () => {
 
   cy.contains("label", name).click();
   cy.get(".react-datepicker__day--today").click();
-  //Click on 12:00 AM
-  cy.get(".react-datepicker__time-list-item--selected").click();
+  cy.get(".react-datepicker__time-list-item--selected").click({ force: true });
   cy.get("input[type=submit]").click({ force: true });
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  setUtcTime(today);
 
   cy.get("@onSubmitSpy")
     .its("lastCall.args.0")

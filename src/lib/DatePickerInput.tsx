@@ -4,7 +4,7 @@ import { FormGroupLayout } from "./FormGroupLayout";
 import { CommonInputProps } from "./types/CommonInputProps";
 import DatePicker, { ReactDatePickerProps } from "react-datepicker";
 import { useEffect, useState } from "react";
-import { setUtcTimeToZero, setUtcTime } from "./helpers/dateUtils";
+import { setUtcTimeToZero } from "./helpers/dateUtils";
 
 interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputProps<T>, "onChange"> {
   datePickerProps?: Omit<ReactDatePickerProps, "onChange" | "selected" | "id" | "className" | "onBlur">;
@@ -67,8 +67,8 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
 
               // we set the time to utc 0 to avoid timezone issues, so it will be 0Z
               // when JSON stringified
-              if (utcTimeZeroDate) {
-                isTimeIncluded ? setUtcTime(utcTimeZeroDate) : setUtcTimeToZero(initialDate);
+              if (utcTimeZeroDate && !isTimeIncluded) {
+                setUtcTimeToZero(initialDate);
               }
 
               if (props.onChange) props.onChange(utcTimeZeroDate);
