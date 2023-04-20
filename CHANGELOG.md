@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Dependabot: Bumps vm2 from 3.9.11 to 3.9.16.
 
+### Added
+
+- `plainText` property to set `plaintext` in `<Input />` components
+
 ## [0.8.1] - 2023-04-06
 
 ### Fixed
