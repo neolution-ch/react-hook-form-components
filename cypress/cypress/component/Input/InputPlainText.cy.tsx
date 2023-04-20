@@ -6,9 +6,11 @@ it("it has form-control-plaintext class", () => {
   const value = faker.random.alpha(10);
 
   cy.mount(
-    <Form onSubmit={() => {
-      // Do nothing
-    }}>
+    <Form
+      onSubmit={() => {
+        // Do nothing
+      }}
+    >
       <Input type="text" name={name} label={name} plainText value={value} />
     </Form>,
   );
@@ -20,9 +22,11 @@ it("it has the correct style", () => {
   const value = faker.random.alpha(10);
 
   cy.mount(
-    <Form onSubmit={() => {
-      // Do nothing
-    }}>
+    <Form
+      onSubmit={() => {
+        // Do nothing
+      }}
+    >
       <Input type="text" name={name} label={name} plainText value={value} />
     </Form>,
   );
