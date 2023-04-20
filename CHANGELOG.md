@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.0] - 2023-04-20
+
 ### Security
 
 - Dependabot: Bumps vm2 from 3.9.11 to 3.9.16.
@@ -119,10 +121,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Created package :tada:
 
-[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/0.8.1...HEAD
+[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/0.9.0...HEAD
 [0.1.2]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.1...0.1.2
 [0.1.1]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.1.0
+[0.9.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.8.1...0.9.0
 [0.8.1]: https://github.com/neolution-ch/react-hook-form-components/compare/0.8.0...0.8.1
 [0.8.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.7.0...0.8.0
 [0.7.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.6.0...0.7.0
