@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Security
+
+- Dependabot: Bump vm2 from 3.9.16 to 3.9.17
+
 ## [0.9.0] - 2023-04-20
 
 ### Security
