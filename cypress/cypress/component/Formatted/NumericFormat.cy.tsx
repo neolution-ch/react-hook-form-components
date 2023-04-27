@@ -47,3 +47,73 @@ it("is disabled", () => {
 
   cy.get(`input[name=${name}]`).should("be.disabled");
 });
+
+it("validation works", () => {
+  const name = faker.random.alpha(10);
+  const errorMessage = faker.random.words();
+  const schema = yup.object().shape({
+    [name]: yup
+      .number()
+      .nullable()
+      .required(errorMessage)
+      .transform((_, val) => (isNaN(parseFloat(val)) ? null : Number(val))),
+  });
+
+  const randomNumber = faker.datatype.number({
+    min: 10000,
+  });
+
+  cy.mount(
+    <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
+      <FormattedInput name={name} label={name} numericFormat={numericFormat} />
+
+      <input type={"submit"} />
+    </Form>,
+  );
+
+  cy.get(`input[id=${name}]`).type(randomNumber.toString()).clear();
+  cy.get("input[type=submit]").click({ force: true });
+  cy.contains(errorMessage);
+
+  cy.get(`input[id=${name}]`).type(randomNumber.toString());
+  cy.get("input[type=submit]").click({ force: true });
+
+  cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: randomNumber });
+});
+
+it("validation works for nested fields", () => {
+  const objectName = faker.random.alpha(10);
+  const propertyName = faker.random.alpha(10);
+  const errorMessage = faker.random.words();
+  const schema = yup.object().shape({
+    [objectName]: yup.object().shape({
+      [propertyName]: yup
+        .number()
+        .nullable()
+        .required(errorMessage)
+        .transform((_, val) => (isNaN(parseFloat(val)) ? null : Number(val))),
+    }),
+  });
+
+  const name = `${objectName}.${propertyName}`;
+  const randomNumber = faker.datatype.number({
+    min: 10000,
+  });
+
+  cy.mount(
+    <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
+      <FormattedInput name={name} label={name} numericFormat={numericFormat} />
+
+      <input type={"submit"} />
+    </Form>,
+  );
+
+  cy.get(`input[id="${name}"]`).type(randomNumber.toString()).clear();
+  cy.get("input[type=submit]").click({ force: true });
+  cy.contains(errorMessage);
+
+  cy.contains("label", name).click().type(randomNumber.toString());
+  cy.get("input[type=submit]").click({ force: true });
+
+  cy.get("@onSubmitSpy").should("be.calledOnceWith", { [objectName]: { [propertyName]: randomNumber } });
+});
