@@ -16,6 +16,8 @@ interface InputProps<T extends FieldValues> extends CommonInputProps<T> {
   rangeMin?: number;
   rangeMax?: number;
   textAreaRows?: number;
+  plainText?: boolean;
+  placeholder?: string;
 }
 
 const Input = <T extends FieldValues>(props: InputProps<T>) => {
