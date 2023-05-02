@@ -19,12 +19,9 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
 
   const dateFormat = datePickerProps?.dateFormat || "dd.MM.yyyy";
   const calendarStartDay = datePickerProps?.calendarStartDay || 1;
-  const isTimeIncluded = datePickerProps?.showTimeSelect || datePickerProps?.showTimeSelectOnly;
-  const initialDate = getValues(name) as Date | null;
 
-  if (!isTimeIncluded) {
-    setUtcTimeToZero(initialDate);
-  }
+  const initialDate = getValues(name) as Date | null;
+  setUtcTimeToZero(initialDate);
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(initialDate);
 
@@ -67,7 +64,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
 
               // we set the time to utc 0 to avoid timezone issues, so it will be 0Z
               // when JSON stringified
-              if (utcTimeZeroDate && !isTimeIncluded) {
+              if (utcTimeZeroDate) {
                 setUtcTimeToZero(initialDate);
               }
 

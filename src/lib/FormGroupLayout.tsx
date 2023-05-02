@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react";
-import { ControllerRenderProps, FieldError, FieldValues, get, useFormContext } from "react-hook-form";
+import { FieldError, FieldValues, get, useFormContext } from "react-hook-form";
 import { FormGroup, Label, FormFeedback, FormText, UncontrolledTooltip } from "reactstrap";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { CommonInputProps } from "./types/CommonInputProps";
@@ -9,7 +9,6 @@ import { useInternalFormContext } from "./context/InternalFormContext";
 interface FormGroupLayoutProps<T extends FieldValues>
   extends PropsWithChildren<Pick<CommonInputProps<T>, "helpText" | "label" | "name" | "id" | "labelToolTip">> {
   layout?: "checkbox" | "switch";
-  field?: ControllerRenderProps<FieldValues, string>;
 }
 
 const FormGroupLayout = <T extends FieldValues>(props: FormGroupLayoutProps<T>) => {
