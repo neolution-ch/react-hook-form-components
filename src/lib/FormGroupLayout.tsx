@@ -29,7 +29,7 @@ const FormGroupLayout = <T extends FieldValues>(props: FormGroupLayoutProps<T>) 
   return (
     <FormGroup switch={switchLayout ? true : undefined} check={checkboxLayout ? true : undefined}>
       <Label check={checkboxLayout || switchLayout} for={id}>
-        {label} {requiredFields && requiredFields.indexOf(name) > -1 && "*"}
+        {label} {requiredFields?.includes(name) && String(label)?.length > 0 && "*"}
         {labelToolTip && (
           <svg
             xmlns="http://www.w3.org/2000/svg"
