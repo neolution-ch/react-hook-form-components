@@ -1,13 +1,15 @@
 import { PropsWithChildren } from "react";
-import { FieldError, FieldValues, get, useFormContext } from "react-hook-form";
+import { ControllerRenderProps, FieldError, FieldValues, get, useFormContext } from "react-hook-form";
 import { FormGroup, Label, FormFeedback, FormText, UncontrolledTooltip } from "reactstrap";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { CommonInputProps } from "./types/CommonInputProps";
 import "./styles/FormGroupLayout.css";
+import { useInternalFormContext } from "./context/InternalFormContext";
 
 interface FormGroupLayoutProps<T extends FieldValues>
   extends PropsWithChildren<Pick<CommonInputProps<T>, "helpText" | "label" | "name" | "id" | "labelToolTip">> {
   layout?: "checkbox" | "switch";
+  field?: ControllerRenderProps<FieldValues, string>;
 }
 
 const FormGroupLayout = <T extends FieldValues>(props: FormGroupLayoutProps<T>) => {
@@ -16,6 +18,8 @@ const FormGroupLayout = <T extends FieldValues>(props: FormGroupLayoutProps<T>) 
   const {
     formState: { errors },
   } = useFormContext();
+
+  const { requiredFields } = useInternalFormContext();
 
   const fieldError = get(errors, name) as FieldError | undefined;
   const errorMessage = String(fieldError?.message);
@@ -26,7 +30,7 @@ const FormGroupLayout = <T extends FieldValues>(props: FormGroupLayoutProps<T>) 
   return (
     <FormGroup switch={switchLayout ? true : undefined} check={checkboxLayout ? true : undefined}>
       <Label check={checkboxLayout || switchLayout} for={id}>
-        {label}
+        {label} {requiredFields && requiredFields.indexOf(name) > -1 && "*"}
         {labelToolTip && (
           <svg
             xmlns="http://www.w3.org/2000/svg"
