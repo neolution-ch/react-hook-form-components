@@ -277,4 +277,21 @@ describe("Input.cy.tsx", () => {
 
     cy.get(`input[name=${name}]`).should("be.disabled");
   });
+
+  it("placeholder", () => {
+    const name = faker.random.word();
+    const placeholder = faker.random.word();
+
+    cy.mount(
+      <Form
+        onSubmit={() => {
+          // Do nothing
+        }}
+      >
+        <Input name={name} label={name} placeholder={placeholder} />
+      </Form>,
+    );
+
+    cy.get(`input[name=${name}]`).invoke("attr", "placeholder").should("eq", placeholder);
+  });
 });
