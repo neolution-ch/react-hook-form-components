@@ -1,3 +1,4 @@
+import classnames from "classnames";
 import { Controller, FieldValues, useFormContext } from "react-hook-form";
 import { NumericFormat, NumericFormatProps, PatternFormat, PatternFormatProps } from "react-number-format";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
@@ -29,6 +30,7 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             value: value,
             getInputRef: ref,
+            className: classnames("form-control", { "is-invalid": error }),
             "aria-invalid": !!error,
             id,
             onBlur: (e) => {

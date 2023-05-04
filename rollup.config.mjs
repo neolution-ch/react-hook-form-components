@@ -3,10 +3,34 @@ import nodeResolve from "@rollup/plugin-node-resolve";
 import external from "rollup-plugin-peer-deps-external";
 import terser from "@rollup/plugin-terser";
 import typescript from "rollup-plugin-typescript2";
+import css from "rollup-plugin-import-css";
+
+const input = "src/index.ts";
+
+const plugins = [
+  css({
+    output: "dist/index.css",
+  }),
+  external(),
+  typescript({
+    clean: true,
+    exclude: ["**/__tests__", "**/*.test.ts", "**/stories/**/*"],
+  }),
+  commonjs({
+    include: /\/node_modules\//,
+  }),
+  nodeResolve(),
+  terser({
+    output: { comments: false },
+    compress: {
+      drop_console: true,
+    },
+  }),
+];
 
 export default [
   {
-    input: "src/index.ts",
+    input,
     output: {
       file: "dist/index.cjs.js",
       format: "cjs",
@@ -16,26 +40,10 @@ export default [
       exports: "named",
       sourcemap: true,
     },
-    plugins: [
-      external(),
-      typescript({
-        clean: true,
-        exclude: ["**/__tests__", "**/*.test.ts"],
-      }),
-      commonjs({
-        include: /\/node_modules\//,
-      }),
-      nodeResolve(),
-      terser({
-        output: { comments: false },
-        compress: {
-          drop_console: true,
-        },
-      }),
-    ],
+    plugins,
   },
   {
-    input: "src/index.ts",
+    input,
     output: {
       file: "dist/index.esm.mjs",
       format: "esm",
@@ -45,26 +53,10 @@ export default [
       exports: "named",
       sourcemap: true,
     },
-    plugins: [
-      external(),
-      typescript({
-        clean: true,
-        exclude: ["**/__tests__", "**/*.test.ts"],
-      }),
-      commonjs({
-        include: /\/node_modules\//,
-      }),
-      nodeResolve(),
-      terser({
-        output: { comments: false },
-        compress: {
-          drop_console: true,
-        },
-      }),
-    ],
+    plugins,
   },
   {
-    input: "src/index.ts",
+    input,
     output: {
       file: "dist/index.umd.js",
       format: "umd",
@@ -74,22 +66,6 @@ export default [
       exports: "named",
       sourcemap: true,
     },
-    plugins: [
-      external(),
-      typescript({
-        clean: true,
-        exclude: ["**/__tests__", "**/*.test.ts"],
-      }),
-      commonjs({
-        include: /\/node_modules\//,
-      }),
-      nodeResolve(),
-      terser({
-        output: { comments: false },
-        compress: {
-          drop_console: true,
-        },
-      }),
-    ],
+    plugins,
   },
 ];
