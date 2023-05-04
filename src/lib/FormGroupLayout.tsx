@@ -3,7 +3,6 @@ import { FieldError, FieldValues, get, useFormContext } from "react-hook-form";
 import { FormGroup, Label, FormFeedback, FormText, UncontrolledTooltip } from "reactstrap";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { CommonInputProps } from "./types/CommonInputProps";
-import "./styles/FormGroupLayout.css";
 
 interface FormGroupLayoutProps<T extends FieldValues>
   extends PropsWithChildren<Pick<CommonInputProps<T>, "helpText" | "label" | "name" | "id" | "labelToolTip">> {

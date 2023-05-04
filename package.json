@@ -1,6 +1,6 @@
 {
   "name": "@neolution-ch/react-hook-form-components",
-  "version": "0.10.0",
+  "version": "1.10.0",
   "description": "a collection of react hook form components to reduce boilerplate and figuring out how to integrate react hook form with other libraries",
   "homepage": "https://neolution-ch.github.io/react-hook-form-components",
   "repository": {
@@ -9,31 +9,32 @@
   },
   "license": "MIT",
   "author": "Neolution",
-  "main": "dist/index.js",
-  "module": "dist/index.esm.mjs",
-  "umd:main": "dist/index.umd.js",
-  "unpkg": "dist/index.umd.js",
-  "jsdelivr": "dist/index.umd.js",
-  "jsnext:main": "dist/index.esm.mjs",
-  "source": "src/index.ts",
-  "types": "dist/index.d.ts",
   "sideEffects": false,
   "exports": {
     "./package.json": "./package.json",
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.esm.mjs",
-      "require": "./dist/index.js"
+      "require": "./dist/index.cjs"
     }
   },
+  "main": "dist/index.cjs",
+  "umd:main": "dist/index.umd.js",
+  "jsdelivr": "dist/index.umd.js",
+  "unpkg": "dist/index.umd.js",
+  "module": "dist/index.esm.mjs",
+  "source": "src/index.ts",
+  "jsnext:main": "dist/index.esm.mjs",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
     "build": "microbundle --jsx React.createElement --jsxFragment React.Fragment --jsxImportSource react --globals react/jsx-runtime=jsx --tsconfig ./tsconfig.microbundle.json",
+    "build-rollup": "rollup -c",
     "build-storybook": "build-storybook",
     "lint": "eslint \"**/*.{ts,tsx}\" --cache --max-warnings 0",
-    "prepack": "yarn build",
+    "prepack": "yarn build-rollup",
     "prepare-pr": "yarn prettier . --write && yarn lint && yarn build && yarn test\"",
     "prettier-check": "prettier --check .",
     "prettier-write": "prettier --write .",
@@ -52,6 +53,8 @@
     "@babel/core": "^7.20.2",
     "@popperjs/core": "^2.11.6",
     "@release-it/keep-a-changelog": "^3.1.0",
+    "@rollup/plugin-commonjs": "^22.0.2",
+    "@rollup/plugin-node-resolve": "^14.1.0",
     "@storybook/addon-actions": "^6.5.13",
     "@storybook/addon-essentials": "^6.5.13",
     "@storybook/addon-interactions": "^6.5.13",
@@ -85,6 +88,11 @@
     "react-hook-form": "^7.39.4",
     "reactstrap": "^9.1.5",
     "release-it": "^15.5.0",
+    "rollup": "^2.79.1",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-sourcemaps": "^0.6.3",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript2": "^0.34.1",
     "shx": "^0.3.4",
     "tsconfig-paths-webpack-plugin": "^4.0.0",
     "typescript": "^4.9.3",
