@@ -1,8 +1,7 @@
 import commonjs from "@rollup/plugin-commonjs";
 import nodeResolve from "@rollup/plugin-node-resolve";
 import external from "rollup-plugin-peer-deps-external";
-import sourcemaps from "rollup-plugin-sourcemaps";
-import { terser } from "rollup-plugin-terser";
+import terser from "@rollup/plugin-terser";
 import typescript from "rollup-plugin-typescript2";
 
 export default [
@@ -15,6 +14,7 @@ export default [
       sourcemap: true,
       globals: { react: "React" },
       exports: "named",
+      sourcemap: true,
     },
     plugins: [
       external(),
@@ -25,7 +25,6 @@ export default [
       commonjs({
         include: /\/node_modules\//,
       }),
-      sourcemaps(),
       nodeResolve(),
       terser({
         output: { comments: false },
@@ -44,6 +43,7 @@ export default [
       sourcemap: true,
       globals: { react: "React" },
       exports: "named",
+      sourcemap: true,
     },
     plugins: [
       external(),
@@ -54,7 +54,6 @@ export default [
       commonjs({
         include: /\/node_modules\//,
       }),
-      sourcemaps(),
       nodeResolve(),
       terser({
         output: { comments: false },
@@ -73,6 +72,7 @@ export default [
       sourcemap: true,
       globals: { react: "React" },
       exports: "named",
+      sourcemap: true,
     },
     plugins: [
       external(),
@@ -83,7 +83,6 @@ export default [
       commonjs({
         include: /\/node_modules\//,
       }),
-      sourcemaps(),
       nodeResolve(),
       terser({
         output: { comments: false },
