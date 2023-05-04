@@ -11,7 +11,9 @@ const plugins = [
   css({
     output: "dist/index.css",
   }),
-  external(),
+  external({
+    includeDependencies: true,
+  }),
   typescript({
     clean: true,
     exclude: ["**/__tests__", "**/*.test.ts", "**/stories/**/*"],

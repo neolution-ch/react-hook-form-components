@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Changed from `microbundle` to `rollup` for building the package
+- Updated all the dependencies to the latest version
+
 ### Fixed
 
 - Fixed `useFormContext` that returned null on server side.
