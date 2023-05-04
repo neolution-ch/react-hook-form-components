@@ -41,6 +41,7 @@ export default [
       globals: { react: "React" },
       exports: "named",
       sourcemap: true,
+      interop: "auto",
     },
     plugins,
   },
