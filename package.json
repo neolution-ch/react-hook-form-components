@@ -14,17 +14,17 @@
     "./package.json": "./package.json",
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.esm.mjs",
+      "import": "./dist/index.modern.js",
       "require": "./dist/index.cjs"
     }
   },
-  "main": "dist/index.cjs",
+  "main": "dist/index.js",
   "umd:main": "dist/index.umd.js",
   "jsdelivr": "dist/index.umd.js",
   "unpkg": "dist/index.umd.js",
-  "module": "dist/index.esm.mjs",
+  "module": "dist/index.modern.js",
   "source": "src/index.ts",
-  "jsnext:main": "dist/index.esm.mjs",
+  "jsnext:main": "dist/index.modern.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist"

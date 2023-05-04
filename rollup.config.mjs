@@ -32,7 +32,7 @@ export default [
   {
     input,
     output: {
-      file: "dist/index.cjs.js",
+      file: "dist/index.js",
       format: "cjs",
       name: "ReactHookFormComponents",
       sourcemap: true,
@@ -45,7 +45,7 @@ export default [
   {
     input,
     output: {
-      file: "dist/index.esm.mjs",
+      file: "dist/index.modern.js",
       format: "esm",
       name: "ReactHookFormComponents",
       sourcemap: true,
