@@ -33,7 +33,7 @@
     "build": "rollup -c",
     "build-storybook": "build-storybook",
     "lint": "eslint \"**/*.{ts,tsx}\" --cache --max-warnings 0",
-    "prepack": "yarn build-rollup",
+    "prepack": "yarn build",
     "prepare-pr": "yarn prettier . --write && yarn lint && yarn build && yarn test\"",
     "prettier-check": "prettier --check .",
     "prettier-write": "prettier --write .",
