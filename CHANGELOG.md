@@ -11,6 +11,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `requiredFields` property names array used to just mark label of required fields with `*` character
 
+## [0.10.1] - 2023-05-08
+
+### Changed
+
+- Changed from `microbundle` to `rollup` for building the package
+- Updated all the dependencies to the latest version
+
+### Fixed
+
+- Fixed `useFormContext` that returned null on server side.
+
 ## [0.10.0] - 2023-04-27
 
 ### Added
@@ -135,10 +146,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Created package :tada:
 
-[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/0.10.0...HEAD
+[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/0.10.1...HEAD
 [0.1.2]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.1...0.1.2
 [0.1.1]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.1.0
+[0.10.1]: https://github.com/neolution-ch/react-hook-form-components/compare/0.10.0...0.10.1
 [0.10.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.9.0...0.10.0
 [0.9.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.8.1...0.9.0
 [0.8.1]: https://github.com/neolution-ch/react-hook-form-components/compare/0.8.0...0.8.1
