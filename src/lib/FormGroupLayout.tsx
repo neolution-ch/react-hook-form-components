@@ -23,13 +23,19 @@ const FormGroupLayout = <T extends FieldValues>(props: FormGroupLayoutProps<T>) 
   const fieldError = get(errors, name) as FieldError | undefined;
   const errorMessage = String(fieldError?.message);
 
+  let labelText = String(label);
+
+  if (requiredFields?.includes(name) && labelText?.length > 0) {
+    labelText += " *";
+  }
+
   const switchLayout = layout === "switch";
   const checkboxLayout = layout === "checkbox";
 
   return (
     <FormGroup switch={switchLayout ? true : undefined} check={checkboxLayout ? true : undefined}>
       <Label check={checkboxLayout || switchLayout} for={id}>
-        {label} {requiredFields?.includes(name) && String(label)?.length > 0 && "*"}
+        {labelText}
         {labelToolTip && (
           <svg
             xmlns="http://www.w3.org/2000/svg"
