@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.1] - 2023-05-08
+
 ### Changed
 
 - Changed from `microbundle` to `rollup` for building the package
@@ -140,10 +142,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Created package :tada:
 
-[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/0.10.0...HEAD
+[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/0.10.1...HEAD
 [0.1.2]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.1...0.1.2
 [0.1.1]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.1.0
+[0.10.1]: https://github.com/neolution-ch/react-hook-form-components/compare/0.10.0...0.10.1
 [0.10.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.9.0...0.10.0
 [0.9.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.8.1...0.9.0
 [0.8.1]: https://github.com/neolution-ch/react-hook-form-components/compare/0.8.0...0.8.1
