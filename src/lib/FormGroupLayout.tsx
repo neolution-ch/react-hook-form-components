@@ -23,10 +23,10 @@ const FormGroupLayout = <T extends FieldValues>(props: FormGroupLayoutProps<T>) 
   const fieldError = get(errors, name) as FieldError | undefined;
   const errorMessage = String(fieldError?.message);
 
-  let labelText = String(label);
+  let labelText = label;
 
-  if (requiredFields?.includes(name) && labelText?.length > 0) {
-    labelText += " *";
+  if (typeof labelText == "string" && requiredFields?.includes(name) && labelText?.length > 0) {
+    labelText = `${String(label)} *`;
   }
 
   const switchLayout = layout === "switch";
