@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `requiredFields` property names array used to just mark label of required fields with `*` character
+
 ## [0.10.1] - 2023-05-08
 
 ### Changed

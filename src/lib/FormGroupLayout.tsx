@@ -4,6 +4,7 @@ import { FormGroup, Label, FormFeedback, FormText, UncontrolledTooltip } from "r
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { CommonInputProps } from "./types/CommonInputProps";
 import "./styles/FormGroupLayout.css";
+import { useInternalFormContext } from "./context/InternalFormContext";
 
 interface FormGroupLayoutProps<T extends FieldValues>
   extends PropsWithChildren<Pick<CommonInputProps<T>, "helpText" | "label" | "name" | "id" | "labelToolTip">> {
@@ -17,8 +18,16 @@ const FormGroupLayout = <T extends FieldValues>(props: FormGroupLayoutProps<T>) 
     formState: { errors },
   } = useFormContext();
 
+  const { requiredFields } = useInternalFormContext();
+
   const fieldError = get(errors, name) as FieldError | undefined;
   const errorMessage = String(fieldError?.message);
+
+  let labelText = label;
+
+  if (typeof labelText == "string" && requiredFields?.includes(name) && labelText?.length > 0) {
+    labelText = `${String(label)} *`;
+  }
 
   const switchLayout = layout === "switch";
   const checkboxLayout = layout === "checkbox";
@@ -26,7 +35,7 @@ const FormGroupLayout = <T extends FieldValues>(props: FormGroupLayoutProps<T>) 
   return (
     <FormGroup switch={switchLayout ? true : undefined} check={checkboxLayout ? true : undefined}>
       <Label check={checkboxLayout || switchLayout} for={id}>
-        {label}
+        {labelText}
         {labelToolTip && (
           <svg
             xmlns="http://www.w3.org/2000/svg"

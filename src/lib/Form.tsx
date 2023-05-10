@@ -1,15 +1,17 @@
 import { ReactNode } from "react";
 import { DeepPartial, FieldValues, FormProvider, Resolver, SubmitHandler, useForm, UseFormReturn } from "react-hook-form";
 import { jsonIsoDateReviver } from "./helpers/dateUtils";
+import { InternalFormContext } from "./context/InternalFormContext";
 
 interface FormProps<T extends FieldValues> {
   onSubmit: SubmitHandler<T>;
   resolver?: Resolver<T>;
   defaultValues?: DeepPartial<T>;
+  requiredFields?: (keyof T)[];
   children: ((formMethods: UseFormReturn<T, unknown>) => ReactNode) | ReactNode;
 }
 
-const Form = <T extends FieldValues>({ children, onSubmit, resolver, defaultValues }: FormProps<T>) => {
+const Form = <T extends FieldValues>({ children, onSubmit, resolver, defaultValues, requiredFields }: FormProps<T>) => {
   const revivedDefaultValues = defaultValues
     ? (JSON.parse(JSON.stringify(defaultValues), jsonIsoDateReviver) as DeepPartial<T>)
     : defaultValues;
@@ -18,17 +20,19 @@ const Form = <T extends FieldValues>({ children, onSubmit, resolver, defaultValu
   const { handleSubmit } = formMethods;
 
   return (
-    <FormProvider {...formMethods}>
-      <form
-        onSubmit={(e) => {
-          void (async () => {
-            await handleSubmit(onSubmit)(e);
-          })();
-        }}
-      >
-        {children instanceof Function ? children(formMethods) : children}
-      </form>
-    </FormProvider>
+    <InternalFormContext.Provider value={{ requiredFields }}>
+      <FormProvider {...formMethods}>
+        <form
+          onSubmit={(e) => {
+            void (async () => {
+              await handleSubmit(onSubmit)(e);
+            })();
+          }}
+        >
+          {children instanceof Function ? children(formMethods) : children}
+        </form>
+      </FormProvider>
+    </InternalFormContext.Provider>
   );
 };
 
