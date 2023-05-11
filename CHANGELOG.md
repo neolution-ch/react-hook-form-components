@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `autoSubmitOnChangeDelayInMs` property to make a form submit automatically with a delay in MS after every change
+
 ## [0.11.0] - 2023-05-10
 
 ### Added
