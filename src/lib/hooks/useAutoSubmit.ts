@@ -3,14 +3,28 @@ import { FieldValues, SubmitHandler, UseFormReturn } from "react-hook-form";
 import { Options, useDebouncedCallback } from "use-debounce";
 
 interface UseAutoSubmitProps<T extends FieldValues> {
+  /**
+   * will be executed when an submit action was triggered
+   */
   onSubmit: SubmitHandler<T>;
+
+  /**
+   * the form methods of the form
+   */
   formMethods: UseFormReturn<T, object>;
+
+  /**
+   * enables the form to do an autosubmit on values changed
+   */
   autoSubmitConfig?: AutoSubmitConfig;
 }
 
 type AutoSubmitHandler = (e?: React.FormEvent<HTMLFormElement> | undefined) => void;
 
 export interface AutoSubmitConfig extends Options {
+  /**
+   * the waiting time in MS after the last change till the auto submit gets triggered
+   */
   wait: number;
 }
 

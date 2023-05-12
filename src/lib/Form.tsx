@@ -5,11 +5,34 @@ import { InternalFormContext } from "./context/InternalFormContext";
 import { AutoSubmitConfig, useAutoSubmit } from "./hooks/useAutoSubmit";
 
 interface FormProps<T extends FieldValues> {
+  /**
+   * will be executed when an submit action was triggered
+   */
   onSubmit: SubmitHandler<T>;
+
+  /**
+   * the resolver for the validation
+   */
   resolver?: Resolver<T>;
+
+  /**
+   * the default values of the form
+   */
   defaultValues?: DeepPartial<T>;
+
+  /**
+   * passed fieldnames will be marked with "*"
+   */
   requiredFields?: (keyof T)[];
+
+  /**
+   * enables the form to do an autosubmit on values changed
+   */
   autoSubmitConfig?: AutoSubmitConfig;
+
+  /**
+   * the children that will be drawn inside the form
+   */
   children: ((formMethods: UseFormReturn<T, unknown>) => ReactNode) | ReactNode;
 }
 
