@@ -1,6 +1,6 @@
 {
   "name": "@neolution-ch/react-hook-form-components",
-  "version": "0.11.0",
+  "version": "0.11.1",
   "description": "a collection of react hook form components to reduce boilerplate and figuring out how to integrate react hook form with other libraries",
   "homepage": "https://neolution-ch.github.io/react-hook-form-components",
   "repository": {
@@ -37,7 +37,7 @@
     "prepare-pr": "yarn prettier . --write && yarn lint && yarn build && yarn test\"",
     "prettier-check": "prettier --check .",
     "prettier-write": "prettier --write .",
-    "start": "microbundle watch --jsx React.createElement --jsxFragment React.Fragment --jsxImportSource react --globals react/jsx-runtime=jsx --no-compress --tsconfig ./tsconfig.microbundle.json",
+    "start": "rollup -c -w",
     "start-all": "concurrently \"yarn start\" \"yarn start-yalc\"",
     "start-yalc": "yarn nodemon --watch dist -x \"yarn yalc push\"",
     "storybook": "start-storybook -p 6006"

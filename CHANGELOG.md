@@ -11,6 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `autoSubmitOnChangeDelayInMs` property to make a form submit automatically with a delay in MS after every change
 
+## [0.11.1] - 2023-05-12
+
+### Fixed
+
+- Changed the default for the InternalFormContext to be a suitable default instead of null
+
 ## [0.11.0] - 2023-05-10
 
 ### Added
@@ -152,10 +158,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Created package :tada:
 
-[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/0.11.0...HEAD
+[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/0.11.1...HEAD
 [0.1.2]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.1...0.1.2
 [0.1.1]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.1.0
+[0.11.1]: https://github.com/neolution-ch/react-hook-form-components/compare/0.11.0...0.11.1
 [0.11.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.10.1...0.11.0
 [0.10.1]: https://github.com/neolution-ch/react-hook-form-components/compare/0.10.0...0.10.1
 [0.10.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.9.0...0.10.0

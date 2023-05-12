@@ -45,7 +45,7 @@ const Form = <T extends FieldValues>({ children, onSubmit, resolver, defaultValu
   const autoSubmitHandler = useAutoSubmit({ onSubmit, formMethods, autoSubmitConfig });
 
   return (
-    <InternalFormContext.Provider value={{ requiredFields }}>
+    <InternalFormContext.Provider value={{ requiredFields: requiredFields || [] }}>
       <FormProvider {...formMethods}>
         <form onSubmit={autoSubmitHandler}>{children instanceof Function ? children(formMethods) : children}</form>
       </FormProvider>
