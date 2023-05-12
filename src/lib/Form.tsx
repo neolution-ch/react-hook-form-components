@@ -20,7 +20,7 @@ const Form = <T extends FieldValues>({ children, onSubmit, resolver, defaultValu
   const { handleSubmit } = formMethods;
 
   return (
-    <InternalFormContext.Provider value={{ requiredFields }}>
+    <InternalFormContext.Provider value={{ requiredFields: requiredFields || [] }}>
       <FormProvider {...formMethods}>
         <form
           onSubmit={(e) => {
