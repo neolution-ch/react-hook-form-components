@@ -29,16 +29,26 @@ it("radio button multiple autosave works", () => {
   );
 
   cy.get("@onSubmitSpy1").should("have.callCount", 0);
-  options1.forEach(({ value, label }) => {
+  options1.forEach(({ value, label }, i) => {
     cy.contains("label", label).click();
-    cy.get("@onSubmitSpy1").should("be.calledOnceWith", { [name1]: value });
+
+    cy.get("@onSubmitSpy1").should("have.callCount", i + 1);
+    cy.get("@onSubmitSpy1")
+      .its("lastCall.args.0")
+      .should("deep.equal", { [name1]: value });
   });
+  cy.get("@onSubmitSpy1").should("callCount", options1.length);
 
   cy.get("@onSubmitSpy2").should("have.callCount", 0);
-  options2.forEach(({ value, label }) => {
+  options2.forEach(({ value, label }, i) => {
     cy.contains("label", label).click();
-    cy.get("@onSubmitSpy2").should("be.calledOnceWith", { [name2]: value });
+
+    cy.get("@onSubmitSpy2").should("have.callCount", i + 1);
+    cy.get("@onSubmitSpy2")
+      .its("lastCall.args.0")
+      .should("deep.equal", { [name2]: value });
   });
+  cy.get("@onSubmitSpy2").should("callCount", options2.length);
 });
 
 it("radio button autosave only once", () => {
