@@ -18,14 +18,14 @@ const FormGroupLayout = <T extends FieldValues>(props: FormGroupLayoutProps<T>) 
     formState: { errors },
   } = useFormContext();
 
-  const { requiredFields } = useInternalFormContext();
+  const { requiredFields } = useInternalFormContext<T>();
 
   const fieldError = get(errors, name) as FieldError | undefined;
   const errorMessage = String(fieldError?.message);
 
   let labelText = label;
 
-  if (typeof labelText == "string" && requiredFields?.includes(name) && labelText?.length > 0) {
+  if (typeof labelText == "string" && requiredFields.includes(name) && labelText?.length > 0) {
     labelText = `${String(label)} *`;
   }
 

@@ -2,7 +2,7 @@ import { createContext, useContext } from "react";
 import { FieldValues } from "react-hook-form";
 
 export interface InternalFormContextProps<T extends FieldValues> {
-  requiredFields?: (keyof T)[];
+  requiredFields: (keyof T)[];
 }
 
 export interface InternalFormContextProviderProps<T extends FieldValues> extends Pick<InternalFormContextProps<T>, "requiredFields"> {
@@ -27,8 +27,8 @@ export const InternalFormProvider = <T extends FieldValues>(props: InternalFormC
   );
 };
 
-export const useInternalFormContext = () => {
+export const useInternalFormContext = <T extends FieldValues>() => {
   const context = useContext(InternalFormContext);
 
-  return context;
+  return context as InternalFormContextProps<T>;
 };
