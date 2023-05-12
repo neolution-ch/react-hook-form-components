@@ -9,8 +9,9 @@ export interface InternalFormContextProviderProps<T extends FieldValues> extends
   children: React.ReactNode;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const InternalFormContext = createContext<InternalFormContextProps<any> | null>(null);
+export const InternalFormContext = createContext<InternalFormContextProps<never>>({
+  requiredFields: [],
+});
 
 export const InternalFormProvider = <T extends FieldValues>(props: InternalFormContextProviderProps<T>) => {
   const { children, requiredFields } = props;
@@ -28,8 +29,6 @@ export const InternalFormProvider = <T extends FieldValues>(props: InternalFormC
 
 export const useInternalFormContext = () => {
   const context = useContext(InternalFormContext);
-  if (context === null) {
-    throw new Error("useInternalFormContext must be used within a InternalFormContextProvider");
-  }
+
   return context;
 };

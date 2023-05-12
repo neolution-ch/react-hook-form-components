@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Changed the default for the InternalFormContext to be a suitable default instead of null
+
 ## [0.11.0] - 2023-05-10
 
 ### Added
