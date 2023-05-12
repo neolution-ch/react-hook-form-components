@@ -61,10 +61,10 @@ it("radio button multiple autosave works", () => {
 
   cy.mount(
     <>
-      <Form onSubmit={cy.spy().as("onSubmitSpy1")} resolver={yupResolver(schema1)} autoSubmitOnChangeDelayInMs={500}>
+      <Form onSubmit={cy.spy().as("onSubmitSpy1")} resolver={yupResolver(schema1)} autoSubmitConfig={{ wait: 500 }}>
         <Input type="radio" label="hello" name={name1} helpText="help" options={options1} />
       </Form>
-      <Form onSubmit={cy.spy().as("onSubmitSpy2")} resolver={yupResolver(schema2)} autoSubmitOnChangeDelayInMs={500}>
+      <Form onSubmit={cy.spy().as("onSubmitSpy2")} resolver={yupResolver(schema2)} autoSubmitConfig={{ wait: 500 }}>
         <Input type="radio" label="hello" name={name2} helpText="help" options={options2} />
       </Form>
     </>,
@@ -92,7 +92,7 @@ it("radio button autosave only once", () => {
   const options = faker.helpers.uniqueArray<LabelValueOption>(() => ({ value: faker.random.alpha(10), label: faker.random.alpha(10) }), 3);
 
   cy.mount(
-    <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)} autoSubmitOnChangeDelayInMs={500}>
+    <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)} autoSubmitConfig={{ wait: 500 }}>
       <Input type="radio" label="hello" name={name} helpText="help" options={options} />
     </Form>,
   );
