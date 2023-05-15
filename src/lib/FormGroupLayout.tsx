@@ -26,7 +26,7 @@ const FormGroupLayout = <T extends FieldValues>(props: FormGroupLayoutProps<T>) 
 
   return (
     <FormGroup switch={switchLayout ? true : undefined} check={checkboxLayout ? true : undefined}>
-      <FormGroupLayoutLabel label={label} fieldName={name} fieldId={id} tooltip={labelToolTip} layout={layout} />
+      <FormGroupLayoutLabel<T> label={label} fieldName={name} fieldId={id} tooltip={labelToolTip} layout={layout} />
       {children}
       <FormFeedback>{errorMessage}</FormFeedback>
       {helpText && <FormText>{helpText}</FormText>}
