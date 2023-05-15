@@ -1,10 +1,10 @@
 import { PropsWithChildren } from "react";
 import { FieldError, FieldValues, get, useFormContext } from "react-hook-form";
-import { FormGroup, Label, FormFeedback, FormText, UncontrolledTooltip } from "reactstrap";
+import { FormGroup, FormFeedback, FormText } from "reactstrap";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { CommonInputProps } from "./types/CommonInputProps";
 import "./styles/FormGroupLayout.css";
-import { useInternalFormContext } from "./context/InternalFormContext";
+import { FormGroupLayoutLabel } from "./FormGroupLayoutLabel";
 
 interface FormGroupLayoutProps<T extends FieldValues>
   extends PropsWithChildren<Pick<CommonInputProps<T>, "helpText" | "label" | "name" | "id" | "labelToolTip">> {
@@ -18,47 +18,15 @@ const FormGroupLayout = <T extends FieldValues>(props: FormGroupLayoutProps<T>) 
     formState: { errors },
   } = useFormContext();
 
-  const { requiredFields } = useInternalFormContext<T>();
-
   const fieldError = get(errors, name) as FieldError | undefined;
   const errorMessage = String(fieldError?.message);
-
-  let labelText = label;
-
-  if (typeof labelText == "string" && requiredFields.includes(name) && labelText?.length > 0) {
-    labelText = `${String(label)} *`;
-  }
 
   const switchLayout = layout === "switch";
   const checkboxLayout = layout === "checkbox";
 
   return (
     <FormGroup switch={switchLayout ? true : undefined} check={checkboxLayout ? true : undefined}>
-      <Label check={checkboxLayout || switchLayout} for={id}>
-        {labelText}
-        {labelToolTip && (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            id={`Tooltip-${id}`}
-            className="tooltip--icon"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"
-            />
-          </svg>
-        )}
-      </Label>
-      {labelToolTip && (
-        <UncontrolledTooltip placement="top" target={`Tooltip-${id}`}>
-          {labelToolTip}
-        </UncontrolledTooltip>
-      )}
+      <FormGroupLayoutLabel<T> label={label} fieldName={name} fieldId={id} tooltip={labelToolTip} layout={layout} />
       {children}
       <FormFeedback>{errorMessage}</FormFeedback>
       {helpText && <FormText>{helpText}</FormText>}
