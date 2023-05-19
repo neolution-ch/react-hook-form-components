@@ -59,3 +59,11 @@ jobs:
       #   working-directory: ./cypress
       - run: yarn cypress run --component
         working-directory: ./cypress
+
+      # Upload screenshits/videos
+      - name: Upload screenshots
+        uses: actions/upload-artifact@latest
+        if: failure()
+        with:
+          name: cypress-snapshots
+          path: /home/runner/work/react-hook-form-components/react-hook-form-components/cypress/cypress/
