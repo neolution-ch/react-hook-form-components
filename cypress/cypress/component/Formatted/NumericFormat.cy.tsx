@@ -3,6 +3,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Form, FormattedInput } from "react-hook-form-components";
 import { NumericFormatProps, numericFormatter } from "react-number-format";
 import * as yup from "yup";
+import { getSelectedTextFromInputField } from "../../helpers/getSelectedText";
 
 const numericFormat: NumericFormatProps = {
   thousandSeparator: faker.random.alpha(),
@@ -46,6 +47,39 @@ it("is disabled", () => {
   );
 
   cy.get(`input[name=${name}]`).should("be.disabled");
+});
+
+it("auto mark on focus", () => {
+  const name = faker.random.word();
+  const randomNumber = faker.datatype.number({
+    min: 10000000,
+  });
+
+  cy.mount(
+    <Form
+      defaultValues={{ [name]: randomNumber }}
+      onSubmit={() => {
+        // Do nothing
+      }}
+    >
+      <FormattedInput name={name} label={name} numericFormat={numericFormat} markAllOnFocus />
+    </Form>,
+  );
+
+  cy.contains("label", name).click();
+  let selectedText: string | undefined;
+  cy.get(`input[id=${name}]`)
+    .then((input) => {
+      selectedText = getSelectedTextFromInputField(input);
+    })
+    .then(() => {
+      // replace thousand separator
+      const thousandSeparator = /(\d+)(\d{3})/;
+      let randomNumberFormatted: string = randomNumber?.toString();
+      while (thousandSeparator.test(randomNumberFormatted))
+        randomNumberFormatted = randomNumberFormatted.replace(thousandSeparator, `$1${numericFormat.thousandSeparator}$2`);
+      expect(selectedText).to.equal(randomNumberFormatted);
+    });
 });
 
 it("validation works", () => {

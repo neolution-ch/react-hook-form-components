@@ -2,10 +2,26 @@ import { FieldValues, useFormContext } from "react-hook-form";
 import { Input } from "reactstrap";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { InputProps } from "./Input";
+import { useMarkOnFocusHandler } from "./hooks/useMarkOnFocusHandler";
 
 const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
-  const { disabled, type, onBlur, onChange, value, options, multiple, rangeMin, rangeMax, textAreaRows, plainText, placeholder } = props;
+  const {
+    disabled,
+    type,
+    onBlur,
+    onChange,
+    value,
+    options,
+    multiple,
+    rangeMin,
+    rangeMax,
+    textAreaRows,
+    plainText,
+    placeholder,
+    markAllOnFocus,
+  } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
+  const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
   const {
     register,
     formState: { errors },
@@ -51,6 +67,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
             await rest.onChange(e);
           })();
         }}
+        onFocus={focusHandler}
       >
         {options?.map((option) => (
           <option key={option.value} value={option.value}>
