@@ -60,7 +60,7 @@ jobs:
       - run: yarn cypress run --component
         working-directory: ./cypress
 
-      # Upload screenshits/videos
+      # Upload screenshots/videos
       - name: Upload screenshots
         uses: actions/upload-artifact@v3
         if: failure()
