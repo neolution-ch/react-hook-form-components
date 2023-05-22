@@ -61,9 +61,11 @@ jobs:
         working-directory: ./cypress
 
       # Upload screenshots/videos
-      - name: Upload screenshots
+      - name: Upload snapshots
         uses: actions/upload-artifact@v3
         if: failure()
         with:
-          name: cypress-snapshots
-          path: /home/runner/work/react-hook-form-components/react-hook-form-components/cypress/cypress/
+          name: cypress-snapshots-${{ matrix.node-version }}
+          path: |
+            /home/runner/work/react-hook-form-components/react-hook-form-components/cypress/cypress/screenshots
+            /home/runner/work/react-hook-form-components/react-hook-form-components/cypress/cypress/videos
