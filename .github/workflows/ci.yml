@@ -63,7 +63,7 @@ jobs:
       # Upload screenshots/videos
       - name: Upload snapshots
         uses: actions/upload-artifact@v3
-        if: failed()
+        if: failure()
         with:
           name: cypress-snapshots-${{ matrix.node-version }}
           path: |
