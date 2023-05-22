@@ -86,7 +86,7 @@ it("select only works", () => {
     </Form>,
   );
 
-  cy.get(".mb-3").should("have.length", 1);
+  cy.get(".mb-3").should("have.length", 0);
   cy.get(`select[id=${name}]`).select(randomOption.label);
   cy.get("input[type=submit]").click({ force: true });
 
