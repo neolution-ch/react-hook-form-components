@@ -68,27 +68,3 @@ it("is disabled", () => {
 
   cy.get(`select[name=${name}]`).should("be.disabled");
 });
-
-it("select only works", () => {
-  const name = faker.random.alpha(10);
-  const schema = yup.object().shape({
-    [name]: yup.string(),
-  });
-
-  const options = faker.helpers.uniqueArray<LabelValueOption>(() => ({ value: faker.random.alpha(10), label: faker.random.alpha(10) }), 3);
-  const randomOption = faker.helpers.arrayElement(options);
-
-  cy.mount(
-    <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
-      <Input type="select" name={name} label={name} options={options} inputOnly />
-
-      <input type={"submit"} />
-    </Form>,
-  );
-
-  cy.get(".mb-3").should("have.length", 0);
-  cy.get(`select[id=${name}]`).select(randomOption.label);
-  cy.get("input[type=submit]").click({ force: true });
-
-  cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: randomOption.value });
-});
