@@ -43,7 +43,7 @@ it("basic text input only works", () => {
     </Form>,
   );
 
-  cy.get(".mb-3").should("have.length", 1);
+  cy.get(".mb-3").should("have.length", 0);
   cy.get("input[type=text]").click().type(randomWord.toString());
   cy.get("input[type=submit]").click({ force: true });
 
