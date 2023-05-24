@@ -3,7 +3,6 @@ import { Form, Input } from "react-hook-form-components";
 import { faker } from "@faker-js/faker";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { getSelectedTextFromInputField } from "../../helpers/getSelectedText";
 
 describe("Input.cy.tsx", () => {
   it("basic text input works", () => {
@@ -312,13 +311,6 @@ describe("Input.cy.tsx", () => {
     );
 
     cy.contains("label", name).click();
-    let selectedText: string | undefined;
-    cy.get(`input[id=${name}]`)
-      .then((input) => {
-        selectedText = getSelectedTextFromInputField(input);
-      })
-      .then(() => {
-        expect(selectedText).to.equal(value);
-      });
+    cy.get(`input[id=${name}]`).getSelectedText().should("eq", value);
   });
 });

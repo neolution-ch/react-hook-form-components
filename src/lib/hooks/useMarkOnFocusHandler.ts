@@ -1,13 +1,24 @@
+interface MarkOnFocusEvent {
+  currentTarget: HTMLInputElement;
+  target?: HTMLInputElement;
+}
+
+interface MarkOnFocusSyntheticEvent {
+  currentTarget: HTMLInputElement;
+}
+
+type MarkOnFocusEventHandler = (event: MarkOnFocusEvent | MarkOnFocusSyntheticEvent) => void;
+
 const useMarkOnFocusHandler = (
   markOnFocus?: boolean,
-  defaultHandler?: React.FocusEventHandler<HTMLInputElement>,
-): React.FocusEventHandler<HTMLInputElement> | undefined => {
+  defaultHandler?: (e: MarkOnFocusEvent) => void,
+): MarkOnFocusEventHandler | undefined => {
   if (markOnFocus !== true) {
     return defaultHandler;
   }
 
-  return (event: React.FocusEvent<HTMLInputElement, Element>) => {
-    event.target.select();
+  return (event: MarkOnFocusEvent) => {
+    (event.target ?? event.currentTarget).select();
     if (defaultHandler) {
       defaultHandler(event);
     }

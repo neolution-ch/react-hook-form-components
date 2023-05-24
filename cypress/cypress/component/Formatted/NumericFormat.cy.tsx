@@ -3,7 +3,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Form, FormattedInput } from "react-hook-form-components";
 import { NumericFormatProps, numericFormatter } from "react-number-format";
 import * as yup from "yup";
-import { getSelectedTextFromInputField } from "../../helpers/getSelectedText";
 
 const numericFormat: NumericFormatProps = {
   thousandSeparator: faker.random.alpha(),
@@ -67,12 +66,9 @@ it("auto mark on focus", () => {
   );
 
   cy.contains("label", name).click();
-  let selectedText: string | undefined;
   cy.get(`input[id=${name}]`)
-    .then((input) => {
-      selectedText = getSelectedTextFromInputField(input);
-    })
-    .then(() => {
+    .getSelectedText()
+    .then((selectedText) => {
       // replace thousand separator
       const thousandSeparator = /(\d+)(\d{3})/;
       let randomNumberFormatted: string = randomNumber?.toString();
