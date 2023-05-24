@@ -7,12 +7,12 @@ import "./styles/FormGroupLayout.css";
 import { FormGroupLayoutLabel } from "./FormGroupLayoutLabel";
 
 interface FormGroupLayoutProps<T extends FieldValues>
-  extends PropsWithChildren<Pick<CommonInputProps<T>, "helpText" | "label" | "name" | "id" | "labelToolTip">> {
+  extends PropsWithChildren<Pick<CommonInputProps<T>, "helpText" | "label" | "name" | "id" | "labelToolTip" | "inputOnly">> {
   layout?: "checkbox" | "switch";
 }
 
 const FormGroupLayout = <T extends FieldValues>(props: FormGroupLayoutProps<T>) => {
-  const { label, helpText, children, layout, labelToolTip } = props;
+  const { label, helpText, children, layout, labelToolTip, inputOnly } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
   const {
     formState: { errors },
@@ -24,7 +24,16 @@ const FormGroupLayout = <T extends FieldValues>(props: FormGroupLayoutProps<T>) 
   const switchLayout = layout === "switch";
   const checkboxLayout = layout === "checkbox";
 
-  return (
+  if (inputOnly && (switchLayout || checkboxLayout)) {
+    throw "'inputOnly' is not possible with switches or checkboxes";
+  }
+
+  return inputOnly ? (
+    <>
+      {children}
+      <FormFeedback>{errorMessage}</FormFeedback>
+    </>
+  ) : (
     <FormGroup switch={switchLayout ? true : undefined} check={checkboxLayout ? true : undefined}>
       <FormGroupLayoutLabel<T> label={label} fieldName={name} fieldId={id} tooltip={labelToolTip} layout={layout} />
       {children}

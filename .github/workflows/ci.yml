@@ -59,3 +59,13 @@ jobs:
       #   working-directory: ./cypress
       - run: yarn cypress run --component
         working-directory: ./cypress
+
+      # Upload screenshots/videos
+      - name: Upload snapshots
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: cypress-snapshots-${{ matrix.node-version }}
+          path: |
+            ./cypress/cypress/screenshots
+            ./cypress/cypress/videos

@@ -10,6 +10,7 @@ interface CommonInputProps<T extends FieldValues> {
   helpText?: ReactNode;
   disabled?: boolean;
   labelToolTip?: string;
+  inputOnly?: boolean;
 }
 
 export { CommonInputProps };
