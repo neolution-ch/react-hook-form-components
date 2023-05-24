@@ -11,6 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `markAllOnFocus` property to make an inputfield mark the inner text by getting the focus
 
+## [0.14.0] - 2023-05-24
+
+### Added
+
+- `inputOnly` property to only get the inputfield not nested in other elements
+
 ## [0.13.0] - 2023-05-15
 
 ### Changed
@@ -170,10 +176,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Created package :tada:
 
-[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/0.13.0...HEAD
+[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/0.14.0...HEAD
 [0.1.2]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.1...0.1.2
 [0.1.1]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.1.0
+[0.14.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.13.0...0.14.0
 [0.13.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.12.0...0.13.0
 [0.12.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.11.1...0.12.0
 [0.11.1]: https://github.com/neolution-ch/react-hook-form-components/compare/0.11.0...0.11.1

@@ -11,6 +11,7 @@ interface CommonInputProps<T extends FieldValues> {
   disabled?: boolean;
   labelToolTip?: string;
   markAllOnFocus?: boolean;
+  inputOnly?: boolean;
 }
 
 export { CommonInputProps };

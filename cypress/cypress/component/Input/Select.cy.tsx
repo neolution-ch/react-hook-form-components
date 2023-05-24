@@ -41,7 +41,7 @@ it("select multiple works", () => {
       <input type={"submit"} />
     </Form>,
   );
-
+  cy.get(".mb-3").should("have.length", 1);
   cy.get(`select[id=${name}]`).select(randomOptions.map((option) => option.label));
 
   cy.get("input[type=submit]").click({ force: true });
