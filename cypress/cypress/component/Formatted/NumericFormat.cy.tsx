@@ -48,6 +48,36 @@ it("is disabled", () => {
   cy.get(`input[name=${name}]`).should("be.disabled");
 });
 
+it("auto mark on focus", () => {
+  const name = faker.random.word();
+  const randomNumber = faker.datatype.number({
+    min: 10000000,
+  });
+
+  cy.mount(
+    <Form
+      defaultValues={{ [name]: randomNumber }}
+      onSubmit={() => {
+        // Do nothing
+      }}
+    >
+      <FormattedInput name={name} label={name} numericFormat={numericFormat} markAllOnFocus />
+    </Form>,
+  );
+
+  cy.contains("label", name).click();
+  cy.get(`input[id=${name}]`)
+    .getSelectedText()
+    .then((selectedText) => {
+      // replace thousand separator
+      const thousandSeparator = /(\d+)(\d{3})/;
+      let randomNumberFormatted: string = randomNumber?.toString();
+      while (thousandSeparator.test(randomNumberFormatted))
+        randomNumberFormatted = randomNumberFormatted.replace(thousandSeparator, `$1${numericFormat.thousandSeparator}$2`);
+      expect(selectedText).to.equal(randomNumberFormatted);
+    });
+});
+
 it("validation works", () => {
   const name = faker.random.alpha(10);
   const errorMessage = faker.random.words();

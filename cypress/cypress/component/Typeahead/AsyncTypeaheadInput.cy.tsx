@@ -194,3 +194,28 @@ it("is disabled", () => {
 
   cy.get("input.rbt-input-main").should("be.disabled");
 });
+
+it("auto mark on focus", () => {
+  const options = generateOptions(100);
+  const name = faker.random.alpha(10);
+  const randomOption = faker.helpers.arrayElements(options.objectOptions, 1)[0];
+
+  cy.mount(
+    <Form
+      onSubmit={() => {
+        // Do nothing
+      }}
+    >
+      <AsyncTypeaheadInput
+        defaultSelected={[randomOption.label]}
+        name={name}
+        label={name}
+        queryFn={async (query) => await fetchMock(options.objectOptions, query)}
+        markAllOnFocus
+      />
+    </Form>,
+  );
+
+  cy.contains("label", name).click();
+  cy.get(`input[id=${name}]`).getSelectedText().should("eq", randomOption.label);
+});

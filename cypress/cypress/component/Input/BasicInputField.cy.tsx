@@ -294,4 +294,23 @@ describe("Input.cy.tsx", () => {
 
     cy.get(`input[name=${name}]`).invoke("attr", "placeholder").should("eq", placeholder);
   });
+
+  it("auto mark on focus", () => {
+    const name = faker.random.word();
+    const value = faker.random.word();
+
+    cy.mount(
+      <Form
+        defaultValues={{ [name]: value }}
+        onSubmit={() => {
+          // Do nothing
+        }}
+      >
+        <Input name={name} label={name} markAllOnFocus />
+      </Form>,
+    );
+
+    cy.contains("label", name).click();
+    cy.get(`input[id=${name}]`).getSelectedText().should("eq", value);
+  });
 });
