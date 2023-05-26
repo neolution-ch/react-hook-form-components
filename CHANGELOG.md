@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### dependabot: \#43 Bump vm2 from 3.9.17 to 3.9.19
+
 ## [0.15.0] - 2023-05-25
 
 ### Added
