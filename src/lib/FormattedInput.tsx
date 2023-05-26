@@ -4,6 +4,7 @@ import { NumericFormat, NumericFormatProps, PatternFormat, PatternFormatProps } 
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";
 import { CommonInputProps } from "./types/CommonInputProps";
+import { useMarkOnFocusHandler } from "./hooks/useMarkOnFocusHandler";
 
 interface FormattedInputProps<T extends FieldValues> extends CommonInputProps<T> {
   patternFormat?: PatternFormatProps;
@@ -15,10 +16,20 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
     throw new Error("FormattedInput cannot have both patternFormat and numericFormat");
   }
 
-  const { disabled, label, helpText, numericFormat, patternFormat, onChange: propsOnChange, onBlur: propsOnBlur, labelToolTip } = props;
+  const {
+    disabled,
+    label,
+    helpText,
+    numericFormat,
+    patternFormat,
+    onChange: propsOnChange,
+    onBlur: propsOnBlur,
+    labelToolTip,
+    markAllOnFocus,
+  } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
   const { control } = useFormContext();
-
+  const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
   return (
     <>
       <Controller
@@ -54,10 +65,13 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
                     onValueChange={(values) => {
                       onChange(values.value);
                     }}
+                    onFocus={focusHandler}
                   ></NumericFormat>
                 )}
 
-                {patternFormat && <PatternFormat {...patternFormat} {...commonProps} onChange={onChange}></PatternFormat>}
+                {patternFormat && (
+                  <PatternFormat {...patternFormat} {...commonProps} onChange={onChange} onFocus={focusHandler}></PatternFormat>
+                )}
               </>
             </FormGroupLayout>
           );

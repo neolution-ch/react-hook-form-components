@@ -5,6 +5,7 @@ import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";
 import { convertTypeaheadOptionsToStringArray } from "./helpers/typeahead";
 import { CommonTypeaheadProps, TypeaheadOptions } from "./types/Typeahead";
+import { useMarkOnFocusHandler } from "./hooks/useMarkOnFocusHandler";
 
 interface StaticTypeaheadInputProps<T extends FieldValues> extends CommonTypeaheadProps<T> {
   options: TypeaheadOptions;
@@ -12,10 +13,11 @@ interface StaticTypeaheadInputProps<T extends FieldValues> extends CommonTypeahe
 }
 
 const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInputProps<T>) => {
-  const { disabled, label, helpText, labelToolTip, defaultSelected, reactBootstrapTypeaheadProps, onChange } = props;
+  const { disabled, label, helpText, labelToolTip, defaultSelected, reactBootstrapTypeaheadProps, onChange, markAllOnFocus } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
 
   const { control } = useFormContext();
+  const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
 
   return (
     <Controller
@@ -42,6 +44,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
             className={error ? "is-invalid" : ""}
             inputProps={{ id }}
             disabled={disabled}
+            onFocus={focusHandler}
             {...reactBootstrapTypeaheadProps}
           />
         </FormGroupLayout>

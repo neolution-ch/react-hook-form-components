@@ -47,3 +47,27 @@ it("is disabled", () => {
 
   cy.get(`input[name=${name}]`).should("be.disabled");
 });
+
+it("auto mark on focus", () => {
+  const name = faker.random.word();
+  const randomDigits = faker.random.numeric(10).toString();
+
+  cy.mount(
+    <Form
+      defaultValues={{ [name]: randomDigits }}
+      onSubmit={() => {
+        // Do nothing
+      }}
+    >
+      <FormattedInput name={name} label={name} patternFormat={patternFormat} markAllOnFocus />
+    </Form>,
+  );
+
+  cy.contains("label", name).click();
+  cy.get(`input[id=${name}]`)
+    .getSelectedText()
+    .then((selectedText) => {
+      const randomNumberFormatted: string = randomDigits?.toString().replace(/(\d{3})(\d{3})(\d{4})/, `$1-$2-$3`);
+      expect(selectedText).to.equal(randomNumberFormatted);
+    });
+});
