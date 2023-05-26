@@ -37,8 +37,8 @@ jobs:
 
       - name: initialize mandatory git config
         run: |
-          git config user.name "dependabot[bot]"
-          git config user.email support@github.com
+          git config user.name "GitHub Changelog Bot"
+          git config user.email changelog-bot@neolution.ch
 
       - run: npx prettier --write CHANGELOG.md
 
@@ -58,7 +58,7 @@ jobs:
 
       - name: Get changed files
         id: changed-files
-        uses: tj-actions/changed-files@v35
+        uses: tj-actions/changed-files@v36
 
       - name: Check if changelog was touched
         run: |
