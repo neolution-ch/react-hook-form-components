@@ -12,6 +12,42 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  depandabot-modify-changelog:
+    if: ${{ github.actor == 'dependabot[bot]' }}
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - run: |
+          insertText="### dependabot: \\\#${{ github.event.pull_request.number }} ${{ github.event.pull_request.title }}"
+
+          # check if file doesn't contain the text already
+          if ! grep -q "$insertText" CHANGELOG.md; then
+            echo "Changelog entry not found, adding it"
+            sed -i "/## \[Unreleased\]/a \
+            $insertText" CHANGELOG.md
+          else
+            echo "Changelog entry already exists, skipping"
+            exit 0
+          fi
+
+      - name: initialize mandatory git config
+        run: |
+          git config user.name "dependabot[bot]"
+          git config user.email support@github.com
+
+      - run: npx prettier --write CHANGELOG.md
+
+      - name: commit and push
+        run: |
+          git add CHANGELOG.md
+          git commit -m "Add changelog entry for ${{ github.event.pull_request.title }}"
+          git push
+
   check-changelog:
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
