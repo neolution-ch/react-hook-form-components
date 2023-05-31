@@ -75,8 +75,8 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
             marginRight: "6px",
             marginTop: "-43px",
             position: "relative",
-            zIndex: "2"
-          }}          
+            zIndex: "2",
+          }}
         />
       )}
     </>

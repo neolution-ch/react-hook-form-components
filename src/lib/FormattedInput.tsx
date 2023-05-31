@@ -89,7 +89,7 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
             marginRight: "6px",
             marginTop: "-43px",
             position: "relative",
-            zIndex: "2"
+            zIndex: "2",
           }}
         />
       )}

@@ -85,7 +85,7 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
             marginRight: "6px",
             marginTop: "-43px",
             position: "relative",
-            zIndex: "2"
+            zIndex: "2",
           }}
         />
       )}

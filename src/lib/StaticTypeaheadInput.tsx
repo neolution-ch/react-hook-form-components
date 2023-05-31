@@ -62,7 +62,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
             marginRight: "6px",
             marginTop: "-43px",
             position: "relative",
-            zIndex: "2"
+            zIndex: "2",
           }}
         />
       )}

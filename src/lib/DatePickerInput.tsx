@@ -88,7 +88,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
             marginRight: "6px",
             marginTop: "-43px",
             position: "relative",
-            zIndex: "2"
+            zIndex: "2",
           }}
         />
       )}
