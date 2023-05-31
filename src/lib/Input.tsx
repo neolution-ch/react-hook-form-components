@@ -1,4 +1,5 @@
 /* eslint-disable complexity */
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FieldValues } from "react-hook-form";
 import { FormGroup, Label } from "reactstrap";
 import { InputType } from "reactstrap/types/lib/Input";
@@ -52,27 +53,43 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
   const { id } = useSafeNameId(props.name, props.id);
 
   return (
-    <FormGroupLayout {...props} layout={formGroupLayout}>
-      {type === "radio" ? (
-        <>
-          {options?.map((option, i) => {
-            const optionId = `${id}-${i}`;
-            return (
-              <FormGroup key={option.value} check>
-                <InputInternal {...props} id={optionId} value={option.value} options={undefined} />
-                <Label for={optionId} check>
-                  {option.label}
-                </Label>
-              </FormGroup>
-            );
-          })}
-        </>
-      ) : (
-        <>
-          <InputInternal {...props} />
-        </>
+    <>
+      <FormGroupLayout {...props} layout={formGroupLayout}>
+        {type === "radio" ? (
+          <>
+            {options?.map((option, i) => {
+              const optionId = `${id}-${i}`;
+              return (
+                <FormGroup key={option.value} check>
+                  <InputInternal {...props} id={optionId} value={option.value} options={undefined} />
+                  <Label for={optionId} check>
+                    {option.label}
+                  </Label>
+                </FormGroup>
+              );
+            })}
+          </>
+        ) : (
+          <>
+            <InputInternal {...props} />
+          </>
+        )}
+      </FormGroupLayout>
+      {props.icon && (
+        <FontAwesomeIcon
+          icon={props.icon}
+          fixedWidth
+          size="lg"
+          style={{
+            float: "right",
+            marginRight: "6px",
+            marginTop: "-43px",
+            position: "relative",
+            zIndex: "2"
+          }}
+        />
       )}
-    </FormGroupLayout>
+    </>
   );
 };
 

@@ -5,6 +5,7 @@ import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";
 import { CommonInputProps } from "./types/CommonInputProps";
 import { useMarkOnFocusHandler } from "./hooks/useMarkOnFocusHandler";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface FormattedInputProps<T extends FieldValues> extends CommonInputProps<T> {
   patternFormat?: PatternFormatProps;
@@ -26,6 +27,7 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
     onBlur: propsOnBlur,
     labelToolTip,
     markAllOnFocus,
+    icon,
   } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
   const { control } = useFormContext();
@@ -77,6 +79,20 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
           );
         }}
       />
+      {icon && (
+        <FontAwesomeIcon
+          icon={icon}
+          fixedWidth
+          size="lg"
+          style={{
+            float: "right",
+            marginRight: "6px",
+            marginTop: "-43px",
+            position: "relative",
+            zIndex: "2"
+          }}
+        />
+      )}
     </>
   );
 };
