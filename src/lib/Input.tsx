@@ -30,6 +30,7 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
   if (
     props.icon &&
     !(
+      props.type == null ||
       props.type === "button" ||
       props.type === "email" ||
       props.type === "file" ||
