@@ -6,7 +6,6 @@ import { FormGroupLayout } from "./FormGroupLayout";
 import { convertTypeaheadOptionsToStringArray } from "./helpers/typeahead";
 import { CommonTypeaheadProps, TypeaheadOptions } from "./types/Typeahead";
 import { useMarkOnFocusHandler } from "./hooks/useMarkOnFocusHandler";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface StaticTypeaheadInputProps<T extends FieldValues> extends CommonTypeaheadProps<T> {
   options: TypeaheadOptions;
@@ -21,52 +20,36 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
   const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
 
   return (
-    <>
-      <Controller
-        control={control}
-        name={name}
-        render={({ field, fieldState: { error } }) => (
-          <FormGroupLayout helpText={helpText} name={name} id={id} label={label} labelToolTip={labelToolTip}>
-            <Typeahead
-              {...field}
-              defaultSelected={defaultSelected}
-              multiple={props.multiple}
-              onChange={(e) => {
-                const values = convertTypeaheadOptionsToStringArray(e);
-                const finalValue = props.multiple ? values : values[0];
+    <Controller
+      control={control}
+      name={name}
+      render={({ field, fieldState: { error } }) => (
+        <FormGroupLayout helpText={helpText} name={name} id={id} label={label} labelToolTip={labelToolTip} icon={icon}>
+          <Typeahead
+            {...field}
+            defaultSelected={defaultSelected}
+            multiple={props.multiple}
+            onChange={(e) => {
+              const values = convertTypeaheadOptionsToStringArray(e);
+              const finalValue = props.multiple ? values : values[0];
 
-                if (onChange) {
-                  onChange(finalValue);
-                }
+              if (onChange) {
+                onChange(finalValue);
+              }
 
-                field.onChange(finalValue);
-              }}
-              id={id}
-              options={props.options}
-              className={error ? "is-invalid" : ""}
-              inputProps={{ id }}
-              disabled={disabled}
-              onFocus={focusHandler}
-              {...reactBootstrapTypeaheadProps}
-            />
-          </FormGroupLayout>
-        )}
-      />
-      {icon && (
-        <FontAwesomeIcon
-          icon={icon}
-          fixedWidth
-          size="lg"
-          style={{
-            float: "right",
-            marginRight: "6px",
-            marginTop: "-43px",
-            position: "relative",
-            zIndex: "2",
-          }}
-        />
+              field.onChange(finalValue);
+            }}
+            id={id}
+            options={props.options}
+            className={error ? "is-invalid" : ""}
+            inputProps={{ id }}
+            disabled={disabled}
+            onFocus={focusHandler}
+            {...reactBootstrapTypeaheadProps}
+          />
+        </FormGroupLayout>
       )}
-    </>
+    />
   );
 };
 

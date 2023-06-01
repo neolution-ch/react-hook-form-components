@@ -1,5 +1,4 @@
 /* eslint-disable complexity */
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FieldValues } from "react-hook-form";
 import { FormGroup, Label } from "reactstrap";
 import { InputType } from "reactstrap/types/lib/Input";
@@ -28,6 +27,26 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
   if (props.type === "select" && !props.options) {
     throw new Error("options must be provided for select inputs");
   }
+  if (
+    props.icon &&
+    !(
+      props.type === "button" ||
+      props.type === "email" ||
+      props.type === "file" ||
+      props.type === "image" ||
+      props.type === "password" ||
+      props.type === "reset" ||
+      props.type === "search" ||
+      props.type === "submit" ||
+      props.type === "tel" ||
+      props.type === "text" ||
+      props.type === "url"
+    )
+  ) {
+    throw new Error(
+      "Icon can be shown only on button, email, file, image, password, reset, search, submit, tel, text, url types of inputs",
+    );
+  }
   if (props.multiple && props.type !== "select") {
     throw new Error("multiple can only be used with select inputs");
   }
@@ -53,43 +72,27 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
   const { id } = useSafeNameId(props.name, props.id);
 
   return (
-    <>
-      <FormGroupLayout {...props} layout={formGroupLayout}>
-        {type === "radio" ? (
-          <>
-            {options?.map((option, i) => {
-              const optionId = `${id}-${i}`;
-              return (
-                <FormGroup key={option.value} check>
-                  <InputInternal {...props} id={optionId} value={option.value} options={undefined} />
-                  <Label for={optionId} check>
-                    {option.label}
-                  </Label>
-                </FormGroup>
-              );
-            })}
-          </>
-        ) : (
-          <>
-            <InputInternal {...props} />
-          </>
-        )}
-      </FormGroupLayout>
-      {props.icon && (
-        <FontAwesomeIcon
-          icon={props.icon}
-          fixedWidth
-          size="lg"
-          style={{
-            float: "right",
-            marginRight: "6px",
-            marginTop: "-43px",
-            position: "relative",
-            zIndex: "2",
-          }}
-        />
+    <FormGroupLayout {...props} layout={formGroupLayout}>
+      {type === "radio" ? (
+        <>
+          {options?.map((option, i) => {
+            const optionId = `${id}-${i}`;
+            return (
+              <FormGroup key={option.value} check>
+                <InputInternal {...props} id={optionId} value={option.value} options={undefined} />
+                <Label for={optionId} check>
+                  {option.label}
+                </Label>
+              </FormGroup>
+            );
+          })}
+        </>
+      ) : (
+        <>
+          <InputInternal {...props} />
+        </>
       )}
-    </>
+    </FormGroupLayout>
   );
 };
 

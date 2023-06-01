@@ -5,7 +5,6 @@ import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";
 import { CommonInputProps } from "./types/CommonInputProps";
 import { useMarkOnFocusHandler } from "./hooks/useMarkOnFocusHandler";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface FormattedInputProps<T extends FieldValues> extends CommonInputProps<T> {
   patternFormat?: PatternFormatProps;
@@ -33,67 +32,51 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
   const { control } = useFormContext();
   const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
   return (
-    <>
-      <Controller
-        control={control}
-        name={name}
-        render={({ field: { name, onBlur, onChange, ref, value }, fieldState: { error } }) => {
-          const commonProps: NumericFormatProps = {
-            name: name,
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            value: value,
-            getInputRef: ref,
-            className: classnames("form-control", { "is-invalid": error }),
-            "aria-invalid": !!error,
-            id,
-            onBlur: (e) => {
-              if (propsOnBlur) propsOnBlur(e);
-              onBlur();
-            },
-            disabled,
-          };
+    <Controller
+      control={control}
+      name={name}
+      render={({ field: { name, onBlur, onChange, ref, value }, fieldState: { error } }) => {
+        const commonProps: NumericFormatProps = {
+          name: name,
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          value: value,
+          getInputRef: ref,
+          className: classnames("form-control", { "is-invalid": error }),
+          "aria-invalid": !!error,
+          id,
+          onBlur: (e) => {
+            if (propsOnBlur) propsOnBlur(e);
+            onBlur();
+          },
+          disabled,
+        };
 
-          return (
-            <FormGroupLayout helpText={helpText} name={name} id={id} label={label} labelToolTip={labelToolTip}>
-              <>
-                {numericFormat && (
-                  <NumericFormat
-                    {...numericFormat}
-                    {...commonProps}
-                    valueIsNumericString={true}
-                    onChange={(e) => {
-                      if (propsOnChange) propsOnChange(e);
-                    }}
-                    onValueChange={(values) => {
-                      onChange(values.value);
-                    }}
-                    onFocus={focusHandler}
-                  ></NumericFormat>
-                )}
+        return (
+          <FormGroupLayout helpText={helpText} name={name} id={id} label={label} labelToolTip={labelToolTip} icon={icon}>
+            <>
+              {numericFormat && (
+                <NumericFormat
+                  {...numericFormat}
+                  {...commonProps}
+                  valueIsNumericString={true}
+                  onChange={(e) => {
+                    if (propsOnChange) propsOnChange(e);
+                  }}
+                  onValueChange={(values) => {
+                    onChange(values.value);
+                  }}
+                  onFocus={focusHandler}
+                ></NumericFormat>
+              )}
 
-                {patternFormat && (
-                  <PatternFormat {...patternFormat} {...commonProps} onChange={onChange} onFocus={focusHandler}></PatternFormat>
-                )}
-              </>
-            </FormGroupLayout>
-          );
-        }}
-      />
-      {icon && (
-        <FontAwesomeIcon
-          icon={icon}
-          fixedWidth
-          size="lg"
-          style={{
-            float: "right",
-            marginRight: "6px",
-            marginTop: "-43px",
-            position: "relative",
-            zIndex: "2",
-          }}
-        />
-      )}
-    </>
+              {patternFormat && (
+                <PatternFormat {...patternFormat} {...commonProps} onChange={onChange} onFocus={focusHandler}></PatternFormat>
+              )}
+            </>
+          </FormGroupLayout>
+        );
+      }}
+    />
   );
 };
 

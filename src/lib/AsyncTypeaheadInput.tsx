@@ -6,7 +6,6 @@ import { FormGroupLayout } from "./FormGroupLayout";
 import { convertTypeaheadOptionsToStringArray } from "./helpers/typeahead";
 import { CommonTypeaheadProps, TypeaheadOptions } from "./types/Typeahead";
 import { useMarkOnFocusHandler } from "./hooks/useMarkOnFocusHandler";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface AsyncTypeaheadProps<T extends FieldValues> extends CommonTypeaheadProps<T> {
   queryFn: (query: string) => Promise<TypeaheadOptions>;
@@ -24,62 +23,46 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
   const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
 
   return (
-    <>
-      <Controller
-        control={control}
-        name={name}
-        render={({ field, fieldState: { error } }) => (
-          <FormGroupLayout helpText={helpText} name={name} id={id} label={label} labelToolTip={labelToolTip}>
-            <AsyncTypeahead
-              {...field}
-              id={id}
-              multiple={props.multiple}
-              defaultSelected={defaultSelected}
-              onChange={(e) => {
-                const values = convertTypeaheadOptionsToStringArray(e);
-                const finalValue = props.multiple ? values : values[0];
+    <Controller
+      control={control}
+      name={name}
+      render={({ field, fieldState: { error } }) => (
+        <FormGroupLayout helpText={helpText} name={name} id={id} label={label} labelToolTip={labelToolTip} icon={icon}>
+          <AsyncTypeahead
+            {...field}
+            id={id}
+            multiple={props.multiple}
+            defaultSelected={defaultSelected}
+            onChange={(e) => {
+              const values = convertTypeaheadOptionsToStringArray(e);
+              const finalValue = props.multiple ? values : values[0];
 
-                if (onChange) {
-                  onChange(finalValue);
-                }
+              if (onChange) {
+                onChange(finalValue);
+              }
 
-                field.onChange(finalValue);
-              }}
-              className={error ? "is-invalid" : ""}
-              inputProps={{ id }}
-              isLoading={isLoading}
-              options={options}
-              filterBy={() => true}
-              onSearch={(query) => {
-                void (async () => {
-                  setIsLoading(true);
-                  const results = await props.queryFn(query);
-                  setOptions(results);
-                  setIsLoading(false);
-                })();
-              }}
-              disabled={disabled}
-              onFocus={focusHandler}
-              {...reactBootstrapTypeaheadProps}
-            />
-          </FormGroupLayout>
-        )}
-      />
-      {icon && (
-        <FontAwesomeIcon
-          icon={icon}
-          fixedWidth
-          size="lg"
-          style={{
-            float: "right",
-            marginRight: "6px",
-            marginTop: "-43px",
-            position: "relative",
-            zIndex: "2",
-          }}
-        />
+              field.onChange(finalValue);
+            }}
+            className={error ? "is-invalid" : ""}
+            inputProps={{ id }}
+            isLoading={isLoading}
+            options={options}
+            filterBy={() => true}
+            onSearch={(query) => {
+              void (async () => {
+                setIsLoading(true);
+                const results = await props.queryFn(query);
+                setOptions(results);
+                setIsLoading(false);
+              })();
+            }}
+            disabled={disabled}
+            onFocus={focusHandler}
+            {...reactBootstrapTypeaheadProps}
+          />
+        </FormGroupLayout>
       )}
-    </>
+    />
   );
 };
 
