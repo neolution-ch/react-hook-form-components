@@ -4,6 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { faker } from "@faker-js/faker";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 
 it("selecting today works", () => {
   const name = faker.random.alpha(10);
@@ -110,4 +111,44 @@ it("is disabled", () => {
   );
 
   cy.get(`input[name=${name}]`).should("be.disabled");
+});
+
+it("contains calendar icon if provided in DateInput", () => {
+  const name = faker.random.alpha(10);
+  const schema = yup.object().shape({
+    [name]: yup.date(),
+  });
+
+  cy.mount(
+    <Form
+      onSubmit={() => {
+        // Nothing to do
+      }}
+      resolver={yupResolver(schema)}
+    >
+      <DatePickerInput name={name} label={name} icon={faCalendar} />
+    </Form>,
+  );
+
+  cy.get(`label[for=${name}]`).parent().find("svg[data-icon=calendar]");
+});
+
+it("not contains calendar icon if not provided in DateInput", () => {
+  const name = faker.random.alpha(10);
+  const schema = yup.object().shape({
+    [name]: yup.date(),
+  });
+
+  cy.mount(
+    <Form
+      onSubmit={() => {
+        // Nothing to do
+      }}
+      resolver={yupResolver(schema)}
+    >
+      <DatePickerInput name={name} label={name} />
+    </Form>,
+  );
+
+  cy.get(`label[for=${name}]`).parent().find("svg").should("not.exist");
 });

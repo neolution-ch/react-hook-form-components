@@ -44,7 +44,7 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
     )
   ) {
     throw new Error(
-      "Icon can be shown only on button, email, file, image, password, reset, search, submit, tel, text, url types of inputs",
+      "Icon can be shown only on button, email, file, image, password, reset, search, submit, tel, text or url types of inputs",
     );
   }
   if (props.multiple && props.type !== "select") {
