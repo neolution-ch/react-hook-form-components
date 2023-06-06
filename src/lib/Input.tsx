@@ -8,6 +8,8 @@ import { InputInternal } from "./InputInternal";
 import { CommonInputProps } from "./types/CommonInputProps";
 import { LabelValueOption } from "./types/LabelValueOption";
 
+const invalidTypes = ["switch", "radio", "checkbox"];
+
 interface InputProps<T extends FieldValues> extends CommonInputProps<T> {
   type?: InputType;
   options?: LabelValueOption[];
@@ -27,26 +29,8 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
   if (props.type === "select" && !props.options) {
     throw new Error("options must be provided for select inputs");
   }
-  if (
-    props.icon &&
-    props.type &&
-    !(
-      props.type === "button" ||
-      props.type === "email" ||
-      props.type === "file" ||
-      props.type === "image" ||
-      props.type === "password" ||
-      props.type === "reset" ||
-      props.type === "search" ||
-      props.type === "submit" ||
-      props.type === "tel" ||
-      props.type === "text" ||
-      props.type === "url"
-    )
-  ) {
-    throw new Error(
-      "Icon can be shown only on button, email, file, image, password, reset, search, submit, tel, text or url types of inputs",
-    );
+  if ((props.addonLeft || props.addonRight) && props.type && invalidTypes.includes(props.type)) {
+    throw new Error("Addons can not be shown on switch, radio or checkbox types of inputs");
   }
   if (props.multiple && props.type !== "select") {
     throw new Error("multiple can only be used with select inputs");

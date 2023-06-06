@@ -13,7 +13,18 @@ interface StaticTypeaheadInputProps<T extends FieldValues> extends CommonTypeahe
 }
 
 const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInputProps<T>) => {
-  const { disabled, label, helpText, labelToolTip, defaultSelected, reactBootstrapTypeaheadProps, onChange, markAllOnFocus, icon } = props;
+  const {
+    disabled,
+    label,
+    helpText,
+    labelToolTip,
+    defaultSelected,
+    reactBootstrapTypeaheadProps,
+    onChange,
+    markAllOnFocus,
+    addonLeft,
+    addonRight,
+  } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
 
   const { control } = useFormContext();
@@ -24,7 +35,15 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
       control={control}
       name={name}
       render={({ field, fieldState: { error } }) => (
-        <FormGroupLayout helpText={helpText} name={name} id={id} label={label} labelToolTip={labelToolTip} icon={icon}>
+        <FormGroupLayout
+          helpText={helpText}
+          name={name}
+          id={id}
+          label={label}
+          labelToolTip={labelToolTip}
+          addonLeft={addonLeft}
+          addonRight={addonRight}
+        >
           <Typeahead
             {...field}
             defaultSelected={defaultSelected}

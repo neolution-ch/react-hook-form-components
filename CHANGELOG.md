@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `icon` property to pass an icon to be shown inside the inputfield
+- `addonLeft` and `addonRight` properties to pass a ReactNode to be shown on the left/right of the inputfield in a reactstrap InputGroup
 
 ## [0.15.0] - 2023-05-25
 

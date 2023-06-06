@@ -1,4 +1,3 @@
-import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { ReactNode } from "react";
 import { FieldValues } from "react-hook-form";
 
@@ -13,7 +12,8 @@ interface CommonInputProps<T extends FieldValues> {
   labelToolTip?: string;
   markAllOnFocus?: boolean;
   inputOnly?: boolean;
-  icon?: IconDefinition;
+  addonLeft?: ReactNode;
+  addonRight?: ReactNode;
 }
 
 export { CommonInputProps };
