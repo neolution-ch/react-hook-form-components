@@ -4,6 +4,8 @@ import { faker } from "@faker-js/faker";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { InputGroupText } from "reactstrap";
 
 describe("Input.cy.tsx", () => {
   it("basic text input works", () => {
@@ -315,7 +317,7 @@ describe("Input.cy.tsx", () => {
     cy.get(`input[id=${name}]`).getSelectedText().should("eq", value);
   });
 
-  it("contains pencil icon if provided in Input no type", () => {
+  it("contains pencil icon if provided for Input with no type", () => {
     const name = faker.random.alpha(10);
     const schema = yup.object().shape({
       [name]: yup.date(),
@@ -328,7 +330,15 @@ describe("Input.cy.tsx", () => {
         }}
         resolver={yupResolver(schema)}
       >
-        <Input name={name} label={name} icon={faPencil} />
+        <Input
+          name={name}
+          label={name}
+          addonRight={
+            <InputGroupText>
+              <FontAwesomeIcon icon={faPencil} />
+            </InputGroupText>
+          }
+        />
       </Form>,
     );
 
