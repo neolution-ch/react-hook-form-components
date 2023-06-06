@@ -12,8 +12,30 @@ interface CommonInputProps<T extends FieldValues> {
   labelToolTip?: string;
   markAllOnFocus?: boolean;
   inputOnly?: boolean;
-  addonLeft?: ReactNode;
-  addonRight?: ReactNode;
+
+  /**
+   * Component prop that represents an element rendered inside the input group on the left side: https://reactstrap.github.io/?path=/docs/components-inputgroup--input-group
+   * If you want to render text or an icon inside the input, it is recommended to wrap it inside an `InputGroupText` component.
+   * @type {React.ReactNode}
+   * @example <caption>Render a string by wrapping it inside a `InputGroupText` component</caption>
+   * addonLeft={<InputGroupText>@</InputGroupText>}
+   *
+   * @example <caption>Render a `Button` component</caption>
+   * addonLeft={<Button>Button</Button>}
+   */
+  addonLeft?: React.ReactNode;
+
+  /**
+   * Component prop that represents an element rendered inside the input group on the right side: https://reactstrap.github.io/?path=/docs/components-inputgroup--input-group
+   * If you want to render text or an icon inside the input, it is recommended to wrap it inside an `InputGroupText` component.
+   * @type {React.ReactNode}
+   * @example <caption>Render a string by wrapping it inside a `InputGroupText` component</caption>
+   * addonRight={<InputGroupText>@</InputGroupText>}
+   *
+   * @example <caption>Render a `Button` component</caption>
+   * addonRight={<Button>Button</Button>}
+   */
+  addonRight?: React.ReactNode;
 }
 
 export { CommonInputProps };

@@ -38,7 +38,11 @@ const FormGroupLayout = <T extends FieldValues>(props: FormGroupLayoutProps<T>) 
   ) : (
     <FormGroup switch={switchLayout ? true : undefined} check={checkboxLayout ? true : undefined}>
       <FormGroupLayoutLabel<T> label={label} fieldName={name} fieldId={id} tooltip={labelToolTip} layout={layout} />
-      <InputGroup>
+      <InputGroup
+        style={{
+          flexWrap: "nowrap",
+        }}
+      >
         {addonLeft}
         {children}
         {addonRight}

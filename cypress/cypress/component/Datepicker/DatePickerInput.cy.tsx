@@ -5,6 +5,8 @@ import { faker } from "@faker-js/faker";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { faCalendar } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { InputGroupText } from "reactstrap";
 
 it("selecting today works", () => {
   const name = faker.random.alpha(10);
@@ -126,7 +128,20 @@ it("contains calendar icon if provided in DateInput", () => {
       }}
       resolver={yupResolver(schema)}
     >
-      <DatePickerInput name={name} label={name} icon={faCalendar} />
+      <DatePickerInput
+        name={name}
+        label={name}
+        addonLeft={
+          <InputGroupText>
+            <FontAwesomeIcon icon={faCalendar} />
+          </InputGroupText>
+        }
+        addonRight={
+          <InputGroupText>
+            <FontAwesomeIcon icon={faCalendar} />
+          </InputGroupText>
+        }
+      />
     </Form>,
   );
 

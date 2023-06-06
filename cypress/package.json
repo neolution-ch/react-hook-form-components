@@ -12,6 +12,9 @@
     "start": "next start"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.4.0",
+    "@fortawesome/free-solid-svg-icons": "^6.4.0",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "@hookform/resolvers": "^2.9.10",
     "@types/node": "18.11.9",
     "@types/react": "18.0.25",
@@ -19,12 +22,12 @@
     "eslint": "8.27.0",
     "eslint-config-next": "13.0.2",
     "next": "13.0.2",
-    "react-hook-form-components": "link:../dist",
-    "typescript": "4.8.4",
-    "yup": "^0.32.11",
     "react": "link:../node_modules/react",
     "react-dom": "link:../node_modules/react-dom",
-    "react-hook-form": "link:../node_modules/react-hook-form"
+    "react-hook-form": "link:../node_modules/react-hook-form",
+    "react-hook-form-components": "link:../dist",
+    "typescript": "4.8.4",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",
