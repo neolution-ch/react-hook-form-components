@@ -13,7 +13,18 @@ interface AsyncTypeaheadProps<T extends FieldValues> extends CommonTypeaheadProp
 }
 
 const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T>) => {
-  const { disabled, label, helpText, labelToolTip, defaultSelected, reactBootstrapTypeaheadProps, onChange, markAllOnFocus } = props;
+  const {
+    disabled,
+    label,
+    helpText,
+    labelToolTip,
+    defaultSelected,
+    reactBootstrapTypeaheadProps,
+    onChange,
+    markAllOnFocus,
+    addonLeft,
+    addonRight,
+  } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
 
   const { control } = useFormContext();
@@ -27,7 +38,15 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
       control={control}
       name={name}
       render={({ field, fieldState: { error } }) => (
-        <FormGroupLayout helpText={helpText} name={name} id={id} label={label} labelToolTip={labelToolTip}>
+        <FormGroupLayout
+          helpText={helpText}
+          name={name}
+          id={id}
+          label={label}
+          labelToolTip={labelToolTip}
+          addonLeft={addonLeft}
+          addonRight={addonRight}
+        >
           <AsyncTypeahead
             {...field}
             id={id}

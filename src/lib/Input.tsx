@@ -8,6 +8,8 @@ import { InputInternal } from "./InputInternal";
 import { CommonInputProps } from "./types/CommonInputProps";
 import { LabelValueOption } from "./types/LabelValueOption";
 
+const invalidAddonTypes = ["switch", "radio", "checkbox"];
+
 interface InputProps<T extends FieldValues> extends CommonInputProps<T> {
   type?: InputType;
   options?: LabelValueOption[];
@@ -26,6 +28,9 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
   }
   if (props.type === "select" && !props.options) {
     throw new Error("options must be provided for select inputs");
+  }
+  if ((props.addonLeft || props.addonRight) && props.type && invalidAddonTypes.includes(props.type)) {
+    throw new Error("Addons can not be shown on switch, radio or checkbox types of inputs");
   }
   if (props.multiple && props.type !== "select") {
     throw new Error("multiple can only be used with select inputs");

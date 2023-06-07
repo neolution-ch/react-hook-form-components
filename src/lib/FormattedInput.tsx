@@ -26,58 +26,66 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
     onBlur: propsOnBlur,
     labelToolTip,
     markAllOnFocus,
+    addonLeft,
+    addonRight,
   } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
   const { control } = useFormContext();
   const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
   return (
-    <>
-      <Controller
-        control={control}
-        name={name}
-        render={({ field: { name, onBlur, onChange, ref, value }, fieldState: { error } }) => {
-          const commonProps: NumericFormatProps = {
-            name: name,
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            value: value,
-            getInputRef: ref,
-            className: classnames("form-control", { "is-invalid": error }),
-            "aria-invalid": !!error,
-            id,
-            onBlur: (e) => {
-              if (propsOnBlur) propsOnBlur(e);
-              onBlur();
-            },
-            disabled,
-          };
+    <Controller
+      control={control}
+      name={name}
+      render={({ field: { name, onBlur, onChange, ref, value }, fieldState: { error } }) => {
+        const commonProps: NumericFormatProps = {
+          name: name,
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          value: value,
+          getInputRef: ref,
+          className: classnames("form-control", { "is-invalid": error }),
+          "aria-invalid": !!error,
+          id,
+          onBlur: (e) => {
+            if (propsOnBlur) propsOnBlur(e);
+            onBlur();
+          },
+          disabled,
+        };
 
-          return (
-            <FormGroupLayout helpText={helpText} name={name} id={id} label={label} labelToolTip={labelToolTip}>
-              <>
-                {numericFormat && (
-                  <NumericFormat
-                    {...numericFormat}
-                    {...commonProps}
-                    valueIsNumericString={true}
-                    onChange={(e) => {
-                      if (propsOnChange) propsOnChange(e);
-                    }}
-                    onValueChange={(values) => {
-                      onChange(values.value);
-                    }}
-                    onFocus={focusHandler}
-                  ></NumericFormat>
-                )}
+        return (
+          <FormGroupLayout
+            helpText={helpText}
+            name={name}
+            id={id}
+            label={label}
+            labelToolTip={labelToolTip}
+            addonLeft={addonLeft}
+            addonRight={addonRight}
+          >
+            <>
+              {numericFormat && (
+                <NumericFormat
+                  {...numericFormat}
+                  {...commonProps}
+                  valueIsNumericString={true}
+                  onChange={(e) => {
+                    if (propsOnChange) propsOnChange(e);
+                  }}
+                  onValueChange={(values) => {
+                    onChange(values.value);
+                  }}
+                  onFocus={focusHandler}
+                ></NumericFormat>
+              )}
 
-                {patternFormat && (
-                  <PatternFormat {...patternFormat} {...commonProps} onChange={onChange} onFocus={focusHandler}></PatternFormat>
-                )}
-              </>
-            </FormGroupLayout>
-          );
-        }}
-      />
-    </>
+              {patternFormat && (
+                <PatternFormat {...patternFormat} {...commonProps} onChange={onChange} onFocus={focusHandler}></PatternFormat>
+              )}
+            </>
+          </FormGroupLayout>
+        );
+      }}
+    />
   );
 };
 
