@@ -11,8 +11,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### dependabot: \#43 Bump vm2 from 3.9.17 to 3.9.19
 
-## [0.16.0] - 2023-05-31
-
 ### Added
 
 - `addonLeft` and `addonRight` properties to pass a ReactNode to be shown on the left/right of the inputfield in a reactstrap InputGroup
