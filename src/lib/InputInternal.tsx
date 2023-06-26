@@ -53,6 +53,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
           void (async () => {
             if (onBlur) {
               onBlur(e);
+              onBlur(e);
             }
 
             await rest.onBlur(e);
