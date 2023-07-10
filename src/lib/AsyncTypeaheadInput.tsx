@@ -24,6 +24,8 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
     markAllOnFocus,
     addonLeft,
     addonRight,
+    className = "",
+    style,
   } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
 
@@ -62,7 +64,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
 
               field.onChange(finalValue);
             }}
-            className={error ? "is-invalid" : ""}
+            className={`${className} ${error ? "is-invalid" : ""}`}
             inputProps={{ id }}
             isLoading={isLoading}
             options={options}
@@ -78,6 +80,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
             disabled={disabled}
             onFocus={focusHandler}
             {...reactBootstrapTypeaheadProps}
+            style={style}
           />
         </FormGroupLayout>
       )}

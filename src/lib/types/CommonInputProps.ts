@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, CSSProperties } from "react";
 import { FieldValues } from "react-hook-form";
 
 interface CommonInputProps<T extends FieldValues> {
@@ -12,6 +12,8 @@ interface CommonInputProps<T extends FieldValues> {
   labelToolTip?: string;
   markAllOnFocus?: boolean;
   inputOnly?: boolean;
+  className?: React.HTMLAttributes<T>["className"];
+  style?: CSSProperties;
 
   /**
    * Component prop that represents an element rendered inside the input group on the left side: https://reactstrap.github.io/?path=/docs/components-inputgroup--input-group

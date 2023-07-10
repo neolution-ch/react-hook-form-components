@@ -24,6 +24,8 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
     markAllOnFocus,
     addonLeft,
     addonRight,
+    style,
+    className = "",
   } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
 
@@ -48,6 +50,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
             {...field}
             defaultSelected={defaultSelected}
             multiple={props.multiple}
+            style={style}
             onChange={(e) => {
               const values = convertTypeaheadOptionsToStringArray(e);
               const finalValue = props.multiple ? values : values[0];
@@ -60,7 +63,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
             }}
             id={id}
             options={props.options}
-            className={error ? "is-invalid" : ""}
+            className={`${className} ${error ? "is-invalid" : ""}`}
             inputProps={{ id }}
             disabled={disabled}
             onFocus={focusHandler}

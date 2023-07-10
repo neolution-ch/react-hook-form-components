@@ -12,7 +12,7 @@ interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputPr
 }
 
 const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) => {
-  const { disabled, label, helpText, datePickerProps, labelToolTip, addonLeft, addonRight } = props;
+  const { disabled, label, helpText, datePickerProps, labelToolTip, addonLeft, addonRight, className = "" } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
 
   const { control, getValues, setValue } = useFormContext();
@@ -50,7 +50,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
             {...field}
             id={id}
             disabled={disabled}
-            className="form-control"
+            className={`${className} form-control`}
             dateFormat={dateFormat}
             calendarStartDay={calendarStartDay}
             wrapperClassName={error ? "is-invalid" : ""}
