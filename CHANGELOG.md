@@ -7,12 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.17.0] - 2023-06-26
-
-### Added
-
-- `style` and `className` properties to `CommonInputProps` in order to customize input fields
-
 ## [0.16.1] - 2023-06-26
 
 ### dependabot: \#48 Bump tj-actions/changed-files from 36 to 37
