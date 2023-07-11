@@ -18,7 +18,7 @@ it("input has correct classname", () => {
   cy.get(`[name=${name}]`).should("have.class", "mt-0 text-white");
 });
 
-it("datepicker input has correct classname", () => {
+it("datepicker has correct classname", () => {
   const name = faker.random.word();
 
   cy.mount(
