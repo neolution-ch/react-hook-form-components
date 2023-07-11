@@ -24,6 +24,7 @@ interface CommonInputProps<T extends FieldValues> {
   /**
    * Component prop that represents an additional style attribute
    * Adding a new style will NOT override the existing one, but it's added to the existing style attributes
+   * This property is not included in DatePickerInput, as it only allow styling through classNames
    * @type {CSSProperties}
    * @example <Input<T> type="text" style={{ backgroundColor: "red" }} />
    */
