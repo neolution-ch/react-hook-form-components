@@ -19,22 +19,19 @@ interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputPr
   ianaTimeZone?: string;
 }
 
-const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) => {
-  const { disabled, label, helpText, datePickerProps = {}, labelToolTip, addonLeft, addonRight, ianaTimeZone } = props;
+const DEFAULT_DATE_FORMAT = "dd.MM.yyyy";
+const DEFAULT_DATE_TIME_FORMAT = "dd.MM.yyyy HH:mm";
 
+const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) => {
   const { name, id } = useSafeNameId(props.name, props.id);
   const { control, getValues, setValue } = useFormContext();
 
-  const { calendarStartDay = 1, showTimeInput = false, showTimeSelect = false } = datePickerProps;
-
+  const { disabled, label, helpText, datePickerProps = {}, labelToolTip, addonLeft, addonRight, ianaTimeZone } = props;
+  const { calendarStartDay = 1, showTimeInput = false, showTimeSelect = false, dateFormat } = datePickerProps;
   const showTimeInputOrSelect = showTimeInput || showTimeSelect;
+  const effectiveDateFormat = dateFormat || (showTimeInputOrSelect ? DEFAULT_DATE_TIME_FORMAT : DEFAULT_DATE_FORMAT);
 
-  const { dateFormat = showTimeInputOrSelect ? "dd.MM.yyyy HH:mm" : "dd.MM.yyyy" } = datePickerProps;
-
-  const timeIncluded =
-    showTimeInput || showTimeSelect || dateFormat.includes("HH") || dateFormat.includes("mm") || dateFormat.includes("ss");
-
-  if (ianaTimeZone && !timeIncluded) {
+  if (ianaTimeZone && !showTimeInputOrSelect) {
     throw new Error("If you use ianaTimeZone, you have to include time in the dateFormat or set showTimeInput or showTimeSelect to true");
   }
 
@@ -43,7 +40,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
 
     if (!value) return null;
 
-    if (!timeIncluded) return getUtcTimeZeroDate(value);
+    if (!showTimeInputOrSelect) return getUtcTimeZeroDate(value);
 
     if (!ianaTimeZone) return value;
 
@@ -54,13 +51,13 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
     (date: Date | null): Date | null => {
       if (!date) return null;
 
-      if (!timeIncluded) return getUtcTimeZeroDate(date);
+      if (!showTimeInputOrSelect) return getUtcTimeZeroDate(date);
 
       if (!ianaTimeZone) return date;
 
       return zonedTimeToUtc(date, ianaTimeZone);
     },
-    [ianaTimeZone, timeIncluded],
+    [ianaTimeZone, showTimeInputOrSelect],
   );
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(getInitialDate());
@@ -91,7 +88,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
             id={id}
             disabled={disabled}
             className="form-control"
-            dateFormat={dateFormat}
+            dateFormat={effectiveDateFormat}
             calendarStartDay={calendarStartDay}
             wrapperClassName={error ? "is-invalid" : ""}
             selected={selectedDate}
