@@ -20,6 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `DatePickerInput` is not setting the time to utc zero anymore if it's not a date only picker
 
+## [1.0.0] - 2023-10-18
+
+:warning: Missing release because of a bug on npmjs.com. Releasing 1.0.1 instead.
+
 ## [0.16.2] - 2023-07-18
 
 ### dependabot: \#52 Bump semver from 6.3.0 to 6.3.1 in /cypress
