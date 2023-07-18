@@ -3,33 +3,70 @@ import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";
 import { CommonInputProps } from "./types/CommonInputProps";
 import DatePicker, { ReactDatePickerProps } from "react-datepicker";
-import { useEffect, useState } from "react";
-import { setUtcTimeToZero } from "./helpers/dateUtils";
+import { useCallback, useEffect, useState } from "react";
+import { utcToZonedTime, zonedTimeToUtc } from "date-fns-tz";
+import { getUtcTimeZeroDate } from "./helpers/dateUtils";
 
 interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputProps<T>, "onChange"> {
   datePickerProps?: Omit<ReactDatePickerProps, "onChange" | "selected" | "id" | "className" | "onBlur">;
   onChange?: (value: Date | null) => void;
+  /**
+   * The IANA time zone identifier, e.g. "Europe/Berlin" for which the date should be displayed.
+   * By default the date is displayed in the local time zone of the user / browser.
+   * @example "Europe/Berlin"
+   * @example "America/New_York"
+   */
+  ianaTimeZone?: string;
 }
 
-const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) => {
-  const { disabled, label, helpText, datePickerProps, labelToolTip, addonLeft, addonRight } = props;
-  const { name, id } = useSafeNameId(props.name, props.id);
+const DEFAULT_DATE_FORMAT = "dd.MM.yyyy";
+const DEFAULT_DATE_TIME_FORMAT = "dd.MM.yyyy HH:mm";
 
+const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) => {
+  const { name, id } = useSafeNameId(props.name, props.id);
   const { control, getValues, setValue } = useFormContext();
 
-  const dateFormat = datePickerProps?.dateFormat || "dd.MM.yyyy";
-  const calendarStartDay = datePickerProps?.calendarStartDay || 1;
+  const { disabled, label, helpText, datePickerProps = {}, labelToolTip, addonLeft, addonRight, ianaTimeZone } = props;
+  const { calendarStartDay = 1, showTimeInput = false, showTimeSelect = false, dateFormat } = datePickerProps;
+  const showTimeInputOrSelect = showTimeInput || showTimeSelect;
+  const effectiveDateFormat = dateFormat || (showTimeInputOrSelect ? DEFAULT_DATE_TIME_FORMAT : DEFAULT_DATE_FORMAT);
 
-  const initialDate = getValues(name) as Date | null;
-  setUtcTimeToZero(initialDate);
+  if (ianaTimeZone && !showTimeInputOrSelect) {
+    throw new Error("If you use ianaTimeZone, you have to include time in the dateFormat or set showTimeInput or showTimeSelect to true");
+  }
 
-  const [selectedDate, setSelectedDate] = useState<Date | null>(initialDate);
+  const getInitialDate = (): Date | null => {
+    const value = getValues(name) as Date | null;
+
+    if (!value) return null;
+
+    if (!showTimeInputOrSelect) return getUtcTimeZeroDate(value);
+
+    if (!ianaTimeZone) return value;
+
+    return utcToZonedTime(value, ianaTimeZone);
+  };
+
+  const getConvertedDate = useCallback(
+    (date: Date | null): Date | null => {
+      if (!date) return null;
+
+      if (!showTimeInputOrSelect) return getUtcTimeZeroDate(date);
+
+      if (!ianaTimeZone) return date;
+
+      return zonedTimeToUtc(date, ianaTimeZone);
+    },
+    [ianaTimeZone, showTimeInputOrSelect],
+  );
+
+  const [selectedDate, setSelectedDate] = useState<Date | null>(getInitialDate());
 
   // setting the value here once the component is mounted
   // so we have the corrected date in the form
   useEffect(() => {
-    setValue(name, initialDate);
-  }, [initialDate, name, setValue]);
+    setValue(name, getConvertedDate(selectedDate));
+  }, [name, selectedDate, setValue, getConvertedDate]);
 
   return (
     <Controller
@@ -51,7 +88,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
             id={id}
             disabled={disabled}
             className="form-control"
-            dateFormat={dateFormat}
+            dateFormat={effectiveDateFormat}
             calendarStartDay={calendarStartDay}
             wrapperClassName={error ? "is-invalid" : ""}
             selected={selectedDate}
@@ -68,17 +105,11 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
             onChange={(date) => {
               setSelectedDate(date);
 
-              const utcTimeZeroDate = date == null ? null : new Date(date.getTime());
+              const convertedDate = getConvertedDate(date);
 
-              // we set the time to utc 0 to avoid timezone issues, so it will be 0Z
-              // when JSON stringified
-              if (utcTimeZeroDate) {
-                setUtcTimeToZero(initialDate);
-              }
+              if (props.onChange) props.onChange(convertedDate);
 
-              if (props.onChange) props.onChange(utcTimeZeroDate);
-
-              field.onChange(utcTimeZeroDate);
+              field.onChange(convertedDate);
             }}
           />
         </FormGroupLayout>

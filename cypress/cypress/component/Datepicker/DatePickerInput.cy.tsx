@@ -1,12 +1,13 @@
 /* eslint-disable max-lines */
-import { DatePickerInput, Form, setUtcTimeToZero } from "react-hook-form-components";
+import { DatePickerInput, Form, getUtcTimeZeroDate } from "react-hook-form-components";
 import "react-datepicker/dist/react-datepicker.css";
 import { faker } from "@faker-js/faker";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { InputGroupText } from "reactstrap";
+import { Button, InputGroupText } from "reactstrap";
+import { SinonSpy } from "cypress/types/sinon";
 
 it("selecting today works", () => {
   const name = faker.random.alpha(10);
@@ -27,8 +28,8 @@ it("selecting today works", () => {
   cy.get(".react-datepicker__day--today").click();
   cy.get("input[type=submit]").click({ force: true });
 
-  const todayMidnight = new Date();
-  setUtcTimeToZero(todayMidnight);
+  const todayMidnight = getUtcTimeZeroDate(new Date());
+
   cy.get("@onSubmitSpy")
     .its("lastCall.args.0")
     .should("deep.equal", { [name]: todayMidnight });
@@ -36,7 +37,7 @@ it("selecting today works", () => {
 
 it("setting intial value as iso string works", () => {
   const name = faker.random.alpha(10);
-  const randomDate = faker.date.future();
+  const randomDate = getUtcTimeZeroDate(faker.date.future());
 
   const schema = yup.object().shape({
     [name]: yup.date().required(),
@@ -63,7 +64,6 @@ it("setting intial value as iso string works", () => {
 
   cy.get("input[type=submit]").click({ force: true });
 
-  setUtcTimeToZero(randomDate);
   cy.get("@onSubmitSpy")
     .its("lastCall.args.0")
     .should("deep.equal", { [name]: randomDate });
@@ -71,7 +71,7 @@ it("setting intial value as iso string works", () => {
 
 it("setting intial value as date object works", () => {
   const name = faker.random.alpha(10);
-  const randomDate = faker.date.future();
+  const randomDate = getUtcTimeZeroDate(faker.date.future());
 
   const schema = yup.object().shape({
     [name]: yup.date().required(),
@@ -93,7 +93,6 @@ it("setting intial value as date object works", () => {
 
   cy.get("input[type=submit]").click({ force: true });
 
-  setUtcTimeToZero(randomDate);
   cy.get("@onSubmitSpy")
     .its("lastCall.args.0")
     .should("deep.equal", { [name]: randomDate });
@@ -166,4 +165,52 @@ it("not contains calendar icon if not provided in DateInput", () => {
   );
 
   cy.get(`label[for=${name}]`).parent().find("svg").should("not.exist");
+});
+
+it.only("passing an IANA timezone works", () => {
+  const name = "input1";
+
+  interface FormFields {
+    [name]: Date;
+  }
+
+  const schema = yup.object().shape({
+    [name]: yup.date(),
+  });
+
+  const timezone = "America/New_York";
+  const isoInputDate = "2021-02-03T08:00:00.000Z";
+  const fixedDate = new Date(isoInputDate);
+  const inputJsonString = JSON.stringify(fixedDate);
+
+  cy.mount(
+    <Form<FormFields>
+      defaultValues={{
+        [name]: fixedDate,
+      }}
+      onSubmit={cy.spy().as("onSubmitSpy")}
+      resolver={yupResolver(schema)}
+    >
+      <DatePickerInput
+        name={name}
+        label={name}
+        ianaTimeZone={timezone}
+        datePickerProps={{
+          showTimeSelect: true,
+        }}
+      />
+
+      <Button type={"submit"}>Submit</Button>
+    </Form>,
+  );
+
+  cy.get(`input[name=${name}]`).should("have.value", "03.02.2021 03:00");
+
+  cy.get("button[type=submit]").click({ force: true });
+
+  cy.get<SinonSpy>("@onSubmitSpy").should((x) => {
+    expect(x).to.have.callCount(1);
+    const [args] = x.getCall(0).args as [FormFields];
+    expect(JSON.stringify(args[name])).to.equal(inputJsonString);
+  });
 });

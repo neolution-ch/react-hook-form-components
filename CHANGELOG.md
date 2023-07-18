@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- :boom: `DatePickerInput` by default now uses the browser timezone
+- :boom: `setUtcTimeToZero` changed to `getUtcTimeZeroDate` which returns a new date instead of modifying the passed one
+
+### Added
+
+- `DatePickerInput` now supports `ianaTimeZone` property to set the timezone of the date picker
+
+### Fixed
+
+- `DatePickerInput` is not setting the time to utc zero anymore if it's not a date only picker
+
 ## [0.16.2] - 2023-07-18
 
 ### dependabot: \#52 Bump semver from 6.3.0 to 6.3.1 in /cypress
