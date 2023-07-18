@@ -20,12 +20,16 @@ interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputPr
 }
 
 const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) => {
-  const { disabled, label, helpText, datePickerProps, labelToolTip, addonLeft, addonRight, ianaTimeZone } = props;
+  const { disabled, label, helpText, datePickerProps = {}, labelToolTip, addonLeft, addonRight, ianaTimeZone } = props;
 
   const { name, id } = useSafeNameId(props.name, props.id);
   const { control, getValues, setValue } = useFormContext();
 
-  const { dateFormat = "dd.MM.yyyy", calendarStartDay = 1, showTimeInput = false, showTimeSelect = false } = datePickerProps || {};
+  const { calendarStartDay = 1, showTimeInput = false, showTimeSelect = false } = datePickerProps;
+
+  const showTimeInputOrSelect = showTimeInput || showTimeSelect;
+
+  const { dateFormat = showTimeInputOrSelect ? "dd.MM.yyyy HH:mm" : "dd.MM.yyyy" } = datePickerProps;
 
   const timeIncluded =
     showTimeInput || showTimeSelect || dateFormat.includes("HH") || dateFormat.includes("mm") || dateFormat.includes("ss");
