@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### dependabot: \#57 Bump word-wrap from 1.2.3 to 1.2.4 in /cypress
 
+### dependabot: \#56 Bump word-wrap from 1.2.3 to 1.2.4
+
 ### Fixed
 
 - moved `rollup-plugin-import-css` from `dependencies` to `devDependencies`
