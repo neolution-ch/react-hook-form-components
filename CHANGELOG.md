@@ -7,9 +7,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### dependabot: \#57 Bump word-wrap from 1.2.3 to 1.2.4 in /cypress
+
+### dependabot: \#56 Bump word-wrap from 1.2.3 to 1.2.4
+
+### Fixed
+
+- moved `rollup-plugin-import-css` from `dependencies` to `devDependencies`
+
+## [1.0.1] - 2023-07-18
+
+### Changed
+
+- :boom: `DatePickerInput` by default now uses the browser timezone
+- :boom: `setUtcTimeToZero` changed to `getUtcTimeZeroDate` which returns a new date instead of modifying the passed one
+
 ### Added
 
-- `style` and `className` properties to `CommonInputProps` in order to customize input fields
+- `DatePickerInput` now supports `ianaTimeZone` property to set the timezone of the date picker
+
+### Fixed
+
+- `DatePickerInput` is not setting the time to utc zero anymore if it's not a date only picker
+
+## [1.0.0] - 2023-10-18
+
+:warning: Missing release because of a bug on npmjs.com. Releasing 1.0.1 instead.
+
+## [0.16.2] - 2023-07-18
+
+### dependabot: \#52 Bump semver from 6.3.0 to 6.3.1 in /cypress
+
+### dependabot: \#51 Bump semver from 5.7.1 to 5.7.2
 
 ## [0.16.1] - 2023-06-26
 
@@ -194,10 +223,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Created package :tada:
 
-[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/0.16.1...HEAD
+[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/1.0.1...HEAD
 [0.1.2]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.1...0.1.2
 [0.1.1]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.1.0
+[0.16.2]: https://github.com/neolution-ch/react-hook-form-components/compare/0.16.1...0.16.2
 [0.16.1]: https://github.com/neolution-ch/react-hook-form-components/compare/0.16.0...0.16.1
 [0.16.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.15.0...0.16.0
 [0.15.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.14.0...0.15.0
@@ -218,3 +248,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.4.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.3.0...0.4.0
 [0.3.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.2.0...0.3.0
 [0.2.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.2.0
+[1.0.1]: https://github.com/neolution-ch/react-hook-form-components/compare/0.16.2...1.0.1
