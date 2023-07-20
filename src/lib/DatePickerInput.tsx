@@ -7,7 +7,7 @@ import { useCallback, useEffect, useState } from "react";
 import { utcToZonedTime, zonedTimeToUtc } from "date-fns-tz";
 import { getUtcTimeZeroDate } from "./helpers/dateUtils";
 
-interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputProps<T>, "onChange"> {
+interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputProps<T>, "onChange" | "style"> {
   datePickerProps?: Omit<ReactDatePickerProps, "onChange" | "selected" | "id" | "className" | "onBlur">;
   onChange?: (value: Date | null) => void;
   /**
@@ -26,7 +26,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
   const { name, id } = useSafeNameId(props.name, props.id);
   const { control, getValues, setValue } = useFormContext();
 
-  const { disabled, label, helpText, datePickerProps = {}, labelToolTip, addonLeft, addonRight, ianaTimeZone } = props;
+  const { disabled, label, helpText, datePickerProps = {}, labelToolTip, addonLeft, addonRight, ianaTimeZone, className = "" } = props;
   const { calendarStartDay = 1, showTimeInput = false, showTimeSelect = false, dateFormat } = datePickerProps;
   const showTimeInputOrSelect = showTimeInput || showTimeSelect;
   const effectiveDateFormat = dateFormat || (showTimeInputOrSelect ? DEFAULT_DATE_TIME_FORMAT : DEFAULT_DATE_FORMAT);
@@ -87,7 +87,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
             {...field}
             id={id}
             disabled={disabled}
-            className="form-control"
+            className={`${className} form-control`}
             dateFormat={effectiveDateFormat}
             calendarStartDay={calendarStartDay}
             wrapperClassName={error ? "is-invalid" : ""}

@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - moved `rollup-plugin-import-css` from `dependencies` to `devDependencies`
 
+### Added
+
+- `style` and `classname` properties to `CommonInputProps` in order to customize input fields
+
 ## [1.0.1] - 2023-07-18
 
 ### Changed

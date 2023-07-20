@@ -19,6 +19,8 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
     plainText,
     placeholder,
     markAllOnFocus,
+    className,
+    style,
   } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
   const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
@@ -45,7 +47,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
         multiple={multiple}
         disabled={disabled}
         plaintext={plainText}
-        style={plainText ? { color: "black", marginLeft: 10 } : {}}
+        style={plainText ? { color: "black", marginLeft: 10, ...style } : { ...style }}
         placeholder={placeholder}
         {...rest}
         {...(value ? { value } : {})}
@@ -68,6 +70,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
           })();
         }}
         onFocus={focusHandler}
+        className={className}
       >
         {options?.map((option) => (
           <option key={option.value} value={option.value}>

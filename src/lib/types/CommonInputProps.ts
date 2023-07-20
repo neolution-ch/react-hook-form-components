@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, CSSProperties } from "react";
 import { FieldValues } from "react-hook-form";
 
 interface CommonInputProps<T extends FieldValues> {
@@ -12,6 +12,23 @@ interface CommonInputProps<T extends FieldValues> {
   labelToolTip?: string;
   markAllOnFocus?: boolean;
   inputOnly?: boolean;
+
+  /**
+   * Component prop that represents an additional className attribute
+   * Adding a new className will NOT override the existing one, but it's added to the existing className attributes
+   * @type {React.HTMLAttributes<T>["className"]}
+   * @example <Input<T> type="text" className="text-white" />
+   */
+  className?: React.HTMLAttributes<T>["className"];
+
+  /**
+   * Component prop that represents an additional style attribute
+   * Adding a new style will NOT override the existing one, but it's added to the existing style attributes
+   * This property is not included in DatePickerInput, as it only allow styling through classNames
+   * @type {CSSProperties}
+   * @example <Input<T> type="text" style={{ backgroundColor: "red" }} />
+   */
+  style?: CSSProperties;
 
   /**
    * Component prop that represents an element rendered inside the input group on the left side: https://reactstrap.github.io/?path=/docs/components-inputgroup--input-group
