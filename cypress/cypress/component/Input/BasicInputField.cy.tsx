@@ -90,7 +90,8 @@ describe("Input.cy.tsx", () => {
 
     cy.get(`input[id=${name}]`).type(randomWord).clear();
     cy.get("input[type=submit]").click({ force: true });
-    cy.contains(errorMessage);
+    cy.get(`input[id="${name}"]`).should("have.attr", "class").and("contain", "is-invalid");
+    cy.get(`input[id="${name}"]`).parents("div").find(".invalid-feedback").should("be.visible").should("have.text", errorMessage);
 
     cy.contains("label", name).click().type(randomWord.toString());
     cy.get("input[type=submit]").click({ force: true });
@@ -121,7 +122,8 @@ describe("Input.cy.tsx", () => {
 
     cy.get(`input[id="${name}"]`).type(randomWord).clear();
     cy.get("input[type=submit]").click({ force: true });
-    cy.contains(errorMessage);
+    cy.get(`input[id="${name}"]`).parents("div").find(".invalid-feedback").should("be.visible").should("have.text", errorMessage);
+    cy.get(`input[id="${name}"]`).should("have.attr", "class").and("contain", "is-invalid");
 
     cy.contains("label", name).click().type(randomWord.toString());
     cy.get("input[type=submit]").click({ force: true });
