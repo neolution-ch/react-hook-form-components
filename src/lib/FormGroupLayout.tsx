@@ -42,6 +42,7 @@ const FormGroupLayout = <T extends FieldValues>(props: FormGroupLayoutProps<T>) 
         style={{
           flexWrap: "nowrap",
         }}
+        className={fieldError ? "is-invalid" : undefined}
       >
         {addonLeft}
         {children}
