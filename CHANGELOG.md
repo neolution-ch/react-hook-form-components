@@ -11,6 +11,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `is-invalid` added to invalid input groups to show form feedback
 
+## [1.1.0] - 2023-07-20
+
+### dependabot: \#57 Bump word-wrap from 1.2.3 to 1.2.4 in /cypress
+
+### dependabot: \#56 Bump word-wrap from 1.2.3 to 1.2.4
+
+### Fixed
+
+- moved `rollup-plugin-import-css` from `dependencies` to `devDependencies`
+- `InputField` is marked invalid also for nested fields
+
+### Added
+
+- `style` and `classname` properties to `CommonInputProps` in order to customize input fields
+
 ## [1.0.1] - 2023-07-18
 
 ### Changed
@@ -219,7 +234,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Created package :tada:
 
-[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/1.0.1...HEAD
+[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/1.1.0...HEAD
 [0.1.2]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.1...0.1.2
 [0.1.1]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.1.0
@@ -244,4 +259,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.4.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.3.0...0.4.0
 [0.3.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.2.0...0.3.0
 [0.2.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.2.0
+[1.1.0]: https://github.com/neolution-ch/react-hook-form-components/compare/1.0.1...1.1.0
 [1.0.1]: https://github.com/neolution-ch/react-hook-form-components/compare/0.16.2...1.0.1

@@ -1,4 +1,4 @@
-import { FieldValues, useFormContext } from "react-hook-form";
+import { FieldValues, useFormContext, get, FieldError } from "react-hook-form";
 import { Input } from "reactstrap";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { InputProps } from "./Input";
@@ -19,6 +19,8 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
     plainText,
     placeholder,
     markAllOnFocus,
+    className,
+    style,
   } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
   const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
@@ -29,7 +31,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
 
   const { ref, ...rest } = register(name);
 
-  const fieldError = errors[name];
+  const fieldError = get(errors, name) as FieldError | undefined;
   const hasError = !!fieldError;
 
   return (
@@ -45,7 +47,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
         multiple={multiple}
         disabled={disabled}
         plaintext={plainText}
-        style={plainText ? { color: "black", marginLeft: 10 } : {}}
+        style={plainText ? { color: "black", marginLeft: 10, ...style } : { ...style }}
         placeholder={placeholder}
         {...rest}
         {...(value ? { value } : {})}
@@ -68,6 +70,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
           })();
         }}
         onFocus={focusHandler}
+        className={className}
       >
         {options?.map((option) => (
           <option key={option.value} value={option.value}>
