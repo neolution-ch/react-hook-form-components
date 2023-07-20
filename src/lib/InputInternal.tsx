@@ -1,4 +1,4 @@
-import { FieldValues, useFormContext } from "react-hook-form";
+import { FieldValues, useFormContext, get, FieldError } from "react-hook-form";
 import { Input } from "reactstrap";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { InputProps } from "./Input";
@@ -31,7 +31,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
 
   const { ref, ...rest } = register(name);
 
-  const fieldError = errors[name];
+  const fieldError = get(errors, name) as FieldError | undefined;
   const hasError = !!fieldError;
 
   return (

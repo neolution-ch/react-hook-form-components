@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - moved `rollup-plugin-import-css` from `dependencies` to `devDependencies`
+- `InputField` is marked invalid also for nested fields
 
 ### Added
 
