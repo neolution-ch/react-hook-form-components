@@ -7,8 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### dependabot: \#57 Bump word-wrap from 1.2.3 to 1.2.4 in /cypress
+
+### dependabot: \#56 Bump word-wrap from 1.2.3 to 1.2.4
+
 ### Fixed
 
+- moved `rollup-plugin-import-css` from `dependencies` to `devDependencies`
 - `InputField` is marked invalid also for nested fields
 
 ## [1.0.1] - 2023-07-18
