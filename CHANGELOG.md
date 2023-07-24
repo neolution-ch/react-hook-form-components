@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Fixed checkbox/radio label spacing due to `addonLeft` and `addonRight` props
+
 ## [1.1.1] - 2023-07-20
 
 ### Fixed
