@@ -36,18 +36,18 @@ const FormGroupLayout = <T extends FieldValues>(props: FormGroupLayoutProps<T>) 
       <FormFeedback>{errorMessage}</FormFeedback>
     </>
   ) : (
-    <FormGroup switch={switchLayout ? true : undefined} check={checkboxLayout ? true : undefined}>
+    <FormGroup switch={switchLayout ? true : undefined} check={checkboxLayout ? true : undefined} >
       <FormGroupLayoutLabel<T> label={label} fieldName={name} fieldId={id} tooltip={labelToolTip} layout={layout} />
-      <InputGroup
-        style={{
-          flexWrap: "nowrap",
-        }}
-        className={fieldError ? "is-invalid" : undefined}
-      >
-        {addonLeft}
-        {children}
-        {addonRight}
-      </InputGroup>
+        {switchLayout || checkboxLayout ? children : <InputGroup
+            style={{
+                flexWrap: "nowrap", alignItems: "center",
+            }}
+            className={fieldError ? "is-invalid" : undefined}
+        >
+            {addonLeft}
+            {children}
+            {addonRight}
+        </InputGroup>}
       <FormFeedback>{errorMessage}</FormFeedback>
       {helpText && <FormText>{helpText}</FormText>}
     </FormGroup>
