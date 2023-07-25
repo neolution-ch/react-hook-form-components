@@ -26,7 +26,18 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
   const { name, id } = useSafeNameId(props.name, props.id);
   const { control, getValues, setValue } = useFormContext();
 
-  const { disabled, label, helpText, datePickerProps = {}, labelToolTip, addonLeft, addonRight, ianaTimeZone, className = "" } = props;
+  const {
+    disabled,
+    label,
+    helpText,
+    datePickerProps = {},
+    labelToolTip,
+    addonLeft,
+    addonRight,
+    ianaTimeZone,
+    className = "",
+    inputGroupStyle,
+  } = props;
   const { calendarStartDay = 1, showTimeInput = false, showTimeSelect = false, dateFormat } = datePickerProps;
   const showTimeInputOrSelect = showTimeInput || showTimeSelect;
   const effectiveDateFormat = dateFormat || (showTimeInputOrSelect ? DEFAULT_DATE_TIME_FORMAT : DEFAULT_DATE_FORMAT);
@@ -81,6 +92,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
           labelToolTip={labelToolTip}
           addonLeft={addonLeft}
           addonRight={addonRight}
+          inputGroupStyle={inputGroupStyle}
         >
           <DatePicker
             {...datePickerProps}
