@@ -19,23 +19,23 @@ it("contains pencil icon and inputGroup has correct style", () => {
   const style = defaultStyle.concat(inputGroupStyle);
 
   cy.mount(
-      <Form
-          onSubmit={() => {
-            // Nothing to do
-          }}
-          resolver={yupResolver(schema)}
-      >
-        <Input
-            name={name}
-            label={name}
-            inputGroupStyle={{ backgroundColor: "black" }}
-            addonRight={
-              <InputGroupText>
-                <FontAwesomeIcon icon={faPencil} />
-              </InputGroupText>
-            }
-        />
-      </Form>,
+    <Form
+      onSubmit={() => {
+        // Nothing to do
+      }}
+      resolver={yupResolver(schema)}
+    >
+      <Input
+        name={name}
+        label={name}
+        inputGroupStyle={{ backgroundColor: "black" }}
+        addonRight={
+          <InputGroupText>
+            <FontAwesomeIcon icon={faPencil} />
+          </InputGroupText>
+        }
+      />
+    </Form>,
   );
 
   cy.get(`label[for=${name}]`).parent().find("svg[data-icon=pencil]");
@@ -52,28 +52,28 @@ it("contains calendar icon and inputGroup has correct style", () => {
   const style = defaultStyle.concat(inputGroupStyle);
 
   cy.mount(
-      <Form
-          onSubmit={() => {
-            // Nothing to do
-          }}
-          resolver={yupResolver(schema)}
-      >
-        <DatePickerInput
-            inputGroupStyle={{ backgroundColor: "black" }}
-            name={name}
-            label={name}
-            addonLeft={
-              <InputGroupText>
-                <FontAwesomeIcon icon={faCalendar} />
-              </InputGroupText>
-            }
-            addonRight={
-              <InputGroupText>
-                <FontAwesomeIcon icon={faCalendar} />
-              </InputGroupText>
-            }
-        />
-      </Form>,
+    <Form
+      onSubmit={() => {
+        // Nothing to do
+      }}
+      resolver={yupResolver(schema)}
+    >
+      <DatePickerInput
+        inputGroupStyle={{ backgroundColor: "black" }}
+        name={name}
+        label={name}
+        addonLeft={
+          <InputGroupText>
+            <FontAwesomeIcon icon={faCalendar} />
+          </InputGroupText>
+        }
+        addonRight={
+          <InputGroupText>
+            <FontAwesomeIcon icon={faCalendar} />
+          </InputGroupText>
+        }
+      />
+    </Form>,
   );
 
   cy.get(`label[for=${name}]`).parent().find("svg[data-icon=calendar]");
