@@ -53,6 +53,14 @@ interface CommonInputProps<T extends FieldValues> {
    * addonRight={<Button>Button</Button>}
    */
   addonRight?: React.ReactNode;
+
+  /**
+   * Component prop that represents an additional style attribute for the input group
+   * Adding a new style will NOT override the existing one, but it's added to the existing style attributes
+   * @type {CSSProperties}
+   * @example <Input<T> type="text" inputGroupStyle={{ align-items: "center" }} />
+   */
+  inputGroupStyle?: CSSProperties;
 }
 
 export { CommonInputProps };

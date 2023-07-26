@@ -167,7 +167,7 @@ it("not contains calendar icon if not provided in DateInput", () => {
   cy.get(`label[for=${name}]`).parent().find("svg").should("not.exist");
 });
 
-it.only("passing an IANA timezone works", () => {
+it("passing an IANA timezone works", () => {
   const name = "input1";
 
   interface FormFields {

@@ -1,4 +1,4 @@
-import { PropsWithChildren, ReactNode } from "react";
+import { PropsWithChildren, ReactNode, CSSProperties } from "react";
 import { FieldError, FieldValues, get, useFormContext } from "react-hook-form";
 import { FormGroup, FormFeedback, FormText, InputGroup } from "reactstrap";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
@@ -11,10 +11,11 @@ interface FormGroupLayoutProps<T extends FieldValues>
   layout?: "checkbox" | "switch";
   addonLeft?: ReactNode;
   addonRight?: ReactNode;
+  inputGroupStyle?: CSSProperties;
 }
 
 const FormGroupLayout = <T extends FieldValues>(props: FormGroupLayoutProps<T>) => {
-  const { label, helpText, children, layout, labelToolTip, inputOnly, addonLeft, addonRight } = props;
+  const { label, helpText, children, layout, labelToolTip, inputOnly, addonLeft, addonRight, inputGroupStyle } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
   const {
     formState: { errors },
@@ -45,6 +46,7 @@ const FormGroupLayout = <T extends FieldValues>(props: FormGroupLayoutProps<T>) 
           style={{
             flexWrap: "nowrap",
             alignItems: "center",
+            ...inputGroupStyle,
           }}
           className={fieldError ? "is-invalid" : undefined}
         >

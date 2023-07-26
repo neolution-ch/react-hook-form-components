@@ -45,6 +45,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
           labelToolTip={labelToolTip}
           addonLeft={addonLeft}
           addonRight={addonRight}
+          inputGroupStyle={props.inputGroupStyle}
         >
           <Typeahead
             {...field}
