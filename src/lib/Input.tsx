@@ -7,7 +7,6 @@ import { FormGroupLayout } from "./FormGroupLayout";
 import { InputInternal } from "./InputInternal";
 import { CommonInputProps } from "./types/CommonInputProps";
 import { LabelValueOption } from "./types/LabelValueOption";
-import { CSSProperties } from "react";
 
 const invalidAddonTypes = ["switch", "radio", "checkbox"];
 
@@ -21,7 +20,6 @@ interface InputProps<T extends FieldValues> extends CommonInputProps<T> {
   textAreaRows?: number;
   plainText?: boolean;
   placeholder?: string;
-  inputGroupStyle?: CSSProperties;
 }
 
 const Input = <T extends FieldValues>(props: InputProps<T>) => {
@@ -44,7 +42,7 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
     throw new Error("textAreaRows can only be used with textarea inputs");
   }
 
-  const { type, options, inputGroupStyle } = props;
+  const { type, options } = props;
 
   const formGroupLayout = (() => {
     if (type === "switch") {
@@ -59,7 +57,7 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
   const { id } = useSafeNameId(props.name, props.id);
 
   return (
-    <FormGroupLayout {...props} layout={formGroupLayout} inputGroupStyle={inputGroupStyle}>
+    <FormGroupLayout {...props} layout={formGroupLayout}>
       {type === "radio" ? (
         <>
           {options?.map((option, i) => {

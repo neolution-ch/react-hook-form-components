@@ -45,6 +45,7 @@ const FormGroupLayout = <T extends FieldValues>(props: FormGroupLayoutProps<T>) 
         <InputGroup
           style={{
             flexWrap: "nowrap",
+            alignItems: "center",
             ...inputGroupStyle,
           }}
           className={fieldError ? "is-invalid" : undefined}

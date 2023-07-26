@@ -48,6 +48,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
           labelToolTip={labelToolTip}
           addonLeft={addonLeft}
           addonRight={addonRight}
+          inputGroupStyle={props.inputGroupStyle}
         >
           <AsyncTypeahead
             {...field}

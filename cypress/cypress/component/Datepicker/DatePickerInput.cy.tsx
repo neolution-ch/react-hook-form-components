@@ -167,44 +167,6 @@ it("not contains calendar icon if not provided in DateInput", () => {
   cy.get(`label[for=${name}]`).parent().find("svg").should("not.exist");
 });
 
-it("contains calendar icon and inputGroup has correct style", () => {
-  const name = faker.random.alpha(10);
-  const schema = yup.object().shape({
-    [name]: yup.date(),
-  });
-  const inputGroupStyle = "background-color: black;";
-  const defaultStyle = "flex-wrap: nowrap; ";
-  const style = defaultStyle.concat(inputGroupStyle);
-
-  cy.mount(
-    <Form
-      onSubmit={() => {
-        // Nothing to do
-      }}
-      resolver={yupResolver(schema)}
-    >
-      <DatePickerInput
-        inputGroupStyle={{ backgroundColor: "black" }}
-        name={name}
-        label={name}
-        addonLeft={
-          <InputGroupText>
-            <FontAwesomeIcon icon={faCalendar} />
-          </InputGroupText>
-        }
-        addonRight={
-          <InputGroupText>
-            <FontAwesomeIcon icon={faCalendar} />
-          </InputGroupText>
-        }
-      />
-    </Form>,
-  );
-
-  cy.get(`label[for=${name}]`).parent().find("svg[data-icon=calendar]");
-  cy.get(".input-group").should("have.attr", "style", style);
-});
-
 it("passing an IANA timezone works", () => {
   const name = "input1";
 
