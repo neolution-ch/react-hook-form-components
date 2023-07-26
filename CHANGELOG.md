@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `inputGroupStyle` property to `CommonInputProps` in order to customize input group 
+- `inputGroupStyle` property to `CommonInputProps` in order to customize input group
 
 ## [1.1.2] - 2023-07-24
 
