@@ -15,7 +15,7 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.modern.js",
-      "require": "./dist/index.cjs"
+      "require": "./dist/index.js"
     }
   },
   "main": "dist/index.js",
@@ -99,10 +99,10 @@
     "yalc": "^1.0.0-pre.53"
   },
   "peerDependencies": {
-    "react": ">=16",
-    "react-dom": ">=16",
-    "react-hook-form": ">=7",
-    "reactstrap": ">=8"
+    "react": "^16.0.0 || ^17.0.0 || ^18.0.0",
+    "react-dom": "^16.0.0 || ^17.0.0 || ^18.0.0",
+    "react-hook-form": "^7.0.0",
+    "reactstrap": "^8.0.0 || ^9.0.0"
   },
   "engines": {
     "node": ">=14"
