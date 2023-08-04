@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Changed peerDependencies notation to support specific major versions
+
+### Fixed
+
+- Fixed export for CommonJS
+
 ## [1.2.0] - 2023-07-26
 
 ### Added
