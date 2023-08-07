@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### dependabot: \#62 Bump saadmk11/github-actions-version-updater from 0.7.4 to 0.8.0
+
 ## [1.3.0] - 2023-08-04
 
 ### Changed
