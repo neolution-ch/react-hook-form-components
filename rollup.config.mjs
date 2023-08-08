@@ -9,7 +9,7 @@ const input = "src/index.ts";
 
 const plugins = [
   css({
-    output: "dist/index.css",
+    output: "dist/styles.css",
   }),
   external({
     includeDependencies: true,

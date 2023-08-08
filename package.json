@@ -15,8 +15,11 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.modern.js",
-      "require": "./dist/index.js"
-    }
+      "require": "./dist/index.js",
+      "styles": "./dist/styles.css"
+    },
+    "./styles": "./dist/styles.css",
+    "./styles.css": "./dist/styles.css"
   },
   "main": "dist/index.js",
   "umd:main": "dist/index.umd.js",
@@ -26,6 +29,7 @@
   "source": "src/index.ts",
   "jsnext:main": "dist/index.modern.js",
   "types": "dist/index.d.ts",
+  "styles": "./dist/styles.css",
   "files": [
     "dist"
   ],
