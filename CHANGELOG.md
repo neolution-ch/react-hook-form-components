@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added `styles.css` to the export in the package.json
+
 ## [1.3.0] - 2023-08-04
 
 ### Changed

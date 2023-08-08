@@ -207,6 +207,14 @@ Refer to the [react-number-format](https://s-yadav.github.io/react-number-format
 />
 ```
 
+## Tooltip
+
+To use the tooltip option of `FormGroupLayoutLabel` you have to import the package styles like this:
+
+```jsx
+import "@neolution-ch/react-hook-form-components/styles.css";
+```
+
 ## Storybook
 
 The storybook is a visual testing tool that makes it easy to test and tinker with the components.
