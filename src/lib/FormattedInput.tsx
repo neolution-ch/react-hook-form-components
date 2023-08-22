@@ -81,7 +81,7 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
               )}
 
               {patternFormat && (
-                <PatternFormat {...patternFormat} {...commonProps} onChange={onChange} onFocus={focusHandler}></PatternFormat>
+                <PatternFormat {...patternFormat} {...commonProps} onChange={onChange} style={style} onFocus={focusHandler}></PatternFormat>
               )}
             </>
           </FormGroupLayout>

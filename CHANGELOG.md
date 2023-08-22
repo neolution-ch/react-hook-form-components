@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- `style` property applied also to `FormattedInput`
+
 ### Added
 
 - Added `styles.css` to the export in the package.json
