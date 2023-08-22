@@ -150,16 +150,16 @@ it("validation works for nested fields", () => {
 
 it("style is correcly applied", () => {
   const name = faker.random.word();
-  const style = { backgroundColor: "red" };
+  const style = "background-color: red;";
   cy.mount(
     <Form
       onSubmit={() => {
         // Do nothing
       }}
     >
-      <FormattedInput name={name} label={name} numericFormat={numericFormat} style={style} disabled />
+      <FormattedInput name={name} label={name} numericFormat={numericFormat} style={{ backgroundColor: "red" }} disabled />
     </Form>,
   );
 
-  cy.get("input").should("have.attr", "style", style);
+  cy.get(`input[id=${name}]`).should("have.attr", "style", style);
 });
