@@ -25,6 +25,7 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
     onChange: propsOnChange,
     onBlur: propsOnBlur,
     labelToolTip,
+    style,
     markAllOnFocus,
     addonLeft,
     addonRight,
@@ -75,6 +76,7 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
                     onChange(values.value);
                   }}
                   onFocus={focusHandler}
+                  style={style}
                 ></NumericFormat>
               )}
 
