@@ -21,10 +21,12 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
     label,
     helpText,
     numericFormat,
+    inputGroupStyle,
     patternFormat,
     onChange: propsOnChange,
     onBlur: propsOnBlur,
     labelToolTip,
+    style,
     markAllOnFocus,
     addonLeft,
     addonRight,
@@ -59,6 +61,7 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
             id={id}
             label={label}
             labelToolTip={labelToolTip}
+            inputGroupStyle={inputGroupStyle}
             addonLeft={addonLeft}
             addonRight={addonRight}
           >
@@ -75,11 +78,12 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
                     onChange(values.value);
                   }}
                   onFocus={focusHandler}
+                  style={style}
                 ></NumericFormat>
               )}
 
               {patternFormat && (
-                <PatternFormat {...patternFormat} {...commonProps} onChange={onChange} onFocus={focusHandler}></PatternFormat>
+                <PatternFormat {...patternFormat} {...commonProps} onChange={onChange} style={style} onFocus={focusHandler}></PatternFormat>
               )}
             </>
           </FormGroupLayout>

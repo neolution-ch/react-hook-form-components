@@ -147,3 +147,19 @@ it("validation works for nested fields", () => {
 
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [objectName]: { [propertyName]: randomNumber } });
 });
+
+it("style is correcly applied", () => {
+  const name = faker.random.word();
+  const style = "background-color: red;";
+  cy.mount(
+    <Form
+      onSubmit={() => {
+        // Do nothing
+      }}
+    >
+      <FormattedInput name={name} label={name} numericFormat={numericFormat} style={{ backgroundColor: "red" }} disabled />
+    </Form>,
+  );
+
+  cy.get(`input[id=${name}]`).should("have.attr", "style", style);
+});
