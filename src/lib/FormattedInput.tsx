@@ -21,6 +21,7 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
     label,
     helpText,
     numericFormat,
+    inputGroupStyle,
     patternFormat,
     onChange: propsOnChange,
     onBlur: propsOnBlur,
@@ -60,6 +61,7 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
             id={id}
             label={label}
             labelToolTip={labelToolTip}
+            inputGroupStyle={inputGroupStyle}
             addonLeft={addonLeft}
             addonRight={addonRight}
           >
