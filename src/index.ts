@@ -7,3 +7,7 @@ export * from "./lib/types/Typeahead";
 export * from "./lib/types/LabelValueOption";
 export * from "./lib/DatePickerInput";
 export * from "./lib/helpers/dateUtils";
+
+// for some unknown reason, SSR only works if the consumer
+// imports useFormContext from our package
+export { useFormContext } from "react-hook-form";
