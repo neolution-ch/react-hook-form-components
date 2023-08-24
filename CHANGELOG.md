@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### dependabot: \#65 Bump tj-actions/changed-files from 37 to 38
+
 ## [1.3.1] - 2023-08-22
 
 ### Fixed
