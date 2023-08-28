@@ -30,7 +30,7 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
     markAllOnFocus,
     addonLeft,
     addonRight,
-    className,
+    className = "",
   } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
   const { control } = useFormContext();
@@ -80,12 +80,19 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
                   }}
                   onFocus={focusHandler}
                   style={style}
-                  className={className}
+                  className={`form-control ${className}`}
                 ></NumericFormat>
               )}
 
               {patternFormat && (
-                <PatternFormat {...patternFormat} {...commonProps} onChange={onChange} style={style} onFocus={focusHandler} className={className}></PatternFormat>
+                <PatternFormat
+                  {...patternFormat}
+                  {...commonProps}
+                  onChange={onChange}
+                  style={style}
+                  onFocus={focusHandler}
+                  className={`form-control ${className}`}
+                ></PatternFormat>
               )}
             </>
           </FormGroupLayout>

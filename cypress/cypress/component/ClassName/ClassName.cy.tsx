@@ -77,13 +77,13 @@ it("formatted input has correct classname", () => {
   const name = faker.random.alpha(10);
 
   cy.mount(
-      <Form
-          onSubmit={() => {
-            // Do nothing
-          }}
-      >
-        <FormattedInput name={name} label={name} className="mt-0 text-white" numericFormat={{}}/>
-      </Form>,
+    <Form
+      onSubmit={() => {
+        // Do nothing
+      }}
+    >
+      <FormattedInput name={name} label={name} className="mt-0 text-white" numericFormat={{}} />
+    </Form>,
   );
   cy.get(`[name=${name}]`).should("have.class", "mt-0 text-white");
 });
