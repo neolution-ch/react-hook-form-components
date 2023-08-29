@@ -45,7 +45,7 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           value: value,
           getInputRef: ref,
-          className: classnames("form-control", { "is-invalid": error }),
+          className: classnames("form-control", { "is-invalid": error }, className),
           "aria-invalid": !!error,
           id,
           onBlur: (e) => {
@@ -80,19 +80,11 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
                   }}
                   onFocus={focusHandler}
                   style={style}
-                  className={`form-control ${className}`}
                 ></NumericFormat>
               )}
 
               {patternFormat && (
-                <PatternFormat
-                  {...patternFormat}
-                  {...commonProps}
-                  onChange={onChange}
-                  style={style}
-                  onFocus={focusHandler}
-                  className={`form-control ${className}`}
-                ></PatternFormat>
+                <PatternFormat {...patternFormat} {...commonProps} onChange={onChange} style={style} onFocus={focusHandler}></PatternFormat>
               )}
             </>
           </FormGroupLayout>
