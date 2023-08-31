@@ -213,3 +213,36 @@ it("auto mark on focus", () => {
   cy.contains("label", name).click();
   cy.get(`input[id=${name}]`).getSelectedText().should("eq", randomOption);
 });
+
+it("disabled options", () => {
+  const { disabledOptions } = generateOptions();
+  const name = faker.random.alpha(10);
+
+  const randomOptions = faker.helpers.arrayElements(disabledOptions, faker.datatype.number({ min: 2, max: 5 }));
+  const half = Math.ceil(randomOptions.length / 2);
+
+  const defaultSelectedOptions = randomOptions.slice(0, half);
+  const changedOptions = randomOptions.slice(half);
+
+  cy.mount(
+    <Form
+      onSubmit={cy.spy().as("onSubmitSpy")}
+      defaultValues={{
+        [name]: defaultSelectedOptions,
+      }}
+    >
+      <StaticTypeaheadInput multiple name={name} label={name} options={disabledOptions} defaultSelected={defaultSelectedOptions} />
+      <input type="submit" />
+    </Form>,
+  );
+
+  cy.get("input[type=submit]").click({ force: true });
+  cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: defaultSelectedOptions });
+
+  cy.get(`#${name}`).click().type("{backspace}".repeat(20));
+
+  for (const option of changedOptions) {
+    cy.get(`#${name}`).click();
+    cy.get(`a[aria-label='${option.label}']`).should("have.class", "disabled");
+  }
+});
