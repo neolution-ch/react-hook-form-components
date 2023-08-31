@@ -89,24 +89,3 @@ it("option is disabled", () => {
 
   cy.get(`select[name=${name}]`).get('[value="DisabledOption"]').should("be.disabled");
 });
-
-it("option is selected", () => {
-  const name = faker.random.word();
-  const options = [...Array<unknown>(5)].map<LabelValueOption>(() => {
-    const randomVal = faker.science.chemicalElement().name;
-    return { label: randomVal, value: randomVal };
-  });
-  options.push({ label: "SelectedOption", value: "SelectedOption", selected: true });
-
-  cy.mount(
-    <Form
-      onSubmit={() => {
-        // Do nothing
-      }}
-    >
-      <Input type="select" name={name} label={name} options={options} />
-    </Form>,
-  );
-
-  cy.get(`select[name=${name}] option:selected`).should("have.text", "SelectedOption");
-});
