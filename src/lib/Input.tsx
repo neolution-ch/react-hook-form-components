@@ -64,7 +64,13 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
             const optionId = `${id}-${i}`;
             return (
               <FormGroup key={option.value} check>
-                <InputInternal {...props} id={optionId} value={option.value} options={undefined} />
+                <InputInternal
+                  {...props}
+                  id={optionId}
+                  value={option.value}
+                  options={undefined}
+                  disabled={props?.disabled || option?.disabled}
+                />
                 <Label for={optionId} check>
                   {option.label}
                 </Label>
