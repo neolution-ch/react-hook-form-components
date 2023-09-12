@@ -219,3 +219,30 @@ it("auto mark on focus", () => {
   cy.contains("label", name).click();
   cy.get(`input[id=${name}]`).getSelectedText().should("eq", randomOption.label);
 });
+
+it("disabled options", () => {
+  const { disabledOptions } = generateOptions(100);
+  const name = faker.random.alpha(10);
+  const randomOptions = faker.helpers.arrayElements(disabledOptions, 1);
+
+  const [changedOption] = randomOptions;
+
+  cy.mount(
+    <Form
+      onSubmit={() => {
+        // Nothing to do
+      }}
+    >
+      <AsyncTypeaheadInput
+        name={name}
+        label={name}
+        queryFn={async (query) => await fetchMock(disabledOptions, query, false)}
+        onChange={cy.spy().as("OnChangeSpy")}
+      />
+      <input type="submit" />
+    </Form>,
+  );
+
+  cy.get(`#${name}`).clear().click().type(changedOption.label);
+  cy.get(`a[aria-label='${changedOption.label}']`).should("have.class", "disabled");
+});

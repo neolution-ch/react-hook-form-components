@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### dependabot: \#70 Bump tibdex/github-app-token from 1 to 2
 
+## [1.4.0] - 2023-09-11
+
+### Added
+
+- Added `disabled` and `selected` to `LabelValueOption` and select inputs
+
 ## [1.3.3] - 2023-08-30
 
 ### Fixed
@@ -280,7 +286,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Created package :tada:
 
-[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/1.3.3...HEAD
+[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/1.4.0...HEAD
 [0.1.2]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.1...0.1.2
 [0.1.1]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.1.0
@@ -305,6 +311,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.4.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.3.0...0.4.0
 [0.3.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.2.0...0.3.0
 [0.2.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.2.0
+[1.4.0]: https://github.com/neolution-ch/react-hook-form-components/compare/1.3.3...1.4.0
 [1.3.3]: https://github.com/neolution-ch/react-hook-form-components/compare/1.3.2...1.3.3
 [1.3.2]: https://github.com/neolution-ch/react-hook-form-components/compare/1.3.1...1.3.2
 [1.3.1]: https://github.com/neolution-ch/react-hook-form-components/compare/1.3.0...1.3.1

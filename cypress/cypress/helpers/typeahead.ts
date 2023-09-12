@@ -5,6 +5,7 @@ interface GenerateOptionsResult {
   objectOptions: LabelValueOption[];
   simpleOptions: string[];
   randomSubset: LabelValueOption[];
+  disabledOptions: LabelValueOption[];
 }
 
 const generateOptions = (count = 10): GenerateOptionsResult => {
@@ -20,7 +21,9 @@ const generateOptions = (count = 10): GenerateOptionsResult => {
   const randomSubset = faker.helpers
     .arrayElements(objectOptions, 2)
     .sort((a, b) => objectOptions.findIndex((x) => x.value == a.value) - objectOptions.findIndex((x) => x.value == b.value));
-  return { objectOptions, simpleOptions, randomSubset };
+
+  const disabledOptions: LabelValueOption[] = objectOptions.map((o) => ({ value: o.value, label: o.label, disabled: true }));
+  return { objectOptions, simpleOptions, randomSubset, disabledOptions };
 };
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
