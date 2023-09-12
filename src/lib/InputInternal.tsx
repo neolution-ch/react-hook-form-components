@@ -73,7 +73,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
         className={className}
       >
         {options?.map((option) => (
-          <option key={option.value} value={option.value}>
+          <option key={option.value} value={option.value} disabled={option?.disabled}>
             {option.label}
           </option>
         ))}
