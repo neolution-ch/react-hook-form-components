@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### dependabot: \#65 Bump tj-actions/changed-files from 37 to 38
+
 ### dependabot: \#69 Bump actions/checkout from 3 to 4
 
 ### dependabot: \#70 Bump tibdex/github-app-token from 1 to 2
