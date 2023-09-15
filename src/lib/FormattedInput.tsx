@@ -30,6 +30,7 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
     markAllOnFocus,
     addonLeft,
     addonRight,
+    className = "",
   } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
   const { control } = useFormContext();
@@ -44,7 +45,7 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           value: value,
           getInputRef: ref,
-          className: classnames("form-control", { "is-invalid": error }),
+          className: classnames("form-control", { "is-invalid": error }, className),
           "aria-invalid": !!error,
           id,
           onBlur: (e) => {
