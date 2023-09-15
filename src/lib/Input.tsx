@@ -14,7 +14,7 @@ interface InputProps<T extends FieldValues> extends CommonInputProps<T> {
   type?: InputType;
   options?: LabelValueOption[];
   multiple?: boolean;
-  value?: string;
+  value?: string | number;
   rangeMin?: number;
   rangeMax?: number;
   textAreaRows?: number;
@@ -23,26 +23,32 @@ interface InputProps<T extends FieldValues> extends CommonInputProps<T> {
 }
 
 const Input = <T extends FieldValues>(props: InputProps<T>) => {
-  if (props.type === "radio" && !props.options) {
+  const { type, options, addonLeft, name, addonRight, rangeMin, rangeMax, textAreaRows, multiple, id, value } = props;
+
+  if (type === "radio" && !options) {
     throw new Error("options must be provided for radio inputs");
   }
-  if (props.type === "select" && !props.options) {
+  if (type === "select" && !options) {
     throw new Error("options must be provided for select inputs");
   }
-  if ((props.addonLeft || props.addonRight) && props.type && invalidAddonTypes.includes(props.type)) {
+  if ((addonLeft || addonRight) && type && invalidAddonTypes.includes(type)) {
     throw new Error("Addons can not be shown on switch, radio or checkbox types of inputs");
   }
-  if (props.multiple && props.type !== "select") {
+  if (multiple && type !== "select") {
     throw new Error("multiple can only be used with select inputs");
   }
-  if ((props.rangeMin || props.rangeMax) && props.type !== "range") {
+  if ((rangeMin || rangeMax) && type !== "range") {
     throw new Error("rangeMin and rangeMax can only be used with range inputs");
   }
-  if (props.textAreaRows && props.type !== "textarea") {
+  if (textAreaRows && type !== "textarea") {
     throw new Error("textAreaRows can only be used with textarea inputs");
   }
-
-  const { type, options } = props;
+  if (value && type === "radio") {
+    throw new Error("value can only be used with radio inputs");
+  }
+  if (options && options.filter((option) => option.value === undefined).length > 1) {
+    throw new Error("options can only contain one undefined value");
+  }
 
   const formGroupLayout = (() => {
     if (type === "switch") {
@@ -54,14 +60,14 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
     return undefined;
   })();
 
-  const { id } = useSafeNameId(props.name, props.id);
+  const { id: safeId } = useSafeNameId(name, id);
 
   return (
     <FormGroupLayout {...props} layout={formGroupLayout}>
       {type === "radio" ? (
         <>
           {options?.map((option, i) => {
-            const optionId = `${id}-${i}`;
+            const optionId = `${safeId}-${i}`;
             return (
               <FormGroup key={option.value} check>
                 <InputInternal

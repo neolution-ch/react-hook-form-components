@@ -1,5 +1,5 @@
 interface LabelValueOption {
-  value: string;
+  value?: string | number;
   label: string;
   disabled?: boolean;
 }

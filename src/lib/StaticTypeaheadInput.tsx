@@ -52,8 +52,8 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
             defaultSelected={defaultSelected}
             multiple={props.multiple}
             style={style}
-            onChange={(e) => {
-              const values = convertTypeaheadOptionsToStringArray(e);
+            onChange={(options) => {
+              const values = convertTypeaheadOptionsToStringArray(options);
               const finalValue = props.multiple ? values : values[0];
 
               if (onChange) {
