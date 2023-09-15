@@ -6,6 +6,7 @@ import { FormGroupLayout } from "./FormGroupLayout";
 import { convertTypeaheadOptionsToStringArray } from "./helpers/typeahead";
 import { CommonTypeaheadProps, TypeaheadOptions } from "./types/Typeahead";
 import { useMarkOnFocusHandler } from "./hooks/useMarkOnFocusHandler";
+import { useInternalFormContext } from "./context/InternalFormContext";
 
 interface StaticTypeaheadInputProps<T extends FieldValues> extends CommonTypeaheadProps<T> {
   options: TypeaheadOptions;
@@ -31,6 +32,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
 
   const { control } = useFormContext();
   const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
+  const { readonly } = useInternalFormContext<T>();
 
   return (
     <Controller
@@ -66,7 +68,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
             options={props.options}
             className={`${className} ${error ? "is-invalid" : ""}`}
             inputProps={{ id }}
-            disabled={disabled}
+            disabled={readonly || disabled}
             onFocus={focusHandler}
             {...reactBootstrapTypeaheadProps}
           />

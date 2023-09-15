@@ -6,6 +6,7 @@ import DatePicker, { ReactDatePickerProps } from "react-datepicker";
 import { useCallback, useEffect, useState } from "react";
 import { utcToZonedTime, zonedTimeToUtc } from "date-fns-tz";
 import { getUtcTimeZeroDate } from "./helpers/dateUtils";
+import { useInternalFormContext } from "./context/InternalFormContext";
 
 interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputProps<T>, "onChange" | "style"> {
   datePickerProps?: Omit<ReactDatePickerProps, "onChange" | "selected" | "id" | "className" | "onBlur">;
@@ -25,6 +26,7 @@ const DEFAULT_DATE_TIME_FORMAT = "dd.MM.yyyy HH:mm";
 const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) => {
   const { name, id } = useSafeNameId(props.name, props.id);
   const { control, getValues, setValue } = useFormContext();
+  const { readonly } = useInternalFormContext<T>();
 
   const {
     disabled,
@@ -98,7 +100,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
             {...datePickerProps}
             {...field}
             id={id}
-            disabled={disabled}
+            disabled={readonly || disabled}
             className={`${className} form-control`}
             dateFormat={effectiveDateFormat}
             calendarStartDay={calendarStartDay}

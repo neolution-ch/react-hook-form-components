@@ -5,6 +5,7 @@ import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";
 import { CommonInputProps } from "./types/CommonInputProps";
 import { useMarkOnFocusHandler } from "./hooks/useMarkOnFocusHandler";
+import { useInternalFormContext } from "./context/InternalFormContext";
 
 interface FormattedInputProps<T extends FieldValues> extends CommonInputProps<T> {
   patternFormat?: PatternFormatProps;
@@ -35,6 +36,8 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
   const { name, id } = useSafeNameId(props.name, props.id);
   const { control } = useFormContext();
   const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
+  const { readonly } = useInternalFormContext<T>();
+
   return (
     <Controller
       control={control}
@@ -52,7 +55,7 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
             if (propsOnBlur) propsOnBlur(e);
             onBlur();
           },
-          disabled,
+          disabled: readonly || disabled,
         };
 
         return (

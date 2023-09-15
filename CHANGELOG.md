@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added `readonly` property to disable all inputs in the form
+
+### Changed
+
+- Exports `useInternalContext` and its properties through children function params
+
 ### dependabot: \#71 Bump tj-actions/changed-files from 38 to 39
 
 ### dependabot: \#65 Bump tj-actions/changed-files from 37 to 38

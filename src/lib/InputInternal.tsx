@@ -3,6 +3,7 @@ import { Input } from "reactstrap";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { InputProps } from "./Input";
 import { useMarkOnFocusHandler } from "./hooks/useMarkOnFocusHandler";
+import { useInternalFormContext } from "./context/InternalFormContext";
 
 const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
   const {
@@ -33,6 +34,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
 
   const fieldError = get(errors, name) as FieldError | undefined;
   const hasError = !!fieldError;
+  const { readonly } = useInternalFormContext<T>();
 
   return (
     <>
@@ -45,7 +47,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
         max={rangeMax}
         rows={textAreaRows}
         multiple={multiple}
-        disabled={disabled}
+        disabled={readonly || disabled}
         plaintext={plainText}
         style={plainText ? { color: "black", marginLeft: 10, ...style } : { ...style }}
         placeholder={placeholder}

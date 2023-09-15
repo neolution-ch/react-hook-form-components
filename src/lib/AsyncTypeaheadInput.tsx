@@ -6,6 +6,7 @@ import { FormGroupLayout } from "./FormGroupLayout";
 import { convertTypeaheadOptionsToStringArray } from "./helpers/typeahead";
 import { CommonTypeaheadProps, TypeaheadOptions } from "./types/Typeahead";
 import { useMarkOnFocusHandler } from "./hooks/useMarkOnFocusHandler";
+import { useInternalFormContext } from "./context/InternalFormContext";
 
 interface AsyncTypeaheadProps<T extends FieldValues> extends CommonTypeaheadProps<T> {
   queryFn: (query: string) => Promise<TypeaheadOptions>;
@@ -30,6 +31,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
   const { name, id } = useSafeNameId(props.name, props.id);
 
   const { control } = useFormContext();
+  const { readonly } = useInternalFormContext<T>();
 
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState<TypeaheadOptions>([]);
@@ -78,7 +80,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
                 setIsLoading(false);
               })();
             }}
-            disabled={disabled}
+            disabled={readonly || disabled}
             onFocus={focusHandler}
             {...reactBootstrapTypeaheadProps}
             style={style}
