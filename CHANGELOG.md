@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added support to have undefined values in a select input by using a magic guid value
+
 ### dependabot: \#71 Bump tj-actions/changed-files from 38 to 39
 
 ### dependabot: \#65 Bump tj-actions/changed-files from 37 to 38
