@@ -32,7 +32,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
 
   const { control } = useFormContext();
   const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
-  const { disabled : formDisabled } = useInternalFormContext<T>();
+  const { disabled: formDisabled } = useInternalFormContext<T>();
 
   return (
     <Controller

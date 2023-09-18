@@ -56,7 +56,7 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
   })();
 
   const { id } = useSafeNameId(props.name, props.id);
-  const { disabled : formDisabled } = useInternalFormContext<T>();
+  const { disabled: formDisabled } = useInternalFormContext<T>();
 
   return (
     <FormGroupLayout {...props} layout={formGroupLayout}>

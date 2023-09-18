@@ -34,7 +34,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
 
   const fieldError = get(errors, name) as FieldError | undefined;
   const hasError = !!fieldError;
-  const { disabled : formDisabled } = useInternalFormContext<T>();
+  const { disabled: formDisabled } = useInternalFormContext<T>();
 
   return (
     <>

@@ -31,7 +31,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
   const { name, id } = useSafeNameId(props.name, props.id);
 
   const { control } = useFormContext();
-  const { disabled : formDisabled } = useInternalFormContext<T>();
+  const { disabled: formDisabled } = useInternalFormContext<T>();
 
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState<TypeaheadOptions>([]);

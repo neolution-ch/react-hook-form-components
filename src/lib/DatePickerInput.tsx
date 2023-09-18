@@ -26,7 +26,7 @@ const DEFAULT_DATE_TIME_FORMAT = "dd.MM.yyyy HH:mm";
 const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) => {
   const { name, id } = useSafeNameId(props.name, props.id);
   const { control, getValues, setValue } = useFormContext();
-  const { disabled : formDisabled } = useInternalFormContext<T>();
+  const { disabled: formDisabled } = useInternalFormContext<T>();
 
   const {
     disabled,
