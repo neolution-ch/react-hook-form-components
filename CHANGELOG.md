@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Exports `useInternalContext` and its properties through children function params
+- Exports `useInternalFormContext` and its properties through children function params
 
 ### dependabot: \#71 Bump tj-actions/changed-files from 38 to 39
 
