@@ -7,6 +7,7 @@ import { FormGroupLayout } from "./FormGroupLayout";
 import { InputInternal } from "./InputInternal";
 import { CommonInputProps } from "./types/CommonInputProps";
 import { LabelValueOption } from "./types/LabelValueOption";
+import { useInternalFormContext } from "./context/InternalFormContext";
 
 const invalidAddonTypes = ["switch", "radio", "checkbox"];
 
@@ -61,6 +62,7 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
   })();
 
   const { id: safeId } = useSafeNameId(name, id);
+  const { disabled: formDisabled } = useInternalFormContext<T>();
 
   return (
     <FormGroupLayout {...props} layout={formGroupLayout}>
@@ -75,7 +77,7 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
                   id={optionId}
                   value={option.value}
                   options={undefined}
-                  disabled={props?.disabled || option?.disabled}
+                  disabled={formDisabled || props?.disabled || option?.disabled}
                 />
                 <Label for={optionId} check>
                   {option.label}

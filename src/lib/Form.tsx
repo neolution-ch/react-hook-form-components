@@ -1,8 +1,12 @@
 import { ReactNode } from "react";
 import { DeepPartial, FieldValues, FormProvider, Resolver, SubmitHandler, useForm, UseFormReturn } from "react-hook-form";
 import { jsonIsoDateReviver } from "./helpers/dateUtils";
-import { InternalFormContext } from "./context/InternalFormContext";
+import { InternalFormContext, InternalFormContextProps } from "./context/InternalFormContext";
 import { AutoSubmitConfig, useAutoSubmit } from "./hooks/useAutoSubmit";
+
+interface ExposedFormMethods<T extends FieldValues>
+  extends UseFormReturn<T, unknown>,
+    Omit<InternalFormContextProps<T>, "requiredFields"> {}
 
 interface FormProps<T extends FieldValues> {
   /**
@@ -26,6 +30,11 @@ interface FormProps<T extends FieldValues> {
   requiredFields?: (keyof T)[];
 
   /**
+   * disable all fields inside the form making it readonly
+   */
+  disabled?: boolean;
+
+  /**
    * enables the form to do an autosubmit on values changed
    */
   autoSubmitConfig?: AutoSubmitConfig;
@@ -33,10 +42,18 @@ interface FormProps<T extends FieldValues> {
   /**
    * the children that will be drawn inside the form
    */
-  children: ((formMethods: UseFormReturn<T, unknown>) => ReactNode) | ReactNode;
+  children: ((formMethods: ExposedFormMethods<T>) => ReactNode) | ReactNode;
 }
 
-const Form = <T extends FieldValues>({ children, onSubmit, resolver, defaultValues, requiredFields, autoSubmitConfig }: FormProps<T>) => {
+const Form = <T extends FieldValues>({
+  children,
+  onSubmit,
+  resolver,
+  defaultValues,
+  requiredFields,
+  disabled = false,
+  autoSubmitConfig,
+}: FormProps<T>) => {
   const revivedDefaultValues = defaultValues
     ? (JSON.parse(JSON.stringify(defaultValues), jsonIsoDateReviver) as DeepPartial<T>)
     : defaultValues;
@@ -45,9 +62,9 @@ const Form = <T extends FieldValues>({ children, onSubmit, resolver, defaultValu
   const autoSubmitHandler = useAutoSubmit({ onSubmit, formMethods, autoSubmitConfig });
 
   return (
-    <InternalFormContext.Provider value={{ requiredFields: requiredFields || [] }}>
+    <InternalFormContext.Provider value={{ requiredFields: requiredFields || [], disabled }}>
       <FormProvider {...formMethods}>
-        <form onSubmit={autoSubmitHandler}>{children instanceof Function ? children(formMethods) : children}</form>
+        <form onSubmit={autoSubmitHandler}>{children instanceof Function ? children({ ...formMethods, disabled }) : children}</form>
       </FormProvider>
     </InternalFormContext.Provider>
   );
