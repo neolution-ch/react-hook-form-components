@@ -56,7 +56,7 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
   })();
 
   const { id } = useSafeNameId(props.name, props.id);
-  const { readonly } = useInternalFormContext<T>();
+  const { disabled : formDisabled } = useInternalFormContext<T>();
 
   return (
     <FormGroupLayout {...props} layout={formGroupLayout}>
@@ -71,7 +71,7 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
                   id={optionId}
                   value={option.value}
                   options={undefined}
-                  disabled={readonly || props?.disabled || option?.disabled}
+                  disabled={formDisabled || props?.disabled || option?.disabled}
                 />
                 <Label for={optionId} check>
                   {option.label}

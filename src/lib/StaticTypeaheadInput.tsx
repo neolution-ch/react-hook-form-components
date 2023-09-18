@@ -32,7 +32,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
 
   const { control } = useFormContext();
   const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
-  const { readonly } = useInternalFormContext<T>();
+  const { disabled : formDisabled } = useInternalFormContext<T>();
 
   return (
     <Controller
@@ -68,7 +68,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
             options={props.options}
             className={`${className} ${error ? "is-invalid" : ""}`}
             inputProps={{ id }}
-            disabled={readonly || disabled}
+            disabled={formDisabled || disabled}
             onFocus={focusHandler}
             {...reactBootstrapTypeaheadProps}
           />

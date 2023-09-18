@@ -36,7 +36,7 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
   const { name, id } = useSafeNameId(props.name, props.id);
   const { control } = useFormContext();
   const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
-  const { readonly } = useInternalFormContext<T>();
+  const { disabled : formDisabled } = useInternalFormContext<T>();
 
   return (
     <Controller
@@ -55,7 +55,7 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
             if (propsOnBlur) propsOnBlur(e);
             onBlur();
           },
-          disabled: readonly || disabled,
+          disabled: formDisabled || disabled,
         };
 
         return (

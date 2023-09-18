@@ -32,7 +32,7 @@ interface FormProps<T extends FieldValues> {
   /**
    * disable all fields inside the form making it readonly
    */
-  readonly?: boolean;
+  disabled?: boolean;
 
   /**
    * enables the form to do an autosubmit on values changed
@@ -51,7 +51,7 @@ const Form = <T extends FieldValues>({
   resolver,
   defaultValues,
   requiredFields,
-  readonly = false,
+  disabled = false,
   autoSubmitConfig,
 }: FormProps<T>) => {
   const revivedDefaultValues = defaultValues
@@ -62,9 +62,9 @@ const Form = <T extends FieldValues>({
   const autoSubmitHandler = useAutoSubmit({ onSubmit, formMethods, autoSubmitConfig });
 
   return (
-    <InternalFormContext.Provider value={{ requiredFields: requiredFields || [], readonly }}>
+    <InternalFormContext.Provider value={{ requiredFields: requiredFields || [], disabled }}>
       <FormProvider {...formMethods}>
-        <form onSubmit={autoSubmitHandler}>{children instanceof Function ? children({ ...formMethods, readonly }) : children}</form>
+        <form onSubmit={autoSubmitHandler}>{children instanceof Function ? children({ ...formMethods, disabled }) : children}</form>
       </FormProvider>
     </InternalFormContext.Provider>
   );

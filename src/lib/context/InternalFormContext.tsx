@@ -3,27 +3,27 @@ import { FieldValues } from "react-hook-form";
 
 export interface InternalFormContextProps<T extends FieldValues> {
   requiredFields: (keyof T)[];
-  readonly: boolean;
+  disabled: boolean;
 }
 
 export interface InternalFormContextProviderProps<T extends FieldValues>
-  extends Pick<InternalFormContextProps<T>, "requiredFields" | "readonly"> {
+  extends Pick<InternalFormContextProps<T>, "requiredFields" | "disabled"> {
   children: React.ReactNode;
 }
 
 export const InternalFormContext = createContext<InternalFormContextProps<never>>({
   requiredFields: [],
-  readonly: false,
+  disabled: false,
 });
 
 export const InternalFormProvider = <T extends FieldValues>(props: InternalFormContextProviderProps<T>) => {
-  const { children, requiredFields, readonly } = props;
+  const { children, requiredFields, disabled } = props;
 
   return (
     <InternalFormContext.Provider
       value={{
         requiredFields,
-        readonly,
+        disabled,
       }}
     >
       {children}

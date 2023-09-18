@@ -22,7 +22,7 @@ it("disable all fields when readonly attribute is set", () => {
       onSubmit={() => {
         // Nothing to do
       }}
-      readonly
+      disabled
     >
       <Input type="text" label={inputName} name={inputName} />
       <FormattedInput numericFormat={{ thousandSeparator: "'" }} label={formattedInputName} name={formattedInputName} />
@@ -47,12 +47,12 @@ it("exposing readonly through children function works", () => {
       onSubmit={() => {
         // Nothing to do
       }}
-      readonly
+      disabled
     >
-      {({ readonly }) => (
+      {({ disabled }) => (
         <>
           <Label>{name}</Label>
-          <ReactstrapInput id={name} type="text" disabled={readonly} name={name} />
+          <ReactstrapInput id={name} type="text" disabled={disabled} name={name} />
         </>
       )}
     </Form>,
@@ -65,11 +65,11 @@ it("exposing readonly through context works", () => {
   const name = faker.random.alpha(10);
 
   const CustomInput = () => {
-    const { readonly } = useInternalFormContext();
+    const { disabled } = useInternalFormContext();
     return (
       <>
         <Label>{name}</Label>
-        <ReactstrapInput id={name} type="text" disabled={readonly} name={name} />
+        <ReactstrapInput id={name} type="text" disabled={disabled} name={name} />
       </>
     );
   };
@@ -78,7 +78,7 @@ it("exposing readonly through context works", () => {
       onSubmit={() => {
         // Nothing to do
       }}
-      readonly
+      disabled
     >
       <CustomInput />
     </Form>,

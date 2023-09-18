@@ -31,7 +31,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
   const { name, id } = useSafeNameId(props.name, props.id);
 
   const { control } = useFormContext();
-  const { readonly } = useInternalFormContext<T>();
+  const { disabled : formDisabled } = useInternalFormContext<T>();
 
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState<TypeaheadOptions>([]);
@@ -80,7 +80,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
                 setIsLoading(false);
               })();
             }}
-            disabled={readonly || disabled}
+            disabled={formDisabled || disabled}
             onFocus={focusHandler}
             {...reactBootstrapTypeaheadProps}
             style={style}

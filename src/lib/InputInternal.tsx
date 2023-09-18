@@ -34,7 +34,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
 
   const fieldError = get(errors, name) as FieldError | undefined;
   const hasError = !!fieldError;
-  const { readonly } = useInternalFormContext<T>();
+  const { disabled : formDisabled } = useInternalFormContext<T>();
 
   return (
     <>
@@ -47,7 +47,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
         max={rangeMax}
         rows={textAreaRows}
         multiple={multiple}
-        disabled={readonly || disabled}
+        disabled={formDisabled || disabled}
         plaintext={plainText}
         style={plainText ? { color: "black", marginLeft: 10, ...style } : { ...style }}
         placeholder={placeholder}
