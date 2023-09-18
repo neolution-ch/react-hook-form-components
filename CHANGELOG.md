@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added `readonly` property to disable all inputs in the form
+- Added `disabled` property to disable all inputs in the form
 
 ### Changed
 
