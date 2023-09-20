@@ -1,12 +1,13 @@
 import { Option } from "react-bootstrap-typeahead/types/types";
-import { LabelValueOption } from "../types/LabelValueOption";
 
 const convertTypeaheadOptionsToStringArray = (options: Option[]): string[] => {
-  if (typeof options[0] === "string") {
+  const isStringArray = options.length > 0 && options.every((value) => typeof value === "string");
+
+  if (isStringArray) {
     return options as string[];
   }
 
-  return (options as LabelValueOption[]).map((option: LabelValueOption) => option.value);
+  return (options as Record<string, string>[]).map((option) => option.value);
 };
 
 export { convertTypeaheadOptionsToStringArray };

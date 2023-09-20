@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added support to have undefined values in a select input by using a magic guid value
+
 ## [1.5.0] - 2023-09-18
 
 ### Added
