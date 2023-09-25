@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added support to have undefined values in a select input by using a magic guid value
+- `datePickerRef` ref prop to `DatePickerInput`
 
 ## [1.5.0] - 2023-09-18
 

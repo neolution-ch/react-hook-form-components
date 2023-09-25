@@ -3,7 +3,7 @@ import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";
 import { CommonInputProps } from "./types/CommonInputProps";
 import DatePicker, { ReactDatePickerProps } from "react-datepicker";
-import { useCallback, useEffect, useState } from "react";
+import {useCallback, useEffect, useState, MutableRefObject} from "react";
 import { utcToZonedTime, zonedTimeToUtc } from "date-fns-tz";
 import { getUtcTimeZeroDate } from "./helpers/dateUtils";
 import { useInternalFormContext } from "./context/InternalFormContext";
@@ -18,6 +18,7 @@ interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputPr
    * @example "America/New_York"
    */
   ianaTimeZone?: string;
+  datePickerRef?: MutableRefObject<DatePicker<never, undefined> | null>;
 }
 
 const DEFAULT_DATE_FORMAT = "dd.MM.yyyy";
@@ -39,6 +40,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
     ianaTimeZone,
     className = "",
     inputGroupStyle,
+    datePickerRef,
   } = props;
   const { calendarStartDay = 1, showTimeInput = false, showTimeSelect = false, dateFormat } = datePickerProps;
   const showTimeInputOrSelect = showTimeInput || showTimeSelect;
@@ -111,6 +113,9 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
               // https://codesandbox.io/s/react-hook-form-focus-forked-yyhsi?file=/src/index.js
               // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
               elem && field.ref((elem as any).input);
+              if (datePickerRef) {
+                datePickerRef.current = elem as DatePicker<never>;
+              }
             }}
             onBlur={(e) => {
               if (props.onBlur) props.onBlur(e);
