@@ -8,6 +8,8 @@ import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, InputGroupText } from "reactstrap";
 import { SinonSpy } from "cypress/types/sinon";
+import { useRef, useEffect, FC } from "react";
+import ReactDatePicker from "react-datepicker";
 
 it("selecting today works", () => {
   const name = faker.random.alpha(10);
@@ -213,4 +215,39 @@ it("passing an IANA timezone works", () => {
     const [args] = x.getCall(0).args as [FormFields];
     expect(JSON.stringify(args[name])).to.equal(inputJsonString);
   });
+});
+
+it("passing the ref works", () => {
+  const name = faker.random.alpha(10);
+  const schema = yup.object().shape({
+    [name]: yup.date(),
+  });
+
+  const DatePickerWithRef: FC = () => {
+    const ref = useRef<ReactDatePicker<never, undefined>>(null);
+
+    useEffect(() => {
+      if (ref && ref.current) {
+        ref.current.setOpen(true);
+      }
+    }, [ref]);
+
+    return (
+      <>
+        <Form
+          onSubmit={() => {
+            // Nothing to do
+          }}
+          resolver={yupResolver(schema)}
+        >
+          <DatePickerInput name={name} label={name} datePickerRef={ref} />
+        </Form>
+        ,
+      </>
+    );
+  };
+
+  cy.mount(<DatePickerWithRef />);
+
+  cy.get(".react-datepicker-popper").should("be.visible");
 });
