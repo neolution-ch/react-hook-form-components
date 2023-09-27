@@ -6,32 +6,13 @@ export interface FormContextProps<T extends FieldValues> extends UseFormReturn<T
   disabled: boolean;
 }
 
-export interface InternalFormContextProviderProps<T extends FieldValues> extends Pick<FormContextProps<T>, "requiredFields" | "disabled"> {
-  children: React.ReactNode;
-  formMethods: UseFormReturn<T, unknown>;
-}
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const FormContext = createContext<FormContextProps<any>>({} as FormContextProps<any>);
-
-export const InternalFormProvider = <T extends FieldValues>(props: InternalFormContextProviderProps<T>) => {
-  const { children, requiredFields, disabled, formMethods } = props;
-
-  return (
-    <FormContext.Provider
-      value={{
-        ...formMethods,
-        requiredFields,
-        disabled,
-      }}
-    >
-      {children}
-    </FormContext.Provider>
-  );
-};
+export const FormContext = createContext<FormContextProps<any> | null>(null);
 
 export const useFormContext = <T extends FieldValues>() => {
   const context = useContext(FormContext);
-
+  if (!context) {
+    throw new Error("useFormContext must be used within a FormContextProvider");
+  }
   return context as FormContextProps<T>;
 };
