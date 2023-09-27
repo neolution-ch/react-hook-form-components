@@ -111,7 +111,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
           id={id}
           label={label}
           labelToolTip={labelToolTip}
-          inputGroupStyle={{ ...inputGroupStyle, alignItems: icon ? "normal" : "" }}
+          inputGroupStyle={icon ? { ...inputGroupStyle, alignItems: "normal" } : inputGroupStyle}
           formGroupId={formGroupId}
           addonRight={
             icon && addonPosition == AddonPosition.Rigth && !addonRight ? (
