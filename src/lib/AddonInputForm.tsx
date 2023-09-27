@@ -1,7 +1,7 @@
 import { ReactNode, CSSProperties } from "react";
 import { InputGroupText } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {IconDefinition} from "@fortawesome/fontawesome-common-types";
+import { IconDefinition } from "@fortawesome/fontawesome-common-types";
 export interface AddonInputFormProps {
   icon?: IconDefinition;
   iconSize?: string;
@@ -18,8 +18,8 @@ const AddonInputForm = (props: AddonInputFormProps) => {
   }
   return (
     <InputGroupText className={inputGroupClassName} style={inputGroupStyle}>
-      {!customElement
-        ? <FontAwesomeIcon
+      {!customElement ? (
+        <FontAwesomeIcon
           size={iconSize}
           icon={icon as IconDefinition}
           role={iconOnClick ? "button" : ""}
@@ -29,10 +29,11 @@ const AddonInputForm = (props: AddonInputFormProps) => {
             }
           }}
         />
-        : customElement
-      }
+      ) : (
+        customElement
+      )}
     </InputGroupText>
-  )
-}
+  );
+};
 
 export default AddonInputForm;

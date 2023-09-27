@@ -8,7 +8,7 @@ import { utcToZonedTime, zonedTimeToUtc } from "date-fns-tz";
 import { getUtcTimeZeroDate } from "./helpers/dateUtils";
 import { useInternalFormContext } from "./context/InternalFormContext";
 import { v4 as guidGen } from "uuid";
-import {IconDefinition} from "@fortawesome/fontawesome-common-types";
+import { IconDefinition } from "@fortawesome/fontawesome-common-types";
 import AddonInputForm from "src/lib/AddonInputForm";
 
 interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputProps<T>, "onChange" | "style" | "addonLeft" | "addonRight"> {
@@ -104,18 +104,24 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
           labelToolTip={labelToolTip}
           inputGroupStyle={inputGroupStyle}
           formGroupId={formGroupId}
-          addonRight={iconRight &&
+          addonRight={
+            iconRight && (
               <AddonInputForm
-                  iconSize={iconSize}
-                  icon={iconRight}
-                  iconOnClick={() => datePickerRef && datePickerRef.current?.setOpen(!datePickerRef.current.isCalendarOpen())}
-              />}
-          addonLeft={iconLeft &&
+                iconSize={iconSize}
+                icon={iconRight}
+                iconOnClick={() => datePickerRef && datePickerRef.current?.setOpen(!datePickerRef.current.isCalendarOpen())}
+              />
+            )
+          }
+          addonLeft={
+            iconLeft && (
               <AddonInputForm
-                  iconSize={iconSize}
-                  icon={iconLeft}
-                  iconOnClick={() => datePickerRef && datePickerRef.current?.setOpen(!datePickerRef.current.isCalendarOpen())}
-              />}
+                iconSize={iconSize}
+                icon={iconLeft}
+                iconOnClick={() => datePickerRef && datePickerRef.current?.setOpen(!datePickerRef.current.isCalendarOpen())}
+              />
+            )
+          }
         >
           <DatePicker
             {...datePickerProps}
@@ -149,8 +155,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
 
               field.onChange(convertedDate);
             }}
-            onClickOutside={(e) =>
-            {
+            onClickOutside={(e) => {
               if (document.getElementById(formGroupId)?.contains(e.target as HTMLElement) && datePickerRef) {
                 datePickerRef.current?.setOpen(true);
               }
