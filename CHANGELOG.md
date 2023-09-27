@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.6.0] - 2023-09-25
 
+- Added `iconRight`, `iconLeft` and `iconSize` props to `DatePickerInput` in order to display directly the icon inside the input with the open/close calendar logic
+
 ### Added
 
 - Added support to have undefined values in a select input by using a magic guid value
