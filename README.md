@@ -20,6 +20,7 @@ Supported input types:
 - [Typeahead](#typeahead)
 - [DatePicker](#datepicker)
 - [Numeric and Pattern Format](#numeric-and-pattern-format)
+- [Form Context](#form-context)
 - [Storybook](#storybook)
 
 ## Installation
@@ -206,6 +207,17 @@ Refer to the [react-number-format](https://s-yadav.github.io/react-number-format
   }}
 />
 ```
+
+## Form Context
+
+In order to correctly use the form context you have to import it like this:
+
+```jsx
+import { useFormContext } from "@neolution-ch/react-hook-form-components";
+```
+
+This is needed, as importing it directly from the `react-hook-form`, will produce runtime errors.
+In addition, our context will provide some additional properties for your form.
 
 ## Tooltip
 
