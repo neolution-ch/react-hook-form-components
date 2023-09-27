@@ -5,6 +5,9 @@ import { InputProps } from "./Input";
 import { useMarkOnFocusHandler } from "./hooks/useMarkOnFocusHandler";
 import { useFormContext } from "./context/FormContext";
 
+// This is two random guids concatenated. It is used to set the value of the option to undefined.
+const UNDEFINED_OPTION_VALUE = "CABB7A27DB754DA58C89D43ADB03FE0EC5EE3E25A6624D749F35CF2E92CFA784";
+
 const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
   const {
     disabled,
@@ -31,7 +34,9 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
     disabled: formDisabled,
   } = useFormContext();
 
-  const { ref, ...rest } = register(name);
+  const { ref, ...rest } = register(name, {
+    setValueAs: (value: string) => (value === UNDEFINED_OPTION_VALUE ? undefined : value),
+  });
 
   const fieldError = get(errors, name) as FieldError | undefined;
   const hasError = !!fieldError;
@@ -75,7 +80,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
         className={className}
       >
         {options?.map((option) => (
-          <option key={option.value} value={option.value} disabled={option?.disabled}>
+          <option key={option.value} value={option.value ?? UNDEFINED_OPTION_VALUE} disabled={option?.disabled}>
             {option.label}
           </option>
         ))}
