@@ -4,9 +4,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import { faker } from "@faker-js/faker";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { faCalendar } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, InputGroupText } from "reactstrap";
+import { faCalendar, faClock } from "@fortawesome/free-solid-svg-icons";
+import { Button } from "reactstrap";
 import { SinonSpy } from "cypress/types/sinon";
 import { useRef, useEffect, FC } from "react";
 import ReactDatePicker from "react-datepicker";
@@ -129,24 +128,11 @@ it("contains calendar icon if provided in DateInput", () => {
       }}
       resolver={yupResolver(schema)}
     >
-      <DatePickerInput
-        name={name}
-        label={name}
-        addonLeft={
-          <InputGroupText>
-            <FontAwesomeIcon icon={faCalendar} />
-          </InputGroupText>
-        }
-        addonRight={
-          <InputGroupText>
-            <FontAwesomeIcon icon={faCalendar} />
-          </InputGroupText>
-        }
-      />
+      <DatePickerInput name={name} label={name} iconLeft={faClock} iconRight={faCalendar} />
     </Form>,
   );
 
-  cy.get(`label[for=${name}]`).parent().find("svg[data-icon=calendar]");
+  cy.get(`label[for=${name}]`).parent().find("svg[data-icon=calendar]").should("be.visible");
 });
 
 it("not contains calendar icon if not provided in DateInput", () => {
@@ -217,7 +203,7 @@ it("passing an IANA timezone works", () => {
   });
 });
 
-it("passing the ref works", () => {
+it("passing the ref and click on icons open/close calendar", () => {
   const name = faker.random.alpha(10);
   const schema = yup.object().shape({
     [name]: yup.date(),
@@ -225,12 +211,6 @@ it("passing the ref works", () => {
 
   const DatePickerWithRef: FC = () => {
     const ref = useRef<ReactDatePicker<never, undefined>>(null);
-
-    useEffect(() => {
-      if (ref && ref.current) {
-        ref.current.setOpen(true);
-      }
-    }, [ref]);
 
     return (
       <>
@@ -240,7 +220,7 @@ it("passing the ref works", () => {
           }}
           resolver={yupResolver(schema)}
         >
-          <DatePickerInput name={name} label={name} datePickerRef={ref} />
+          <DatePickerInput name={name} label={name} datePickerRef={ref} iconRight={faCalendar} iconLeft={faClock} />
         </Form>
         ,
       </>
@@ -249,5 +229,10 @@ it("passing the ref works", () => {
 
   cy.mount(<DatePickerWithRef />);
 
+  cy.get(`label[for=${name}]`).parent().find("svg[data-icon=calendar]").click();
+  cy.get(".react-datepicker-popper").should("be.visible");
+  cy.get(`label[for=${name}]`).parent().find("svg[data-icon=calendar]").click();
+
+  cy.get(`label[for=${name}]`).parent().find("svg[data-icon=clock]").click();
   cy.get(".react-datepicker-popper").should("be.visible");
 });

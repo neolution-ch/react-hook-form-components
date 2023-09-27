@@ -62,16 +62,8 @@ it("contains calendar icon and inputGroup has correct style", () => {
         inputGroupStyle={{ backgroundColor: "black" }}
         name={name}
         label={name}
-        addonLeft={
-          <InputGroupText>
-            <FontAwesomeIcon icon={faCalendar} />
-          </InputGroupText>
-        }
-        addonRight={
-          <InputGroupText>
-            <FontAwesomeIcon icon={faCalendar} />
-          </InputGroupText>
-        }
+        iconLeft={faCalendar}
+        iconRight={faCalendar}
       />
     </Form>,
   );

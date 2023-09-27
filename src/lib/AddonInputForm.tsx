@@ -2,9 +2,10 @@ import { ReactNode, CSSProperties } from "react";
 import { InputGroupText } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconDefinition } from "@fortawesome/fontawesome-common-types";
+import { SizeProp } from "@fortawesome/fontawesome-svg-core";
 export interface AddonInputFormProps {
   icon?: IconDefinition;
-  iconSize?: string;
+  iconSize?: SizeProp;
   inputGroupStyle?: CSSProperties;
   iconOnClick?: () => void;
   customElement?: ReactNode;

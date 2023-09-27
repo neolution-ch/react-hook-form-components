@@ -10,6 +10,7 @@ import { useInternalFormContext } from "./context/InternalFormContext";
 import { v4 as guidGen } from "uuid";
 import { IconDefinition } from "@fortawesome/fontawesome-common-types";
 import AddonInputForm from "src/lib/AddonInputForm";
+import { SizeProp } from "@fortawesome/fontawesome-svg-core";
 
 interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputProps<T>, "onChange" | "style" | "addonLeft" | "addonRight"> {
   datePickerProps?: Omit<ReactDatePickerProps, "onChange" | "selected" | "id" | "className" | "onBlur">;
@@ -24,7 +25,7 @@ interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputPr
   datePickerRef?: MutableRefObject<DatePicker<never, undefined> | null>;
   iconRight?: IconDefinition;
   iconLeft?: IconDefinition;
-  iconSize?: string;
+  iconSize?: SizeProp;
 }
 
 const DEFAULT_DATE_FORMAT = "dd.MM.yyyy";
