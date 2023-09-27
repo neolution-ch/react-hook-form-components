@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import { DatePickerInput, Form, getUtcTimeZeroDate } from "react-hook-form-components";
+import { DatePickerInput, Form, getUtcTimeZeroDate, AddonPosition } from "react-hook-form-components";
 import "react-datepicker/dist/react-datepicker.css";
 import { faker } from "@faker-js/faker";
 import * as yup from "yup";
@@ -7,7 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { faCalendar, faClock } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "reactstrap";
 import { SinonSpy } from "cypress/types/sinon";
-import { useRef, useEffect, FC } from "react";
+import { useRef } from "react";
 import ReactDatePicker from "react-datepicker";
 
 it("selecting today works", () => {
@@ -128,11 +128,11 @@ it("contains calendar icon if provided in DateInput", () => {
       }}
       resolver={yupResolver(schema)}
     >
-      <DatePickerInput name={name} label={name} iconLeft={faClock} iconRight={faCalendar} />
+      <DatePickerInput name={name} label={name} icon={faClock} addonPosition={AddonPosition.Rigth} />
     </Form>,
   );
 
-  cy.get(`label[for=${name}]`).parent().find("svg[data-icon=calendar]").should("be.visible");
+  cy.get(`label[for=${name}]`).parent().find("svg[data-icon=clock]").should("be.visible");
 });
 
 it("not contains calendar icon if not provided in DateInput", () => {
@@ -203,36 +203,106 @@ it("passing an IANA timezone works", () => {
   });
 });
 
-it("passing the ref and click on icons open/close calendar", () => {
+it("passing the the icon correctly render the icon on rigth and open/close calendar", () => {
   const name = faker.random.alpha(10);
   const schema = yup.object().shape({
     [name]: yup.date(),
   });
 
-  const DatePickerWithRef: FC = () => {
-    const ref = useRef<ReactDatePicker<never, undefined>>(null);
-
-    return (
-      <>
-        <Form
-          onSubmit={() => {
-            // Nothing to do
-          }}
-          resolver={yupResolver(schema)}
-        >
-          <DatePickerInput name={name} label={name} datePickerRef={ref} iconRight={faCalendar} iconLeft={faClock} />
-        </Form>
-        ,
-      </>
-    );
-  };
-
-  cy.mount(<DatePickerWithRef />);
+  cy.mount(
+    <>
+      <Form
+        onSubmit={() => {
+          // Nothing to do
+        }}
+        resolver={yupResolver(schema)}
+      >
+        <DatePickerInput name={name} label={name} icon={faCalendar} />
+      </Form>
+    </>,
+  );
 
   cy.get(`label[for=${name}]`).parent().find("svg[data-icon=calendar]").click();
   cy.get(".react-datepicker-popper").should("be.visible");
   cy.get(`label[for=${name}]`).parent().find("svg[data-icon=calendar]").click();
+  cy.get(".react-datepicker-popper").should("not.exist");
+});
 
-  cy.get(`label[for=${name}]`).parent().find("svg[data-icon=clock]").click();
+it("passing the the icon correctly render the icon on the left and open/close calendar", () => {
+  const name = faker.random.alpha(10);
+  const schema = yup.object().shape({
+    [name]: yup.date(),
+  });
+
+  cy.mount(
+    <>
+      <Form
+        onSubmit={() => {
+          // Nothing to do
+        }}
+        resolver={yupResolver(schema)}
+      >
+        <DatePickerInput name={name} label={name} icon={faCalendar} addonPosition={AddonPosition.Left} />
+      </Form>
+    </>,
+  );
+
+  cy.get(`label[for=${name}]`).parent().find("svg[data-icon=calendar]").click();
+  cy.get(".react-datepicker-popper").should("be.visible");
+  cy.get(`label[for=${name}]`).parent().find("svg[data-icon=calendar]").click();
+  cy.get(".react-datepicker-popper").should("not.exist");
+});
+
+it("Clicking the icon with disabled input should not open the calendar", () => {
+  const name = faker.random.alpha(10);
+  const schema = yup.object().shape({
+    [name]: yup.date(),
+  });
+
+  cy.mount(
+    <>
+      <Form
+        onSubmit={() => {
+          // Nothing to do
+        }}
+        resolver={yupResolver(schema)}
+      >
+        <DatePickerInput name={name} label={name} icon={faCalendar} disabled />
+      </Form>
+    </>,
+  );
+
+  cy.get(`label[for=${name}]`).parent().find("svg[data-icon=calendar]").click();
+  cy.get(".react-datepicker-popper").should("not.exist");
+});
+
+it("Passing ref works", () => {
+  const name = faker.random.alpha(10);
+  const id = faker.random.alpha(10);
+
+  const schema = yup.object().shape({
+    [name]: yup.date(),
+  });
+
+  const CustomComponent = () => {
+    const datePickerRef = useRef<ReactDatePicker>(null);
+    return (
+      <Form
+        onSubmit={() => {
+          // Nothing to do
+        }}
+        resolver={yupResolver(schema)}
+      >
+        <DatePickerInput datePickerRef={datePickerRef} name={name} label={name} icon={faCalendar} />
+        <button id={id} type="button" onClick={() => datePickerRef.current?.setOpen(true)}>
+          Click me
+        </button>
+      </Form>
+    );
+  };
+
+  cy.mount(<CustomComponent />);
+
+  cy.get(`button[id=${id}]`).click();
   cy.get(".react-datepicker-popper").should("be.visible");
 });

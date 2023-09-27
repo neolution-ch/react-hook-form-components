@@ -3,17 +3,18 @@ import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";
 import { CommonInputProps } from "./types/CommonInputProps";
 import DatePicker, { ReactDatePickerProps } from "react-datepicker";
-import { useCallback, useEffect, useState, MutableRefObject } from "react";
+import { useCallback, useEffect, useState, MutableRefObject, useRef, useMemo } from "react";
 import { utcToZonedTime, zonedTimeToUtc } from "date-fns-tz";
 import { getUtcTimeZeroDate } from "./helpers/dateUtils";
 import { useInternalFormContext } from "./context/InternalFormContext";
 import { v4 as guidGen } from "uuid";
 import { IconDefinition } from "@fortawesome/fontawesome-common-types";
-import AddonInputForm from "src/lib/AddonInputForm";
 import { SizeProp } from "@fortawesome/fontawesome-svg-core";
+import { AddonPosition } from "./types/DatePicker";
+import { DatePickerIconAddon } from "./DatePickerIconAddon";
 
-interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputProps<T>, "onChange" | "style" | "addonLeft" | "addonRight"> {
-  datePickerProps?: Omit<ReactDatePickerProps, "onChange" | "selected" | "id" | "className" | "onBlur">;
+interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputProps<T>, "onChange" | "style"> {
+  datePickerProps?: Omit<ReactDatePickerProps, "onChange" | "selected" | "id" | "className" | "onBlur" | "onClickOutside">;
   onChange?: (value: Date | null) => void;
   /**
    * The IANA time zone identifier, e.g. "Europe/Berlin" for which the date should be displayed.
@@ -23,9 +24,9 @@ interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputPr
    */
   ianaTimeZone?: string;
   datePickerRef?: MutableRefObject<DatePicker<never, undefined> | null>;
-  iconRight?: IconDefinition;
-  iconLeft?: IconDefinition;
+  icon?: IconDefinition;
   iconSize?: SizeProp;
+  addonPosition?: AddonPosition;
 }
 
 const DEFAULT_DATE_FORMAT = "dd.MM.yyyy";
@@ -35,26 +36,33 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
   const { name, id } = useSafeNameId(props.name, props.id);
   const { control, getValues, setValue } = useFormContext();
   const { disabled: formDisabled } = useInternalFormContext<T>();
-
   const {
     disabled,
     label,
     helpText,
+    addonLeft,
+    addonRight,
     datePickerProps = {},
     labelToolTip,
     ianaTimeZone,
     className = "",
     inputGroupStyle,
     datePickerRef,
-    iconRight,
-    iconLeft,
-    iconSize = "lg",
+    iconSize,
+    icon,
+    addonPosition = AddonPosition.Rigth,
   } = props;
+
   const { calendarStartDay = 1, showTimeInput = false, showTimeSelect = false, dateFormat } = datePickerProps;
   const showTimeInputOrSelect = showTimeInput || showTimeSelect;
   const effectiveDateFormat = dateFormat || (showTimeInputOrSelect ? DEFAULT_DATE_TIME_FORMAT : DEFAULT_DATE_FORMAT);
-  const formGroupId = guidGen();
-
+  const formGroupId = useMemo(() => guidGen(), []);
+  const internalDatePickerRef = useRef<DatePicker>();
+  const addonClassName = icon
+    ? addonPosition == AddonPosition.Rigth
+      ? "border-end-0 rounded-0 rounded-start"
+      : "border-start-0 rounded-0 rounded-end"
+    : "";
   if (ianaTimeZone && !showTimeInputOrSelect) {
     throw new Error("If you use ianaTimeZone, you have to include time in the dateFormat or set showTimeInput or showTimeSelect to true");
   }
@@ -103,24 +111,20 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
           id={id}
           label={label}
           labelToolTip={labelToolTip}
-          inputGroupStyle={inputGroupStyle}
+          inputGroupStyle={{ ...inputGroupStyle, alignItems: icon ? "normal" : "" }}
           formGroupId={formGroupId}
           addonRight={
-            iconRight && (
-              <AddonInputForm
-                iconSize={iconSize}
-                icon={iconRight}
-                iconOnClick={() => datePickerRef && datePickerRef.current?.setOpen(!datePickerRef.current.isCalendarOpen())}
-              />
+            icon && addonPosition == AddonPosition.Rigth && !addonRight ? (
+              <DatePickerIconAddon datePickerRef={internalDatePickerRef} icon={icon} iconSize={iconSize} disabled={disabled} />
+            ) : (
+              addonRight
             )
           }
           addonLeft={
-            iconLeft && (
-              <AddonInputForm
-                iconSize={iconSize}
-                icon={iconLeft}
-                iconOnClick={() => datePickerRef && datePickerRef.current?.setOpen(!datePickerRef.current.isCalendarOpen())}
-              />
+            icon && addonPosition == AddonPosition.Left && !addonLeft ? (
+              <DatePickerIconAddon datePickerRef={internalDatePickerRef} icon={icon} iconSize={iconSize} disabled={disabled} />
+            ) : (
+              addonLeft
             )
           }
         >
@@ -129,7 +133,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
             {...field}
             id={id}
             disabled={formDisabled || disabled}
-            className={`${className} form-control`}
+            className={`${className} ${addonClassName} form-control`}
             dateFormat={effectiveDateFormat}
             calendarStartDay={calendarStartDay}
             wrapperClassName={error ? "is-invalid" : ""}
@@ -139,6 +143,8 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
               // https://codesandbox.io/s/react-hook-form-focus-forked-yyhsi?file=/src/index.js
               // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
               elem && field.ref((elem as any).input);
+              internalDatePickerRef.current = elem as DatePicker<never>;
+
               if (datePickerRef) {
                 datePickerRef.current = elem as DatePicker<never>;
               }
@@ -157,8 +163,8 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
               field.onChange(convertedDate);
             }}
             onClickOutside={(e) => {
-              if (document.getElementById(formGroupId)?.contains(e.target as HTMLElement) && datePickerRef) {
-                datePickerRef.current?.setOpen(true);
+              if (document.getElementById(formGroupId)?.contains(e.target as HTMLElement) && !disabled && !formDisabled) {
+                internalDatePickerRef.current?.setOpen(true);
               }
             }}
           />
