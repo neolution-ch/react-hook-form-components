@@ -6,8 +6,7 @@ export interface FormContextProps<T extends FieldValues> extends UseFormReturn<T
   disabled: boolean;
 }
 
-export interface InternalFormContextProviderProps<T extends FieldValues>
-  extends Pick<FormContextProps<T>, "requiredFields" | "disabled"> {
+export interface InternalFormContextProviderProps<T extends FieldValues> extends Pick<FormContextProps<T>, "requiredFields" | "disabled"> {
   children: React.ReactNode;
   formMethods: UseFormReturn<T, unknown>;
 }

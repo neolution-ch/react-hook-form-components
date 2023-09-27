@@ -10,14 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - :boom: Merged `useInternalFormContext` and `react-hook-form context` in the same `useFormContext` context
-- 
+
 ## [1.6.0] - 2023-09-25
 
 ### Added
 
 - Added support to have undefined values in a select input by using a magic guid value
 - `datePickerRef` ref prop to `DatePickerInput`
-
 
 ## [1.5.0] - 2023-09-18
 
