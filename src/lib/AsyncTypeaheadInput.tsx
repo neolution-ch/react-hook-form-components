@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { AsyncTypeahead, UseAsyncProps } from "react-bootstrap-typeahead";
-import { Controller, FieldValues, useFormContext } from "react-hook-form";
+import { Controller, FieldValues } from "react-hook-form";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";
 import { convertTypeaheadOptionsToStringArray } from "./helpers/typeahead";
 import { CommonTypeaheadProps, TypeaheadOptions } from "./types/Typeahead";
 import { useMarkOnFocusHandler } from "./hooks/useMarkOnFocusHandler";
-import { useInternalFormContext } from "./context/InternalFormContext";
+import { useFormContext } from "./context/FormContext";
 
 interface AsyncTypeaheadProps<T extends FieldValues> extends CommonTypeaheadProps<T> {
   queryFn: (query: string) => Promise<TypeaheadOptions>;
@@ -30,8 +30,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
   } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
 
-  const { control } = useFormContext();
-  const { disabled: formDisabled } = useInternalFormContext<T>();
+  const { control, disabled: formDisabled } = useFormContext();
 
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState<TypeaheadOptions>([]);

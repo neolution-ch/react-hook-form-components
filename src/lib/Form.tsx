@@ -1,12 +1,10 @@
 import { ReactNode } from "react";
-import { DeepPartial, FieldValues, FormProvider, Resolver, SubmitHandler, useForm, UseFormReturn } from "react-hook-form";
+import { DeepPartial, FieldValues, Resolver, SubmitHandler, useForm, UseFormReturn } from "react-hook-form";
 import { jsonIsoDateReviver } from "./helpers/dateUtils";
-import { InternalFormContext, InternalFormContextProps } from "./context/InternalFormContext";
+import { FormContext, FormContextProps } from "./context/FormContext";
 import { AutoSubmitConfig, useAutoSubmit } from "./hooks/useAutoSubmit";
 
-interface ExposedFormMethods<T extends FieldValues>
-  extends UseFormReturn<T, unknown>,
-    Omit<InternalFormContextProps<T>, "requiredFields"> {}
+interface ExposedFormMethods<T extends FieldValues> extends UseFormReturn<T, unknown>, Omit<FormContextProps<T>, "requiredFields"> {}
 
 interface FormProps<T extends FieldValues> {
   /**
@@ -62,11 +60,9 @@ const Form = <T extends FieldValues>({
   const autoSubmitHandler = useAutoSubmit({ onSubmit, formMethods, autoSubmitConfig });
 
   return (
-    <InternalFormContext.Provider value={{ requiredFields: requiredFields || [], disabled }}>
-      <FormProvider {...formMethods}>
-        <form onSubmit={autoSubmitHandler}>{children instanceof Function ? children({ ...formMethods, disabled }) : children}</form>
-      </FormProvider>
-    </InternalFormContext.Provider>
+    <FormContext.Provider value={{ requiredFields: requiredFields || [], disabled, ...formMethods }}>
+      <form onSubmit={autoSubmitHandler}>{children instanceof Function ? children({ ...formMethods, disabled }) : children}</form>
+    </FormContext.Provider>
   );
 };
 

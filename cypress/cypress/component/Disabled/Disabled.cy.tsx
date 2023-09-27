@@ -6,7 +6,7 @@ import {
   FormattedInput,
   Input,
   StaticTypeaheadInput,
-  useInternalFormContext,
+  useFormContext,
 } from "react-hook-form-components";
 import { Input as ReactstrapInput, Label } from "reactstrap";
 
@@ -65,7 +65,7 @@ it("exposing readonly through context works", () => {
   const name = faker.random.alpha(10);
 
   const CustomInput = () => {
-    const { disabled } = useInternalFormContext();
+    const { disabled } = useFormContext();
     return (
       <>
         <Label>{name}</Label>
