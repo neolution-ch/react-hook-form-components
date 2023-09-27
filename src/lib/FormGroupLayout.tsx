@@ -12,10 +12,11 @@ interface FormGroupLayoutProps<T extends FieldValues>
   addonLeft?: ReactNode;
   addonRight?: ReactNode;
   inputGroupStyle?: CSSProperties;
+  formGroupId?: string;
 }
 
 const FormGroupLayout = <T extends FieldValues>(props: FormGroupLayoutProps<T>) => {
-  const { label, helpText, children, layout, labelToolTip, inputOnly, addonLeft, addonRight, inputGroupStyle } = props;
+  const { label, helpText, children, layout, labelToolTip, inputOnly, addonLeft, addonRight, inputGroupStyle, formGroupId } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
   const {
     formState: { errors },
@@ -37,7 +38,7 @@ const FormGroupLayout = <T extends FieldValues>(props: FormGroupLayoutProps<T>) 
       <FormFeedback>{errorMessage}</FormFeedback>
     </>
   ) : (
-    <FormGroup switch={switchLayout ? true : undefined} check={checkboxLayout ? true : undefined}>
+    <FormGroup switch={switchLayout ? true : undefined} check={checkboxLayout ? true : undefined} id={formGroupId}>
       <FormGroupLayoutLabel<T> label={label} fieldName={name} fieldId={id} tooltip={labelToolTip} layout={layout} />
       {switchLayout || checkboxLayout ? (
         children
