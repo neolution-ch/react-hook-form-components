@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- :boom: Merged `useInternalFormContext` and `react-hook-form context` in the same `useFormContext` context
+
 ## [1.5.0] - 2023-09-18
 
 ### Added

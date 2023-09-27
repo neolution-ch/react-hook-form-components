@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { useInternalFormContext } from "./context/InternalFormContext";
+import { useFormContext } from "./context/FormContext";
 import { FieldValues } from "react-hook-form";
 import { Label, UncontrolledTooltip } from "reactstrap";
 
@@ -13,7 +13,7 @@ interface FormGroupLayoutLabelProps<T extends FieldValues> {
 
 const FormGroupLayoutLabel = <T extends FieldValues>(props: FormGroupLayoutLabelProps<T>) => {
   const { label, tooltip, fieldName, layout, fieldId } = props;
-  const { requiredFields } = useInternalFormContext<T>();
+  const { requiredFields } = useFormContext<T>();
 
   if (!label && !!tooltip) {
     throw new Error("You can't have a tooltip without a label");

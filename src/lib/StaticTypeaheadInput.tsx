@@ -1,12 +1,12 @@
 import { Typeahead } from "react-bootstrap-typeahead";
 import { TypeaheadComponentProps } from "react-bootstrap-typeahead/types/components/Typeahead";
-import { Controller, FieldValues, useFormContext } from "react-hook-form";
+import { Controller, FieldValues } from "react-hook-form";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";
 import { convertTypeaheadOptionsToStringArray } from "./helpers/typeahead";
 import { CommonTypeaheadProps, TypeaheadOptions } from "./types/Typeahead";
 import { useMarkOnFocusHandler } from "./hooks/useMarkOnFocusHandler";
-import { useInternalFormContext } from "./context/InternalFormContext";
+import { useFormContext } from "./context/FormContext";
 
 interface StaticTypeaheadInputProps<T extends FieldValues> extends CommonTypeaheadProps<T> {
   options: TypeaheadOptions;
@@ -30,9 +30,8 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
   } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
 
-  const { control } = useFormContext();
+  const { control, disabled: formDisabled } = useFormContext();
   const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
-  const { disabled: formDisabled } = useInternalFormContext<T>();
 
   return (
     <Controller

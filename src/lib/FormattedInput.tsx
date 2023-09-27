@@ -1,11 +1,11 @@
 import classnames from "classnames";
-import { Controller, FieldValues, useFormContext } from "react-hook-form";
+import { Controller, FieldValues } from "react-hook-form";
 import { NumericFormat, NumericFormatProps, PatternFormat, PatternFormatProps } from "react-number-format";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";
 import { CommonInputProps } from "./types/CommonInputProps";
 import { useMarkOnFocusHandler } from "./hooks/useMarkOnFocusHandler";
-import { useInternalFormContext } from "./context/InternalFormContext";
+import { useFormContext } from "./context/FormContext";
 
 interface FormattedInputProps<T extends FieldValues> extends CommonInputProps<T> {
   patternFormat?: PatternFormatProps;
@@ -34,9 +34,8 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
     className = "",
   } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
-  const { control } = useFormContext();
+  const { control, disabled: formDisabled } = useFormContext();
   const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
-  const { disabled: formDisabled } = useInternalFormContext<T>();
 
   return (
     <Controller

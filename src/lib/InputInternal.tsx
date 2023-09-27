@@ -1,9 +1,9 @@
-import { FieldValues, useFormContext, get, FieldError } from "react-hook-form";
+import { FieldValues, get, FieldError } from "react-hook-form";
 import { Input } from "reactstrap";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { InputProps } from "./Input";
 import { useMarkOnFocusHandler } from "./hooks/useMarkOnFocusHandler";
-import { useInternalFormContext } from "./context/InternalFormContext";
+import { useFormContext } from "./context/FormContext";
 
 const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
   const {
@@ -28,13 +28,13 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
   const {
     register,
     formState: { errors },
+    disabled: formDisabled,
   } = useFormContext();
 
   const { ref, ...rest } = register(name);
 
   const fieldError = get(errors, name) as FieldError | undefined;
   const hasError = !!fieldError;
-  const { disabled: formDisabled } = useInternalFormContext<T>();
 
   return (
     <>
