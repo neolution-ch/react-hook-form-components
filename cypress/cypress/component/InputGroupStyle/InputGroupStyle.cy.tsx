@@ -48,7 +48,7 @@ it("contains calendar icon and inputGroup has correct style", () => {
     [name]: yup.date(),
   });
   const inputGroupStyle = "background-color: black;";
-  const defaultStyle = "flex-wrap: nowrap; align-items: center; ";
+  const defaultStyle = "flex-wrap: nowrap; align-items: normal; ";
   const style = defaultStyle.concat(inputGroupStyle);
 
   cy.mount(

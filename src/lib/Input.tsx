@@ -24,7 +24,7 @@ interface InputProps<T extends FieldValues> extends CommonInputProps<T> {
 }
 
 const Input = <T extends FieldValues>(props: InputProps<T>) => {
-  const { type, options, addonLeft, name, addonRight, rangeMin, rangeMax, textAreaRows, multiple, id, value } = props;
+  const { type, options, addonLeft, name, addonRight, rangeMin, rangeMax, textAreaRows, multiple, id, value, disabled } = props;
 
   if (type === "radio" && !options) {
     throw new Error("options must be provided for radio inputs");
@@ -64,8 +64,16 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
   const { id: safeId } = useSafeNameId(name, id);
   const { disabled: formDisabled } = useFormContext<T>();
 
+  const isDisabled = formDisabled || disabled;
+
   return (
-    <FormGroupLayout {...props} layout={formGroupLayout}>
+    <FormGroupLayout
+      {...props}
+      layout={formGroupLayout}
+      addonProps={{
+        isDisabled,
+      }}
+    >
       {type === "radio" ? (
         <>
           {options?.map((option, i) => {
@@ -77,7 +85,7 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
                   id={optionId}
                   value={option.value}
                   options={undefined}
-                  disabled={formDisabled || props?.disabled || option?.disabled}
+                  disabled={isDisabled || option?.disabled}
                 />
                 <Label for={optionId} check>
                   {option.label}

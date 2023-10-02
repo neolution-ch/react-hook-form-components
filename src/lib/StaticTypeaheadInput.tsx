@@ -33,6 +33,8 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
   const { control, disabled: formDisabled } = useFormContext();
   const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
 
+  const isDisabled = formDisabled || disabled;
+
   return (
     <Controller
       control={control}
@@ -46,6 +48,9 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
           labelToolTip={labelToolTip}
           addonLeft={addonLeft}
           addonRight={addonRight}
+          addonProps={{
+            isDisabled,
+          }}
           inputGroupStyle={props.inputGroupStyle}
         >
           <Typeahead
@@ -67,7 +72,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
             options={props.options}
             className={`${className} ${error ? "is-invalid" : ""}`}
             inputProps={{ id }}
-            disabled={formDisabled || disabled}
+            disabled={isDisabled}
             onFocus={focusHandler}
             {...reactBootstrapTypeaheadProps}
           />

@@ -3,14 +3,29 @@ import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";
 import { CommonInputProps } from "./types/CommonInputProps";
 import DatePicker, { ReactDatePickerProps } from "react-datepicker";
-import { useCallback, useEffect, useState, MutableRefObject } from "react";
+import { useCallback, useEffect, useState, MutableRefObject, useRef } from "react";
 import { utcToZonedTime, zonedTimeToUtc } from "date-fns-tz";
-import { getUtcTimeZeroDate } from "./helpers/dateUtils";
 import { useFormContext } from "./context/FormContext";
+import { v4 as guidGen } from "uuid";
+import { getUtcTimeZeroDate } from "./helpers/dateUtils";
+import classNames from "classnames";
 
-interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputProps<T>, "onChange" | "style"> {
+interface DatePickerRenderAddonProps {
+  openDatePicker: () => void;
+}
+
+interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputProps<T, DatePickerRenderAddonProps>, "onChange" | "style"> {
+  /**
+   * The props for the date picker component: https://reactdatepicker.com/
+   */
   datePickerProps?: Omit<ReactDatePickerProps, "onChange" | "selected" | "id" | "className" | "onBlur">;
+
+  /**
+   * The onChange handler for the date picker component.
+   * @param value The selected date or null if the user cleared the date.
+   */
   onChange?: (value: Date | null) => void;
+
   /**
    * The IANA time zone identifier, e.g. "Europe/Berlin" for which the date should be displayed.
    * By default the date is displayed in the local time zone of the user / browser.
@@ -18,6 +33,10 @@ interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputPr
    * @example "America/New_York"
    */
   ianaTimeZone?: string;
+
+  /**
+   * The ref of the date picker component.
+   */
   datePickerRef?: MutableRefObject<DatePicker<never, undefined> | null>;
 }
 
@@ -25,9 +44,6 @@ const DEFAULT_DATE_FORMAT = "dd.MM.yyyy";
 const DEFAULT_DATE_TIME_FORMAT = "dd.MM.yyyy HH:mm";
 
 const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) => {
-  const { name, id } = useSafeNameId(props.name, props.id);
-  const { control, getValues, setValue, disabled: formDisabled } = useFormContext();
-
   const {
     disabled,
     label,
@@ -40,10 +56,19 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
     className = "",
     inputGroupStyle,
     datePickerRef,
+    name: initialName,
+    id: initialId,
   } = props;
+
+  const { id, name } = useSafeNameId(initialName, initialId);
+  const { control, getValues, setValue, disabled: formDisabled } = useFormContext();
+  const internalDatePickerRef = useRef<DatePicker>();
+  const formGroupId = useRef(guidGen());
+
   const { calendarStartDay = 1, showTimeInput = false, showTimeSelect = false, dateFormat } = datePickerProps;
   const showTimeInputOrSelect = showTimeInput || showTimeSelect;
   const effectiveDateFormat = dateFormat || (showTimeInputOrSelect ? DEFAULT_DATE_TIME_FORMAT : DEFAULT_DATE_FORMAT);
+  const isDisabled = disabled || formDisabled;
 
   if (ianaTimeZone && !showTimeInputOrSelect) {
     throw new Error("If you use ianaTimeZone, you have to include time in the dateFormat or set showTimeInput or showTimeSelect to true");
@@ -82,27 +107,40 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
     setValue(name, getConvertedDate(selectedDate));
   }, [name, selectedDate, setValue, getConvertedDate]);
 
+  const openDatePicker = useCallback(() => {
+    if (!isDisabled) {
+      internalDatePickerRef.current?.setOpen(true);
+    }
+  }, [isDisabled]);
+
+  const datePickerClassNames = classNames(className, "form-control", {
+    "border-start-0 rounded-0 rounded-end": !!addonLeft,
+    "border-end-0 rounded-0 rounded-start": !!addonRight,
+  });
+
   return (
     <Controller
       control={control}
       name={name}
       render={({ field, fieldState: { error } }) => (
-        <FormGroupLayout
+        <FormGroupLayout<T, DatePickerRenderAddonProps>
           helpText={helpText}
+          formGroupId={formGroupId.current}
           name={name}
           id={id}
           label={label}
           labelToolTip={labelToolTip}
           addonLeft={addonLeft}
           addonRight={addonRight}
-          inputGroupStyle={inputGroupStyle}
+          addonProps={{ openDatePicker, isDisabled }}
+          inputGroupStyle={!!addonLeft || !!addonRight ? { ...inputGroupStyle, alignItems: "normal" } : inputGroupStyle}
         >
           <DatePicker
             {...datePickerProps}
             {...field}
             id={id}
-            disabled={formDisabled || disabled}
-            className={`${className} form-control`}
+            disabled={isDisabled}
+            className={datePickerClassNames}
             dateFormat={effectiveDateFormat}
             calendarStartDay={calendarStartDay}
             wrapperClassName={error ? "is-invalid" : ""}
@@ -112,6 +150,9 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
               // https://codesandbox.io/s/react-hook-form-focus-forked-yyhsi?file=/src/index.js
               // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
               elem && field.ref((elem as any).input);
+
+              internalDatePickerRef.current = elem as DatePicker<never>;
+
               if (datePickerRef) {
                 datePickerRef.current = elem as DatePicker<never>;
               }
@@ -128,6 +169,15 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
               if (props.onChange) props.onChange(convertedDate);
 
               field.onChange(convertedDate);
+            }}
+            onClickOutside={(e) => {
+              if (document.getElementById(formGroupId.current)?.contains(e.target as HTMLElement) && !disabled && !formDisabled) {
+                internalDatePickerRef.current?.setOpen(true);
+              }
+
+              if (datePickerProps.onClickOutside) {
+                datePickerProps.onClickOutside(e);
+              }
             }}
           />
         </FormGroupLayout>

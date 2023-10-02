@@ -36,6 +36,8 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
   const [options, setOptions] = useState<TypeaheadOptions>([]);
   const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
 
+  const isDisabled = formDisabled || disabled;
+
   return (
     <Controller
       control={control}
@@ -49,6 +51,9 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
           labelToolTip={labelToolTip}
           addonLeft={addonLeft}
           addonRight={addonRight}
+          addonProps={{
+            isDisabled,
+          }}
           inputGroupStyle={props.inputGroupStyle}
         >
           <AsyncTypeahead
@@ -79,7 +84,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
                 setIsLoading(false);
               })();
             }}
-            disabled={formDisabled || disabled}
+            disabled={isDisabled}
             onFocus={focusHandler}
             {...reactBootstrapTypeaheadProps}
             style={style}
