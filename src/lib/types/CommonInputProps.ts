@@ -7,7 +7,7 @@ interface DefaultAddonProps {
 
 export type MergedAddonProps<TRenderAddon> = TRenderAddon & DefaultAddonProps;
 
-interface CommonInputProps<T extends FieldValues, TRenderAddon = MergedAddonProps<unknown>> {
+interface CommonInputProps<T extends FieldValues, TRenderAddon = unknown> {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   label?: ReactNode;
@@ -47,7 +47,7 @@ interface CommonInputProps<T extends FieldValues, TRenderAddon = MergedAddonProp
    * @example <caption>Render a `Button` component</caption>
    * addonLeft={<Button>Button</Button>}
    */
-  addonLeft?: React.ReactNode | ((props: TRenderAddon) => React.ReactNode);
+  addonLeft?: React.ReactNode | ((props: MergedAddonProps<TRenderAddon>) => React.ReactNode);
 
   /**
    * Component prop that represents an element rendered inside the input group on the right side: https://reactstrap.github.io/?path=/docs/components-inputgroup--input-group
@@ -60,7 +60,7 @@ interface CommonInputProps<T extends FieldValues, TRenderAddon = MergedAddonProp
    * @example <caption>Render a `Button` component</caption>
    * addonRight={<Button>Button</Button>}
    */
-  addonRight?: React.ReactNode | ((props: TRenderAddon) => React.ReactNode);
+  addonRight?: React.ReactNode | ((props: MergedAddonProps<TRenderAddon>) => React.ReactNode);
 
   /**
    * Component prop that represents an additional style attribute for the input group
