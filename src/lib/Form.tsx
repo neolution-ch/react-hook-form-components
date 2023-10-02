@@ -4,7 +4,7 @@ import { jsonIsoDateReviver } from "./helpers/dateUtils";
 import { FormContext, FormContextProps } from "./context/FormContext";
 import { AutoSubmitConfig, useAutoSubmit } from "./hooks/useAutoSubmit";
 
-interface ExposedFormMethods<T extends FieldValues> extends UseFormReturn<T, unknown>, Omit<FormContextProps<T>, "requiredFields"> {}
+export interface FormMethods<T extends FieldValues> extends UseFormReturn<T, unknown>, FormContextProps<T> {}
 
 interface FormProps<T extends FieldValues> {
   /**
@@ -40,7 +40,7 @@ interface FormProps<T extends FieldValues> {
   /**
    * the children that will be drawn inside the form
    */
-  children: ((formMethods: ExposedFormMethods<T>) => ReactNode) | ReactNode;
+  children: ((formMethods: FormMethods<T>) => ReactNode) | ReactNode;
 }
 
 const Form = <T extends FieldValues>({
@@ -48,7 +48,7 @@ const Form = <T extends FieldValues>({
   onSubmit,
   resolver,
   defaultValues,
-  requiredFields,
+  requiredFields = [],
   disabled = false,
   autoSubmitConfig,
 }: FormProps<T>) => {
@@ -60,8 +60,10 @@ const Form = <T extends FieldValues>({
   const autoSubmitHandler = useAutoSubmit({ onSubmit, formMethods, autoSubmitConfig });
 
   return (
-    <FormContext.Provider value={{ requiredFields: requiredFields || [], disabled, ...formMethods }}>
-      <form onSubmit={autoSubmitHandler}>{children instanceof Function ? children({ ...formMethods, disabled }) : children}</form>
+    <FormContext.Provider value={{ requiredFields, disabled, ...formMethods }}>
+      <form onSubmit={autoSubmitHandler}>
+        {children instanceof Function ? children({ ...formMethods, disabled, requiredFields }) : children}
+      </form>
     </FormContext.Provider>
   );
 };
