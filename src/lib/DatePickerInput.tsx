@@ -11,7 +11,7 @@ import { getUtcTimeZeroDate } from "./helpers/dateUtils";
 import classNames from "classnames";
 
 interface DatePickerRenderAddonProps {
-  openDatePicker: () => void;
+  toggleDatePicker: () => void;
 }
 
 interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputProps<T, DatePickerRenderAddonProps>, "onChange" | "style"> {
@@ -107,7 +107,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
     setValue(name, getConvertedDate(selectedDate));
   }, [name, selectedDate, setValue, getConvertedDate]);
 
-  const openDatePicker = useCallback(() => {
+  const toggleDatePicker = useCallback(() => {
     if (!isDisabled) {
       internalDatePickerRef.current?.setOpen(true);
     }
@@ -132,7 +132,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
           labelToolTip={labelToolTip}
           addonLeft={addonLeft}
           addonRight={addonRight}
-          addonProps={{ openDatePicker, isDisabled }}
+          addonProps={{ toggleDatePicker, isDisabled }}
           inputGroupStyle={!!addonLeft || !!addonRight ? { ...inputGroupStyle, alignItems: "normal" } : inputGroupStyle}
         >
           <DatePicker

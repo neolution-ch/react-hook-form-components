@@ -268,9 +268,9 @@ it("addon works as a function (with onClick)", () => {
       <DatePickerInput
         name={name}
         label={name}
-        addonLeft={({ isDisabled, openDatePicker }) => (
+        addonLeft={({ isDisabled, toggleDatePicker }) => (
           <InputGroupText className="rounded-end">
-            <FontAwesomeIcon size="lg" icon={faCalendar} role={isDisabled ? "none" : "button"} onClick={openDatePicker} />
+            <FontAwesomeIcon size="lg" icon={faCalendar} role={isDisabled ? "none" : "button"} onClick={toggleDatePicker} />
           </InputGroupText>
         )}
       />
