@@ -109,7 +109,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
 
   const toggleDatePicker = useCallback(() => {
     if (!isDisabled) {
-      internalDatePickerRef.current?.setOpen(true);
+      internalDatePickerRef.current?.setOpen(internalDatePickerRef.current?.isCalendarOpen());
     }
   }, [isDisabled]);
 
