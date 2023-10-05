@@ -90,7 +90,7 @@ it("option is disabled", () => {
   cy.get(`select[name=${name}]`).get('[value="DisabledOption"]').should("be.disabled");
 });
 
-it.only("undefined option value is working", () => {
+it("undefined option value is working", () => {
   const name = faker.random.word();
   const schema = yup.object().shape({
     [name]: yup.string(),

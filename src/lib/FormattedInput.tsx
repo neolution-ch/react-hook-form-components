@@ -37,6 +37,8 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
   const { control, disabled: formDisabled } = useFormContext();
   const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
 
+  const isDisabled = formDisabled || disabled;
+
   return (
     <Controller
       control={control}
@@ -54,7 +56,7 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
             if (propsOnBlur) propsOnBlur(e);
             onBlur();
           },
-          disabled: formDisabled || disabled,
+          disabled: isDisabled,
         };
 
         return (
@@ -67,6 +69,9 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
             inputGroupStyle={inputGroupStyle}
             addonLeft={addonLeft}
             addonRight={addonRight}
+            addonProps={{
+              isDisabled,
+            }}
           >
             <>
               {numericFormat && (

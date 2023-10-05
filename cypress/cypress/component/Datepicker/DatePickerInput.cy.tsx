@@ -251,3 +251,32 @@ it("passing the ref works", () => {
 
   cy.get(".react-datepicker-popper").should("be.visible");
 });
+
+it("addon works as a function (with onClick)", () => {
+  const name = faker.random.alpha(10);
+  const schema = yup.object().shape({
+    [name]: yup.date(),
+  });
+
+  cy.mount(
+    <Form
+      onSubmit={() => {
+        // Nothing to do
+      }}
+      resolver={yupResolver(schema)}
+    >
+      <DatePickerInput
+        name={name}
+        label={name}
+        addonLeft={({ isDisabled, toggleDatePicker }) => (
+          <InputGroupText className="rounded-end">
+            <FontAwesomeIcon size="lg" icon={faCalendar} role={isDisabled ? "none" : "button"} onClick={toggleDatePicker} />
+          </InputGroupText>
+        )}
+      />
+    </Form>,
+  );
+
+  cy.get(".fa-calendar").click();
+  cy.get(".react-datepicker-popper").should("be.visible");
+});

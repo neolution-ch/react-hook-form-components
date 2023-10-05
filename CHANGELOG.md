@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `addonLeft` and `addonRight` props now also accept a function to render a custom component
+
 ### Fixed
 
 - Export `FormMethods` type
