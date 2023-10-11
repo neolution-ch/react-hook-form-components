@@ -3,12 +3,12 @@ import nodeResolve from "@rollup/plugin-node-resolve";
 import external from "rollup-plugin-peer-deps-external";
 import terser from "@rollup/plugin-terser";
 import typescript from "rollup-plugin-typescript2";
-import css from "rollup-plugin-import-css";
+import sass from "rollup-plugin-sass";
 
 const input = "src/index.ts";
 
 const plugins = [
-  css({
+  sass({
     output: "dist/styles.css",
   }),
   external({

@@ -41,6 +41,12 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
   const fieldError = get(errors, name) as FieldError | undefined;
   const hasError = !!fieldError;
 
+  // const inputStyle = plainText
+  // ? { color: "black", marginLeft: 10, ...style }
+  // : disabled || formDisabled
+  // ? { backgroundColor: "#EEF1F5", ...style }
+  // : { ...style };
+
   return (
     <>
       <Input
