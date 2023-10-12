@@ -3,7 +3,6 @@ import { FieldError, FieldValues, get } from "react-hook-form";
 import { FormGroup, FormFeedback, FormText, InputGroup } from "reactstrap";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { CommonInputProps, MergedAddonProps } from "./types/CommonInputProps";
-import "./styles/FormGroupLayout.css";
 import { FormGroupLayoutLabel } from "./FormGroupLayoutLabel";
 import { useFormContext } from "./context/FormContext";
 
