@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### dependabot: \#84 Bump next from 13.0.2 to 13.5.0 in /cypress
+
 ## [2.1.0] - 2023-10-05
 
 ### Added
