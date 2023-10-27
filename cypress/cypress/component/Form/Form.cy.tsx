@@ -22,11 +22,11 @@ it("submitting through the ref works", () => {
   const FormWithRef = () => {
     const ref = useRef<HTMLFormElement | null>(null);
     return (
-      <Form ref={ref} onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
+      <Form formRef={ref} onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
         <FormattedInput name={name} label={name} numericFormat={numericFormat} />
-        <button id="submit" onClick={() => ref.current?.submit()}>
+        <span id="testButton" onClick={() => ref.current?.requestSubmit()}>
           Submit
-        </button>
+        </span>
       </Form>
     );
   };
@@ -34,7 +34,7 @@ it("submitting through the ref works", () => {
 
   cy.contains("label", name).click().type(randomNumber.toString());
   cy.get(`input[id=${name}]`).should("have.value", numericFormatter(randomNumber.toString(), numericFormat));
-  cy.get("button[id=submit]").click({ force: true });
+  cy.get("span[id=testButton]").click();
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: randomNumber });
 });
 
@@ -51,11 +51,11 @@ it("submitting through the ref checks for yup errors", () => {
   const FormWithRef = () => {
     const ref = useRef<HTMLFormElement | null>(null);
     return (
-      <Form ref={ref} onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
+      <Form formRef={ref} onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
         <FormattedInput name={name} label={name} numericFormat={numericFormat} />
-        <button id="submit" onClick={() => ref.current?.submit()}>
+        <span id="testButton" onClick={() => ref.current?.requestSubmit()}>
           Submit
-        </button>
+        </span>
       </Form>
     );
   };
@@ -63,6 +63,6 @@ it("submitting through the ref checks for yup errors", () => {
 
   cy.contains("label", name).click().type(randomNumber.toString());
   cy.get(`input[id=${name}]`).should("have.value", numericFormatter(randomNumber.toString(), numericFormat));
-  cy.get("button[id=submit]").click({ force: true });
+  cy.get("span[id=testButton]").click();
   cy.get("@onSubmitSpy").should("not.be.calledOnceWith", { [name]: randomNumber });
 });
