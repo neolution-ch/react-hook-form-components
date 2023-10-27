@@ -45,7 +45,7 @@ interface FormProps<T extends FieldValues> {
   /**
    * the form ref
    */
-  ref?: React.MutableRefObject<HTMLFormElement | null>;
+  formRef?: React.MutableRefObject<HTMLFormElement | null>;
 }
 
 const Form = <T extends FieldValues>({
@@ -56,7 +56,7 @@ const Form = <T extends FieldValues>({
   requiredFields = [],
   disabled = false,
   autoSubmitConfig,
-  ref,
+  formRef,
 }: FormProps<T>) => {
   const revivedDefaultValues = defaultValues
     ? (JSON.parse(JSON.stringify(defaultValues), jsonIsoDateReviver) as DeepPartial<T>)
@@ -68,8 +68,8 @@ const Form = <T extends FieldValues>({
     <FormContext.Provider value={{ requiredFields, disabled, ...formMethods }}>
       <form
         ref={(elem) => {
-          if (ref) {
-            ref.current = elem;
+          if (formRef) {
+            formRef.current = elem;
           }
         }}
         onSubmit={autoSubmitHandler}
