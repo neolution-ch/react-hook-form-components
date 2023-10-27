@@ -41,6 +41,11 @@ interface FormProps<T extends FieldValues> {
    * the children that will be drawn inside the form
    */
   children: ((formMethods: FormMethods<T>) => ReactNode) | ReactNode;
+
+  /**
+   * the form ref
+   */
+  ref?: React.MutableRefObject<HTMLFormElement | null>;
 }
 
 const Form = <T extends FieldValues>({
@@ -51,6 +56,7 @@ const Form = <T extends FieldValues>({
   requiredFields = [],
   disabled = false,
   autoSubmitConfig,
+  ref,
 }: FormProps<T>) => {
   const revivedDefaultValues = defaultValues
     ? (JSON.parse(JSON.stringify(defaultValues), jsonIsoDateReviver) as DeepPartial<T>)
@@ -58,10 +64,16 @@ const Form = <T extends FieldValues>({
 
   const formMethods = useForm<T>({ resolver, defaultValues: revivedDefaultValues });
   const autoSubmitHandler = useAutoSubmit({ onSubmit, formMethods, autoSubmitConfig });
-
   return (
     <FormContext.Provider value={{ requiredFields, disabled, ...formMethods }}>
-      <form onSubmit={autoSubmitHandler}>
+      <form
+        ref={(elem) => {
+          if (ref) {
+            ref.current = elem;
+          }
+        }}
+        onSubmit={autoSubmitHandler}
+      >
         {children instanceof Function ? children({ ...formMethods, disabled, requiredFields }) : children}
       </form>
     </FormContext.Provider>
