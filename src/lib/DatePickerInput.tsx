@@ -41,6 +41,7 @@ interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputPr
 
   /**
    * The autoComplete property for the date picker component.
+   * By default set as "off".
    */
   autoComplete?: string;
 }
