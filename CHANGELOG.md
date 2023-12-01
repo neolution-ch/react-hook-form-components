@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Added `autoComplete` property ("off" as default) in `<DatePickerInput />` component
+
 ## [2.2.1] - 2023-10-27
 
 ### Changed
