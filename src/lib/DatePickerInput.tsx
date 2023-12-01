@@ -18,7 +18,7 @@ interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputPr
   /**
    * The props for the date picker component: https://reactdatepicker.com/
    */
-  datePickerProps?: Omit<ReactDatePickerProps, "onChange" | "selected" | "id" | "className" | "onBlur">;
+  datePickerProps?: Omit<ReactDatePickerProps, "onChange" | "selected" | "id" | "className" | "onBlur" | "autoComplete">;
 
   /**
    * The onChange handler for the date picker component.
@@ -38,6 +38,12 @@ interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputPr
    * The ref of the date picker component.
    */
   datePickerRef?: MutableRefObject<DatePicker<never, undefined> | null>;
+
+  /**
+   * The autoComplete property for the date picker component.
+   * By default set as "off".
+   */
+  autoComplete?: string;
 }
 
 const DEFAULT_DATE_FORMAT = "dd.MM.yyyy";
@@ -54,6 +60,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
     addonRight,
     ianaTimeZone,
     className = "",
+    autoComplete = "off",
     inputGroupStyle,
     datePickerRef,
     name: initialName,
@@ -144,6 +151,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
             dateFormat={effectiveDateFormat}
             calendarStartDay={calendarStartDay}
             wrapperClassName={error ? "is-invalid" : ""}
+            autoComplete={autoComplete}
             selected={selectedDate}
             ref={(elem) => {
               // https://github.com/react-hook-form/react-hook-form/discussions/5413
