@@ -246,3 +246,39 @@ it("disabled options", () => {
   cy.get(`#${name}`).clear().click().type(changedOption.label);
   cy.get(`a[aria-label='${changedOption.label}']`).should("have.class", "disabled");
 });
+
+it("empty label", () => {
+  const { simpleOptions } = generateOptions();
+  const name = faker.random.alpha(10);
+  const emptyLabel = faker.random.words(5);
+
+  cy.mount(
+    <Form
+      onSubmit={cy.spy().as("onSubmitSpy")}
+      defaultValues={{
+        [name]: simpleOptions,
+      }}
+    >
+      <AsyncTypeaheadInput
+        multiple
+        name={name}
+        label={name}
+        queryFn={async (query) =>
+          await fetchMock(
+            simpleOptions.map((x) => {
+              return { label: x, value: x };
+            }),
+            query,
+            false,
+          )
+        }
+        defaultSelected={simpleOptions}
+        emptyLabel={emptyLabel}
+      />
+      <input type="submit" />
+    </Form>,
+  );
+
+  cy.get(`#${name}`).clear().click().type(name);
+  cy.get(".dropdown-menu > .dropdown-item").should("have.text", emptyLabel);
+});

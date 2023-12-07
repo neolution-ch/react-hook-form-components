@@ -1,4 +1,4 @@
-import { Form, StaticTypeaheadInput } from "react-hook-form-components";
+import { Form, LabelValueOption, StaticTypeaheadInput } from "react-hook-form-components";
 import { faker } from "@faker-js/faker";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -245,4 +245,32 @@ it("disabled options", () => {
     cy.get(`#${name}`).click();
     cy.get(`a[aria-label='${option.label}']`).should("have.class", "disabled");
   }
+});
+
+it("empty label", () => {
+  const { simpleOptions } = generateOptions();
+  const name = faker.random.alpha(10);
+  const emptyLabel = faker.random.words(5);
+
+  cy.mount(
+    <Form
+      onSubmit={cy.spy().as("onSubmitSpy")}
+      defaultValues={{
+        [name]: simpleOptions,
+      }}
+    >
+      <StaticTypeaheadInput
+        multiple
+        name={name}
+        label={name}
+        options={simpleOptions}
+        defaultSelected={simpleOptions}
+        emptyLabel={emptyLabel}
+      />
+      <input type="submit" />
+    </Form>,
+  );
+
+  cy.get(`#${name}`).click();
+  cy.get(".dropdown-menu > .dropdown-item").should("have.text", emptyLabel);
 });

@@ -6,6 +6,7 @@ export type TypeaheadOptions = LabelValueOption[] | string[];
 
 interface CommonTypeaheadProps<T extends FieldValues> extends Omit<CommonInputProps<T>, "onChange"> {
   multiple?: boolean;
+  emptyLabel?: string;
   defaultSelected?: TypeaheadOptions;
   onChange?: (selected: string | string[]) => void;
 }
