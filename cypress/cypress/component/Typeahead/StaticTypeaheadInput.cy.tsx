@@ -274,3 +274,22 @@ it("empty label", () => {
   cy.get(`#${name}`).click();
   cy.get(".dropdown-menu > .dropdown-item").should("have.text", emptyLabel);
 });
+
+it("placeholder", () => {
+  const { simpleOptions } = generateOptions();
+  const name = faker.random.alpha(10);
+  const placeholder = faker.random.words(5);
+
+  cy.mount(
+    <Form
+      onSubmit={cy.spy().as("onSubmitSpy")}
+      defaultValues={{
+        [name]: simpleOptions,
+      }}
+    >
+      <StaticTypeaheadInput multiple name={name} label={name} options={simpleOptions} placeholder={placeholder} />
+      <input type="submit" />
+    </Form>,
+  );
+  cy.get(`#${name}`).should("have.attr", "placeholder", placeholder);
+});

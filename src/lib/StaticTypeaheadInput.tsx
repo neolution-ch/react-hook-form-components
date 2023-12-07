@@ -28,6 +28,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
     style,
     className = "",
     emptyLabel,
+    placeholder,
   } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
 
@@ -76,6 +77,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
             disabled={isDisabled}
             onFocus={focusHandler}
             emptyLabel={emptyLabel}
+            placeholder={placeholder}
             {...reactBootstrapTypeaheadProps}
           />
         </FormGroupLayout>

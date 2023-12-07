@@ -28,6 +28,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
     className = "",
     style,
     emptyLabel,
+    placeholder,
   } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
 
@@ -90,6 +91,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
             {...reactBootstrapTypeaheadProps}
             style={style}
             emptyLabel={emptyLabel}
+            placeholder={placeholder}
           />
         </FormGroupLayout>
       )}
