@@ -52,7 +52,7 @@ describe("Input.cy.tsx", () => {
     cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: randomNumber });
   });
 
-  it("number accepts step", () => {
+  it("number input correctly increase value according to step", () => {
     const name = faker.random.alpha(10);
     const schema = yup.object().shape({
       [name]: yup.number(),
