@@ -52,6 +52,30 @@ describe("Input.cy.tsx", () => {
     cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: randomNumber });
   });
 
+  it("number accepts step", () => {
+    const name = faker.random.alpha(10);
+    const schema = yup.object().shape({
+      [name]: yup.number(),
+    });
+
+    const randomNumber = faker.datatype.number();
+    const step = 2;
+
+    cy.mount(
+      <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
+        <Input type="number" name={name} label={name} step={step} />
+
+        <input type={"submit"} />
+      </Form>,
+    );
+
+    cy.contains("label", name).click().type(randomNumber.toString());
+    cy.get(`input[id=${name}]`).should("have.attr", "step", step.toString());
+    cy.get("input[type=submit]").click({ force: true });
+
+    cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: randomNumber });
+  });
+
   it("help text gets displayed", () => {
     const name = faker.random.alpha(10);
     const schema = yup.object().shape({
@@ -263,6 +287,29 @@ describe("Input.cy.tsx", () => {
     );
 
     cy.get(`input[id=${name}]`).setSliderValue(selectedValue);
+    cy.get("input[type=submit]").click({ force: true });
+    cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: selectedValue });
+  });
+
+  it("range input works with step", () => {
+    const name = faker.random.alpha(10);
+    const schema = yup.object().shape({
+      [name]: yup.number(),
+    });
+
+    const [min, selectedValue, max] = faker.helpers.uniqueArray(faker.datatype.number, 3).sort((a, b) => a - b);
+    const step = 2;
+
+    cy.mount(
+      <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
+        <Input type="range" name={name} label={name} rangeMin={min} rangeMax={max} step={step} />
+
+        <input type={"submit"} />
+      </Form>,
+    );
+
+    cy.get(`input[id=${name}]`).setSliderValue(selectedValue);
+    cy.get(`input[id=${name}]`).should("have.attr", "step", step.toString());
     cy.get("input[type=submit]").click({ force: true });
     cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: selectedValue });
   });
