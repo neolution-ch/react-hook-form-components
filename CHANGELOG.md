@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### dependabot: \#92 Bump actions/upload-artifact from 3 to 4
+
 ## [2.3.0] - 2023-12-12
 
 ### Added
