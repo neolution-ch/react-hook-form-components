@@ -52,6 +52,32 @@ describe("Input.cy.tsx", () => {
     cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: randomNumber });
   });
 
+  it("number input correctly increase value according to step", () => {
+    const name = faker.random.alpha(10);
+    const schema = yup.object().shape({
+      [name]: yup.number(),
+    });
+
+    const step = faker.datatype.number({ min: 1 });
+    const randomNumber = faker.datatype.number();
+    const expectedResult = randomNumber + step - (randomNumber % step);
+
+    cy.mount(
+      <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
+        <Input type="number" name={name} label={name} step={step} />
+
+        <input type={"submit"} />
+      </Form>,
+    );
+
+    cy.contains("label", name).click().type(randomNumber.toString());
+    cy.get(`input[id=${name}]`).should("have.attr", "step", step.toString());
+    cy.get(`input[id=${name}]`).click({ force: true }).type("{uparrow}");
+    cy.get("input[type=submit]").click({ force: true });
+
+    cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: expectedResult });
+  });
+
   it("help text gets displayed", () => {
     const name = faker.random.alpha(10);
     const schema = yup.object().shape({

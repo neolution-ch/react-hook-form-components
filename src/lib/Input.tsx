@@ -21,10 +21,11 @@ interface InputProps<T extends FieldValues> extends CommonInputProps<T> {
   textAreaRows?: number;
   plainText?: boolean;
   placeholder?: string;
+  step?: number;
 }
 
 const Input = <T extends FieldValues>(props: InputProps<T>) => {
-  const { type, options, addonLeft, name, addonRight, rangeMin, rangeMax, textAreaRows, multiple, id, value, disabled } = props;
+  const { type, options, addonLeft, name, addonRight, rangeMin, rangeMax, textAreaRows, multiple, id, value, disabled, step } = props;
 
   if (type === "radio" && !options) {
     throw new Error("options must be provided for radio inputs");
@@ -49,6 +50,9 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
   }
   if (options && options.filter((option) => option.value === undefined).length > 1) {
     throw new Error("options can only contain one undefined value");
+  }
+  if (step && type !== "number" && type !== "range") {
+    throw new Error("step can only be used with number or range inputs");
   }
 
   const formGroupLayout = (() => {

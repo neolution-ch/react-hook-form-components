@@ -22,6 +22,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
     textAreaRows,
     plainText,
     placeholder,
+    step,
     markAllOnFocus,
     className,
     style,
@@ -56,6 +57,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
         plaintext={plainText}
         style={plainText ? { color: "black", marginLeft: 10, ...style } : { ...style }}
         placeholder={placeholder}
+        step={step}
         {...rest}
         {...(value ? { value } : {})}
         onBlur={(e) => {
