@@ -49,7 +49,7 @@ describe("Input.cy.tsx", () => {
       }, [ref]);
 
       return (
-        <Form 
+        <Form
           onSubmit={() => {
             // nothing to do
           }}
@@ -57,8 +57,8 @@ describe("Input.cy.tsx", () => {
         >
           <Input innerRef={ref} name={name} label={name} />
         </Form>
-      )
-    }
+      );
+    };
 
     cy.mount(<InputWithRef />);
 

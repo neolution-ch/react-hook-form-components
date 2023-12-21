@@ -26,7 +26,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
     markAllOnFocus,
     className,
     style,
-    innerRef
+    innerRef,
   } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
   const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
