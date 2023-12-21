@@ -37,32 +37,38 @@ describe("Input.cy.tsx", () => {
       [name]: yup.string(),
     });
 
-    const randomWord = faker.random.word();
+    const randomNumber = faker.datatype.number();
 
     const InputWithRef = () => {
       const ref = useRef<HTMLInputElement>(null);
 
-      useEffect(() => {
-        if (ref && ref.current) {
-          ref.current.value = randomWord;
+      const handleClick = () => {
+        if (ref.current) {
+          const value = Number(ref.current.value);
+          ref.current.value = String(value + 1);
+          console.log("HANDLE CLICK DONE", ref.current.value);
         }
-      }, [ref]);
+      };
 
       return (
         <Form
+          defaultValues={{ [name]: randomNumber }}
           onSubmit={() => {
             // nothing to do
           }}
           resolver={yupResolver(schema)}
         >
-          <Input innerRef={ref} name={name} label={name} />
+          <Input type="number" innerRef={ref} name={name} label={name} />
+          <button onClick={handleClick}>Increment</button>
         </Form>
       );
     };
 
     cy.mount(<InputWithRef />);
 
-    cy.get("input[type=text]").should("have.value", randomWord);
+    cy.get("input[type=number]").should("have.value", randomNumber);
+    cy.get("button").click({ force: true });
+    cy.get("input[type=number]").should("have.value", randomNumber + 1);
   });
 
   it("number gets passed as number and not string", () => {

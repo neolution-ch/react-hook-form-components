@@ -49,11 +49,11 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
         invalid={hasError}
         type={type}
         id={id}
-        innerRef={(el) => {
+        innerRef={(elem) => {
           if (innerRef) {
-            innerRef.current = el;
+            innerRef.current = elem;
           }
-          ref(el);
+          ref(elem);
         }}
         min={rangeMin}
         max={rangeMax}
