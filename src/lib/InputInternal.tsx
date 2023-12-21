@@ -26,6 +26,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
     markAllOnFocus,
     className,
     style,
+    innerRef,
   } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
   const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
@@ -48,7 +49,12 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
         invalid={hasError}
         type={type}
         id={id}
-        innerRef={ref}
+        innerRef={(elem) => {
+          if (innerRef) {
+            innerRef.current = elem;
+          }
+          ref(elem);
+        }}
         min={rangeMin}
         max={rangeMax}
         rows={textAreaRows}

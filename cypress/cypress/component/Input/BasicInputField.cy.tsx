@@ -6,6 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { InputGroupText } from "reactstrap";
+import { useRef } from "react";
 
 describe("Input.cy.tsx", () => {
   it("basic text input works", () => {
@@ -28,6 +29,45 @@ describe("Input.cy.tsx", () => {
     cy.get("input[type=submit]").click({ force: true });
 
     cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: randomWord });
+  });
+
+  it("passing the ref works", () => {
+    const name = faker.random.alpha(10);
+    const schema = yup.object().shape({
+      [name]: yup.string(),
+    });
+
+    const randomNumber = faker.datatype.number();
+
+    const InputWithRef = () => {
+      const ref = useRef<HTMLInputElement>(null);
+
+      const handleClick = () => {
+        if (ref.current) {
+          const value = Number(ref.current.value);
+          ref.current.value = String(value + 1);
+        }
+      };
+
+      return (
+        <Form
+          defaultValues={{ [name]: randomNumber }}
+          onSubmit={() => {
+            // nothing to do
+          }}
+          resolver={yupResolver(schema)}
+        >
+          <Input type="number" innerRef={ref} name={name} label={name} />
+          <button onClick={handleClick}>Increment</button>
+        </Form>
+      );
+    };
+
+    cy.mount(<InputWithRef />);
+
+    cy.get("input[type=number]").should("have.value", randomNumber);
+    cy.get("button").click({ force: true });
+    cy.get("input[type=number]").should("have.value", randomNumber + 1);
   });
 
   it("number gets passed as number and not string", () => {
