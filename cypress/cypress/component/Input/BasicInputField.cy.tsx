@@ -6,6 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { InputGroupText } from "reactstrap";
+import { useEffect, useRef } from "react";
 
 describe("Input.cy.tsx", () => {
   it("basic text input works", () => {
@@ -28,6 +29,40 @@ describe("Input.cy.tsx", () => {
     cy.get("input[type=submit]").click({ force: true });
 
     cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: randomWord });
+  });
+
+  it("passing the ref works", () => {
+    const name = faker.random.alpha(10);
+    const schema = yup.object().shape({
+      [name]: yup.string(),
+    });
+
+    const randomWord = faker.random.word();
+
+    const InputWithRef = () => {
+      const ref = useRef<HTMLInputElement>(null);
+
+      useEffect(() => {
+        if (ref && ref.current) {
+          ref.current.value = randomWord;
+        }
+      }, [ref]);
+
+      return (
+        <Form 
+          onSubmit={() => {
+            // nothing to do
+          }}
+          resolver={yupResolver(schema)}
+        >
+          <Input innerRef={ref} name={name} label={name} />
+        </Form>
+      )
+    }
+
+    cy.mount(<InputWithRef />);
+
+    cy.get("input[type=text]").should("have.value", randomWord);
   });
 
   it("number gets passed as number and not string", () => {
