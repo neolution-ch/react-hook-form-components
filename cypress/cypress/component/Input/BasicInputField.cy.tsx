@@ -6,7 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { InputGroupText } from "reactstrap";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 
 describe("Input.cy.tsx", () => {
   it("basic text input works", () => {
