@@ -46,7 +46,6 @@ describe("Input.cy.tsx", () => {
         if (ref.current) {
           const value = Number(ref.current.value);
           ref.current.value = String(value + 1);
-          console.log("HANDLE CLICK DONE", ref.current.value);
         }
       };
 
