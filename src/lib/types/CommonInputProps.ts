@@ -1,5 +1,5 @@
 import { ReactNode, CSSProperties } from "react";
-import { FieldValues } from "react-hook-form";
+import { FieldPath, FieldValues } from "react-hook-form";
 
 interface DefaultAddonProps {
   isDisabled?: boolean;
@@ -11,7 +11,7 @@ interface CommonInputProps<T extends FieldValues, TRenderAddon = unknown> {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   label?: ReactNode;
-  name: keyof T;
+  name: FieldPath<T>;
   id?: string;
   helpText?: ReactNode;
   disabled?: boolean;

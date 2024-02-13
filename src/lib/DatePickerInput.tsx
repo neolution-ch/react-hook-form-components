@@ -133,7 +133,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
         <FormGroupLayout<T, DatePickerRenderAddonProps>
           helpText={helpText}
           formGroupId={formGroupId.current}
-          name={name}
+          name={props.name}
           id={id}
           label={label}
           labelToolTip={labelToolTip}
