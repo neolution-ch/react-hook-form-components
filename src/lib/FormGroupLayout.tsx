@@ -58,7 +58,7 @@ const FormGroupLayout = <T extends FieldValues, TRenderAddon = unknown>(props: F
     </>
   ) : (
     <FormGroup id={formGroupId} switch={switchLayout ? true : undefined} check={checkboxLayout ? true : undefined}>
-      <FormGroupLayoutLabel<T> label={label} fieldName={name} fieldId={id} tooltip={labelToolTip} layout={layout} />
+      <FormGroupLayoutLabel<T> label={label} fieldName={props.name} fieldId={id} tooltip={labelToolTip} layout={layout} />
       {switchLayout || checkboxLayout ? (
         children
       ) : (

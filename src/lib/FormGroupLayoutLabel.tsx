@@ -1,12 +1,12 @@
 import { ReactNode } from "react";
 import { useFormContext } from "./context/FormContext";
-import { FieldValues } from "react-hook-form";
+import { FieldPath, FieldValues } from "react-hook-form";
 import { Label, UncontrolledTooltip } from "reactstrap";
 
 interface FormGroupLayoutLabelProps<T extends FieldValues> {
   label: ReactNode;
   tooltip?: ReactNode;
-  fieldName: keyof T;
+  fieldName: FieldPath<T>;
   fieldId: string;
   layout?: "checkbox" | "switch";
 }
