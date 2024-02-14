@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { DeepPartial, FieldValues, Resolver, SubmitHandler, useForm, UseFormReturn } from "react-hook-form";
+import { DeepPartial, FieldPath, FieldValues, Resolver, SubmitHandler, useForm, UseFormReturn } from "react-hook-form";
 import { jsonIsoDateReviver } from "./helpers/dateUtils";
 import { FormContext, FormContextProps } from "./context/FormContext";
 import { AutoSubmitConfig, useAutoSubmit } from "./hooks/useAutoSubmit";
@@ -25,7 +25,7 @@ interface FormProps<T extends FieldValues> {
   /**
    * passed fieldnames will be marked with "*"
    */
-  requiredFields?: (keyof T)[];
+  requiredFields?: FieldPath<T>[];
 
   /**
    * disable all fields inside the form making it readonly
