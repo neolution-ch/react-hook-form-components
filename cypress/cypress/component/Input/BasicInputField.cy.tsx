@@ -6,6 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { InputGroupText } from "reactstrap";
+import { useRef } from "react";
 
 describe("Input.cy.tsx", () => {
   it("basic text input works", () => {
@@ -30,6 +31,45 @@ describe("Input.cy.tsx", () => {
     cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: randomWord });
   });
 
+  it("passing the ref works", () => {
+    const name = faker.random.alpha(10);
+    const schema = yup.object().shape({
+      [name]: yup.string(),
+    });
+
+    const randomNumber = faker.datatype.number();
+
+    const InputWithRef = () => {
+      const ref = useRef<HTMLInputElement>(null);
+
+      const handleClick = () => {
+        if (ref.current) {
+          const value = Number(ref.current.value);
+          ref.current.value = String(value + 1);
+        }
+      };
+
+      return (
+        <Form
+          defaultValues={{ [name]: randomNumber }}
+          onSubmit={() => {
+            // nothing to do
+          }}
+          resolver={yupResolver(schema)}
+        >
+          <Input type="number" innerRef={ref} name={name} label={name} />
+          <button onClick={handleClick}>Increment</button>
+        </Form>
+      );
+    };
+
+    cy.mount(<InputWithRef />);
+
+    cy.get("input[type=number]").should("have.value", randomNumber);
+    cy.get("button").click({ force: true });
+    cy.get("input[type=number]").should("have.value", randomNumber + 1);
+  });
+
   it("number gets passed as number and not string", () => {
     const name = faker.random.alpha(10);
     const schema = yup.object().shape({
@@ -50,6 +90,32 @@ describe("Input.cy.tsx", () => {
     cy.get("input[type=submit]").click({ force: true });
 
     cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: randomNumber });
+  });
+
+  it("number input correctly increase value according to step", () => {
+    const name = faker.random.alpha(10);
+    const schema = yup.object().shape({
+      [name]: yup.number(),
+    });
+
+    const step = faker.datatype.number({ min: 1 });
+    const randomNumber = faker.datatype.number();
+    const expectedResult = randomNumber + step - (randomNumber % step);
+
+    cy.mount(
+      <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
+        <Input type="number" name={name} label={name} step={step} />
+
+        <input type={"submit"} />
+      </Form>,
+    );
+
+    cy.contains("label", name).click().type(randomNumber.toString());
+    cy.get(`input[id=${name}]`).should("have.attr", "step", step.toString());
+    cy.get(`input[id=${name}]`).click({ force: true }).type("{uparrow}");
+    cy.get("input[type=submit]").click({ force: true });
+
+    cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: expectedResult });
   });
 
   it("help text gets displayed", () => {

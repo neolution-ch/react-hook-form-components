@@ -1,8 +1,8 @@
 import { createContext, useContext } from "react";
-import { FieldValues, UseFormReturn } from "react-hook-form";
+import { FieldPath, FieldValues, UseFormReturn } from "react-hook-form";
 
 export interface FormContextProps<T extends FieldValues> extends UseFormReturn<T, unknown> {
-  requiredFields: (keyof T)[];
+  requiredFields: FieldPath<T>[];
   disabled: boolean;
 }
 
