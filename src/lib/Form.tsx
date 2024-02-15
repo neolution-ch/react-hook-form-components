@@ -74,7 +74,7 @@ const Form = <T extends FieldValues>({
     if (disabledLoading) {
       setDisabledLoading(false);
     }
-  }, []);
+  }, [setDisabledLoading, disabledLoading]);
 
   const formMethods = useForm<T>({ resolver, defaultValues: revivedDefaultValues });
   const autoSubmitHandler = useAutoSubmit({ onSubmit, formMethods, autoSubmitConfig });
