@@ -79,7 +79,7 @@ const Form = <T extends FieldValues>({
   const formMethods = useForm<T>({ resolver, defaultValues: revivedDefaultValues });
   const autoSubmitHandler = useAutoSubmit({ onSubmit, formMethods, autoSubmitConfig });
   return (
-    <FormContext.Provider value={{ requiredFields, disabled: disabled || disabledLoading, ...formMethods }}>
+    <FormContext.Provider value={{ requiredFields, disabled: disabled, ...formMethods }}>
       <form
         ref={(elem) => {
           if (formRef) {

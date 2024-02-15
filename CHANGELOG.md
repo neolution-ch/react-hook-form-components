@@ -7,13 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-
-- Added `disableBeforeLoading` property (true as default) to `Form` component to prevent the form from being html-native submited by disabling the form till its client-side loaded
-
 ### Changed
 
 - `requiredFields` prop type from `(keyof T)[]` to `FieldPath<T>[]`
+- use "POST" as form method and add additional call to event.preventDefault to prevent a native submit
 
 ## [2.6.0] - 2024-02-13
 
