@@ -46,11 +46,6 @@ interface FormProps<T extends FieldValues> {
    * the form ref
    */
   formRef?: React.MutableRefObject<HTMLFormElement | null>;
-
-  /**
-   * Prevents the form from being html-native submited by disabling the form till its client-side loaded
-   */
-  disableBeforeLoading?: boolean;
 }
 
 const Form = <T extends FieldValues>({
@@ -62,24 +57,15 @@ const Form = <T extends FieldValues>({
   disabled = false,
   autoSubmitConfig,
   formRef,
-  disableBeforeLoading = true,
 }: FormProps<T>) => {
   const revivedDefaultValues = defaultValues
     ? (JSON.parse(JSON.stringify(defaultValues), jsonIsoDateReviver) as DeepPartial<T>)
     : defaultValues;
 
-  // prevents from sending the form wihtout being proberly loaded by react hook form
-  const [disabledLoading, setDisabledLoading] = useState<boolean>(disableBeforeLoading);
-  useEffect(() => {
-    if (disabledLoading) {
-      setDisabledLoading(false);
-    }
-  }, [setDisabledLoading, disabledLoading]);
-
   const formMethods = useForm<T>({ resolver, defaultValues: revivedDefaultValues });
   const autoSubmitHandler = useAutoSubmit({ onSubmit, formMethods, autoSubmitConfig });
   return (
-    <FormContext.Provider value={{ requiredFields, disabled: disabled, ...formMethods }}>
+    <FormContext.Provider value={{ requiredFields, disabled, ...formMethods }}>
       <form
         ref={(elem) => {
           if (formRef) {
