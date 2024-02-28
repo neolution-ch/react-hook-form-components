@@ -34,6 +34,7 @@ const useAutoSubmit = <T extends FieldValues>({ onSubmit, formMethods, autoSubmi
 
   const submitHandler = useCallback(
     (e?: React.FormEvent<HTMLFormElement> | undefined) => {
+      e?.preventDefault();
       void (async () => {
         await handleSubmit(onSubmit)(e);
       })();
@@ -43,6 +44,8 @@ const useAutoSubmit = <T extends FieldValues>({ onSubmit, formMethods, autoSubmi
 
   const debouncedSubmitHandler = useDebouncedCallback(
     (e?: React.FormEvent<HTMLFormElement> | undefined) => {
+      e?.preventDefault();
+
       if (isSubmitting.current) {
         debouncedSubmitHandler(e);
         return;

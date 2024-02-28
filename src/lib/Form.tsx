@@ -73,6 +73,7 @@ const Form = <T extends FieldValues>({
           }
         }}
         onSubmit={autoSubmitHandler}
+        method="POST"
       >
         {children instanceof Function ? children({ ...formMethods, disabled, requiredFields }) : children}
       </form>

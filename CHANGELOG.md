@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - `requiredFields` prop type from `(keyof T)[]` to `FieldPath<T>[]`
+- use "POST" as form method and add additional call to event.preventDefault to prevent a native submit
 
 ## [2.6.0] - 2024-02-13
 
