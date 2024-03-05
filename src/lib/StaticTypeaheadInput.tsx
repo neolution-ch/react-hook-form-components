@@ -1,5 +1,6 @@
 import { Typeahead } from "react-bootstrap-typeahead";
 import { TypeaheadComponentProps } from "react-bootstrap-typeahead/types/components/Typeahead";
+import TypeheadRef from "react-bootstrap-typeahead/types/core/Typeahead";
 import { Controller, FieldValues } from "react-hook-form";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";
@@ -7,6 +8,8 @@ import { convertTypeaheadOptionsToStringArray } from "./helpers/typeahead";
 import { CommonTypeaheadProps, TypeaheadOptions } from "./types/Typeahead";
 import { useMarkOnFocusHandler } from "./hooks/useMarkOnFocusHandler";
 import { useFormContext } from "./context/FormContext";
+import { useRef } from "react";
+import { LabelValueOption } from "./types/LabelValueOption";
 
 interface StaticTypeaheadInputProps<T extends FieldValues> extends CommonTypeaheadProps<T> {
   options: TypeaheadOptions;
@@ -31,9 +34,35 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
     placeholder,
   } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
-
-  const { control, disabled: formDisabled } = useFormContext();
+  const { control, disabled: formDisabled, setError, setValue, clearErrors } = useFormContext();
   const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
+  const ref = useRef<TypeheadRef>(null);
+
+  const handleOnBlur = () => {
+    const innerText = ref.current?.state.text;
+    if (innerText) {
+      const isMatchingOption = (option: string | LabelValueOption) => {
+        const text = reactBootstrapTypeaheadProps?.caseSensitive ? innerText : innerText.toUpperCase();
+        let label = typeof option === "string" ? option : option.label;
+        label = reactBootstrapTypeaheadProps?.caseSensitive ? label : label.toUpperCase();
+        return label.includes(text);
+      };
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+      const matchingOptions = (props.options as any).filter((o: string | LabelValueOption) => isMatchingOption(o)) as TypeaheadOptions;
+      if (matchingOptions.length === 1) {
+        ref.current?.setState({
+          selected: matchingOptions,
+        });
+
+        setValue(name, typeof matchingOptions[0] == "string" ? matchingOptions[0] : matchingOptions[0].value);
+      } else {
+        setError(name, { message: "Invalid Input" });
+      }
+    } else {
+      clearErrors(name);
+    }
+  };
 
   const isDisabled = formDisabled || disabled;
 
@@ -57,6 +86,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
         >
           <Typeahead
             {...field}
+            ref={ref}
             defaultSelected={defaultSelected}
             multiple={props.multiple}
             style={style}
@@ -70,6 +100,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
 
               field.onChange(finalValue);
             }}
+            onBlur={handleOnBlur}
             id={id}
             options={props.options}
             className={`${className} ${error ? "is-invalid" : ""}`}

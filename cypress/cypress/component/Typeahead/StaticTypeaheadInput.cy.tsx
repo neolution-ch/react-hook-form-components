@@ -1,4 +1,4 @@
-import { Form, LabelValueOption, StaticTypeaheadInput } from "react-hook-form-components";
+import { Form, StaticTypeaheadInput } from "react-hook-form-components";
 import { faker } from "@faker-js/faker";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -31,6 +31,47 @@ it("works with single simple options", () => {
   cy.get(`a[aria-label='${changedOption}']`).click();
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledWith", { [name]: changedOption });
+});
+
+it("select automatically a single simple options", () => {
+  const { simpleOptions } = generateOptions();
+  const name = faker.random.alpha(10);
+  const randomOptions = faker.helpers.arrayElements(simpleOptions, 2);
+  const [firstOption] = randomOptions;
+
+  cy.mount(
+    <Form onSubmit={cy.spy().as("onSubmitSpy")}>
+      <StaticTypeaheadInput name={name} label={name} options={simpleOptions} />
+      <input type="submit" />
+    </Form>,
+  );
+
+  cy.get(`#${name}`).type(firstOption);
+  cy.get(`#${name}`).blur({ force: true });
+  cy.get("input[type=submit]").click({ force: true });
+  cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: firstOption });
+});
+
+it("display an error if more than one options are found and not selected", () => {
+  const { simpleOptions } = generateOptions();
+  const name = faker.random.alpha(10);
+  const randomOptions = faker.helpers.arrayElements(simpleOptions, 2);
+  const [firstOption] = randomOptions;
+
+  const additionalOption = firstOption.concat("xyz");
+
+  cy.mount(
+    <Form onSubmit={cy.spy().as("onSubmitSpy")}>
+      <StaticTypeaheadInput name={name} label={name} options={simpleOptions.concat(additionalOption)} />
+      <input type="submit" />
+    </Form>,
+  );
+
+  cy.get(`#${name}`).type(firstOption);
+  cy.get(`#${name}`).blur({ force: true });
+  cy.get("div[class=invalid-feedback]").should("exist");
+  cy.get("input[type=submit]").click({ force: true });
+  cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: undefined });
 });
 
 it("works with multiple simple options", () => {

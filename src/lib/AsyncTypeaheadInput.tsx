@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { AsyncTypeahead, UseAsyncProps } from "react-bootstrap-typeahead";
 import { Controller, FieldValues } from "react-hook-form";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
@@ -7,6 +7,7 @@ import { convertTypeaheadOptionsToStringArray } from "./helpers/typeahead";
 import { CommonTypeaheadProps, TypeaheadOptions } from "./types/Typeahead";
 import { useMarkOnFocusHandler } from "./hooks/useMarkOnFocusHandler";
 import { useFormContext } from "./context/FormContext";
+import TypeheadRef from "react-bootstrap-typeahead/types/core/Typeahead";
 
 interface AsyncTypeaheadProps<T extends FieldValues> extends CommonTypeaheadProps<T> {
   queryFn: (query: string) => Promise<TypeaheadOptions>;
@@ -31,8 +32,9 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
     placeholder,
   } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
+  const ref = useRef<TypeheadRef>(null);
 
-  const { control, disabled: formDisabled } = useFormContext();
+  const { control, disabled: formDisabled, setError, setValue, clearErrors, getValues } = useFormContext();
 
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState<TypeaheadOptions>([]);
@@ -61,6 +63,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
           <AsyncTypeahead
             {...field}
             id={id}
+            ref={ref}
             multiple={props.multiple}
             defaultSelected={defaultSelected}
             onChange={(e) => {
@@ -85,6 +88,22 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
                 setOptions(results);
                 setIsLoading(false);
               })();
+            }}
+            onBlur={() => {
+              if (options.length === 1) {
+                ref.current?.setState({
+                  selected: options,
+                });
+                setValue(name, typeof options[0] == "string" ? options[0] : options[0].value);
+              } else if (
+                options.length > 1 &&
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                (!getValues(name) || convertTypeaheadOptionsToStringArray(options).includes(getValues(name)))
+              ) {
+                setError(name, { message: "Invalid Input" });
+              } else {
+                clearErrors(name);
+              }
             }}
             disabled={isDisabled}
             onFocus={focusHandler}
