@@ -150,6 +150,50 @@ it("works with single simple option and default selected", () => {
   cy.get("@onSubmitSpy").should("have.been.calledWith", { [name]: changedOption.label });
 });
 
+it("select automatically single option", () => {
+  const options = generateOptions(10);
+  const name = faker.random.alpha(10);
+
+  cy.mount(
+    <Form onSubmit={cy.spy().as("onSubmitSpy")}>
+      <AsyncTypeaheadInput name={name} label={name} queryFn={async (query) => await fetchMock(options.objectOptions, query, false)} />
+      <input type="submit" />
+    </Form>,
+  );
+
+  cy.get(`#${name}`).type(options.objectOptions[0].label);
+  cy.wait(1000);
+  cy.get(`#${name}`).blur();
+  cy.get("input[type=submit]").click({ force: true });
+  cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: options.objectOptions[0].value });
+});
+
+it("show error if multiple options are available", () => {
+  const options = generateOptions(10);
+  const name = faker.random.alpha(10);
+  const [firstOption] = options.objectOptions;
+
+  const additionalOption = { label: firstOption.label.concat("xyz"), value: faker.datatype.uuid() };
+
+  cy.mount(
+    <Form onSubmit={cy.spy().as("onSubmitSpy")}>
+      <AsyncTypeaheadInput
+        name={name}
+        label={name}
+        queryFn={async (query) => await fetchMock(options.objectOptions.concat(additionalOption), query, false)}
+      />
+      <input type="submit" />
+    </Form>,
+  );
+
+  cy.get(`#${name}`).type(options.objectOptions[0].label);
+  cy.wait(1000);
+  cy.get(`#${name}`).blur();
+  cy.get("div[class=invalid-feedback]").should("exist");
+  cy.get("input[type=submit]").click({ force: true });
+  cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: undefined });
+});
+
 it("works with the correct value onChange", () => {
   const options = generateOptions(100);
   const name = faker.random.alpha(10);
