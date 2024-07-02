@@ -1,8 +1,11 @@
 ﻿name: PKG PR New Test
 on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, ready_for_review]
   push:
     branches:
-      - feature/pkg-pr-new-test
+      - main
 
 jobs:
   build:
