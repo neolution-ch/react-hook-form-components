@@ -16,4 +16,6 @@ jobs:
         with:
           node-version: 20
 
+      - run: yarn --frozen-lockfile
+
       - run: npx pkg-pr-new publish
