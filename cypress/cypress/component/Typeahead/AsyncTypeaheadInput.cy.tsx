@@ -150,7 +150,7 @@ it("works with single simple option and default selected", () => {
   cy.get("@onSubmitSpy").should("have.been.calledWith", { [name]: changedOption.label });
 });
 
-it("select automatically single option", () => {
+it("select automatically single option - single", () => {
   const options = generateOptions(10);
   const name = faker.random.alpha(10);
 
@@ -161,17 +161,18 @@ it("select automatically single option", () => {
     </Form>,
   );
 
-  cy.get(`#${name}`).type(options.objectOptions[0].label);
+  cy.get(`#${name}`).type(options.objectOptions[0].label, { delay: 100 });
   cy.wait(1000);
   cy.get(`#${name}`).blur();
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: options.objectOptions[0].value });
 });
 
-it("show error if multiple options are available", () => {
+it("show error if multiple options are available - single", () => {
   const options = generateOptions(10);
   const name = faker.random.alpha(10);
   const [firstOption] = options.objectOptions;
+  const errorMessage = faker.random.words(3);
 
   const additionalOption = { label: firstOption.label.concat("xyz"), value: faker.datatype.uuid() };
 
@@ -181,6 +182,62 @@ it("show error if multiple options are available", () => {
         name={name}
         label={name}
         queryFn={async (query) => await fetchMock(options.objectOptions.concat(additionalOption), query, false)}
+        invalidErrorMessage={errorMessage}
+      />
+      <input type="submit" />
+    </Form>,
+  );
+
+  cy.get(`#${name}`).type(options.objectOptions[0].label, { delay: 100 });
+  cy.wait(1000);
+  cy.get(`#${name}`).blur();
+  cy.wait(1000);
+  cy.get("div[class=invalid-feedback]").should("be.visible").should("have.text", errorMessage);
+  cy.get("input[type=submit]").click({ force: true }).then(() => {
+    cy.get("@onSubmitSpy").should("not.have.been.called");
+  });
+  cy.get("div[class=invalid-feedback]").should("be.visible").should("have.text", errorMessage);
+});
+
+it("select automatically single option - multiple", () => {
+  const options = generateOptions(10);
+  const name = faker.random.alpha(10);
+
+  cy.mount(
+    <Form onSubmit={cy.spy().as("onSubmitSpy")}>
+      <AsyncTypeaheadInput name={name} label={name} queryFn={async (query) => await fetchMock(options.objectOptions, query, false)} multiple />
+      <input type="submit" />
+    </Form>,
+  );
+
+
+  cy.get(`#${name}`).type(options.objectOptions[0].label, { delay: 100 });
+  cy.wait(1000);
+  cy.get(`#${name}`).blur();
+  cy.wait(100);
+  cy.get(`#${name}`).type(options.objectOptions[1].label, { delay: 100 });
+  cy.wait(1000);
+  cy.get(`#${name}`).blur();
+  cy.get("input[type=submit]").click({ force: true });
+  cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: [options.objectOptions[0].value, options.objectOptions[1].value] });
+});
+
+it("show error if multiple options are available - multiple", () => {
+  const options = generateOptions(10);
+  const name = faker.random.alpha(10);
+  const [firstOption] = options.objectOptions;
+  const errorMessage = faker.random.words(3);
+
+  const additionalOption = { label: firstOption.label.concat("xyz"), value: faker.datatype.uuid() };
+
+  cy.mount(
+    <Form onSubmit={cy.spy().as("onSubmitSpy")}>
+      <AsyncTypeaheadInput
+        name={name}
+        label={name}
+        queryFn={async (query) => await fetchMock(options.objectOptions.concat(additionalOption), query, false)}
+        invalidErrorMessage={errorMessage}
+        multiple
       />
       <input type="submit" />
     </Form>,
@@ -189,9 +246,12 @@ it("show error if multiple options are available", () => {
   cy.get(`#${name}`).type(options.objectOptions[0].label);
   cy.wait(1000);
   cy.get(`#${name}`).blur();
-  cy.get("div[class=invalid-feedback]").should("exist");
-  cy.get("input[type=submit]").click({ force: true });
-  cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: undefined });
+  cy.wait(1000);
+  cy.get("div[class=invalid-feedback]").should("be.visible").should("have.text", errorMessage);
+  cy.get("input[type=submit]").click({ force: true }).then(() => {
+    cy.get("@onSubmitSpy").should("not.have.been.called");
+  });
+  cy.get("div[class=invalid-feedback]").should("be.visible").should("have.text", errorMessage);
 });
 
 it("works with the correct value onChange", () => {
@@ -242,7 +302,7 @@ it("is disabled", () => {
 it("auto mark on focus", () => {
   const options = generateOptions(100);
   const name = faker.random.alpha(10);
-  const randomOption = faker.helpers.arrayElements(options.objectOptions, 1)[0];
+  const [randomOption] = faker.helpers.arrayElements(options.objectOptions, 1);
 
   cy.mount(
     <Form
@@ -309,9 +369,7 @@ it("empty label", () => {
         label={name}
         queryFn={async (query) =>
           await fetchMock(
-            simpleOptions.map((x) => {
-              return { label: x, value: x };
-            }),
+            simpleOptions.map((x) => ({ label: x, value: x })),
             query,
             false,
           )
@@ -345,9 +403,7 @@ it("placeholder", () => {
         label={name}
         queryFn={async (query) =>
           await fetchMock(
-            simpleOptions.map((x) => {
-              return { label: x, value: x };
-            }),
+            simpleOptions.map((x) => ({ label: x, value: x })),
             query,
             false,
           )

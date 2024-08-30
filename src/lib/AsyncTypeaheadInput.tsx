@@ -30,11 +30,13 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
     style,
     emptyLabel,
     placeholder,
+    multiple,
+    invalidErrorMessage,
   } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
   const ref = useRef<TypeheadRef>(null);
 
-  const { control, disabled: formDisabled, setError, setValue, clearErrors, getValues } = useFormContext();
+  const { control, disabled: formDisabled, setError, setValue, clearErrors, getValues, getFieldState } = useFormContext();
 
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState<TypeaheadOptions>([]);
@@ -46,6 +48,11 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
     <Controller
       control={control}
       name={name}
+      rules={{
+        validate: {
+          required: () => getFieldState(name)?.error?.message,
+        }
+      }}
       render={({ field, fieldState: { error } }) => (
         <FormGroupLayout
           helpText={helpText}
@@ -64,11 +71,11 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
             {...field}
             id={id}
             ref={ref}
-            multiple={props.multiple}
+            multiple={multiple}
             defaultSelected={defaultSelected}
             onChange={(e) => {
               const values = convertTypeaheadOptionsToStringArray(e);
-              const finalValue = props.multiple ? values : values[0];
+              const finalValue = multiple ? values : values[0];
 
               if (onChange) {
                 onChange(finalValue);
@@ -92,21 +99,31 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
             onBlur={() => {
               if (options.length === 1) {
                 ref.current?.setState({
-                  selected: options,
+                  selected: [...ref.current?.state.selected ?? [], ...options],
+                  text: "",
+                  showMenu: false,
                 });
-                setValue(name, typeof options[0] == "string" ? options[0] : options[0].value);
+
+                const newValue = typeof options[0] == "string" ? options[0] : options[0].value;
+                if (multiple) {      
+                  setValue(name, [...getValues(name) as [] | undefined ?? [] , newValue]);
+                } else {
+                  setValue(name, newValue);
+                }
               } else if (
                 options.length > 1 &&
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                 (!getValues(name) || convertTypeaheadOptionsToStringArray(options).includes(getValues(name)))
               ) {
-                setError(name, { message: "Invalid Input" });
+                setError(name, { message: invalidErrorMessage ?? "Invalid Input" });
               } else {
                 clearErrors(name);
               }
             }}
             disabled={isDisabled}
-            onFocus={focusHandler}
+            onFocus={(event) => {
+              focusHandler?.(event);
+            }}
             {...reactBootstrapTypeaheadProps}
             style={style}
             emptyLabel={emptyLabel}

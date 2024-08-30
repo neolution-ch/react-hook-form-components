@@ -33,7 +33,7 @@ it("works with single simple options", () => {
   cy.get("@onSubmitSpy").should("be.calledWith", { [name]: changedOption });
 });
 
-it("select automatically a single simple options", () => {
+it("select automatically a single simple options - single", () => {
   const { simpleOptions } = generateOptions();
   const name = faker.random.alpha(10);
   const randomOptions = faker.helpers.arrayElements(simpleOptions, 2);
@@ -48,30 +48,83 @@ it("select automatically a single simple options", () => {
 
   cy.get(`#${name}`).type(firstOption);
   cy.get(`#${name}`).blur({ force: true });
+  cy.get("div[class=invalid-feedback]").should("not.be.visible");
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: firstOption });
 });
 
-it("display an error if more than one options are found and not selected", () => {
+it("display an error if more than one options are found and not selected - single", () => {
   const { simpleOptions } = generateOptions();
   const name = faker.random.alpha(10);
   const randomOptions = faker.helpers.arrayElements(simpleOptions, 2);
   const [firstOption] = randomOptions;
+  const errorMessage = faker.random.words(3);
 
   const additionalOption = firstOption.concat("xyz");
 
   cy.mount(
     <Form onSubmit={cy.spy().as("onSubmitSpy")}>
-      <StaticTypeaheadInput name={name} label={name} options={simpleOptions.concat(additionalOption)} />
+      <StaticTypeaheadInput name={name} label={name} options={simpleOptions.concat(additionalOption)} invalidErrorMessage={errorMessage} />
       <input type="submit" />
     </Form>,
   );
 
   cy.get(`#${name}`).type(firstOption);
   cy.get(`#${name}`).blur({ force: true });
-  cy.get("div[class=invalid-feedback]").should("exist");
+  cy.get("div[class=invalid-feedback]").should("be.visible").should("have.text", errorMessage);
+  cy.get("input[type=submit]").click({ force: true }).then(() => {
+    cy.get("@onSubmitSpy").should("not.have.been.called");
+  });
+  cy.get("div[class=invalid-feedback]").should("be.visible").should("have.text", errorMessage);
+});
+
+it("select automatically a single simple options - multiple", () => {
+  const { simpleOptions } = generateOptions();
+  const name = faker.random.alpha(10);
+  const randomOptions = faker.helpers.arrayElements(simpleOptions, 2);
+  const [firstOption, secondOption] = randomOptions;
+
+  cy.mount(
+    <Form onSubmit={cy.spy().as("onSubmitSpy")}>
+      <StaticTypeaheadInput name={name} label={name} options={simpleOptions} multiple />
+      <input type="submit" />
+    </Form>,
+  );
+
+  cy.get(`#${name}`).type(firstOption);
+  cy.get(`#${name}`).blur({ force: true });
+  cy.get(`#${name}`).type(secondOption);
+  cy.get(`#${name}`).blur({ force: true });
+  cy.get("div[class=invalid-feedback]").should("not.be.visible");
   cy.get("input[type=submit]").click({ force: true });
-  cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: undefined });
+  cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: [firstOption, secondOption] });
+});
+
+it("display an error if more than one options are found and not selected - multiple", () => {
+  const { simpleOptions } = generateOptions();
+  const name = faker.random.alpha(10);
+  const randomOptions = faker.helpers.arrayElements(simpleOptions, 2);
+  const [firstOption, secondOption] = randomOptions;
+  const errorMessage = faker.random.words(3);
+
+  const additionalOption = secondOption.concat("xyz");
+
+  cy.mount(
+    <Form onSubmit={cy.spy().as("onSubmitSpy")}>
+      <StaticTypeaheadInput name={name} label={name} options={simpleOptions.concat(additionalOption)} multiple invalidErrorMessage={errorMessage} />
+      <input type="submit" />
+    </Form>,
+  );
+
+  cy.get(`#${name}`).type(firstOption);
+  cy.get(`#${name}`).blur({ force: true });
+  cy.get(`#${name}`).type(secondOption);
+  cy.get(`#${name}`).blur({ force: true });
+  cy.get("div[class=invalid-feedback]").should("exist");
+  cy.get("input[type=submit]").click({ force: true }).then(() => {
+    cy.get("@onSubmitSpy").should("not.have.been.called");
+  });
+  cy.get("div[class=invalid-feedback]").should("be.visible").should("have.text", errorMessage);
 });
 
 it("works with multiple simple options", () => {

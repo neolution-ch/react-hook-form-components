@@ -32,9 +32,11 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
     className = "",
     emptyLabel,
     placeholder,
+    multiple,
+    invalidErrorMessage,
   } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
-  const { control, disabled: formDisabled, setError, setValue, clearErrors } = useFormContext();
+  const { control, disabled: formDisabled, setError, setValue, clearErrors, getValues, getFieldState } = useFormContext();
   const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
   const ref = useRef<TypeheadRef>(null);
 
@@ -51,13 +53,21 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
       // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       const matchingOptions = (props.options as any).filter((o: string | LabelValueOption) => isMatchingOption(o)) as TypeaheadOptions;
       if (matchingOptions.length === 1) {
+        
         ref.current?.setState({
-          selected: matchingOptions,
+          selected: [...ref.current?.state.selected ?? [], ...matchingOptions],
+          text: "",
+          showMenu: false,
         });
 
-        setValue(name, typeof matchingOptions[0] == "string" ? matchingOptions[0] : matchingOptions[0].value);
+        const newValue = typeof matchingOptions[0] == "string" ? matchingOptions[0] : matchingOptions[0].value;
+        if (multiple) {      
+          setValue(name, [...getValues(name) as [] | undefined ?? [] , newValue]);
+        } else {
+          setValue(name, newValue);
+        }
       } else {
-        setError(name, { message: "Invalid Input" });
+        setError(name, { message: invalidErrorMessage ?? "Invalid Input" });
       }
     } else {
       clearErrors(name);
@@ -70,6 +80,11 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
     <Controller
       control={control}
       name={name}
+      rules={{
+        validate: {
+          required: () => getFieldState(name)?.error?.message,
+        }
+      }}
       render={({ field, fieldState: { error } }) => (
         <FormGroupLayout
           helpText={helpText}
@@ -88,7 +103,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
             {...field}
             ref={ref}
             defaultSelected={defaultSelected}
-            multiple={props.multiple}
+            multiple={multiple}
             style={style}
             onChange={(options) => {
               const values = convertTypeaheadOptionsToStringArray(options);
