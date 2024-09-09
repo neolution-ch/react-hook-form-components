@@ -48,6 +48,7 @@ it("select automatically a single simple options - single", () => {
 
   cy.get(`#${name}`).type(firstOption);
   cy.get(`#${name}`).blur({ force: true });
+  cy.wait(100);
   cy.get("div[class=invalid-feedback]").should("not.be.visible");
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: firstOption });
@@ -71,6 +72,7 @@ it("display an error if more than one options are found and not selected - singl
 
   cy.get(`#${name}`).type(firstOption);
   cy.get(`#${name}`).blur({ force: true });
+  cy.wait(100);
   cy.get("div[class=invalid-feedback]").should("be.visible").should("have.text", errorMessage);
   cy.get("input[type=submit]")
     .click({ force: true })
@@ -95,8 +97,10 @@ it("select automatically a single simple options - multiple", () => {
 
   cy.get(`#${name}`).type(firstOption);
   cy.get(`#${name}`).blur({ force: true });
+  cy.wait(100);
   cy.get(`#${name}`).type(secondOption);
   cy.get(`#${name}`).blur({ force: true });
+  cy.wait(100);
   cy.get("div[class=invalid-feedback]").should("not.be.visible");
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: [firstOption, secondOption] });
@@ -126,8 +130,10 @@ it("display an error if more than one options are found and not selected - multi
 
   cy.get(`#${name}`).type(firstOption);
   cy.get(`#${name}`).blur({ force: true });
+  cy.wait(100);
   cy.get(`#${name}`).type(secondOption);
   cy.get(`#${name}`).blur({ force: true });
+  cy.wait(100);
   cy.get("div[class=invalid-feedback]").should("exist");
   cy.get("input[type=submit]")
     .click({ force: true })
