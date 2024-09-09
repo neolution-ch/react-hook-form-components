@@ -193,9 +193,11 @@ it("show error if multiple options are available - single", () => {
   cy.get(`#${name}`).blur();
   cy.wait(1000);
   cy.get("div[class=invalid-feedback]").should("be.visible").should("have.text", errorMessage);
-  cy.get("input[type=submit]").click({ force: true }).then(() => {
-    cy.get("@onSubmitSpy").should("not.have.been.called");
-  });
+  cy.get("input[type=submit]")
+    .click({ force: true })
+    .then(() => {
+      cy.get("@onSubmitSpy").should("not.have.been.called");
+    });
   cy.get("div[class=invalid-feedback]").should("be.visible").should("have.text", errorMessage);
 });
 
@@ -205,11 +207,15 @@ it("select automatically single option - multiple", () => {
 
   cy.mount(
     <Form onSubmit={cy.spy().as("onSubmitSpy")}>
-      <AsyncTypeaheadInput name={name} label={name} queryFn={async (query) => await fetchMock(options.objectOptions, query, false)} multiple />
+      <AsyncTypeaheadInput
+        name={name}
+        label={name}
+        queryFn={async (query) => await fetchMock(options.objectOptions, query, false)}
+        multiple
+      />
       <input type="submit" />
     </Form>,
   );
-
 
   cy.get(`#${name}`).type(options.objectOptions[0].label, { delay: 100 });
   cy.wait(1000);
@@ -248,9 +254,11 @@ it("show error if multiple options are available - multiple", () => {
   cy.get(`#${name}`).blur();
   cy.wait(1000);
   cy.get("div[class=invalid-feedback]").should("be.visible").should("have.text", errorMessage);
-  cy.get("input[type=submit]").click({ force: true }).then(() => {
-    cy.get("@onSubmitSpy").should("not.have.been.called");
-  });
+  cy.get("input[type=submit]")
+    .click({ force: true })
+    .then(() => {
+      cy.get("@onSubmitSpy").should("not.have.been.called");
+    });
   cy.get("div[class=invalid-feedback]").should("be.visible").should("have.text", errorMessage);
 });
 

@@ -72,9 +72,11 @@ it("display an error if more than one options are found and not selected - singl
   cy.get(`#${name}`).type(firstOption);
   cy.get(`#${name}`).blur({ force: true });
   cy.get("div[class=invalid-feedback]").should("be.visible").should("have.text", errorMessage);
-  cy.get("input[type=submit]").click({ force: true }).then(() => {
-    cy.get("@onSubmitSpy").should("not.have.been.called");
-  });
+  cy.get("input[type=submit]")
+    .click({ force: true })
+    .then(() => {
+      cy.get("@onSubmitSpy").should("not.have.been.called");
+    });
   cy.get("div[class=invalid-feedback]").should("be.visible").should("have.text", errorMessage);
 });
 
@@ -111,7 +113,13 @@ it("display an error if more than one options are found and not selected - multi
 
   cy.mount(
     <Form onSubmit={cy.spy().as("onSubmitSpy")}>
-      <StaticTypeaheadInput name={name} label={name} options={simpleOptions.concat(additionalOption)} multiple invalidErrorMessage={errorMessage} />
+      <StaticTypeaheadInput
+        name={name}
+        label={name}
+        options={simpleOptions.concat(additionalOption)}
+        multiple
+        invalidErrorMessage={errorMessage}
+      />
       <input type="submit" />
     </Form>,
   );
@@ -121,9 +129,11 @@ it("display an error if more than one options are found and not selected - multi
   cy.get(`#${name}`).type(secondOption);
   cy.get(`#${name}`).blur({ force: true });
   cy.get("div[class=invalid-feedback]").should("exist");
-  cy.get("input[type=submit]").click({ force: true }).then(() => {
-    cy.get("@onSubmitSpy").should("not.have.been.called");
-  });
+  cy.get("input[type=submit]")
+    .click({ force: true })
+    .then(() => {
+      cy.get("@onSubmitSpy").should("not.have.been.called");
+    });
   cy.get("div[class=invalid-feedback]").should("be.visible").should("have.text", errorMessage);
 });
 

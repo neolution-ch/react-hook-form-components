@@ -51,7 +51,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
       rules={{
         validate: {
           required: () => getFieldState(name)?.error?.message,
-        }
+        },
       }}
       render={({ field, fieldState: { error } }) => (
         <FormGroupLayout
@@ -103,14 +103,14 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
             onBlur={() => {
               if (options.length === 1 && ref.current?.state.text.length) {
                 ref.current?.setState({
-                  selected: [...ref.current?.state.selected ?? [], ...options],
+                  selected: [...(ref.current?.state.selected ?? []), ...options],
                   text: "",
                   showMenu: false,
                 });
 
                 const newValue = typeof options[0] == "string" ? options[0] : options[0].value;
-                if (multiple) {      
-                  setValue(name, [...getValues(name) as [] | undefined ?? [] , newValue]);
+                if (multiple) {
+                  setValue(name, [...((getValues(name) as [] | undefined) ?? []), newValue]);
                 } else {
                   setValue(name, newValue);
                 }
