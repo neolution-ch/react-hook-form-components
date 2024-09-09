@@ -1,7 +1,7 @@
 import { Typeahead } from "react-bootstrap-typeahead";
 import { TypeaheadComponentProps } from "react-bootstrap-typeahead/types/components/Typeahead";
 import TypeheadRef from "react-bootstrap-typeahead/types/core/Typeahead";
-import { Controller, FieldValues } from "react-hook-form";
+import { Controller, ControllerRenderProps, FieldValues } from "react-hook-form";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";
 import { convertTypeaheadOptionsToStringArray } from "./helpers/typeahead";
@@ -36,18 +36,19 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
     invalidErrorMessage,
   } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
-  const { control, disabled: formDisabled, setError, setValue, clearErrors, getValues, getFieldState } = useFormContext();
+  const { control, disabled: formDisabled, setError, clearErrors, getValues, getFieldState } = useFormContext();
   const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
   const ref = useRef<TypeheadRef>(null);
 
-  const handleOnBlur = () => {
+  const handleOnBlur = (field: ControllerRenderProps<FieldValues, string>) => {
     const innerText = ref.current?.state.text;
     if (innerText) {
       const isMatchingOption = (option: string | LabelValueOption) => {
         const text = reactBootstrapTypeaheadProps?.caseSensitive ? innerText : innerText.toUpperCase();
         let label = typeof option === "string" ? option : option.label;
         label = reactBootstrapTypeaheadProps?.caseSensitive ? label : label.toUpperCase();
-        return label.includes(text);
+        const value = typeof option === "string" ? option : option.value;
+        return !ref.current?.state.selected.find((x) => (typeof x === "string" ? x : x.value) === value) && label.includes(text);
       };
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
@@ -61,9 +62,9 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
 
         const newValue = typeof matchingOptions[0] == "string" ? matchingOptions[0] : matchingOptions[0].value;
         if (multiple) {
-          setValue(name, [...((getValues(name) as [] | undefined) ?? []), newValue]);
+          field.onChange([...((getValues(name) as [] | undefined) ?? []), newValue]);
         } else {
-          setValue(name, newValue);
+          field.onChange(newValue);
         }
         clearErrors(name);
       } else {
@@ -116,7 +117,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
 
               field.onChange(finalValue);
             }}
-            onBlur={handleOnBlur}
+            onBlur={() => handleOnBlur(field)}
             id={id}
             options={props.options}
             className={`${className} ${error ? "is-invalid" : ""}`}

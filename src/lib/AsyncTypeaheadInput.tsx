@@ -36,7 +36,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
   const { name, id } = useSafeNameId(props.name, props.id);
   const ref = useRef<TypeheadRef>(null);
 
-  const { control, disabled: formDisabled, setError, setValue, clearErrors, getValues, getFieldState } = useFormContext();
+  const { control, disabled: formDisabled, setError, clearErrors, getValues, getFieldState } = useFormContext();
 
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState<TypeaheadOptions>([]);
@@ -110,9 +110,9 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
 
                 const newValue = typeof options[0] == "string" ? options[0] : options[0].value;
                 if (multiple) {
-                  setValue(name, [...((getValues(name) as [] | undefined) ?? []), newValue]);
+                  field.onChange([...((getValues(name) as [] | undefined) ?? []), newValue]);
                 } else {
-                  setValue(name, newValue);
+                  field.onChange(newValue);
                 }
                 clearErrors(name);
               } else if (options.length > 1 && ref.current?.state.text.length) {
