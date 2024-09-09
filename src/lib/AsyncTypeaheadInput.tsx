@@ -82,6 +82,10 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
               }
 
               field.onChange(finalValue);
+              clearErrors(name);
+
+              // if not multiple, clear options to prevent the dropdown from showing multiple again when activating
+              if (!multiple) setOptions([]);
             }}
             className={`${className} ${error ? "is-invalid" : ""}`}
             inputProps={{ id }}
@@ -97,7 +101,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
               })();
             }}
             onBlur={() => {
-              if (options.length === 1) {
+              if (options.length === 1 && ref.current?.state.text.length) {
                 ref.current?.setState({
                   selected: [...ref.current?.state.selected ?? [], ...options],
                   text: "",
@@ -110,11 +114,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
                 } else {
                   setValue(name, newValue);
                 }
-              } else if (
-                options.length > 1 &&
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                (!getValues(name) || convertTypeaheadOptionsToStringArray(options).includes(getValues(name)))
-              ) {
+              } else if (options.length > 1 && ref.current?.state.text.length) {
                 setError(name, { message: invalidErrorMessage ?? "Invalid Input" });
               } else {
                 clearErrors(name);

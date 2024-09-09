@@ -114,6 +114,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
               }
 
               field.onChange(finalValue);
+              clearErrors(name);
             }}
             onBlur={handleOnBlur}
             id={id}
