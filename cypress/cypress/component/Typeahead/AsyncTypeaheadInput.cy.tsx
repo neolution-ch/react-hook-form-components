@@ -164,6 +164,7 @@ it("select automatically single option - single", () => {
   cy.get(`#${name}`).type(options.objectOptions[0].label, { delay: 100 });
   cy.wait(1000);
   cy.get(`#${name}`).blur();
+  cy.wait(100);
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: options.objectOptions[0].value });
 });
@@ -191,7 +192,7 @@ it("show error if multiple options are available - single", () => {
   cy.get(`#${name}`).type(options.objectOptions[0].label, { delay: 100 });
   cy.wait(1000);
   cy.get(`#${name}`).blur();
-  cy.wait(1000);
+  cy.wait(100);
   cy.get("div[class=invalid-feedback]").should("be.visible").should("have.text", errorMessage);
   cy.get("input[type=submit]")
     .click({ force: true })
@@ -224,6 +225,7 @@ it("select automatically single option - multiple", () => {
   cy.get(`#${name}`).type(options.objectOptions[1].label, { delay: 100 });
   cy.wait(1000);
   cy.get(`#${name}`).blur();
+  cy.wait(100);
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: [options.objectOptions[0].value, options.objectOptions[1].value] });
 });
@@ -252,7 +254,7 @@ it("show error if multiple options are available - multiple", () => {
   cy.get(`#${name}`).type(options.objectOptions[0].label);
   cy.wait(1000);
   cy.get(`#${name}`).blur();
-  cy.wait(1000);
+  cy.wait(100);
   cy.get("div[class=invalid-feedback]").should("be.visible").should("have.text", errorMessage);
   cy.get("input[type=submit]")
     .click({ force: true })
