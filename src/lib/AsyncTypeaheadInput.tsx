@@ -76,13 +76,13 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
             onChange={(e) => {
               const values = convertTypeaheadOptionsToStringArray(e);
               const finalValue = multiple ? values : values[0];
+              clearErrors(name);
 
               if (onChange) {
                 onChange(finalValue);
               }
 
               field.onChange(finalValue);
-              clearErrors(name);
 
               // if not multiple, clear options to prevent the dropdown from showing multiple again when activating
               if (!multiple) setOptions([]);
@@ -114,6 +114,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
                 } else {
                   setValue(name, newValue);
                 }
+                clearErrors(name);
               } else if (options.length > 1 && ref.current?.state.text.length) {
                 setError(name, { message: invalidErrorMessage ?? "Invalid Input" });
               } else {

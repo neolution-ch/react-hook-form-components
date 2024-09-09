@@ -66,6 +66,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
         } else {
           setValue(name, newValue);
         }
+        clearErrors(name);
       } else {
         setError(name, { message: invalidErrorMessage ?? "Invalid Input" });
       }
@@ -108,13 +109,13 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
             onChange={(options) => {
               const values = convertTypeaheadOptionsToStringArray(options);
               const finalValue = props.multiple ? values : values[0];
+              clearErrors(name);
 
               if (onChange) {
                 onChange(finalValue);
               }
 
               field.onChange(finalValue);
-              clearErrors(name);
             }}
             onBlur={handleOnBlur}
             id={id}
