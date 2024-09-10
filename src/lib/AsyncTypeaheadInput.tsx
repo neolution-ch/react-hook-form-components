@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { AsyncTypeahead, UseAsyncProps } from "react-bootstrap-typeahead";
 import { Controller, FieldValues } from "react-hook-form";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
@@ -7,6 +7,7 @@ import { convertTypeaheadOptionsToStringArray } from "./helpers/typeahead";
 import { CommonTypeaheadProps, TypeaheadOptions } from "./types/Typeahead";
 import { useMarkOnFocusHandler } from "./hooks/useMarkOnFocusHandler";
 import { useFormContext } from "./context/FormContext";
+import TypeheadRef from "react-bootstrap-typeahead/types/core/Typeahead";
 
 interface AsyncTypeaheadProps<T extends FieldValues> extends CommonTypeaheadProps<T> {
   queryFn: (query: string) => Promise<TypeaheadOptions>;
@@ -29,10 +30,13 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
     style,
     emptyLabel,
     placeholder,
+    multiple,
+    invalidErrorMessage,
   } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
+  const ref = useRef<TypeheadRef>(null);
 
-  const { control, disabled: formDisabled } = useFormContext();
+  const { control, disabled: formDisabled, setError, clearErrors, getValues, getFieldState } = useFormContext();
 
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState<TypeaheadOptions>([]);
@@ -44,6 +48,11 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
     <Controller
       control={control}
       name={name}
+      rules={{
+        validate: {
+          required: () => getFieldState(name)?.error?.message,
+        },
+      }}
       render={({ field, fieldState: { error } }) => (
         <FormGroupLayout
           helpText={helpText}
@@ -61,17 +70,22 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
           <AsyncTypeahead
             {...field}
             id={id}
-            multiple={props.multiple}
+            ref={ref}
+            multiple={multiple}
             defaultSelected={defaultSelected}
             onChange={(e) => {
               const values = convertTypeaheadOptionsToStringArray(e);
-              const finalValue = props.multiple ? values : values[0];
+              const finalValue = multiple ? values : values[0];
+              clearErrors(name);
 
               if (onChange) {
                 onChange(finalValue);
               }
 
               field.onChange(finalValue);
+
+              // if not multiple, clear options to prevent the dropdown from showing multiple again when activating
+              if (!multiple) setOptions([]);
             }}
             className={`${className} ${error ? "is-invalid" : ""}`}
             inputProps={{ id }}
@@ -86,8 +100,31 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
                 setIsLoading(false);
               })();
             }}
+            onBlur={() => {
+              if (options.length === 1 && ref.current?.state.text.length) {
+                ref.current?.setState({
+                  selected: [...(ref.current?.state.selected ?? []), ...options],
+                  text: "",
+                  showMenu: false,
+                });
+
+                const newValue = typeof options[0] == "string" ? options[0] : options[0].value;
+                if (multiple) {
+                  field.onChange([...((getValues(name) as [] | undefined) ?? []), newValue]);
+                } else {
+                  field.onChange(newValue);
+                }
+                clearErrors(name);
+              } else if (options.length > 1 && ref.current?.state.text.length) {
+                setError(name, { message: invalidErrorMessage ?? "Invalid Input" });
+              } else {
+                clearErrors(name);
+              }
+            }}
             disabled={isDisabled}
-            onFocus={focusHandler}
+            onFocus={(event) => {
+              focusHandler?.(event);
+            }}
             {...reactBootstrapTypeaheadProps}
             style={style}
             emptyLabel={emptyLabel}

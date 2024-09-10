@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Autoselect of single available option for `TypeaheadInput` components
+
 ## [2.7.0] - 2024-02-28
 
 ### Changed
