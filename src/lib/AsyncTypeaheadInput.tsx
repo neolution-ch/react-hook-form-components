@@ -115,7 +115,8 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
                   field.onChange(newValue);
                 }
                 clearErrors(name);
-              } else if (options.length > 1 && ref.current?.state.text.length) {
+              } else if (ref.current?.state.text.length && (!!multiple || !ref.current?.state.selected.length)) {
+                // only set error if the text is not empty and the typeahead is multiple or the selected array is empty (for single select, if the selected array is not empty, it means the user has already selected an option)
                 setError(name, { message: invalidErrorMessage ?? "Invalid Input" });
               } else {
                 clearErrors(name);
