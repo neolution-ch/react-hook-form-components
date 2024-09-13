@@ -42,7 +42,8 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
 
   const handleOnBlur = (field: ControllerRenderProps<FieldValues, string>) => {
     const innerText = ref.current?.state.text;
-    if (innerText) {
+    // only check if the text is not empty and the typeahead is multiple or the selected array is empty (for single select, if the selected array is not empty, it means the user has already selected an option)
+    if (innerText && (!!multiple || !ref.current?.state.selected.length)) {
       const isMatchingOption = (option: string | LabelValueOption) => {
         const text = reactBootstrapTypeaheadProps?.caseSensitive ? innerText : innerText.toUpperCase();
         let label = typeof option === "string" ? option : option.label;
