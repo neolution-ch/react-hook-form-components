@@ -1,6 +1,6 @@
 {
   "name": "@neolution-ch/react-hook-form-components",
-  "version": "2.8.1",
+  "version": "2.9.0",
   "description": "a collection of react hook form components to reduce boilerplate and figuring out how to integrate react hook form with other libraries",
   "homepage": "https://neolution-ch.github.io/react-hook-form-components",
   "repository": {
