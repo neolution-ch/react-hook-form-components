@@ -32,6 +32,7 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
     addonLeft,
     addonRight,
     className = "",
+    hideValidationMessage = false,
   } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
   const { control, disabled: formDisabled } = useFormContext();
@@ -72,6 +73,7 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
             addonProps={{
               isDisabled,
             }}
+            hideValidationMessage={hideValidationMessage}
           >
             <>
               {numericFormat && (

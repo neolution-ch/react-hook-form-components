@@ -46,6 +46,11 @@ interface FormProps<T extends FieldValues> {
    * the form ref
    */
   formRef?: React.MutableRefObject<HTMLFormElement | null>;
+
+  /**
+   * hide the validation messages for all form inputs.
+   */
+  hideValidationMessages?: boolean;
 }
 
 const Form = <T extends FieldValues>({
@@ -57,6 +62,7 @@ const Form = <T extends FieldValues>({
   disabled = false,
   autoSubmitConfig,
   formRef,
+  hideValidationMessages = false,
 }: FormProps<T>) => {
   const revivedDefaultValues = defaultValues
     ? (JSON.parse(JSON.stringify(defaultValues), jsonIsoDateReviver) as DeepPartial<T>)
@@ -64,8 +70,9 @@ const Form = <T extends FieldValues>({
 
   const formMethods = useForm<T>({ resolver, defaultValues: revivedDefaultValues });
   const autoSubmitHandler = useAutoSubmit({ onSubmit, formMethods, autoSubmitConfig });
+
   return (
-    <FormContext.Provider value={{ requiredFields, disabled, ...formMethods }}>
+    <FormContext.Provider value={{ requiredFields, disabled, hideValidationMessages, ...formMethods }}>
       <form
         ref={(elem) => {
           if (formRef) {
@@ -75,7 +82,7 @@ const Form = <T extends FieldValues>({
         onSubmit={autoSubmitHandler}
         method="POST"
       >
-        {children instanceof Function ? children({ ...formMethods, disabled, requiredFields }) : children}
+        {children instanceof Function ? children({ ...formMethods, disabled, requiredFields, hideValidationMessages }) : children}
       </form>
     </FormContext.Provider>
   );

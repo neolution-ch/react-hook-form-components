@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { AsyncTypeahead, UseAsyncProps } from "react-bootstrap-typeahead";
-import { Controller, FieldValues } from "react-hook-form";
+import { Controller, FieldError, FieldValues, get } from "react-hook-form";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";
 import { convertTypeaheadOptionsToStringArray } from "./helpers/typeahead";
@@ -32,12 +32,22 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
     placeholder,
     multiple,
     invalidErrorMessage,
+    hideValidationMessage = false,
   } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
   const ref = useRef<TypeheadRef>(null);
 
-  const { control, disabled: formDisabled, setError, clearErrors, getValues, getFieldState } = useFormContext();
-
+  const {
+    control,
+    disabled: formDisabled,
+    formState: { errors },
+    setError,
+    clearErrors,
+    getValues,
+    getFieldState,
+  } = useFormContext();
+  const fieldError = get(errors, name) as FieldError | undefined;
+  const hasError = !!fieldError;
   const [isLoading, setIsLoading] = useState(false);
   const [options, setOptions] = useState<TypeaheadOptions>([]);
   const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
@@ -66,6 +76,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
             isDisabled,
           }}
           inputGroupStyle={props.inputGroupStyle}
+          hideValidationMessage={hideValidationMessage}
         >
           <AsyncTypeahead
             {...field}
@@ -73,6 +84,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
             ref={ref}
             multiple={multiple}
             defaultSelected={defaultSelected}
+            isInvalid={hasError}
             onChange={(e) => {
               const values = convertTypeaheadOptionsToStringArray(e);
               const finalValue = multiple ? values : values[0];

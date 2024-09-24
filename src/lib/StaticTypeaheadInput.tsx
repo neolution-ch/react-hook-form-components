@@ -1,7 +1,7 @@
 import { Typeahead } from "react-bootstrap-typeahead";
 import { TypeaheadComponentProps } from "react-bootstrap-typeahead/types/components/Typeahead";
 import TypeheadRef from "react-bootstrap-typeahead/types/core/Typeahead";
-import { Controller, ControllerRenderProps, FieldValues } from "react-hook-form";
+import { Controller, ControllerRenderProps, FieldError, FieldValues, get } from "react-hook-form";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";
 import { convertTypeaheadOptionsToStringArray } from "./helpers/typeahead";
@@ -34,12 +34,22 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
     placeholder,
     multiple,
     invalidErrorMessage,
+    hideValidationMessage = false,
   } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
-  const { control, disabled: formDisabled, setError, clearErrors, getValues, getFieldState } = useFormContext();
+  const {
+    control,
+    disabled: formDisabled,
+    formState: { errors },
+    setError,
+    clearErrors,
+    getValues,
+    getFieldState,
+  } = useFormContext();
   const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
   const ref = useRef<TypeheadRef>(null);
-
+  const fieldError = get(errors, name) as FieldError | undefined;
+  const hasError = !!fieldError;
   const handleOnBlur = (field: ControllerRenderProps<FieldValues, string>) => {
     const innerText = ref.current?.state.text;
     // only check if the text is not empty and the typeahead is multiple or the selected array is empty (for single select, if the selected array is not empty, it means the user has already selected an option)
@@ -100,6 +110,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
             isDisabled,
           }}
           inputGroupStyle={props.inputGroupStyle}
+          hideValidationMessage={hideValidationMessage}
         >
           <Typeahead
             {...field}
@@ -107,6 +118,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
             defaultSelected={defaultSelected}
             multiple={multiple}
             style={style}
+            isInvalid={hasError}
             onChange={(options) => {
               const values = convertTypeaheadOptionsToStringArray(options);
               const finalValue = props.multiple ? values : values[0];
