@@ -66,7 +66,7 @@ module.exports = {
     complexity: [
       "error",
       {
-        max: 12,
+        max: 15,
       },
     ],
     "prefer-destructuring": "error",

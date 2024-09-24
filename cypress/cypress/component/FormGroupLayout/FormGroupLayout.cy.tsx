@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Form, Input } from "react-hook-form-components";
+import { Form, Input, StaticTypeaheadInput, AsyncTypeaheadInput, DatePickerInput, FormattedInput } from "react-hook-form-components";
 import * as yup from "yup";
 
 it("adding * character if string label works", () => {
@@ -74,4 +74,64 @@ it("testing existing * on nested object", () => {
   );
 
   cy.get(`label[for=${fakePerson.city.address.street}]`).should("have.text", `${fakePerson.city.address.street} *`);
+});
+
+const ValidationForm = (props: { hideValidationMessage?: boolean; hideValidationMessages?: boolean }) => {
+  const { hideValidationMessage, hideValidationMessages } = props;
+  const schema = yup.object().shape({
+    name: yup.string().required(),
+    surname: yup.string().nullable(false).required(),
+    place: yup.string().required(),
+    age: yup.number().required(),
+    dateOfBirth: yup.date().required(),
+  });
+
+  return (
+    <Form
+      hideValidationMessages={hideValidationMessages}
+      onSubmit={() => {
+        // Nothing to do
+      }}
+      resolver={yupResolver(schema)}
+    >
+      <Input name="name" label="name" hideValidationMessage={hideValidationMessage} />
+      <StaticTypeaheadInput name="surname" label="surname" options={[]} hideValidationMessage={hideValidationMessage} />
+      <AsyncTypeaheadInput name="place" label="place" queryFn={() => Promise.resolve([""])} hideValidationMessage={hideValidationMessage} />
+      <DatePickerInput name="dateOfBirth" label="dateOfBirth" hideValidationMessage={hideValidationMessage} />
+      <FormattedInput name="age" label="age" numericFormat={{ thousandSeparator: "'" }} hideValidationMessage={hideValidationMessage} />
+      <button type="submit">click me</button>
+    </Form>
+  );
+};
+
+it("show validation messages", () => {
+  cy.mount(<ValidationForm />);
+  cy.get(`button[type=submit]`).click();
+  cy.get(`label[for=name`).parent().find(".invalid-feedback").should("exist");
+  cy.get(`label[for=surname`).parent().find(".invalid-feedback").should("exist");
+  cy.get(`label[for=place`).parent().find(".invalid-feedback").should("exist");
+  cy.get(`label[for=age`).parent().find(".invalid-feedback").should("exist");
+  cy.get(`label[for=dateOfBirth`).parent().find(".invalid-feedback").should("exist");
+});
+
+it("hide validation messages when hideValidationMessages is provided through the form", () => {
+  cy.mount(<ValidationForm hideValidationMessages />);
+
+  cy.get(`button[type=submit]`).click();
+  cy.get(`label[for=name`).parent().find(".invalid-feedback").should("not.exist");
+  cy.get(`label[for=surname`).parent().find(".invalid-feedback").should("not.exist");
+  cy.get(`label[for=place`).parent().find(".invalid-feedback").should("not.exist");
+  cy.get(`label[for=age`).parent().find(".invalid-feedback").should("not.exist");
+  cy.get(`label[for=dateOfBirth`).parent().find(".invalid-feedback").should("not.exist");
+});
+
+it("hide validation message when hideValidationMessage is provided on the single input", () => {
+  cy.mount(<ValidationForm hideValidationMessage />);
+
+  cy.get(`button[type=submit]`).click();
+  cy.get(`label[for=name`).parent().find(".invalid-feedback").should("not.exist");
+  cy.get(`label[for=surname`).parent().find(".invalid-feedback").should("not.exist");
+  cy.get(`label[for=place`).parent().find(".invalid-feedback").should("not.exist");
+  cy.get(`label[for=age`).parent().find(".invalid-feedback").should("not.exist");
+  cy.get(`label[for=dateOfBirth`).parent().find(".invalid-feedback").should("not.exist");
 });

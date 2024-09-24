@@ -69,6 +69,11 @@ interface CommonInputProps<T extends FieldValues, TRenderAddon = unknown> {
    * @example <Input<T> type="text" inputGroupStyle={{ align-items: "center" }} />
    */
   inputGroupStyle?: CSSProperties;
+
+  /**
+   * hide the validation message for the input
+   */
+  hideValidationMessage?: boolean;
 }
 
 export { CommonInputProps };

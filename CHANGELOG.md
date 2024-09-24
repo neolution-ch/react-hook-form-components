@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Possibility to hide all validation messages through the `hideValidationMessages` form property or field by field by `hideValidationMessage` inputs property
+
+### Fixed
+
+- Form feedback for `TypeaheadInput` components and `DatePickerInput` was not highlighting the input
+
 ## [2.8.1] - 2024-09-13
 
 ### Fixed

@@ -8,7 +8,9 @@ import { FormGroupLayoutLabel } from "./FormGroupLayoutLabel";
 import { useFormContext } from "./context/FormContext";
 
 interface FormGroupLayoutProps<T extends FieldValues, TRenderAddon>
-  extends PropsWithChildren<Pick<CommonInputProps<T>, "helpText" | "label" | "name" | "id" | "labelToolTip" | "inputOnly">> {
+  extends PropsWithChildren<
+    Pick<CommonInputProps<T>, "helpText" | "label" | "name" | "id" | "labelToolTip" | "inputOnly" | "hideValidationMessage">
+  > {
   layout?: "checkbox" | "switch";
   addonLeft?: ReactNode | ((props: TRenderAddon) => ReactNode);
   addonRight?: ReactNode | ((props: TRenderAddon) => ReactNode);
@@ -18,11 +20,24 @@ interface FormGroupLayoutProps<T extends FieldValues, TRenderAddon>
 }
 
 const FormGroupLayout = <T extends FieldValues, TRenderAddon = unknown>(props: FormGroupLayoutProps<T, TRenderAddon>) => {
-  const { label, helpText, children, layout, labelToolTip, inputOnly, addonLeft, addonRight, inputGroupStyle, formGroupId, addonProps } =
-    props;
+  const {
+    label,
+    helpText,
+    children,
+    layout,
+    labelToolTip,
+    inputOnly,
+    addonLeft,
+    addonRight,
+    inputGroupStyle,
+    formGroupId,
+    addonProps,
+    hideValidationMessage = false,
+  } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
   const {
     formState: { errors },
+    hideValidationMessages,
   } = useFormContext();
 
   const fieldError = get(errors, name) as FieldError | undefined;
@@ -51,10 +66,12 @@ const FormGroupLayout = <T extends FieldValues, TRenderAddon = unknown>(props: F
     [addonRight, addonProps],
   );
 
+  const hideErrorMessage = useMemo(() => hideValidationMessages || hideValidationMessage, [hideValidationMessages, hideValidationMessage]);
+
   return inputOnly ? (
     <>
       {children}
-      <FormFeedback>{errorMessage}</FormFeedback>
+      {!hideErrorMessage && <FormFeedback>{errorMessage}</FormFeedback>}
     </>
   ) : (
     <FormGroup id={formGroupId} switch={switchLayout ? true : undefined} check={checkboxLayout ? true : undefined}>
@@ -75,7 +92,7 @@ const FormGroupLayout = <T extends FieldValues, TRenderAddon = unknown>(props: F
           {effectiveAddonRight}
         </InputGroup>
       )}
-      <FormFeedback>{errorMessage}</FormFeedback>
+      {!hideErrorMessage && <FormFeedback>{errorMessage}</FormFeedback>}
       {helpText && <FormText>{helpText}</FormText>}
     </FormGroup>
   );

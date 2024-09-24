@@ -65,13 +65,13 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
     datePickerRef,
     name: initialName,
     id: initialId,
+    hideValidationMessage = false,
   } = props;
 
   const { id, name } = useSafeNameId(initialName, initialId);
   const { control, getValues, setValue, disabled: formDisabled } = useFormContext();
   const internalDatePickerRef = useRef<DatePicker>();
   const formGroupId = useRef(guidGen());
-
   const { calendarStartDay = 1, showTimeInput = false, showTimeSelect = false, dateFormat } = datePickerProps;
   const showTimeInputOrSelect = showTimeInput || showTimeSelect;
   const effectiveDateFormat = dateFormat || (showTimeInputOrSelect ? DEFAULT_DATE_TIME_FORMAT : DEFAULT_DATE_FORMAT);
@@ -141,16 +141,16 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
           addonRight={addonRight}
           addonProps={{ toggleDatePicker, isDisabled }}
           inputGroupStyle={!!addonLeft || !!addonRight ? { ...inputGroupStyle, alignItems: "normal" } : inputGroupStyle}
+          hideValidationMessage={hideValidationMessage}
         >
           <DatePicker
             {...datePickerProps}
             {...field}
             id={id}
             disabled={isDisabled}
-            className={datePickerClassNames}
+            className={`${datePickerClassNames} ${error ? "is-invalid" : ""}`}
             dateFormat={effectiveDateFormat}
             calendarStartDay={calendarStartDay}
-            wrapperClassName={error ? "is-invalid" : ""}
             autoComplete={autoComplete}
             selected={selectedDate}
             ref={(elem) => {
