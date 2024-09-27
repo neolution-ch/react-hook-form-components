@@ -8,11 +8,12 @@ import { convertTypeaheadOptionsToStringArray } from "./helpers/typeahead";
 import { CommonTypeaheadProps, TypeaheadOptions } from "./types/Typeahead";
 import { useMarkOnFocusHandler } from "./hooks/useMarkOnFocusHandler";
 import { useFormContext } from "./context/FormContext";
-import { useRef } from "react";
+import { MutableRefObject, useRef } from "react";
 import { LabelValueOption } from "./types/LabelValueOption";
 
 interface StaticTypeaheadInputProps<T extends FieldValues> extends CommonTypeaheadProps<T> {
   options: TypeaheadOptions;
+  inputRef?: MutableRefObject<TypeheadRef | null>;
   reactBootstrapTypeaheadProps?: Partial<TypeaheadComponentProps>;
 }
 
@@ -35,6 +36,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
     multiple,
     invalidErrorMessage,
     hideValidationMessage = false,
+    inputRef,
   } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
   const {
@@ -47,7 +49,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
     getFieldState,
   } = useFormContext();
   const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
-  const ref = useRef<TypeheadRef>(null);
+  const ref = useRef<TypeheadRef | null>(null);
   const fieldError = get(errors, name) as FieldError | undefined;
   const hasError = !!fieldError;
   const handleOnBlur = (field: ControllerRenderProps<FieldValues, string>) => {
@@ -114,7 +116,12 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
         >
           <Typeahead
             {...field}
-            ref={ref}
+            ref={(elem) => {
+              ref.current = elem;
+              if (inputRef) {
+                inputRef.current = elem;
+              }
+            }}
             defaultSelected={defaultSelected}
             multiple={multiple}
             style={style}
