@@ -3,6 +3,8 @@ import { faker } from "@faker-js/faker";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { generateOptions } from "../../helpers/typeahead";
+import { useEffect, useRef } from "react";
+import TypeheadRef from "react-bootstrap-typeahead/types/core/Typeahead";
 
 it("works with single simple options", () => {
   const { simpleOptions } = generateOptions();
@@ -402,4 +404,34 @@ it("placeholder", () => {
     </Form>,
   );
   cy.get(`#${name}`).should("have.attr", "placeholder", placeholder);
+});
+
+it("use input-ref", () => {
+  const { simpleOptions } = generateOptions();
+  const name = faker.random.alpha(10);
+  const placeholder = faker.random.words(5);
+
+  const TestForm = () => {
+    const ref = useRef<TypeheadRef | null>(null);
+
+    useEffect(() => {
+      if (ref.current) {
+        ref.current.toggleMenu();
+      }
+    }, [ref]);
+
+    return (
+      <Form
+        onSubmit={cy.spy().as("onSubmitSpy")}
+        defaultValues={{
+          [name]: simpleOptions,
+        }}
+      >
+        <StaticTypeaheadInput inputRef={ref} name={name} label={name} options={simpleOptions} placeholder={placeholder} />
+      </Form>
+    );
+  };
+
+  cy.mount(<TestForm />);
+  cy.get(".rbt-menu.dropdown-menu.show").should("be.visible");
 });
