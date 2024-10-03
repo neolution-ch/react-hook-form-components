@@ -14,7 +14,7 @@ interface CommonTypeaheadProps<T extends FieldValues> extends Omit<CommonInputPr
   defaultSelected?: TypeaheadOptions;
   inputRef?: MutableRefObject<TypeheadRef | null>;
   onChange?: (selected: string | string[]) => void;
-  onInputChange?: ((text: string, event: React.ChangeEvent<HTMLInputElement>) => void) | undefined;
+  onInputChange?: (text: string, event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export { CommonTypeaheadProps };
