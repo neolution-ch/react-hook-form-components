@@ -23,6 +23,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
     defaultSelected,
     reactBootstrapTypeaheadProps,
     onChange,
+    onInputChange,
     markAllOnFocus,
     addonLeft,
     addonRight,
@@ -33,9 +34,10 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
     multiple,
     invalidErrorMessage,
     hideValidationMessage = false,
+    inputRef,
   } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
-  const ref = useRef<TypeheadRef>(null);
+  const ref = useRef<TypeheadRef | null>(null);
 
   const {
     control,
@@ -81,7 +83,12 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
           <AsyncTypeahead
             {...field}
             id={id}
-            ref={ref}
+            ref={(elem) => {
+              ref.current = elem;
+              if (inputRef) {
+                inputRef.current = elem;
+              }
+            }}
             multiple={multiple}
             defaultSelected={defaultSelected}
             isInvalid={hasError}
@@ -99,6 +106,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
               // if not multiple, clear options to prevent the dropdown from showing multiple again when activating
               if (!multiple) setOptions([]);
             }}
+            onInputChange={onInputChange}
             className={`${className} ${error ? "is-invalid" : ""}`}
             inputProps={{ id }}
             isLoading={isLoading}

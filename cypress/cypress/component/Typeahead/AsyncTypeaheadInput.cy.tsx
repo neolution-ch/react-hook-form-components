@@ -1,6 +1,8 @@
 import { AsyncTypeaheadInput, Form } from "react-hook-form-components";
 import { faker } from "@faker-js/faker";
 import { fetchMock, generateOptions } from "../../helpers/typeahead";
+import { useRef, useState } from "react";
+import TypeheadRef from "react-bootstrap-typeahead/types/core/Typeahead";
 
 it("works with multiple simple options and default selected", () => {
   const options = generateOptions(100);
@@ -424,4 +426,48 @@ it("placeholder", () => {
     </Form>,
   );
   cy.get(`#${name}`).should("have.attr", "placeholder", placeholder);
+});
+
+it("use input-ref and handle on input change", () => {
+  const { simpleOptions } = generateOptions();
+  const name = faker.random.alpha(10);
+  const text = faker.random.words(5);
+
+  const TestForm = () => {
+    const ref = useRef<TypeheadRef | null>(null);
+    const [disabled, setDisabled] = useState<boolean>(false);
+    return (
+      <Form
+        onSubmit={cy.spy().as("onSubmitSpy")}
+        defaultValues={{
+          [name]: simpleOptions,
+        }}
+      >
+        <AsyncTypeaheadInput
+          inputRef={ref}
+          name={name}
+          label={name}
+          onInputChange={(text) => setDisabled(text.length === 0)}
+          onChange={() => ref.current?.toggleMenu()}
+          queryFn={async (query) =>
+            await fetchMock(
+              simpleOptions.map((x) => ({ label: x, value: x })),
+              query,
+              false,
+            )
+          }
+        />
+        <input type="submit" disabled={disabled} />
+      </Form>
+    );
+  };
+
+  cy.mount(<TestForm />);
+  cy.get(`#${name}`).clear().click().type(text);
+  cy.get('input[type="submit"]').should("be.enabled");
+  cy.get(`#${name}`).clear();
+  cy.get('input[type="submit"]').should("be.disabled");
+  cy.get(`#${name}`).click().type(simpleOptions[0]);
+  cy.get(`a[aria-label='${simpleOptions[0]}']`).click();
+  cy.get(".rbt-menu.dropdown-menu.show").should("be.visible");
 });
