@@ -16,6 +16,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - The `helpers/typeahead` format from `ts` to `tsx`
 
+## [2.11.0] - 2024-10-04
+
+### Added
+
+- The property `inputRef` to the `AsyncTypeaheadInput` and exposed `onInputChange` on `StaticTypeaheadInput` and `AsyncTypeaheadInput`
+
 ## [2.10.0] - 2024-09-27
 
 ### Added
