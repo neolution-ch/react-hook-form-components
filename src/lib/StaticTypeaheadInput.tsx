@@ -8,12 +8,11 @@ import { convertTypeaheadOptionsToStringArray } from "./helpers/typeahead";
 import { CommonTypeaheadProps, TypeaheadOptions } from "./types/Typeahead";
 import { useMarkOnFocusHandler } from "./hooks/useMarkOnFocusHandler";
 import { useFormContext } from "./context/FormContext";
-import { MutableRefObject, useRef } from "react";
+import { useRef } from "react";
 import { LabelValueOption } from "./types/LabelValueOption";
 
 interface StaticTypeaheadInputProps<T extends FieldValues> extends CommonTypeaheadProps<T> {
   options: TypeaheadOptions;
-  inputRef?: MutableRefObject<TypeheadRef | null>;
   reactBootstrapTypeaheadProps?: Partial<TypeaheadComponentProps>;
 }
 
@@ -26,6 +25,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
     defaultSelected,
     reactBootstrapTypeaheadProps,
     onChange,
+    onInputChange,
     markAllOnFocus,
     addonLeft,
     addonRight,
@@ -137,6 +137,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
 
               field.onChange(finalValue);
             }}
+            onInputChange={onInputChange}
             onBlur={() => handleOnBlur(field)}
             id={id}
             options={props.options}
