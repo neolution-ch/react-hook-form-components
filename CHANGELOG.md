@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- The property `inputRef` to the `AsyncTypeaheadInput` and exposed `onInputChange` on `StaticTypeaheadInput` and `AsyncTypeaheadInput`
+- The property `group` in the `LabelValueOption`
+- The possibility to group results both in the `AsyncTypeaheadInput` and `StaticTypeaheadInput` using the property `useGroupBy`
 
 ## [2.10.0] - 2024-09-27
 

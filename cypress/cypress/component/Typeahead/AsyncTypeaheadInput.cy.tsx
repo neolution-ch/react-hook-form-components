@@ -1,8 +1,30 @@
 import { AsyncTypeaheadInput, Form } from "react-hook-form-components";
-import { faker } from "@faker-js/faker";
+import { faker, Sex } from "@faker-js/faker";
 import { fetchMock, generateOptions } from "../../helpers/typeahead";
 import { useRef, useState } from "react";
 import TypeheadRef from "react-bootstrap-typeahead/types/core/Typeahead";
+
+it("grouping options", () => {
+  const { groupedOptions } = generateOptions();
+  const name = faker.random.alpha(10);
+
+  cy.mount(
+    <Form
+      onSubmit={() => {
+        // Nothing to do
+      }}
+    >
+      <AsyncTypeaheadInput name={name} label={name} useGroupBy queryFn={async (query) => await fetchMock(groupedOptions, query, false)} />
+      <input type="submit" />
+    </Form>,
+  );
+
+  cy.get(`#${name}`).type(groupedOptions[0].label);
+  cy.get(".dropdown-header").first().should("be.visible").and("have.text", Sex.Male);
+  cy.contains("a", groupedOptions[0].label).should("have.class", "disabled");
+  cy.get(`#${name}`).clear().type(groupedOptions[5].label);
+  cy.get(".dropdown-header").first().should("be.visible").and("have.text", Sex.Female);
+});
 
 it("works with multiple simple options and default selected", () => {
   const options = generateOptions(100);

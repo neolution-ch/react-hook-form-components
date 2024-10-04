@@ -4,7 +4,7 @@ import TypeheadRef from "react-bootstrap-typeahead/types/core/Typeahead";
 import { Controller, ControllerRenderProps, FieldError, FieldValues, get } from "react-hook-form";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";
-import { convertTypeaheadOptionsToStringArray } from "./helpers/typeahead";
+import { convertTypeaheadOptionsToStringArray, renderMenu } from "./helpers/typeahead";
 import { CommonTypeaheadProps, TypeaheadOptions } from "./types/Typeahead";
 import { useMarkOnFocusHandler } from "./hooks/useMarkOnFocusHandler";
 import { useFormContext } from "./context/FormContext";
@@ -37,6 +37,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
     invalidErrorMessage,
     hideValidationMessage = false,
     inputRef,
+    useGroupBy = false,
   } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
   const {
@@ -148,6 +149,8 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
             emptyLabel={emptyLabel}
             placeholder={placeholder}
             {...reactBootstrapTypeaheadProps}
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call
+            renderMenu={useGroupBy ? (results, menuProps) => renderMenu(results as LabelValueOption[], menuProps) : undefined}
           />
         </FormGroupLayout>
       )}
