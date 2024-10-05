@@ -437,7 +437,8 @@ it("use input-ref", () => {
 });
 
 it("grouping options", () => {
-  const { groupedOptions } = generateOptions();
+  const COUNT = 10;
+  const { groupedOptions } = generateOptions(COUNT);
   const name = faker.random.alpha(10);
 
   cy.mount(
@@ -452,8 +453,11 @@ it("grouping options", () => {
   );
 
   cy.get(`#${name}`).click();
-  cy.get(".dropdown-menu.show").find("a").should("have.length", 10);
+  cy.get(".dropdown-menu.show")
+    .find("a")
+    .should("have.length", COUNT + 1);
   cy.get(".dropdown-header").first().should("be.visible").and("have.text", Sex.Male);
   cy.get(".dropdown-header").eq(1).should("be.visible").and("have.text", Sex.Female);
   cy.contains("a", groupedOptions[0].label).should("have.class", "disabled");
+  cy.contains("a", groupedOptions[COUNT].label).should("exist");
 });

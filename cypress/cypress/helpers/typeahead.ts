@@ -25,7 +25,11 @@ const generateOptions = (count = 10): GenerateOptionsResult => {
 
   const disabledOptions: LabelValueOption[] = objectOptions.map((o) => ({ value: o.value, label: o.label, disabled: true }));
   const groupedOptions: LabelValueOption[] = [
-    ...objectOptions.map((o, i) => ({ value: o.value, label: o.label, group: { name: i < 5 ? Sex.Male : Sex.Female, disabled: i < 5 } })),
+    ...objectOptions.map((o, i) => ({
+      value: o.value,
+      label: o.label,
+      group: { name: i < count / 2 ? Sex.Male : Sex.Female, disabled: i < count / 2 },
+    })),
     { value: faker.datatype.uuid(), label: faker.name.firstName(), group: undefined },
   ];
 

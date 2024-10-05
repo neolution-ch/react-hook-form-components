@@ -473,7 +473,8 @@ it("use input-ref and handle on input change", () => {
 });
 
 it("grouping options", () => {
-  const { groupedOptions } = generateOptions();
+  const COUNT = 10;
+  const { groupedOptions } = generateOptions(COUNT);
   const name = faker.random.alpha(10);
 
   cy.mount(
@@ -490,6 +491,10 @@ it("grouping options", () => {
   cy.get(`#${name}`).type(groupedOptions[0].label);
   cy.get(".dropdown-header").first().should("be.visible").and("have.text", Sex.Male);
   cy.contains("a", groupedOptions[0].label).should("have.class", "disabled");
-  cy.get(`#${name}`).clear().type(groupedOptions[5].label);
+  cy.get(`#${name}`)
+    .clear()
+    .type(groupedOptions[COUNT / 2].label);
   cy.get(".dropdown-header").first().should("be.visible").and("have.text", Sex.Female);
+  cy.get(`#${name}`).clear().type(groupedOptions[COUNT].label);
+  cy.contains("a", groupedOptions[COUNT].label).should("exist");
 });
