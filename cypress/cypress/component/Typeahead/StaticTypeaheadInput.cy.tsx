@@ -1,5 +1,5 @@
 import { Form, StaticTypeaheadInput } from "react-hook-form-components";
-import { faker } from "@faker-js/faker";
+import { faker, Sex } from "@faker-js/faker";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { generateOptions } from "../../helpers/typeahead";
@@ -434,4 +434,30 @@ it("use input-ref", () => {
 
   cy.mount(<TestForm />);
   cy.get(".rbt-menu.dropdown-menu.show").should("be.visible");
+});
+
+it("grouping options", () => {
+  const COUNT = 10;
+  const { groupedOptions } = generateOptions(COUNT);
+  const name = faker.random.alpha(10);
+
+  cy.mount(
+    <Form
+      onSubmit={() => {
+        // Nothing to do
+      }}
+    >
+      <StaticTypeaheadInput useGroupBy name={name} label={name} options={groupedOptions} />
+      <input type="submit" />
+    </Form>,
+  );
+
+  cy.get(`#${name}`).click();
+  cy.get(".dropdown-menu.show")
+    .find("a")
+    .should("have.length", COUNT + 1);
+  cy.get(".dropdown-header").first().should("be.visible").and("have.text", Sex.Male);
+  cy.get(".dropdown-header").eq(1).should("be.visible").and("have.text", Sex.Female);
+  cy.contains("a", groupedOptions[0].label).should("have.class", "disabled");
+  cy.contains("a", groupedOptions[COUNT].label).should("exist");
 });
