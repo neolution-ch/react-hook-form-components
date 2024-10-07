@@ -44,8 +44,7 @@
     "start": "rollup -c -w",
     "start-all": "concurrently \"yarn start\" \"yarn start-yalc\"",
     "start-yalc": "yarn nodemon --watch dist -x \"yarn yalc push\"",
-    "storybook": "start-storybook -p 6006",
-    "test": "cd cypress && yarn cyr"
+    "storybook": "start-storybook -p 6006"
   },
   "dependencies": {
     "classnames": "^2.3.2",

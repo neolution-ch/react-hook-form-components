@@ -15,17 +15,8 @@ const convertTypeaheadOptionsToStringArray = (options: Option[]): string[] => {
 };
 
 const renderMenu = (results: LabelValueOption[], menuProps: RenderMenuProps): JSX.Element => {
-  const anonymousOptions: LabelValueOption[] = [];
-  const groupedOptions = results.reduce((result, option) => {
-    const groupKey = option.group?.name;
-    if (groupKey) {
-      (result[groupKey] = result[groupKey] || []).push(option);
-    } else {
-      anonymousOptions.push(option);
-    }
-    return result;
-  }, {} as Record<string, LabelValueOption[]>);
-  const groups = Object.keys(groupedOptions);
+  const groups = [...new Set(results.map((option) => option.group?.name).filter((group) => group))];
+  const anonymousOptions = results.filter((option) => !option.group);
   let position = 0;
 
   return (
@@ -33,21 +24,23 @@ const renderMenu = (results: LabelValueOption[], menuProps: RenderMenuProps): JS
       {groups.map((group, index) => (
         <React.Fragment key={index}>
           <Menu.Header>{group}</Menu.Header>
-          {groupedOptions[group]?.map((option) => (
-            <MenuItem
-              key={option.value}
-              option={option}
-              position={position++}
-              disabled={option.disabled || option.group?.disabled}
-              className="ps-4"
-            >
-              {option.label}
-            </MenuItem>
-          ))}
+          {results
+            .filter((x) => x.group === group)
+            .map((option) => (
+              <MenuItem
+                key={option.value}
+                option={option}
+                position={position++}
+                disabled={option.disabled || option.group?.disabled}
+                className="ps-4"
+              >
+                {option.label}
+              </MenuItem>
+            ))}
           {index < groups.length - 1 && <Menu.Divider />}
         </React.Fragment>
       ))}
-      {anonymousOptions.length > 0 && <Menu.Divider />}
+      {!!anonymousOptions.length && <Menu.Divider />}
       {anonymousOptions.map((option) => (
         <MenuItem key={option.value} option={option} position={position++} disabled={option.disabled}>
           {option.label}

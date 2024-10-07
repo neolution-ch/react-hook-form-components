@@ -12,11 +12,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The property `group` in the `LabelValueOption`
 - The possibility to group results both in the `AsyncTypeaheadInput` and `StaticTypeaheadInput` using the property `useGroupBy`
 
-### Changed
-
-- The `helpers/typeahead` format from `ts` to `tsx`
-- Corrected the cypress test running script
-
 ## [2.11.0] - 2024-10-04
 
 ### Added
