@@ -15,8 +15,8 @@ const convertTypeaheadOptionsToStringArray = (options: Option[]): string[] => {
 };
 
 const renderMenu = (results: LabelValueOption[], menuProps: RenderMenuProps): JSX.Element => {
-  const groups = [...new Set(results.map((option) => option.group?.name).filter((group) => group))];
-  const anonymousOptions = results.filter((option) => !option.group);
+  const groups = [...new Set(results.filter((x) => x.group?.name).map((option) => option.group?.name))];
+  const anonymousOptions = results.filter((option) => !option.group?.name);
   let position = 0;
 
   return (
@@ -25,7 +25,7 @@ const renderMenu = (results: LabelValueOption[], menuProps: RenderMenuProps): JS
         <React.Fragment key={index}>
           <Menu.Header>{group}</Menu.Header>
           {results
-            .filter((x) => x.group === group)
+            .filter((x) => x.group?.name === group)
             .map((option) => (
               <MenuItem
                 key={option.value}
