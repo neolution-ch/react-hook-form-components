@@ -1,5 +1,5 @@
 import { AsyncTypeaheadInput, Form } from "react-hook-form-components";
-import { faker } from "@faker-js/faker";
+import { faker, Sex } from "@faker-js/faker";
 import { fetchMock, generateOptions } from "../../helpers/typeahead";
 import { useRef, useState } from "react";
 import TypeheadRef from "react-bootstrap-typeahead/types/core/Typeahead";
@@ -470,4 +470,31 @@ it("use input-ref and handle on input change", () => {
   cy.get(`#${name}`).click().type(simpleOptions[0]);
   cy.get(`a[aria-label='${simpleOptions[0]}']`).click();
   cy.get(".rbt-menu.dropdown-menu.show").should("be.visible");
+});
+
+it("grouping options", () => {
+  const COUNT = 10;
+  const { groupedOptions } = generateOptions(COUNT);
+  const name = faker.random.alpha(10);
+
+  cy.mount(
+    <Form
+      onSubmit={() => {
+        // Nothing to do
+      }}
+    >
+      <AsyncTypeaheadInput name={name} label={name} useGroupBy queryFn={async (query) => await fetchMock(groupedOptions, query, false)} />
+      <input type="submit" />
+    </Form>,
+  );
+
+  cy.get(`#${name}`).type(groupedOptions[0].label);
+  cy.get(".dropdown-header").first().should("be.visible").and("have.text", Sex.Male);
+  cy.contains("a", groupedOptions[0].label).should("have.class", "disabled");
+  cy.get(`#${name}`)
+    .clear()
+    .type(groupedOptions[COUNT / 2].label);
+  cy.get(".dropdown-header").first().should("be.visible").and("have.text", Sex.Female);
+  cy.get(`#${name}`).clear().type(groupedOptions[COUNT].label);
+  cy.contains("a", groupedOptions[COUNT].label).should("exist");
 });

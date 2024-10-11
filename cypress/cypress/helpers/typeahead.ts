@@ -1,4 +1,4 @@
-import { faker } from "@faker-js/faker";
+import { faker, Sex } from "@faker-js/faker";
 import { LabelValueOption } from "react-hook-form-components";
 
 interface GenerateOptionsResult {
@@ -6,6 +6,7 @@ interface GenerateOptionsResult {
   simpleOptions: string[];
   randomSubset: LabelValueOption[];
   disabledOptions: LabelValueOption[];
+  groupedOptions: LabelValueOption[];
 }
 
 const generateOptions = (count = 10): GenerateOptionsResult => {
@@ -23,7 +24,16 @@ const generateOptions = (count = 10): GenerateOptionsResult => {
     .sort((a, b) => objectOptions.findIndex((x) => x.value == a.value) - objectOptions.findIndex((x) => x.value == b.value));
 
   const disabledOptions: LabelValueOption[] = objectOptions.map((o) => ({ value: o.value, label: o.label, disabled: true }));
-  return { objectOptions, simpleOptions, randomSubset, disabledOptions };
+  const groupedOptions: LabelValueOption[] = [
+    ...objectOptions.map((o, i) => ({
+      value: o.value,
+      label: o.label,
+      group: { name: i < count / 2 ? Sex.Male : Sex.Female, disabled: i < count / 2 },
+    })),
+    { value: faker.datatype.uuid(), label: faker.name.firstName(), group: undefined },
+  ];
+
+  return { objectOptions, simpleOptions, randomSubset, disabledOptions, groupedOptions };
 };
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));

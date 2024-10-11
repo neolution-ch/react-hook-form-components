@@ -3,11 +3,12 @@ import { AsyncTypeahead, UseAsyncProps } from "react-bootstrap-typeahead";
 import { Controller, FieldError, FieldValues, get } from "react-hook-form";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";
-import { convertTypeaheadOptionsToStringArray } from "./helpers/typeahead";
+import { convertTypeaheadOptionsToStringArray, renderMenu } from "./helpers/typeahead";
 import { CommonTypeaheadProps, TypeaheadOptions } from "./types/Typeahead";
 import { useMarkOnFocusHandler } from "./hooks/useMarkOnFocusHandler";
 import { useFormContext } from "./context/FormContext";
 import TypeheadRef from "react-bootstrap-typeahead/types/core/Typeahead";
+import { LabelValueOption } from "./types/LabelValueOption";
 
 interface AsyncTypeaheadProps<T extends FieldValues> extends CommonTypeaheadProps<T> {
   queryFn: (query: string) => Promise<TypeaheadOptions>;
@@ -35,6 +36,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
     invalidErrorMessage,
     hideValidationMessage = false,
     inputRef,
+    useGroupBy = false,
   } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
   const ref = useRef<TypeheadRef | null>(null);
@@ -150,6 +152,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
             style={style}
             emptyLabel={emptyLabel}
             placeholder={placeholder}
+            renderMenu={useGroupBy ? (results, menuProps) => renderMenu(results as LabelValueOption[], menuProps) : undefined}
           />
         </FormGroupLayout>
       )}
