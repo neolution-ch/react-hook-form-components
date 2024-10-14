@@ -1,5 +1,5 @@
 import classnames from "classnames";
-import { Controller, FieldValues } from "react-hook-form";
+import { Controller, ControllerRenderProps, FieldValues } from "react-hook-form";
 import { NumericFormat, NumericFormatProps, PatternFormat, PatternFormatProps } from "react-number-format";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";
@@ -7,18 +7,14 @@ import { CommonInputProps } from "./types/CommonInputProps";
 import { useMarkOnFocusHandler } from "./hooks/useMarkOnFocusHandler";
 import { UnknownType, useFormContextInternal } from "./context/FormContext";
 
-type FormattedInputProps<T extends FieldValues = UnknownType> = CommonInputProps<T> & {
-  patternFormat?: PatternFormatProps;
-  numericFormat?: NumericFormatProps;
-}
-
-const FormattedInput = <T extends FieldValues = UnknownType>(props: FormattedInputProps<T>) => {
-  if (props.patternFormat && props.numericFormat) {
-    throw new Error("FormattedInput cannot have both patternFormat and numericFormat");
-  }
-
+type FormattedInputInternalProps<T extends FieldValues = UnknownType> = Omit<FormattedInputProps<T>, "name" | "disabled"> & {
+  name: string;
+  isDisabled?: boolean;
+  commonProps?: NumericFormatProps;
+  fieldOnChange?: ControllerRenderProps<FieldValues, string>["onChange"];
+};
+const FormattedInputInternal = <T extends FieldValues = UnknownType>(props: FormattedInputInternalProps<T>) => {
   const {
-    disabled,
     label,
     helpText,
     numericFormat,
@@ -33,76 +29,121 @@ const FormattedInput = <T extends FieldValues = UnknownType>(props: FormattedInp
     addonRight,
     className = "",
     hideValidationMessage = false,
-    defaultValue
+    defaultValue,
+    name,
+    id,
+    isDisabled,
+    commonProps,
+    fieldOnChange,
   } = props;
+
+  const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
+  const commonPropsInternal = commonProps ?? {
+    onBlur: (e) => {
+      if (propsOnBlur) {
+        propsOnBlur(e);
+      }
+    },
+    disabled: isDisabled,
+    className,
+  };
+
+  return (
+    <FormGroupLayout
+      helpText={helpText}
+      name={name}
+      id={id}
+      label={label}
+      labelToolTip={labelToolTip}
+      inputGroupStyle={inputGroupStyle}
+      addonLeft={addonLeft}
+      addonRight={addonRight}
+      addonProps={{
+        isDisabled,
+      }}
+      hideValidationMessage={hideValidationMessage}
+    >
+      <>
+        {numericFormat && (
+          <NumericFormat
+            defaultValue={defaultValue}
+            {...numericFormat}
+            {...commonPropsInternal}
+            valueIsNumericString={true}
+            onChange={(e) => {
+              if (propsOnChange) propsOnChange(e);
+            }}
+            onValueChange={(values) => {
+              fieldOnChange && fieldOnChange(values.value);
+            }}
+            onFocus={focusHandler}
+            style={style}
+          ></NumericFormat>
+        )}
+
+        {patternFormat && (
+          <PatternFormat
+            {...patternFormat}
+            {...commonPropsInternal}
+            onChange={fieldOnChange}
+            style={style}
+            onFocus={focusHandler}
+          ></PatternFormat>
+        )}
+      </>
+    </FormGroupLayout>
+  );
+};
+
+type FormattedInputProps<T extends FieldValues = UnknownType> = CommonInputProps<T> & {
+  patternFormat?: PatternFormatProps;
+  numericFormat?: NumericFormatProps;
+};
+
+const FormattedInput = <T extends FieldValues = UnknownType>(props: FormattedInputProps<T>) => {
+  if (props.patternFormat && props.numericFormat) {
+    throw new Error("FormattedInput cannot have both patternFormat and numericFormat");
+  }
+
+  const {
+    disabled,
+    onBlur: propsOnBlur,
+    className = "",
+  } = props;
+  
   const { name, id } = useSafeNameId(props?.name ?? "", props.id);
   const { control, disabled: formDisabled = false } = useFormContextInternal() ?? {};
-  const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
 
   const isDisabled = formDisabled || disabled;
 
-  return (
+  return control ? (
     <Controller
       control={control}
       name={name}
-      render={({ field, fieldState }) => {
-        const error = fieldState ? fieldState.error : undefined;
+      render={({ field: { name, onBlur, onChange, ref, value }, fieldState: { error } }) => {
         const commonProps: NumericFormatProps = {
           name: name,
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          value: field?.value,
-          getInputRef: field?.ref,
+          value: value,
+          getInputRef: ref,
           className: classnames("form-control", { "is-invalid": error }, className),
           "aria-invalid": !!error,
           id,
           onBlur: (e) => {
             if (propsOnBlur) propsOnBlur(e);
-            field?.onBlur();
+            onBlur();
+          },
+          onValueChange: (values) => {
+            onChange(values.value);
           },
           disabled: isDisabled,
         };
 
-        return (
-          <FormGroupLayout
-            helpText={helpText}
-            name={name}
-            id={id}
-            label={label}
-            labelToolTip={labelToolTip}
-            inputGroupStyle={inputGroupStyle}
-            addonLeft={addonLeft}
-            addonRight={addonRight}
-            addonProps={{
-              isDisabled,
-            }}
-            hideValidationMessage={hideValidationMessage}
-          >
-            <>
-              {numericFormat && (
-                <NumericFormat
-                  {...numericFormat}
-                  {...commonProps}
-                  valueIsNumericString={true}
-                  onChange={(e) => {
-                    if (propsOnChange) propsOnChange(e);
-                  }}
-                  onValueChange={(values) => {
-                    field?.onChange(values.value);
-                  }}
-                  onFocus={focusHandler}
-                  defaultValue={defaultValue}
-                  style={style}
-                ></NumericFormat>
-              )}
-
-              {patternFormat && (
-                <PatternFormat {...patternFormat} {...commonProps} onChange={field?.onChange} style={style} onFocus={focusHandler}></PatternFormat>
-              )}
-            </>
-          </FormGroupLayout>
-        );
+        return <FormattedInputInternal {...props} isDisabled={isDisabled} name={name} fieldOnChange={onChange} commonProps={commonProps} />;
       }}
     />
+  ) : (
+    <FormattedInputInternal {...props} isDisabled={isDisabled} name={name} />
   );
 };
 
