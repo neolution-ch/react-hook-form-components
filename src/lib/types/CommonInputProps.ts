@@ -18,7 +18,7 @@ interface CommonInputProps<T extends FieldValues = never, TRenderAddon = unknown
   labelToolTip?: string;
   markAllOnFocus?: boolean;
   inputOnly?: boolean;
-  defaultValue?: T extends never ? "string" : never;
+  defaultValue?: T extends never ? string : never;
 
   /**
    * Component prop that represents an additional className attribute
