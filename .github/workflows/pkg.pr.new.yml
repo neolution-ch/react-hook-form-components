@@ -1,0 +1,29 @@
+name: PKG PR New
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [opened, synchronize, ready_for_review]
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - run: yarn --frozen-lockfile
+
+      # append the git commit to the package.json version.
+      # We do this because some cache mechanisms (like nextjs) don't work well with the same version and ignore the changes
+      # until you manually delete the cache
+      - run: jq '.version = .version + "-" + env.GITHUB_SHA' package.json > package.json.tmp && mv package.json.tmp package.json
+
+      - run: npx pkg-pr-new publish

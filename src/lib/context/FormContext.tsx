@@ -17,3 +17,8 @@ export const useFormContext = <T extends FieldValues>() => {
   }
   return context as FormContextProps<T>;
 };
+
+export const useFormContextInternal = <T extends FieldValues>() => {
+  const context = useContext(FormContext);
+  return context as Partial<FormContextProps<T>> | undefined;
+};

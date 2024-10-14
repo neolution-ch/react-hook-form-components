@@ -7,7 +7,7 @@ interface DefaultAddonProps {
 
 export type MergedAddonProps<TRenderAddon> = TRenderAddon & DefaultAddonProps;
 
-interface CommonInputProps<T extends FieldValues, TRenderAddon = unknown> {
+interface CommonInputProps<T extends FieldValues = never, TRenderAddon = unknown> {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   label?: ReactNode;
@@ -18,6 +18,7 @@ interface CommonInputProps<T extends FieldValues, TRenderAddon = unknown> {
   labelToolTip?: string;
   markAllOnFocus?: boolean;
   inputOnly?: boolean;
+  defaultValue?: T extends never ? "string" : never;
 
   /**
    * Component prop that represents an additional className attribute

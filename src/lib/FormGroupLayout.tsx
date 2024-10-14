@@ -5,7 +5,7 @@ import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { CommonInputProps, MergedAddonProps } from "./types/CommonInputProps";
 import "./styles/FormGroupLayout.css";
 import { FormGroupLayoutLabel } from "./FormGroupLayoutLabel";
-import { useFormContext } from "./context/FormContext";
+import { useFormContextInternal } from "./context/FormContext";
 
 interface FormGroupLayoutProps<T extends FieldValues, TRenderAddon>
   extends PropsWithChildren<
@@ -36,11 +36,11 @@ const FormGroupLayout = <T extends FieldValues, TRenderAddon = unknown>(props: F
   } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
   const {
-    formState: { errors },
-    hideValidationMessages,
-  } = useFormContext();
+    formState,
+    hideValidationMessages = false,
+  } = useFormContextInternal() ?? {};
 
-  const fieldError = get(errors, name) as FieldError | undefined;
+  const fieldError = formState ? get(formState.errors, name) as FieldError | undefined : undefined;
   const errorMessage = String(fieldError?.message);
 
   const switchLayout = layout === "switch";
