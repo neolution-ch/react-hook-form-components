@@ -5,9 +5,9 @@ import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";
 import { CommonInputProps } from "./types/CommonInputProps";
 import { useMarkOnFocusHandler } from "./hooks/useMarkOnFocusHandler";
-import { useFormContext } from "./context/FormContext";
+import { useFormContextInternal } from "./context/FormContext";
 
-interface FormattedInputProps<T extends FieldValues> extends CommonInputProps<T> {
+type FormattedInputProps<T extends FieldValues> = CommonInputProps<T> & {
   patternFormat?: PatternFormatProps;
   numericFormat?: NumericFormatProps;
 }
@@ -34,8 +34,8 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
     className = "",
     hideValidationMessage = false,
   } = props;
-  const { name, id } = useSafeNameId(props.name, props.id);
-  const { control, disabled: formDisabled } = useFormContext();
+  const { name, id } = useSafeNameId(props?.name ?? "", props.id);
+  const { control, disabled: formDisabled = false } = useFormContextInternal() ?? {};
   const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
 
   const isDisabled = formDisabled || disabled;
@@ -44,18 +44,19 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
     <Controller
       control={control}
       name={name}
-      render={({ field: { name, onBlur, onChange, ref, value }, fieldState: { error } }) => {
+      render={({ field, fieldState }) => {
+        const error = fieldState ? fieldState.error : undefined;
         const commonProps: NumericFormatProps = {
           name: name,
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          value: value,
-          getInputRef: ref,
+          value: field?.value,
+          getInputRef: field?.ref,
           className: classnames("form-control", { "is-invalid": error }, className),
           "aria-invalid": !!error,
           id,
           onBlur: (e) => {
             if (propsOnBlur) propsOnBlur(e);
-            onBlur();
+            field?.onBlur();
           },
           disabled: isDisabled,
         };
@@ -85,7 +86,7 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
                     if (propsOnChange) propsOnChange(e);
                   }}
                   onValueChange={(values) => {
-                    onChange(values.value);
+                    field?.onChange(values.value);
                   }}
                   onFocus={focusHandler}
                   style={style}
@@ -93,7 +94,7 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
               )}
 
               {patternFormat && (
-                <PatternFormat {...patternFormat} {...commonProps} onChange={onChange} style={style} onFocus={focusHandler}></PatternFormat>
+                <PatternFormat {...patternFormat} {...commonProps} onChange={field?.onChange} style={style} onFocus={focusHandler}></PatternFormat>
               )}
             </>
           </FormGroupLayout>

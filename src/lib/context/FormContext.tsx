@@ -7,6 +7,8 @@ export interface FormContextProps<T extends FieldValues> extends UseFormReturn<T
   hideValidationMessages: boolean;
 }
 
+export type UnknownType = Record<string, never>;
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const FormContext = createContext<FormContextProps<any> | null>(null);
 

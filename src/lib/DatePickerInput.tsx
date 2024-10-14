@@ -14,7 +14,7 @@ interface DatePickerRenderAddonProps {
   toggleDatePicker: () => void;
 }
 
-interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputProps<T, DatePickerRenderAddonProps>, "onChange" | "style"> {
+type DatePickerInputProps<T extends FieldValues> = Omit<CommonInputProps<T, DatePickerRenderAddonProps>, "onChange" | "style"> & {
   /**
    * The props for the date picker component: https://reactdatepicker.com/
    */
@@ -68,7 +68,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
     hideValidationMessage = false,
   } = props;
 
-  const { id, name } = useSafeNameId(initialName, initialId);
+  const { id, name } = useSafeNameId(initialName ?? "", initialId);
   const { control, getValues, setValue, disabled: formDisabled } = useFormContext();
   const internalDatePickerRef = useRef<DatePicker>();
   const formGroupId = useRef(guidGen());

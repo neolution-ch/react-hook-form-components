@@ -1,17 +1,18 @@
 import { ReactNode } from "react";
-import { useFormContextInternal } from "./context/FormContext";
-import { FieldPath, FieldValues } from "react-hook-form";
+import { UnknownType, useFormContextInternal } from "./context/FormContext";
+import { FieldValues, Path } from "react-hook-form";
 import { Label, UncontrolledTooltip } from "reactstrap";
+import { CommonInputProps } from "./types/CommonInputProps";
 
-interface FormGroupLayoutLabelProps<T extends FieldValues> {
+interface FormGroupLayoutLabelProps<T extends FieldValues = UnknownType> {
   label: ReactNode;
   tooltip?: ReactNode;
-  fieldName: FieldPath<T>;
+  fieldName: CommonInputProps<T>["name"];
   fieldId: string;
   layout?: "checkbox" | "switch";
 }
 
-const FormGroupLayoutLabel = <T extends FieldValues>(props: FormGroupLayoutLabelProps<T>) => {
+const FormGroupLayoutLabel = <T extends FieldValues = UnknownType>(props: FormGroupLayoutLabelProps<T>) => {
   const { label, tooltip, fieldName, layout, fieldId } = props;
   const { requiredFields = [] } = useFormContextInternal<T>() ?? {};
 
@@ -23,7 +24,7 @@ const FormGroupLayoutLabel = <T extends FieldValues>(props: FormGroupLayoutLabel
     return null;
   }
 
-  const fieldIsRequired = typeof label == "string" && requiredFields.includes(fieldName);
+  const fieldIsRequired = typeof label == "string" && requiredFields.includes(fieldName as Path<T>);
   const finalLabel = fieldIsRequired ? `${String(label)} *` : label;
 
   const switchLayout = layout === "switch";

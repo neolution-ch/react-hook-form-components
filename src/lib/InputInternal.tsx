@@ -3,12 +3,12 @@ import { Input } from "reactstrap";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { InputProps } from "./Input";
 import { useMarkOnFocusHandler } from "./hooks/useMarkOnFocusHandler";
-import { useFormContextInternal } from "./context/FormContext";
+import { UnknownType, useFormContextInternal } from "./context/FormContext";
 
 // This is two random guids concatenated. It is used to set the value of the option to undefined.
 const UNDEFINED_OPTION_VALUE = "CABB7A27DB754DA58C89D43ADB03FE0EC5EE3E25A6624D749F35CF2E92CFA784";
 
-const InputInternal = <T extends FieldValues = never>(props: InputProps<T>) => {
+const InputInternal = <T extends FieldValues = UnknownType>(props: InputProps<T>) => {
   const {
     disabled,
     type,
@@ -28,7 +28,7 @@ const InputInternal = <T extends FieldValues = never>(props: InputProps<T>) => {
     style,
     innerRef,
   } = props;
-  const { name, id } = useSafeNameId(props.name, props.id);
+  const { name, id } = useSafeNameId(props.name ?? "", props.id);
   const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
   const {
     register,

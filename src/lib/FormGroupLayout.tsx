@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { PropsWithChildren, ReactNode, CSSProperties, useMemo } from "react";
 import { FieldError, FieldValues, get } from "react-hook-form";
 import { FormGroup, FormFeedback, FormText, InputGroup } from "reactstrap";
@@ -5,21 +6,20 @@ import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { CommonInputProps, MergedAddonProps } from "./types/CommonInputProps";
 import "./styles/FormGroupLayout.css";
 import { FormGroupLayoutLabel } from "./FormGroupLayoutLabel";
-import { useFormContextInternal } from "./context/FormContext";
+import { UnknownType, useFormContextInternal } from "./context/FormContext";
 
-interface FormGroupLayoutProps<T extends FieldValues, TRenderAddon>
-  extends PropsWithChildren<
-    Pick<CommonInputProps<T>, "helpText" | "label" | "name" | "id" | "labelToolTip" | "inputOnly" | "hideValidationMessage">
-  > {
+type FormGroupLayoutProps<T extends FieldValues = UnknownType, TRenderAddon = unknown> = PropsWithChildren<
+  Pick<CommonInputProps<T>, "helpText" | "label" | "name" | "id" | "labelToolTip" | "inputOnly" | "hideValidationMessage">
+> & {
   layout?: "checkbox" | "switch";
   addonLeft?: ReactNode | ((props: TRenderAddon) => ReactNode);
   addonRight?: ReactNode | ((props: TRenderAddon) => ReactNode);
   addonProps?: MergedAddonProps<TRenderAddon>;
   inputGroupStyle?: CSSProperties;
   formGroupId?: string;
-}
+};
 
-const FormGroupLayout = <T extends FieldValues, TRenderAddon = unknown>(props: FormGroupLayoutProps<T, TRenderAddon>) => {
+const FormGroupLayout = <T extends FieldValues = UnknownType, TRenderAddon = unknown>(props: FormGroupLayoutProps<T, TRenderAddon>) => {
   const {
     label,
     helpText,
@@ -34,13 +34,10 @@ const FormGroupLayout = <T extends FieldValues, TRenderAddon = unknown>(props: F
     addonProps,
     hideValidationMessage = false,
   } = props;
-  const { name, id } = useSafeNameId(props.name, props.id);
-  const {
-    formState,
-    hideValidationMessages = false,
-  } = useFormContextInternal() ?? {};
+  const { name, id } = useSafeNameId(props?.name ?? "", props.id);
+  const { formState, hideValidationMessages = false } = useFormContextInternal() ?? {};
 
-  const fieldError = formState ? get(formState.errors, name) as FieldError | undefined : undefined;
+  const fieldError = formState ? (get(formState.errors, name) as FieldError | undefined) : undefined;
   const errorMessage = String(fieldError?.message);
 
   const switchLayout = layout === "switch";

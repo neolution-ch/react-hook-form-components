@@ -1,5 +1,6 @@
 import { ReactNode, CSSProperties } from "react";
 import { FieldPath, FieldValues } from "react-hook-form";
+import { UnknownType } from "../context/FormContext";
 
 interface DefaultAddonProps {
   isDisabled?: boolean;
@@ -7,18 +8,18 @@ interface DefaultAddonProps {
 
 export type MergedAddonProps<TRenderAddon> = TRenderAddon & DefaultAddonProps;
 
-interface CommonInputProps<T extends FieldValues = never, TRenderAddon = unknown> {
+interface CommonInputPropsInternal<T extends FieldValues = UnknownType, TRenderAddon = unknown> {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   label?: ReactNode;
-  name: FieldPath<T>;
+  name: T extends UnknownType ? string : FieldPath<T>;
   id?: string;
   helpText?: ReactNode;
   disabled?: boolean;
   labelToolTip?: string;
   markAllOnFocus?: boolean;
   inputOnly?: boolean;
-  defaultValue?: T extends never ? string : never;
+  defaultValue?: T extends UnknownType ? string : never;
 
   /**
    * Component prop that represents an additional className attribute
@@ -77,4 +78,7 @@ interface CommonInputProps<T extends FieldValues = never, TRenderAddon = unknown
   hideValidationMessage?: boolean;
 }
 
+type CommonInputProps<T extends FieldValues = UnknownType, TRenderAddon = unknown> = T extends UnknownType
+  ? Omit<CommonInputPropsInternal<T, TRenderAddon>, "name"> & { name?: string }
+  : CommonInputPropsInternal<T, TRenderAddon>;
 export { CommonInputProps };

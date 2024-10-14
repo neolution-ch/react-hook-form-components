@@ -11,7 +11,7 @@ import { useFormContext } from "./context/FormContext";
 import { useRef } from "react";
 import { LabelValueOption } from "./types/LabelValueOption";
 
-interface StaticTypeaheadInputProps<T extends FieldValues> extends CommonTypeaheadProps<T> {
+type StaticTypeaheadInputProps<T extends FieldValues> = CommonTypeaheadProps<T> & {
   options: TypeaheadOptions;
   reactBootstrapTypeaheadProps?: Partial<TypeaheadComponentProps>;
 }
@@ -39,7 +39,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
     inputRef,
     useGroupBy = false,
   } = props;
-  const { name, id } = useSafeNameId(props.name, props.id);
+  const { name, id } = useSafeNameId(props?.name ?? "", props.id);
   const {
     control,
     disabled: formDisabled,
