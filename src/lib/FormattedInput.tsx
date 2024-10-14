@@ -45,7 +45,7 @@ const FormattedInputInternal = <T extends FieldValues = UnknownType>(props: Form
       }
     },
     disabled: isDisabled,
-    className,
+    className:  classnames("form-control", className),
   };
 
   return (
@@ -110,7 +110,7 @@ const FormattedInput = <T extends FieldValues = UnknownType>(props: FormattedInp
     onBlur: propsOnBlur,
     className = "",
   } = props;
-  
+
   const { name, id } = useSafeNameId(props?.name ?? "", props.id);
   const { control, disabled: formDisabled = false } = useFormContextInternal() ?? {};
 
