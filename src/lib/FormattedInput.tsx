@@ -5,14 +5,14 @@ import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";
 import { CommonInputProps } from "./types/CommonInputProps";
 import { useMarkOnFocusHandler } from "./hooks/useMarkOnFocusHandler";
-import { useFormContextInternal } from "./context/FormContext";
+import { UnknownType, useFormContextInternal } from "./context/FormContext";
 
-type FormattedInputProps<T extends FieldValues> = CommonInputProps<T> & {
+type FormattedInputProps<T extends FieldValues = UnknownType> = CommonInputProps<T> & {
   patternFormat?: PatternFormatProps;
   numericFormat?: NumericFormatProps;
 }
 
-const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) => {
+const FormattedInput = <T extends FieldValues = UnknownType>(props: FormattedInputProps<T>) => {
   if (props.patternFormat && props.numericFormat) {
     throw new Error("FormattedInput cannot have both patternFormat and numericFormat");
   }
