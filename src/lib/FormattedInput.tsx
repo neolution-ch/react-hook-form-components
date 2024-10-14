@@ -33,6 +33,7 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
     addonRight,
     className = "",
     hideValidationMessage = false,
+    defaultValue
   } = props;
   const { name, id } = useSafeNameId(props?.name ?? "", props.id);
   const { control, disabled: formDisabled = false } = useFormContextInternal() ?? {};
@@ -89,6 +90,7 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
                     field?.onChange(values.value);
                   }}
                   onFocus={focusHandler}
+                  defaultValue={defaultValue}
                   style={style}
                 ></NumericFormat>
               )}

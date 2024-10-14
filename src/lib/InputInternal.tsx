@@ -27,6 +27,7 @@ const InputInternal = <T extends FieldValues = UnknownType>(props: InputProps<T>
     className,
     style,
     innerRef,
+    defaultValue
   } = props;
   const { name, id } = useSafeNameId(props.name ?? "", props.id);
   const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
@@ -64,6 +65,7 @@ const InputInternal = <T extends FieldValues = UnknownType>(props: InputProps<T>
         style={plainText ? { color: "black", marginLeft: 10, ...style } : { ...style }}
         placeholder={placeholder}
         step={step}
+        defaultValue={defaultValue}
         {...rest}
         {...(value ? { value } : {})}
         onBlur={(e) => {

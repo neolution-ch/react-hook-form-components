@@ -19,7 +19,7 @@ interface CommonInputPropsInternal<T extends FieldValues = UnknownType, TRenderA
   labelToolTip?: string;
   markAllOnFocus?: boolean;
   inputOnly?: boolean;
-  defaultValue?: T extends UnknownType ? string : never;
+  defaultValue?: T extends UnknownType ? string | number : never;
 
   /**
    * Component prop that represents an additional className attribute
