@@ -1,14 +1,14 @@
-import { FieldValues, get, FieldError } from "react-hook-form";
+import { FieldValues, get, FieldError, UseFormRegisterReturn } from "react-hook-form";
 import { Input } from "reactstrap";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { InputProps } from "./Input";
 import { useMarkOnFocusHandler } from "./hooks/useMarkOnFocusHandler";
-import { useFormContext } from "./context/FormContext";
+import { UnknownType, useFormContextInternal } from "./context/FormContext";
 
 // This is two random guids concatenated. It is used to set the value of the option to undefined.
 const UNDEFINED_OPTION_VALUE = "CABB7A27DB754DA58C89D43ADB03FE0EC5EE3E25A6624D749F35CF2E92CFA784";
 
-const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
+const InputInternal = <T extends FieldValues = UnknownType>(props: InputProps<T>) => {
   const {
     disabled,
     type,
@@ -27,20 +27,21 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
     className,
     style,
     innerRef,
+    defaultValue
   } = props;
-  const { name, id } = useSafeNameId(props.name, props.id);
+  const { name, id } = useSafeNameId(props.name ?? "", props.id);
   const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
   const {
     register,
-    formState: { errors },
-    disabled: formDisabled,
-  } = useFormContext();
+    formState,
+    disabled: formDisabled = false,
+  } = useFormContextInternal() ?? {};
 
-  const { ref, ...rest } = register(name, {
+  const { ref, ...rest } =register ? register(name, {
     setValueAs: (value: string) => (value === UNDEFINED_OPTION_VALUE ? undefined : value),
-  });
+  }) : {} as Partial<UseFormRegisterReturn>; // probably to write better
 
-  const fieldError = get(errors, name) as FieldError | undefined;
+  const fieldError = formState ? get(formState.errors, name) as FieldError | undefined : undefined;
   const hasError = !!fieldError;
 
   return (
@@ -53,7 +54,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
           if (innerRef) {
             innerRef.current = elem;
           }
-          ref(elem);
+          ref && ref(elem);
         }}
         min={rangeMin}
         max={rangeMax}
@@ -64,6 +65,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
         style={plainText ? { color: "black", marginLeft: 10, ...style } : { ...style }}
         placeholder={placeholder}
         step={step}
+        defaultValue={defaultValue}
         {...rest}
         {...(value ? { value } : {})}
         onBlur={(e) => {
@@ -72,7 +74,9 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
               onBlur(e);
             }
 
-            await rest.onBlur(e);
+            if (rest?.onBlur) {
+              await rest.onBlur(e);
+            }
           })();
         }}
         onChange={(e) => {
@@ -81,7 +85,9 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
               onChange(e);
             }
 
-            await rest.onChange(e);
+            if (rest?.onChange) {
+              await rest.onChange(e);
+            }
           })();
         }}
         onFocus={focusHandler}

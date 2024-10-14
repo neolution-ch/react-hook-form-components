@@ -7,12 +7,12 @@ import { FormGroupLayout } from "./FormGroupLayout";
 import { InputInternal } from "./InputInternal";
 import { CommonInputProps } from "./types/CommonInputProps";
 import { LabelValueOption } from "./types/LabelValueOption";
-import { useFormContext } from "./context/FormContext";
+import { UnknownType, useFormContextInternal } from "./context/FormContext";
 import { MutableRefObject } from "react";
 
 const invalidAddonTypes = ["switch", "radio", "checkbox"];
 
-interface InputProps<T extends FieldValues> extends CommonInputProps<T> {
+type InputProps<T extends FieldValues = UnknownType> = CommonInputProps<T> & {
   type?: InputType;
   options?: LabelValueOption[];
   multiple?: boolean;
@@ -26,7 +26,7 @@ interface InputProps<T extends FieldValues> extends CommonInputProps<T> {
   innerRef?: MutableRefObject<HTMLInputElement | HTMLTextAreaElement | null>;
 }
 
-const Input = <T extends FieldValues>(props: InputProps<T>) => {
+const Input = <T extends FieldValues = UnknownType>(props: InputProps<T>) => {
   const { type, options, addonLeft, name, addonRight, rangeMin, rangeMax, textAreaRows, multiple, id, value, disabled, step } = props;
 
   if (type === "radio" && !options) {
@@ -67,9 +67,8 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
     return undefined;
   })();
 
-  const { id: safeId } = useSafeNameId(name, id);
-  const { disabled: formDisabled } = useFormContext<T>();
-
+  const { id: safeId } = useSafeNameId(name ?? "", id);
+  const { disabled: formDisabled = false } = useFormContextInternal<T>() ?? {};
   const isDisabled = formDisabled || disabled;
 
   return (
@@ -102,7 +101,7 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
         </>
       ) : (
         <>
-          <InputInternal {...props} />
+          <InputInternal {...props as InputProps} />
         </>
       )}
     </FormGroupLayout>

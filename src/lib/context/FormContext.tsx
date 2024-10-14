@@ -7,6 +7,8 @@ export interface FormContextProps<T extends FieldValues> extends UseFormReturn<T
   hideValidationMessages: boolean;
 }
 
+export type UnknownType = Record<string, never>;
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const FormContext = createContext<FormContextProps<any> | null>(null);
 
@@ -16,4 +18,9 @@ export const useFormContext = <T extends FieldValues>() => {
     throw new Error("useFormContext must be used within a FormContextProvider");
   }
   return context as FormContextProps<T>;
+};
+
+export const useFormContextInternal = <T extends FieldValues>() => {
+  const context = useContext(FormContext);
+  return context as Partial<FormContextProps<T>> | undefined;
 };

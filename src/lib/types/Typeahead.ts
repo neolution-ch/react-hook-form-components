@@ -6,7 +6,7 @@ import TypeheadRef from "react-bootstrap-typeahead/types/core/Typeahead";
 
 export type TypeaheadOptions = LabelValueOption[] | string[];
 
-interface CommonTypeaheadProps<T extends FieldValues> extends Omit<CommonInputProps<T>, "onChange"> {
+type CommonTypeaheadProps<T extends FieldValues> = Omit<CommonInputProps<T>, "onChange"> & {
   multiple?: boolean;
   emptyLabel?: string;
   invalidErrorMessage?: string;

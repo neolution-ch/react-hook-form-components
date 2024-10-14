@@ -10,7 +10,7 @@ import { useFormContext } from "./context/FormContext";
 import TypeheadRef from "react-bootstrap-typeahead/types/core/Typeahead";
 import { LabelValueOption } from "./types/LabelValueOption";
 
-interface AsyncTypeaheadProps<T extends FieldValues> extends CommonTypeaheadProps<T> {
+type AsyncTypeaheadProps<T extends FieldValues> = CommonTypeaheadProps<T> & {
   queryFn: (query: string) => Promise<TypeaheadOptions>;
   reactBootstrapTypeaheadProps?: Partial<UseAsyncProps>;
 }
@@ -38,7 +38,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
     inputRef,
     useGroupBy = false,
   } = props;
-  const { name, id } = useSafeNameId(props.name, props.id);
+  const { name, id } = useSafeNameId(props?.name ?? "", props.id);
   const ref = useRef<TypeheadRef | null>(null);
 
   const {

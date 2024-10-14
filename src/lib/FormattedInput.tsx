@@ -1,24 +1,20 @@
 import classnames from "classnames";
-import { Controller, FieldValues } from "react-hook-form";
+import { Controller, ControllerRenderProps, FieldValues } from "react-hook-form";
 import { NumericFormat, NumericFormatProps, PatternFormat, PatternFormatProps } from "react-number-format";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";
 import { CommonInputProps } from "./types/CommonInputProps";
 import { useMarkOnFocusHandler } from "./hooks/useMarkOnFocusHandler";
-import { useFormContext } from "./context/FormContext";
+import { UnknownType, useFormContextInternal } from "./context/FormContext";
 
-interface FormattedInputProps<T extends FieldValues> extends CommonInputProps<T> {
-  patternFormat?: PatternFormatProps;
-  numericFormat?: NumericFormatProps;
-}
-
-const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) => {
-  if (props.patternFormat && props.numericFormat) {
-    throw new Error("FormattedInput cannot have both patternFormat and numericFormat");
-  }
-
+type FormattedInputInternalProps<T extends FieldValues = UnknownType> = Omit<FormattedInputProps<T>, "name" | "disabled"> & {
+  name: string;
+  isDisabled?: boolean;
+  commonProps?: NumericFormatProps;
+  fieldOnChange?: ControllerRenderProps<FieldValues, string>["onChange"];
+};
+const FormattedInputInternal = <T extends FieldValues = UnknownType>(props: FormattedInputInternalProps<T>) => {
   const {
-    disabled,
     label,
     helpText,
     numericFormat,
@@ -33,14 +29,94 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
     addonRight,
     className = "",
     hideValidationMessage = false,
+    defaultValue,
+    name,
+    id,
+    isDisabled,
+    commonProps,
+    fieldOnChange,
   } = props;
-  const { name, id } = useSafeNameId(props.name, props.id);
-  const { control, disabled: formDisabled } = useFormContext();
+
   const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
+  const commonPropsInternal = commonProps ?? {
+    onBlur: (e) => {
+      if (propsOnBlur) {
+        propsOnBlur(e);
+      }
+    },
+    disabled: isDisabled,
+    className:  classnames("form-control", className),
+  };
+
+  return (
+    <FormGroupLayout
+      helpText={helpText}
+      name={name}
+      id={id}
+      label={label}
+      labelToolTip={labelToolTip}
+      inputGroupStyle={inputGroupStyle}
+      addonLeft={addonLeft}
+      addonRight={addonRight}
+      addonProps={{
+        isDisabled,
+      }}
+      hideValidationMessage={hideValidationMessage}
+    >
+      <>
+        {numericFormat && (
+          <NumericFormat
+            defaultValue={defaultValue}
+            {...numericFormat}
+            {...commonPropsInternal}
+            valueIsNumericString={true}
+            onChange={(e) => {
+              if (propsOnChange) propsOnChange(e);
+            }}
+            onValueChange={(values) => {
+              fieldOnChange && fieldOnChange(values.value);
+            }}
+            onFocus={focusHandler}
+            style={style}
+          ></NumericFormat>
+        )}
+
+        {patternFormat && (
+          <PatternFormat
+            {...patternFormat}
+            {...commonPropsInternal}
+            onChange={fieldOnChange}
+            style={style}
+            onFocus={focusHandler}
+          ></PatternFormat>
+        )}
+      </>
+    </FormGroupLayout>
+  );
+};
+
+type FormattedInputProps<T extends FieldValues = UnknownType> = CommonInputProps<T> & {
+  patternFormat?: PatternFormatProps;
+  numericFormat?: NumericFormatProps;
+};
+
+const FormattedInput = <T extends FieldValues = UnknownType>(props: FormattedInputProps<T>) => {
+  if (props.patternFormat && props.numericFormat) {
+    throw new Error("FormattedInput cannot have both patternFormat and numericFormat");
+  }
+
+  const {
+    disabled,
+    onBlur: propsOnBlur,
+    className = "",
+  } = props;
+
+  const { name, id } = useSafeNameId(props?.name ?? "", props.id);
+  const { control, disabled: formDisabled = false } = useFormContextInternal() ?? {};
 
   const isDisabled = formDisabled || disabled;
 
-  return (
+  return control ? (
     <Controller
       control={control}
       name={name}
@@ -57,49 +133,17 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
             if (propsOnBlur) propsOnBlur(e);
             onBlur();
           },
+          onValueChange: (values) => {
+            onChange(values.value);
+          },
           disabled: isDisabled,
         };
 
-        return (
-          <FormGroupLayout
-            helpText={helpText}
-            name={name}
-            id={id}
-            label={label}
-            labelToolTip={labelToolTip}
-            inputGroupStyle={inputGroupStyle}
-            addonLeft={addonLeft}
-            addonRight={addonRight}
-            addonProps={{
-              isDisabled,
-            }}
-            hideValidationMessage={hideValidationMessage}
-          >
-            <>
-              {numericFormat && (
-                <NumericFormat
-                  {...numericFormat}
-                  {...commonProps}
-                  valueIsNumericString={true}
-                  onChange={(e) => {
-                    if (propsOnChange) propsOnChange(e);
-                  }}
-                  onValueChange={(values) => {
-                    onChange(values.value);
-                  }}
-                  onFocus={focusHandler}
-                  style={style}
-                ></NumericFormat>
-              )}
-
-              {patternFormat && (
-                <PatternFormat {...patternFormat} {...commonProps} onChange={onChange} style={style} onFocus={focusHandler}></PatternFormat>
-              )}
-            </>
-          </FormGroupLayout>
-        );
+        return <FormattedInputInternal {...props} isDisabled={isDisabled} name={name} fieldOnChange={onChange} commonProps={commonProps} />;
       }}
     />
+  ) : (
+    <FormattedInputInternal {...props} isDisabled={isDisabled} name={name} />
   );
 };
 
