@@ -74,6 +74,20 @@ interface CommonInputProps<T extends FieldValues, TRenderAddon = unknown> {
    * hide the validation message for the input
    */
   hideValidationMessage?: boolean;
+
+  /**
+   * Component prop that represents the minlength attribute for the input element
+   * @type {number}
+   * @example <Input<T> type="text" minlength="0" />
+   */
+
+  minlength?: number;
+  /**
+   * Component prop that represents the maxlength attribute for the input element
+   * @type {number}
+   * @example <Input<T> type="text" maxlength="10" />
+   */
+  maxlength?: number;
 }
 
 export { CommonInputProps };
