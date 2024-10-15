@@ -78,14 +78,14 @@ interface CommonInputProps<T extends FieldValues, TRenderAddon = unknown> {
   /**
    * Component prop that represents the minlength attribute for the input element
    * @type {number}
-   * @example <Input<T> type="text" minlength="0" />
+   * @example <Input<T> type="text" minlength={0} />
    */
 
   minlength?: number;
   /**
    * Component prop that represents the maxlength attribute for the input element
    * @type {number}
-   * @example <Input<T> type="text" maxlength="10" />
+   * @example <Input<T> type="text" maxlength={10} />
    */
   maxlength?: number;
 }
