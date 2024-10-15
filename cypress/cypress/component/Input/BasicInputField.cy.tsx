@@ -427,7 +427,8 @@ it("minlenght and maxlenght work", () => {
         // Do nothing
       }}
     >
-      <Input type="text" name={name} label={name} minlength={minLength} maxlength={maxLength} />
+      <Input type="text" name={name} label={name} minLength={minLength} maxLength={maxLength} />
+      <input type={"submit"} />
     </Form>,
   );
 

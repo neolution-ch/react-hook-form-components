@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added the pkg.pr.new workflow
-- The minlenght and maxlenght input properties
+- The minLength and maxLength input properties
 
 ## [2.12.0] - 2024-10-07
 

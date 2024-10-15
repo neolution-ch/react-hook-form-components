@@ -41,8 +41,8 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
     value,
     disabled,
     step,
-    minlength,
-    maxlength,
+    minLength,
+    maxLength,
   } = props;
 
   if (type === "radio" && !options) {
@@ -72,7 +72,7 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
   if (step && type !== "number" && type !== "range") {
     throw new Error("step can only be used with number or range inputs");
   }
-  if ((minlength || maxlength) && type && !["text", "password", "textarea", "search", "tel", "url", "email"].includes(type)) {
+  if ((minLength || maxLength) && type && !["text", "password", "textarea", "search", "tel", "url", "email"].includes(type)) {
     throw new Error("minlength and maxlength can only be used with text, password, textarea, search, tel, url, or email inputs");
   }
 
