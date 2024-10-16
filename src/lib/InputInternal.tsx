@@ -27,6 +27,8 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
     className,
     style,
     innerRef,
+    minLength,
+    maxLength,
   } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
   const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
@@ -57,6 +59,8 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
         }}
         min={rangeMin}
         max={rangeMax}
+        minLength={minLength}
+        maxLength={maxLength}
         rows={textAreaRows}
         multiple={multiple}
         disabled={formDisabled || disabled}

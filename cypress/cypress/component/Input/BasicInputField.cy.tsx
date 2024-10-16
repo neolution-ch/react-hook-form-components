@@ -413,3 +413,25 @@ describe("Input.cy.tsx", () => {
     cy.get(`label[for=${name}]`).parent().find("svg[data-icon=pencil]");
   });
 });
+
+it("minlenght and maxlenght work", () => {
+  const name = faker.random.word();
+  const minLength = 3;
+  const maxLength = 10;
+  const validInput = faker.random.alpha({ count: minLength });
+  const invalidInput = faker.random.alpha({ count: maxLength + 1 });
+
+  cy.mount(
+    <Form
+      onSubmit={() => {
+        // Do nothing
+      }}
+    >
+      <Input type="text" name={name} label={name} minLength={minLength} maxLength={maxLength} />
+      <input type={"submit"} />
+    </Form>,
+  );
+
+  cy.get(`input[name=${name}]`).type(validInput).should("have.value", validInput);
+  cy.get(`input[name=${name}]`).clear().type(invalidInput).should("have.value", invalidInput.slice(0, maxLength));
+});

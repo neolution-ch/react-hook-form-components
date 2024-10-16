@@ -27,7 +27,23 @@ interface InputProps<T extends FieldValues> extends CommonInputProps<T> {
 }
 
 const Input = <T extends FieldValues>(props: InputProps<T>) => {
-  const { type, options, addonLeft, name, addonRight, rangeMin, rangeMax, textAreaRows, multiple, id, value, disabled, step } = props;
+  const {
+    type,
+    options,
+    addonLeft,
+    name,
+    addonRight,
+    rangeMin,
+    rangeMax,
+    textAreaRows,
+    multiple,
+    id,
+    value,
+    disabled,
+    step,
+    minLength,
+    maxLength,
+  } = props;
 
   if (type === "radio" && !options) {
     throw new Error("options must be provided for radio inputs");
@@ -55,6 +71,19 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
   }
   if (step && type !== "number" && type !== "range") {
     throw new Error("step can only be used with number or range inputs");
+  }
+  if (minLength !== undefined || maxLength !== undefined) {
+    // check validity for input types
+    if (type && !["text", "password", "textarea", "search", "tel", "url", "email"].includes(type)) {
+      throw new Error("minlength and maxlength can only be used with text, password, textarea, search, tel, url, or email inputs");
+    }
+    const isNegativeOrInvalidNumber = (value: number | undefined) => value !== undefined && (isNaN(value) || value < 0);
+    if (isNegativeOrInvalidNumber(minLength) || isNegativeOrInvalidNumber(maxLength)) {
+      throw new Error("minlength and maxlength, whether provided, must be 0 or positive valid numbers");
+    }
+    if (minLength !== undefined && maxLength !== undefined && minLength > maxLength) {
+      throw new Error("minlength must be less than or equal to maxlength");
+    }
   }
 
   const formGroupLayout = (() => {
