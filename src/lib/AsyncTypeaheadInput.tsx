@@ -123,7 +123,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
               })();
             }}
             onBlur={() => {
-              if (options.length === 1 && ref.current?.state.text.length) {
+              if (options.length === 1 && ref.current?.state.text.length && typeof options[0] != "string" && !options[0].disabled) {
                 ref.current?.setState({
                   selected: [...(ref.current?.state.selected ?? []), ...options],
                   text: "",

@@ -8,7 +8,7 @@ import { convertTypeaheadOptionsToStringArray, renderMenu } from "./helpers/type
 import { CommonTypeaheadProps, TypeaheadOptions } from "./types/Typeahead";
 import { useMarkOnFocusHandler } from "./hooks/useMarkOnFocusHandler";
 import { useFormContext } from "./context/FormContext";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { LabelValueOption } from "./types/LabelValueOption";
 
 interface StaticTypeaheadInputProps<T extends FieldValues> extends CommonTypeaheadProps<T> {
@@ -51,23 +51,29 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
   } = useFormContext();
   const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
   const ref = useRef<TypeheadRef | null>(null);
+  const [acceptHint, setAcceptHint] = useState<boolean>(true);
   const fieldError = get(errors, name) as FieldError | undefined;
   const hasError = !!fieldError;
+
+  const getLabel = (option: string | LabelValueOption): string => {
+    const label = typeof option === "string" ? option : option.label;
+    return reactBootstrapTypeaheadProps?.caseSensitive ? label : label.toUpperCase();
+  };
+
   const handleOnBlur = (field: ControllerRenderProps<FieldValues, string>) => {
     const innerText = ref.current?.state.text;
     // only check if the text is not empty and the typeahead is multiple or the selected array is empty (for single select, if the selected array is not empty, it means the user has already selected an option)
     if (innerText && (!!multiple || !ref.current?.state.selected.length)) {
       const isMatchingOption = (option: string | LabelValueOption) => {
         const text = reactBootstrapTypeaheadProps?.caseSensitive ? innerText : innerText.toUpperCase();
-        let label = typeof option === "string" ? option : option.label;
-        label = reactBootstrapTypeaheadProps?.caseSensitive ? label : label.toUpperCase();
+        const label = getLabel(option);
         const value = typeof option === "string" ? option : option.value;
         return !ref.current?.state.selected.find((x) => (typeof x === "string" ? x : x.value) === value) && label.includes(text);
       };
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       const matchingOptions = (props.options as any).filter((o: string | LabelValueOption) => isMatchingOption(o)) as TypeaheadOptions;
-      if (matchingOptions.length === 1) {
+      if (matchingOptions.length === 1 && typeof matchingOptions[0] != "string" && !matchingOptions[0].disabled) {
         ref.current?.setState({
           selected: [...(ref.current?.state.selected ?? []), ...matchingOptions],
           text: "",
@@ -138,7 +144,20 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
 
               field.onChange(finalValue);
             }}
-            onInputChange={onInputChange}
+            onInputChange={(text, event) => {
+              if (text) {
+                const innerText = reactBootstrapTypeaheadProps?.caseSensitive ? text : text.toUpperCase();
+                const hintIndex = props.options.findIndex((option: string | LabelValueOption) => getLabel(option).includes(innerText));
+                const hint = hintIndex !== -1 ? props.options[hintIndex] : undefined;
+                if (hint && typeof hint !== "string") {
+                  setAcceptHint(!hint.disabled);
+                }
+                if (onInputChange) {
+                  onInputChange(text, event);
+                }
+              }
+            }}
+            selectHint={(shouldSelectHint) => shouldSelectHint && acceptHint}
             onBlur={() => handleOnBlur(field)}
             id={id}
             options={props.options}

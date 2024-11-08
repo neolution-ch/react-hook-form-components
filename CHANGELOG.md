@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- The `StaticTypeaheadInput` hint accepting on Tab, preventing the option selection whether it is `disabled`.
+
 ## [2.13.0] - 2024-10-16
 
 ### Added
