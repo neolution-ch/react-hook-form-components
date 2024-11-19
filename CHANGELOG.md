@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### dependabot: \#115 Bump rollup from 3.21.4 to 3.29.5
+
 ### dependabot: \#114 Bump the github-actions group with 3 updates
 
 ## [2.13.0] - 2024-10-16
