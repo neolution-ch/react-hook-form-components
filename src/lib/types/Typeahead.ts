@@ -1,21 +1,29 @@
 import { FieldValues } from "react-hook-form";
 import { CommonInputProps } from "./CommonInputProps";
 import { LabelValueOption } from "./LabelValueOption";
-import { MutableRefObject } from "react";
-import TypeheadRef from "react-bootstrap-typeahead/types/core/Typeahead";
+import { ReactNode } from "react";
 
-export type TypeaheadOptions = LabelValueOption[] | string[];
+export type TypeaheadOption = LabelValueOption;
 
-interface CommonTypeaheadProps<T extends FieldValues> extends Omit<CommonInputProps<T>, "onChange"> {
+interface CommonTypeaheadProps<
+  T extends FieldValues,
+  Multiple extends boolean | undefined,
+  FreeSolo extends boolean | undefined
+> extends Omit<CommonInputProps<T>, "onChange"> {
+  defaultValue?: Multiple extends true
+  ? TypeaheadOption[] 
+  : FreeSolo extends true
+  ? TypeaheadOption | string | null 
+  : TypeaheadOption | null;
+
+  options: TypeaheadOption[];
   multiple?: boolean;
-  emptyLabel?: string;
+  noOptionsText?: ReactNode;
   invalidErrorMessage?: string;
   placeholder?: string;
-  defaultSelected?: TypeaheadOptions;
-  inputRef?: MutableRefObject<TypeheadRef | null>;
+
   useGroupBy?: boolean;
   onChange?: (selected: string | string[]) => void;
-  onInputChange?: (text: string, event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export { CommonTypeaheadProps };
