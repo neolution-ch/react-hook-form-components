@@ -1,17 +1,20 @@
-
-import { Controller, FieldValues } from "react-hook-form";
+import { Controller, FieldError, FieldValues, get } from "react-hook-form";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";
-import { CommonTypeaheadProps, TypeaheadOption } from "./types/Typeahead";
+import { CommonTypeaheadProps, TypeaheadOptions } from "./types/Typeahead";
 import { useFormContext } from "./context/FormContext";
+import { useRef } from "react";
+import { LabelValueOption } from "./types/LabelValueOption";
+import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
-import Autocomplete, { AutocompleteProps } from "@mui/material/Autocomplete";
 
-interface StaticTypeaheadInputProps<T extends FieldValues, Multiple extends boolean | undefined, FreeSolo extends boolean | undefined> extends CommonTypeaheadProps<T, Multiple, FreeSolo> {
-  autoCompleteProps?: Partial<AutocompleteProps<TypeaheadOption, Multiple, FreeSolo, false>>;
+interface StaticTypeaheadInputProps<T extends FieldValues> extends CommonTypeaheadProps<T> {
+  options: TypeaheadOptions;
+  // FIXME
+  // reactBootstrapTypeaheadProps?: Partial<TypeaheadComponentProps>;
 }
 
-const StaticTypeaheadInput = <T extends FieldValues, Multiple extends boolean | undefined, FreeSolo extends boolean | undefined>(props: StaticTypeaheadInputProps<T, Multiple, FreeSolo>) => {
+const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInputProps<T>) => {
   const {
     options,
     disabled,
@@ -20,7 +23,6 @@ const StaticTypeaheadInput = <T extends FieldValues, Multiple extends boolean | 
     labelToolTip,
     defaultValue,
     onChange,
-
     addonLeft,
     addonRight,
     style,
@@ -29,17 +31,21 @@ const StaticTypeaheadInput = <T extends FieldValues, Multiple extends boolean | 
     placeholder,
     multiple,
     hideValidationMessage = false,
-    useGroupBy = false,
-
-    autoCompleteProps,
+    inputRef,
   } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
   const {
     control,
     disabled: formDisabled,
+    formState: { errors },
     clearErrors,
     getFieldState,
   } = useFormContext();
+
+  const ref = useRef<HTMLDivElement | null>(null);
+  const fieldError = get(errors, name) as FieldError | undefined;
+  const hasError = !!fieldError;
+
   const isDisabled = formDisabled || disabled;
 
   return (
@@ -67,34 +73,45 @@ const StaticTypeaheadInput = <T extends FieldValues, Multiple extends boolean | 
           hideValidationMessage={hideValidationMessage}
         >
           <Autocomplete
-            id={id}
+            {...field}
+            multiple={multiple}
             options={options}
             defaultValue={defaultValue}
-            multiple={multiple}
-            disabled={isDisabled}
+            getOptionLabel={(option: LabelValueOption | string) =>
+              typeof option === "string" ? option : option.label
+            }
             noOptionsText={noOptionsText}
-            style={style}
-            className={`${className} ${error ? "is-invalid" : ""}`}
-            onChange={(_event, value) => {
-              const finalValue = !value ? [] : (multiple ? (value as LabelValueOption[]).map(x => x.value) as string[] : (value as LabelValueOption).value as string);
+            onChange={(_, options) => {
+              const transformedOptions = !Array.isArray(options)
+                ? (typeof options === "string" ? options : String(options?.value || ""))
+                : options.map(option => typeof option === "string" ? option : String(option.value));
+              const finalValue = multiple ? transformedOptions : transformedOptions[0];
               clearErrors(name);
-
               if (onChange) {
                 onChange(finalValue);
               }
-
               field.onChange(finalValue);
             }}
             renderInput={(params) => (
               <TextField
                 {...params}
-                label={label}
+                error={hasError}
+                helperText={!hideValidationMessage && fieldError?.message}
                 placeholder={placeholder}
-                error={!!error}
-                helperText={error?.message}
+                disabled={isDisabled}
+                variant="outlined" //FIXME
+                fullWidth //FIXME
+                className={`${className} ${error ? "is-invalid" : ""}`} // FIXME
+                style={style}
+                ref={(elem) => {
+                  ref.current = elem;
+                  if (inputRef) {
+                    inputRef.current = elem;
+                  }
+                }}
               />
             )}
-            {...autoCompleteProps}
+            disableClearable={!multiple}
           />
         </FormGroupLayout>
       )}

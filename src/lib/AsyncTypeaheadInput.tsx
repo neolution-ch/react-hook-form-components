@@ -21,7 +21,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
     label,
     helpText,
     labelToolTip,
-    defaultSelected,
+    // defaultSelected,
     reactBootstrapTypeaheadProps,
     onChange,
     onInputChange,
@@ -30,7 +30,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
     addonRight,
     className = "",
     style,
-    emptyLabel,
+    // emptyLabel,
     placeholder,
     multiple,
     invalidErrorMessage,
@@ -88,11 +88,11 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
             ref={(elem) => {
               ref.current = elem;
               if (inputRef) {
-                inputRef.current = elem;
+                // inputRef.current = elem;
               }
             }}
             multiple={multiple}
-            defaultSelected={defaultSelected}
+            // defaultSelected={defaultSelected}
             isInvalid={hasError}
             onChange={(e) => {
               const values = convertTypeaheadOptionsToStringArray(e);
@@ -150,7 +150,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T
             }}
             {...reactBootstrapTypeaheadProps}
             style={style}
-            emptyLabel={emptyLabel}
+            // emptyLabel={emptyLabel}
             placeholder={placeholder}
             renderMenu={useGroupBy ? (results, menuProps) => renderMenu(results as LabelValueOption[], menuProps) : undefined}
           />
