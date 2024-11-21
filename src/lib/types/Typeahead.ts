@@ -15,6 +15,7 @@ interface CommonTypeaheadProps<T extends FieldValues> extends Omit<CommonInputPr
   useGroupBy?: boolean;
   onChange?: (selected: string | string[]) => void;
   onInputChange?: (text: string, event: React.ChangeEvent<HTMLInputElement>) => void;
+  useBootstrapStyle?: boolean;
 }
 
 export { CommonTypeaheadProps };
