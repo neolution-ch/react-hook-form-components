@@ -5,38 +5,45 @@ import { RenderMenuProps } from "react-bootstrap-typeahead/types/components/Type
 import { LabelValueOption } from "../types/LabelValueOption";
 import { alpha, styled } from "@mui/material/styles";
 import { InputBase } from "@mui/material";
-import { TypeaheadOptions } from "../types/Typeahead";
+import { TypeaheadOption } from "../types/Typeahead";
 
 const convertTypeaheadOptionsToStringArray = (options: Option[]): string[] => {
   const isStringArray = options.length > 0 && options.every((value) => typeof value === "string");
-
   if (isStringArray) {
     return options as string[];
   }
-
   return (options as Record<string, string>[]).map((option) => option.value);
 };
 
-const getAutoCompleteValue = (options: TypeaheadOptions, value: string | string[] | undefined) => {
-  if (options[0] === undefined) {
+const convertAutoCompleteOptionsToStringArray = (options: (TypeaheadOption)[] | undefined): string[] => {
+  if (!options) {
+    return [];
+  }
+  const isStringArray = options.length > 0 && options.every((value) => typeof value === "string");
+  if (isStringArray) {
+    return options as string[];
+  }
+  return (options as LabelValueOption[]).map((option) => option.value) as string[];
+};
+
+const getSingleAutoCompleteValue = (options: TypeaheadOption[], value: string | number | undefined) => {
+  if (options[0] === undefined || value === undefined) {
     return undefined;
   }
+  return options.find((x) => (typeof x === "string" ? x === value : x.value == value));
+};
 
-  // if value is array means that the autocomplete is multiple
-  if (Array.isArray(value)) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return options.filter(x => typeof x === "string" ? value.includes(x) : value.includes((x as LabelValueOption).value as string));
+const getMultipleAutoCompleteValue = (options: TypeaheadOption[], value: string[] | undefined) => {
+  if (options[0] === undefined || value === undefined) {
+    return undefined;
   }
-
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-  return options.find((x) => typeof x === "string" ? x === value : (x as LabelValueOption).value == value);
-}
+  return options.filter((x) => (typeof x === "string" ? value.includes(x) : value.includes(x.value as string))) as string[] | LabelValueOption[] | undefined;
+};
 
 const renderMenu = (results: LabelValueOption[], menuProps: RenderMenuProps): JSX.Element => {
   const groups = [...new Set(results.filter((x) => x.group?.name).map((option) => option.group?.name))];
   const anonymousOptions = results.filter((option) => !option.group?.name);
   let position = 0;
-
   return (
     <Menu {...menuProps}>
       {groups.map((group, index) => (
@@ -81,11 +88,7 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
     fontSize: 16,
     width: "auto",
     padding: "10px 12px",
-    transition: theme.transitions.create([
-      "border-color",
-      "background-color",
-      "box-shadow",
-    ]),
+    transition: theme.transitions.create(["border-color", "background-color", "box-shadow"]),
     // Use the system font instead of the default Roboto font.
     fontFamily: [
       "-apple-system",
@@ -110,4 +113,4 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export { convertTypeaheadOptionsToStringArray, renderMenu, getAutoCompleteValue, BootstrapInput };
+export { convertTypeaheadOptionsToStringArray, renderMenu, getSingleAutoCompleteValue, getMultipleAutoCompleteValue, BootstrapInput, convertAutoCompleteOptionsToStringArray };
