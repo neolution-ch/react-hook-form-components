@@ -20,6 +20,7 @@ Supported input types:
 - [Typeahead](#typeahead)
 - [DatePicker](#datepicker)
 - [StandaloneDatePickerInput](#standalonedatepickerinput)
+- [StandaloneFormGroupLayout](#standaloneformgrouplayout)
 - [Numeric and Pattern Format](#numeric-and-pattern-format)
 - [Form Context](#form-context)
 - [Storybook](#storybook)
@@ -201,6 +202,33 @@ So for example if you don't like the default date format of dd.MM.yyyy you can c
     dateFormat: "yyyy-MM-dd",
   }}
 />
+```
+
+## StandaloneFormGroupLayout
+
+The `StandaloneFormGroupLayout` component is a dumb component that receives all its information from props. It can be used without any form context.
+
+Basic example:
+
+```jsx
+<StandaloneFormGroupLayout name="standaloneFormGroupLayout" label="Standalone Form Group Layout">
+  <input type="text" />
+</StandaloneFormGroupLayout>
+```
+
+You get full access to the [reactstrap](https://reactstrap.github.io/) components. So you can pass all props to the `StandaloneFormGroupLayout` component.
+
+So for example if you want to add help text and validation message, you can do it like this:
+
+```jsx
+<StandaloneFormGroupLayout
+  name="standaloneFormGroupLayout"
+  label="Standalone Form Group Layout"
+  helpText="This is a help text"
+  errorMessage="This is an error message"
+>
+  <input type="text" />
+</StandaloneFormGroupLayout>
 ```
 
 ## Numeric and Pattern Format

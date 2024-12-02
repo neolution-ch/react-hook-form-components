@@ -1,6 +1,6 @@
 import { Controller, FieldValues } from "react-hook-form";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
-import { FormGroupLayout } from "./FormGroupLayout";
+import { StandaloneFormGroupLayout } from "./StandaloneFormGroupLayout";
 import { CommonInputProps } from "./types/CommonInputProps";
 import DatePicker, { ReactDatePickerProps } from "react-datepicker";
 import { useCallback, useEffect, useState, MutableRefObject, useRef } from "react";
@@ -131,7 +131,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
       control={control}
       name={name}
       render={({ field, fieldState: { error } }) => (
-        <FormGroupLayout<T, DatePickerRenderAddonProps>
+        <StandaloneFormGroupLayout
           helpText={helpText}
           formGroupId={formGroupId.current}
           name={props.name}
@@ -187,7 +187,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
               }
             }}
           />
-        </FormGroupLayout>
+        </StandaloneFormGroupLayout>
       )}
     />
   );

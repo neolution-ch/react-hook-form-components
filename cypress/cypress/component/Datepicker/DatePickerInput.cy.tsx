@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import { DatePickerInput, Form, getUtcTimeZeroDate, StandaloneDatePickerInput } from "react-hook-form-components";
+import { DatePickerInput, Form, getUtcTimeZeroDate, StandaloneDatePickerInput, StandaloneFormGroupLayout } from "react-hook-form-components";
 import "react-datepicker/dist/react-datepicker.css";
 import { faker } from "@faker-js/faker";
 import * as yup from "yup";
@@ -300,4 +300,23 @@ it("StandaloneDatePickerInput works", () => {
   cy.get("@onChangeSpy")
     .its("lastCall.args.0")
     .should("deep.equal", todayMidnight);
+});
+
+it("StandaloneFormGroupLayout works", () => {
+  const name = faker.random.alpha(10);
+
+  cy.mount(
+    <StandaloneFormGroupLayout
+      name={name}
+      label={name}
+      helpText="This is a help text"
+      errorMessage="This is an error message"
+    >
+      <input type="text" />
+    </StandaloneFormGroupLayout>
+  );
+
+  cy.contains("label", name).should("exist");
+  cy.contains("This is a help text").should("exist");
+  cy.contains("This is an error message").should("exist");
 });

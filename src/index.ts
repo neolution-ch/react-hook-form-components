@@ -8,5 +8,6 @@ export * from "./lib/types/LabelValueOption";
 export * from "./lib/DatePickerInput";
 export * from "./lib/helpers/dateUtils";
 export * from "./lib/StandaloneDatePickerInput";
+export * from "./lib/StandaloneFormGroupLayout";
 
 export { useFormContext } from "./lib/context/FormContext";
