@@ -19,6 +19,7 @@ Supported input types:
 - [Yup](#usage-with-yup)
 - [Typeahead](#typeahead)
 - [DatePicker](#datepicker)
+- [StandaloneDatePickerInput](#standalonedatepickerinput)
 - [Numeric and Pattern Format](#numeric-and-pattern-format)
 - [Form Context](#form-context)
 - [Storybook](#storybook)
@@ -171,6 +172,36 @@ So for example if you don't like the default date format of dd.MM.yyyy you can c
 ```
 
 :warning: **The date will always be set with a time so it matches midnight of the selected date when converted to UTC (which JSON.stringify does). So you will always get a**
+
+## StandaloneDatePickerInput
+
+The `StandaloneDatePickerInput` component is a dumb component that receives all its information from props. It can be used without any form context.
+
+To use the `StandaloneDatePickerInput` component you have to include their CSS file in your project:
+
+```jsx
+import "react-datepicker/dist/react-datepicker.css";
+```
+
+Basic example:
+
+```jsx
+<StandaloneDatePickerInput name="standaloneDatePickerInput" label="Standalone Date Picker" />
+```
+
+You get full access to the [react-datepicker](https://reactdatepicker.com/) component. So you can pass all props to the `datePickerProps` prop of the `StandaloneDatePickerInput` component.
+
+So for example if you don't like the default date format of dd.MM.yyyy you can change it to yyyy-MM-dd like this:
+
+```jsx
+<StandaloneDatePickerInput
+  name="standaloneDatePickerInput"
+  label="Standalone Date Picker"
+  datePickerProps={{
+    dateFormat: "yyyy-MM-dd",
+  }}
+/>
+```
 
 ## Numeric and Pattern Format
 

@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import { DatePickerInput, Form, getUtcTimeZeroDate } from "react-hook-form-components";
+import { DatePickerInput, Form, getUtcTimeZeroDate, StandaloneDatePickerInput } from "react-hook-form-components";
 import "react-datepicker/dist/react-datepicker.css";
 import { faker } from "@faker-js/faker";
 import * as yup from "yup";
@@ -279,4 +279,25 @@ it("addon works as a function (with onClick)", () => {
 
   cy.get(".fa-calendar").click();
   cy.get(".react-datepicker-popper").should("be.visible");
+});
+
+it("StandaloneDatePickerInput works", () => {
+  const name = faker.random.alpha(10);
+
+  cy.mount(
+    <StandaloneDatePickerInput
+      name={name}
+      label={name}
+      onChange={cy.spy().as("onChangeSpy")}
+    />
+  );
+
+  cy.contains("label", name).click();
+  cy.get(".react-datepicker__day--today").click();
+
+  const todayMidnight = getUtcTimeZeroDate(new Date());
+
+  cy.get("@onChangeSpy")
+    .its("lastCall.args.0")
+    .should("deep.equal", todayMidnight);
 });

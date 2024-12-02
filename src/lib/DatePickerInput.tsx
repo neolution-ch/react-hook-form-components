@@ -9,6 +9,7 @@ import { useFormContext } from "./context/FormContext";
 import { v4 as guidGen } from "uuid";
 import { getUtcTimeZeroDate } from "./helpers/dateUtils";
 import classNames from "classnames";
+import { StandaloneDatePickerInput } from "./StandaloneDatePickerInput";
 
 interface DatePickerRenderAddonProps {
   toggleDatePicker: () => void;
@@ -143,10 +144,8 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
           inputGroupStyle={!!addonLeft || !!addonRight ? { ...inputGroupStyle, alignItems: "normal" } : inputGroupStyle}
           hideValidationMessage={hideValidationMessage}
         >
-          <DatePicker
+          <StandaloneDatePickerInput
             {...datePickerProps}
-            {...field}
-            id={id}
             disabled={isDisabled}
             className={`${datePickerClassNames} ${error ? "is-invalid" : ""}`}
             dateFormat={effectiveDateFormat}
