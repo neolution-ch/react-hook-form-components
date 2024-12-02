@@ -1,19 +1,7 @@
-import React from "react";
-import { Option } from "react-bootstrap-typeahead/types/types";
-import { Menu, MenuItem } from "react-bootstrap-typeahead";
-import { RenderMenuProps } from "react-bootstrap-typeahead/types/components/Typeahead";
 import { LabelValueOption } from "../types/LabelValueOption";
 import { alpha, styled } from "@mui/material/styles";
 import { InputBase } from "@mui/material";
 import { TypeaheadOption } from "../types/Typeahead";
-
-const convertTypeaheadOptionsToStringArray = (options: Option[]): string[] => {
-  const isStringArray = options.length > 0 && options.every((value) => typeof value === "string");
-  if (isStringArray) {
-    return options as string[];
-  }
-  return (options as Record<string, string>[]).map((option) => option.value);
-};
 
 const convertAutoCompleteOptionsToStringArray = (options: (TypeaheadOption)[] | undefined): string[] => {
   if (!options) {
@@ -40,40 +28,19 @@ const getMultipleAutoCompleteValue = (options: TypeaheadOption[], value: string[
   return options.filter((x) => (typeof x === "string" ? value.includes(x) : value.includes(x.value as string))) as string[] | LabelValueOption[] | undefined;
 };
 
-const renderMenu = (results: LabelValueOption[], menuProps: RenderMenuProps): JSX.Element => {
-  const groups = [...new Set(results.filter((x) => x.group?.name).map((option) => option.group?.name))];
-  const anonymousOptions = results.filter((option) => !option.group?.name);
-  let position = 0;
-  return (
-    <Menu {...menuProps}>
-      {groups.map((group, index) => (
-        <React.Fragment key={index}>
-          <Menu.Header>{group}</Menu.Header>
-          {results
-            .filter((x) => x.group?.name === group)
-            .map((option) => (
-              <MenuItem
-                key={option.value}
-                option={option}
-                position={position++}
-                disabled={option.disabled || option.group?.disabled}
-                className="ps-4"
-              >
-                {option.label}
-              </MenuItem>
-            ))}
-          {index < groups.length - 1 && <Menu.Divider />}
-        </React.Fragment>
-      ))}
-      {!!anonymousOptions.length && <Menu.Divider />}
-      {anonymousOptions.map((option) => (
-        <MenuItem key={option.value} option={option} position={position++} disabled={option.disabled}>
-          {option.label}
-        </MenuItem>
-      ))}
-    </Menu>
-  );
+const sortOptionsByGroup = (options: TypeaheadOption[]): TypeaheadOption[] => {
+  const isStringArray = options.length > 0 && options.every((value) => typeof value === "string");
+  if (isStringArray) return options.sort();
+  return options.sort((x, y) => {
+    const formattedX =  typeof x === "string" ? x : x.group?.name ?? "";
+    const formattedY = typeof y === "string" ? y : y.group?.name ?? "";
+    return formattedX.localeCompare(formattedY);
+  });
 };
+
+const groupOptions = (option: TypeaheadOption): string => typeof option === "string" ? option : option.group?.name ?? "";
+
+const isDisabledGroup = (option: TypeaheadOption): boolean => typeof option !== "string" && !!option.group?.disabled;
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
   "label + &": {
@@ -113,4 +80,4 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export { convertTypeaheadOptionsToStringArray, renderMenu, getSingleAutoCompleteValue, getMultipleAutoCompleteValue, BootstrapInput, convertAutoCompleteOptionsToStringArray };
+export { convertAutoCompleteOptionsToStringArray, getSingleAutoCompleteValue, getMultipleAutoCompleteValue, sortOptionsByGroup, groupOptions, isDisabledGroup, BootstrapInput };

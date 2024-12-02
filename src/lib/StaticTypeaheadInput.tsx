@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { ReactNode, useMemo } from "react";
 import { get, FieldValues, FieldError, useController } from "react-hook-form";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
@@ -11,8 +12,13 @@ import {
   convertAutoCompleteOptionsToStringArray,
   getMultipleAutoCompleteValue,
   getSingleAutoCompleteValue,
+  isDisabledGroup,
+  sortOptionsByGroup,
+  groupOptions,
 } from "./helpers/typeahead";
 import { MergedAddonProps } from "./types/CommonInputProps";
+import parse from "autosuggest-highlight/parse";
+import match from "autosuggest-highlight/match";
 
 interface StaticTypeaheadInputProps<T extends FieldValues, TRenderAddon = unknown> extends CommonTypeaheadProps<T> {
   options: TypeaheadOption[];
@@ -33,6 +39,15 @@ interface StaticTypeaheadInputProps<T extends FieldValues, TRenderAddon = unknow
     | "className"
     | "onClose"
     | "onOpen"
+    | "clearIcon"
+    | "clearText"
+    | "openText"
+    | "closeText"
+    | "readOnly"
+    | "openOnFocus"
+    | "getOptionDisabled"
+    | "limitTags"
+    | "open"
   >;
 }
 
@@ -41,22 +56,32 @@ const AutoCompleteInternal = <T extends FieldValues, TRenderAddon = unknown>(pro
     options,
     multiple,
     disabled,
+    variant,
     label,
-    placeholder,
     helpText,
-    noOptionsText,
+    hideValidationMessage,
     onChange,
     onInputChange,
     onClose,
     onOpen,
+    getOptionDisabled,
+    openOnFocus,
+    clearIcon,
+    clearText,
+    openText,
+    closeText,
+    limitTags,
     markAllOnFocus,
     addonLeft,
     addonRight,
     addonProps,
     style,
     className,
-    hideValidationMessage,
-    // useGroupBy = false,
+    noOptionsText,
+    placeholder,
+    useGroupBy = false,
+    readOnly,
+    highlightOptions,
     autocompleteProps,
     useBootstrapStyle,
   } = props;
@@ -88,14 +113,14 @@ const AutoCompleteInternal = <T extends FieldValues, TRenderAddon = unknown>(pro
   // autocomplete requires consistency between the form value and the options types
   // need to watch value form the form since controller field value is not consistent
   const value = useMemo(() => {
-    const fieldValue = watch("id") as string | string[] | undefined;
+    const fieldValue = watch(id) as string | string[] | undefined;
     if (fieldValue === undefined) {
       return undefined;
     }
     return typeof fieldValue === "string"
       ? getSingleAutoCompleteValue(options, fieldValue)
       : getMultipleAutoCompleteValue(options, fieldValue);
-  }, [options, watch]);
+  }, [id, options, watch]);
 
   const startAdornment = useMemo(
     () =>
@@ -119,17 +144,29 @@ const AutoCompleteInternal = <T extends FieldValues, TRenderAddon = unknown>(pro
       {...field}
       id={id}
       multiple={multiple}
-      options={options}
-      value={value || null}
-      getOptionLabel={(option: TypeaheadOption) => (typeof option === "string" ? option : option.label)}
+      options={useGroupBy ? sortOptionsByGroup(options) : options}
+      disableCloseOnSelect={!!multiple}
+      value={value || (multiple ? [] : null)}
+      getOptionLabel={(option: TypeaheadOption) =>
+        typeof option === "string" ? option : option.label
+      }
       disabled={isDisabled}
-      selectOnFocus={markAllOnFocus}
+      readOnly={readOnly}
+      limitTags={limitTags}
       noOptionsText={noOptionsText}
+      selectOnFocus={markAllOnFocus}
+      clearIcon={clearIcon}
+      clearText={clearText}
+      openText={openText}
+      closeText={closeText}
       style={style}
       className={className}
-      disableCloseOnSelect={multiple}
       onChange={(_, newValue) => {
-        const optionsArray = newValue ? (Array.isArray(newValue) ? newValue : [newValue]) : undefined;
+        const optionsArray = newValue
+          ? Array.isArray(newValue)
+            ? newValue
+            : [newValue]
+          : undefined;
         const values = convertAutoCompleteOptionsToStringArray(optionsArray);
         const finalValue = multiple ? values : values[0];
         clearErrors(field.name);
@@ -138,8 +175,45 @@ const AutoCompleteInternal = <T extends FieldValues, TRenderAddon = unknown>(pro
         }
         field.onChange(finalValue);
       }}
-      onClose={onClose}
-      onOpen={onOpen}
+      openOnFocus={openOnFocus}
+      onClose={readOnly ? undefined : onClose}
+      onOpen={readOnly ? undefined : onOpen}
+      groupBy={useGroupBy ? groupOptions : undefined}
+      getOptionDisabled={
+        getOptionDisabled || useGroupBy
+          ? (option) =>
+              (getOptionDisabled?.(option) ||
+                (useGroupBy && isDisabledGroup(option))) ??
+              false
+          : undefined
+      }
+      renderOption={
+        highlightOptions
+          ? (props, option, { inputValue }) => {
+              const finalOption = typeof option === "string" ? option : option.label;
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+              const matches = match(finalOption, inputValue, { insideWords: true }) as Array<[number, number]>;
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+              const parts = parse(finalOption, matches) as Array<{ text: string; highlight: boolean }>;
+              return (
+                <li {...props}>
+                  <div>
+                    {parts.map((part, index) => (
+                      <span
+                        key={index}
+                        style={{
+                          fontWeight: part.highlight ? 700 : 400,
+                        }}
+                      >
+                        {part.text}
+                      </span>
+                    ))}
+                  </div>
+                </li>
+              );
+            }
+          : undefined
+      }
       renderInput={(params) =>
         useBootstrapStyle ? (
           <FormControl variant="standard">
@@ -151,13 +225,14 @@ const AutoCompleteInternal = <T extends FieldValues, TRenderAddon = unknown>(pro
         ) : (
           <TextField
             {...params}
+            variant={variant}
             label={label}
             error={hasError}
             helperText={
               hasError && !hideValidationMessage ? errorMessage : helpText
             }
             placeholder={placeholder}
-            onChange={(event) => onInputChange && onInputChange(event.target.value, event)}
+            onChange={(e) => onInputChange && onInputChange(e.target.value)}
             slotProps={{
               input: {
                 ...params.InputProps,
