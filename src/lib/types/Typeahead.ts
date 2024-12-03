@@ -1,21 +1,30 @@
 import { FieldValues } from "react-hook-form";
 import { CommonInputProps } from "./CommonInputProps";
 import { LabelValueOption } from "./LabelValueOption";
-import { MutableRefObject } from "react";
-import TypeheadRef from "react-bootstrap-typeahead/types/core/Typeahead";
+import { AutocompleteCloseReason, TextFieldVariants } from "@mui/material";
 
-export type TypeaheadOptions = LabelValueOption[] | string[];
+export type TypeaheadOption = LabelValueOption | string;
 
 interface CommonTypeaheadProps<T extends FieldValues> extends Omit<CommonInputProps<T>, "onChange"> {
   multiple?: boolean;
-  emptyLabel?: string;
-  invalidErrorMessage?: string;
+  noOptionsText?: string;
   placeholder?: string;
-  defaultSelected?: TypeaheadOptions;
-  inputRef?: MutableRefObject<TypeheadRef | null>;
   useGroupBy?: boolean;
+  clearIcon?: React.ReactNode;
+  clearText?: string;
+  closeText?: string;
+  openText?: string;
+  readOnly?: boolean;
+  openOnFocus?: boolean;
+  limitTags?: number;
+  variant?: TextFieldVariants;
   onChange?: (selected: string | string[]) => void;
-  onInputChange?: (text: string, event: React.ChangeEvent<HTMLInputElement>) => void;
+  onInputChange?: (text: string) => void;
+  onClose?: (event: React.SyntheticEvent, reason: AutocompleteCloseReason) => void;
+  onOpen?: (event: React.SyntheticEvent) => void;
+  getOptionDisabled?: (option: TypeaheadOption) => boolean;
+  highlightOptions?: boolean;
+  useBootstrapStyle?: boolean;
 }
 
 export { CommonTypeaheadProps };
