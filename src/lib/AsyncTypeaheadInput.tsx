@@ -1,66 +1,34 @@
-import {
-  CSSProperties,
-  ReactNode,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { FieldError, FieldValues, useController, get } from "react-hook-form";
+import { ReactNode, useEffect, useMemo, useState } from "react";
+import { FieldError, FieldValues, useController, get, useFormContext } from "react-hook-form";
 import { CommonTypeaheadProps, TypeaheadOption } from "./types/Typeahead";
-import { useFormContext } from "react-hook-form";
 import { LabelValueOption } from "./types/LabelValueOption";
 import Autocomplete, { AutocompleteProps } from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
-import { Chip, FormControl, InputLabel } from "@mui/material";
 import {
-  BootstrapInput,
   convertAutoCompleteOptionsToStringArray,
   getMultipleAutoCompleteValue,
   getSingleAutoCompleteValue,
+  getUniqueOptions,
   groupOptions,
   isDisabledGroup,
+  renderHighlightedOptionFunction,
 } from "./helpers/typeahead";
 import InputAdornment from "@mui/material/InputAdornment";
-import parse from "autosuggest-highlight/parse";
-import match from "autosuggest-highlight/match";
-import { debounce } from "@mui/material/utils";
 import CircularProgress from "@mui/material/CircularProgress";
-import { useDebounceHook } from "./helpers/useDebounceHook";
+import { useDebounceHook } from "./hooks/useDebounceHook";
+import { MergedAddonProps } from "./types/CommonInputProps";
+import { useSafeNameId } from "./hooks/useSafeNameId";
+import DownloadingSharpIcon from "@mui/icons-material/DownloadingSharp";
+import { IconButton } from "@mui/material";
 
-interface UseSafeNameIdResult {
-  name: string;
-  id: string;
-}
-
-const useSafeNameId = <T extends FieldValues>(
-  name: keyof T,
-  id?: string
-): UseSafeNameIdResult => {
-  const safeName = String(name);
-  const safeId = id || safeName;
-
-  return {
-    name: safeName,
-    id: safeId,
-  };
-};
-
-// common input props
-interface DefaultAddonProps {
-  isDisabled?: boolean;
-}
-export type MergedAddonProps<TRenderAddon> = TRenderAddon & DefaultAddonProps;
-
-interface AsyncTypeAheadInputProps<
-  T extends FieldValues,
-  TRenderAddon = unknown
-> extends CommonTypeaheadProps<T> {
+interface AsyncTypeAheadInputProps<T extends FieldValues, TRenderAddon = unknown> extends CommonTypeaheadProps<T> {
   queryFn: (query: string) => Promise<TypeaheadOption[]>;
   onQueryError?: (error: unknown) => void;
   delay?: number;
   loadingText?: string;
   addonProps?: MergedAddonProps<TRenderAddon>;
+  disableCloseOnSelect?: boolean;
+  defaultOptions?: TypeaheadOption[];
   autocompleteProps?: Omit<
     AutocompleteProps<LabelValueOption | string, boolean, boolean, boolean>,
     | "options"
@@ -72,6 +40,7 @@ interface AsyncTypeAheadInputProps<
     | "options"
     | "multiple"
     | "onChange"
+    | "onInputChange"
     | "getOptionLabel"
     | "disabled"
     | "selectOnFocus"
@@ -89,23 +58,11 @@ interface AsyncTypeAheadInputProps<
     | "openOnFocus"
     | "getOptionDisabled"
     | "limitTags"
+    | "disableCloseOnSelect"
   >;
-
-  // common input props
-  addonLeft?: React.ReactNode;
-  addonRight?: React.ReactNode;
-  markAllOnFocus?: boolean;
-  disabled?: boolean;
-  label?: string;
-  helpText?: string;
-  style?: CSSProperties;
-  className?: React.HTMLAttributes<T>["className"];
-  hideValidationMessage?: boolean;
 }
 
-const AutoCompleteInternal = <T extends FieldValues, TRenderAddon = unknown>(
-  props: AsyncTypeAheadInputProps<T, TRenderAddon>
-) => {
+const AsyncTypeAheadInput = <T extends FieldValues, TRenderAddon = unknown>(props: AsyncTypeAheadInputProps<T, TRenderAddon>) => {
   const {
     multiple,
     disabled,
@@ -113,6 +70,7 @@ const AutoCompleteInternal = <T extends FieldValues, TRenderAddon = unknown>(
     label,
     helpText,
     hideValidationMessage,
+    onBlur,
     onChange,
     onInputChange,
     onClose,
@@ -136,15 +94,25 @@ const AutoCompleteInternal = <T extends FieldValues, TRenderAddon = unknown>(
     readOnly,
     autocompleteProps,
     highlightOptions = true,
-    useBootstrapStyle,
     loadingText,
     queryFn,
+    onQueryError,
     delay = 200,
+    disableCloseOnSelect,
+    defaultOptions = [],
+    limitResults = defaultOptions.length,
+    paginationText,
+    paginationIcon,
   } = props;
 
-  const [options, setOptions] = useState<TypeaheadOption[]>([]);
+  const [options, setOptions] = useState<TypeaheadOption[]>(defaultOptions);
+  const [selectedOptions, setSelectedOptions] = useState<TypeaheadOption[]>(defaultOptions);
+  const [inputValue, setInputValue] = useState("");
+  const [pageSize, setPageSize] = useState(limitResults);
+  const [loadMoreOptions, setLoadMoreOptions] = useState(limitResults < defaultOptions.length);
 
   const { name, id } = useSafeNameId(props?.name ?? "", props.id);
+  const { setDebounceSearch, loading } = useDebounceHook(queryFn, setOptions, onQueryError);
   const {
     control,
     getFieldState,
@@ -167,39 +135,47 @@ const AutoCompleteInternal = <T extends FieldValues, TRenderAddon = unknown>(
   const errorMessage = String(fieldError?.message);
 
   // autocomplete requires consistency between the form value and the options types
-  const fieldValue = watch(name);
+  const fieldValue = watch(name) as string | string[] | undefined;
 
   const value = useMemo(() => {
     if (fieldValue == undefined) {
       return undefined;
     }
-    const formValue = fieldValue as string | string[];
-    return typeof formValue === "string"
-      ? getSingleAutoCompleteValue(options, formValue)
-      : getMultipleAutoCompleteValue(options, formValue);
-  }, [fieldValue]);
+    const mergedArray = getUniqueOptions(selectedOptions, options);
+    return typeof fieldValue === "string"
+      ? getSingleAutoCompleteValue(options, fieldValue)
+      : getMultipleAutoCompleteValue([...options, ...mergedArray], fieldValue);
+  }, [fieldValue, options, selectedOptions]);
 
   const startAdornment = useMemo(
     () =>
       addonLeft instanceof Function && addonProps
-        ? (addonLeft as unknown as (props: TRenderAddon) => ReactNode)(
-            addonProps
-          )
+        ? (addonLeft as unknown as (props: TRenderAddon) => ReactNode)(addonProps)
         : (addonLeft as ReactNode),
-    [addonLeft, addonProps]
+    [addonLeft, addonProps],
   );
 
   const endAdornment = useMemo(
     () =>
       addonRight instanceof Function && addonProps
-        ? (addonRight as unknown as (props: TRenderAddon) => ReactNode)(
-            addonProps
-          )
+        ? (addonRight as unknown as (props: TRenderAddon) => ReactNode)(addonProps)
         : (addonRight as ReactNode),
-    [addonRight, addonProps]
+    [addonRight, addonProps],
   );
 
-  const { setDebounceSearch, loading } = useDebounceHook(queryFn, setOptions);
+  const paginatedOptions = useMemo(() => options.slice(0, pageSize), [pageSize, options]);
+
+  useEffect(() => {
+    if (inputValue === "") {
+      setOptions(selectedOptions);
+    } else {
+      setDebounceSearch({ delay, query: inputValue });
+    }
+  }, [delay, inputValue, selectedOptions, setDebounceSearch]);
+
+  useEffect(() => {
+    setLoadMoreOptions(pageSize < options.length);
+  }, [options, pageSize]);
 
   return (
     <Autocomplete<TypeaheadOption, boolean, boolean, boolean>
@@ -207,23 +183,18 @@ const AutoCompleteInternal = <T extends FieldValues, TRenderAddon = unknown>(
       {...field}
       id={id}
       multiple={multiple}
-      disableCloseOnSelect={!!multiple}
+      disableCloseOnSelect={disableCloseOnSelect}
       loading={loading}
       loadingText={loadingText}
-      options={options}
-      filterOptions={(x) => x}
-      filterSelectedOptions
-      getOptionLabel={(option: TypeaheadOption) =>
-        typeof option === "string" ? option : option.label
-      }
+      options={paginatedOptions}
+      filterOptions={(currentOptions) => (multiple ? getUniqueOptions(currentOptions, selectedOptions) : currentOptions)}
+      getOptionLabel={(option: TypeaheadOption) => (typeof option === "string" ? option : option.label)}
+      inputValue={multiple ? inputValue : undefined}
       value={value || (multiple ? [] : null)}
-      getOptionDisabled={
-        getOptionDisabled || useGroupBy
-          ? (option) =>
-              (getOptionDisabled?.(option) ||
-                (useGroupBy && isDisabledGroup(option))) ??
-              false
-          : undefined
+      getOptionDisabled={(option) =>
+        getOptionDisabled?.(option) ||
+        (useGroupBy && isDisabledGroup(option)) ||
+        (typeof option == "string" ? false : option.disabled ?? false)
       }
       disabled={disabled}
       readOnly={readOnly}
@@ -236,128 +207,92 @@ const AutoCompleteInternal = <T extends FieldValues, TRenderAddon = unknown>(
       closeText={closeText}
       style={style}
       className={className}
-      onChange={(_, newValue) => {
-        const optionsArray = newValue
-          ? Array.isArray(newValue)
-            ? newValue
-            : [newValue]
-          : undefined;
-
+      onBlur={() => {
+        if (onBlur) {
+          onBlur();
+        }
+        field.onBlur();
+        if (multiple) {
+          setInputValue("");
+        }
+      }}
+      onChange={(_e, value) => {
+        const optionsArray = value ? (Array.isArray(value) ? value : [value]) : undefined;
         const values = convertAutoCompleteOptionsToStringArray(optionsArray);
         const finalValue = multiple ? values : values[0];
+        setSelectedOptions(optionsArray ?? defaultOptions);
+
         clearErrors(field.name);
         if (onChange) {
           onChange(finalValue);
         }
 
         field.onChange(finalValue);
+        if (!disableCloseOnSelect) {
+          setInputValue("");
+        }
+      }}
+      onInputChange={(_e, query, reason) => {
+        if (reason === "input") {
+          setInputValue(query);
+        }
+        if (onInputChange) {
+          onInputChange(query);
+        }
       }}
       openOnFocus={openOnFocus}
       onClose={readOnly ? undefined : onClose}
       onOpen={readOnly ? undefined : onOpen}
       groupBy={useGroupBy ? groupOptions : undefined}
-      onInputChange={(_e, query, reason) => {
-        setDebounceSearch({ delay, query });
-        if (!query || query === "") {
-          setOptions([]);
-        } else if (reason !== "selectOption") {
-          setOptions([]);
-          setDebounceSearch({ delay, query });
-        }
-      }}
-      renderOption={
-        highlightOptions
-          ? (props, option, { inputValue }) => {
-              const { key, ...optionProps } = props;
-              const finalOption =
-                typeof option === "string" ? option : option.label;
-              const matches = match(finalOption, inputValue, {
-                insideWords: true,
-              });
-              const parts = parse(finalOption, matches);
-              return (
-                <li key={key} {...optionProps}>
-                  <div>
-                    {parts.map((part, index) => (
-                      <span
-                        key={index}
-                        style={{
-                          fontWeight: part.highlight ? 700 : 400,
-                        }}
-                      >
-                        {part.text}
-                      </span>
-                    ))}
-                  </div>
-                </li>
-              );
-            }
-          : undefined
-      }
-      renderInput={(params) => {
-        return useBootstrapStyle ? (
-          <FormControl variant="standard">
-            <InputLabel shrink htmlFor="bootstrap-input">
-              {label}
-            </InputLabel>
-            <BootstrapInput
-              {...params}
-              ref={params.InputProps.ref}
-              defaultValue="react-bootstrap"
-              id="bootstrap-input"
-            />
-          </FormControl>
-        ) : (
-          <TextField
-            {...params}
-            variant={variant}
-            error={hasError}
-            label={label}
-            helperText={
-              hasError && !hideValidationMessage ? errorMessage : helpText
-            }
-            placeholder={placeholder}
-            slotProps={{
-              input: {
-                ...params.InputProps,
-                startAdornment: startAdornment && (
-                  <>
-                    <InputAdornment position="start">
-                      {startAdornment}
+      renderOption={highlightOptions ? renderHighlightedOptionFunction : undefined}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          variant={variant}
+          error={hasError}
+          label={label}
+          helperText={hasError && !hideValidationMessage ? errorMessage : helpText}
+          placeholder={placeholder}
+          slotProps={{
+            input: {
+              ...params.InputProps,
+              startAdornment: (
+                <>
+                  {startAdornment && <InputAdornment position="start">{startAdornment}</InputAdornment>}
+                  {params.InputProps.startAdornment}
+                </>
+              ),
+              endAdornment: (
+                <>
+                  {loading ? (
+                    <InputAdornment position="end">
+                      <CircularProgress color="inherit" size={20} />
                     </InputAdornment>
-                    {params.InputProps.startAdornment}
-                  </>
-                ),
-                endAdornment: (
-                  <>
-                    {loading ? (
-                      <InputAdornment position="start">
-                        <CircularProgress color="inherit" size={20} />
-                      </InputAdornment>
-                    ) : (
-                      endAdornment && (
-                        <InputAdornment position="start">
-                          {endAdornment}
-                        </InputAdornment>
-                      )
-                    )}
-                    {params.InputProps.endAdornment}
-                  </>
-                ),
-              },
-            }}
-          />
-        );
-      }}
+                  ) : (
+                    endAdornment && <InputAdornment position="end">{endAdornment}</InputAdornment>
+                  )}
+                  {loadMoreOptions && (
+                    <IconButton
+                      title={paginationText ?? `Load ${limitResults} more`}
+                      size="small"
+                      onClick={() => {
+                        const nextChunk = options.slice(pageSize, pageSize + limitResults);
+                        setPageSize(pageSize + nextChunk.length);
+                        setLoadMoreOptions(pageSize + nextChunk.length < options.length);
+                      }}
+                    >
+                      {paginationIcon ?? <DownloadingSharpIcon />}
+                    </IconButton>
+                  )}
+                  {params.InputProps.endAdornment}
+                </>
+              ),
+            },
+          }}
+        />
+      )}
     />
   );
-};
-
-const AsyncTypeAheadInput = <T extends FieldValues>(
-  props: AsyncTypeAheadInputProps<T>
-) => {
-  const { id } = useSafeNameId(props?.name ?? "", props.id);
-  return <AutoCompleteInternal id={id} {...props} />;
 };
 
 export { AsyncTypeAheadInput, AsyncTypeAheadInputProps };

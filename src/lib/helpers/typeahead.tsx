@@ -1,16 +1,20 @@
+import { AutocompleteRenderOptionState } from "@mui/material/Autocomplete";
 import { LabelValueOption } from "../types/LabelValueOption";
-import { alpha, styled } from "@mui/material/styles";
-import { InputBase } from "@mui/material";
 import { TypeaheadOption } from "../types/Typeahead";
+import AutosuggestHighlightMatch from "autosuggest-highlight/match";
+import AutosuggestHighlightParse from "autosuggest-highlight/parse";
 
-const convertAutoCompleteOptionsToStringArray = (options: (TypeaheadOption)[] | undefined): string[] => {
+const isStringArray = (options: TypeaheadOption[]): boolean => options.length > 0 && options.every((value) => typeof value === "string");
+
+const convertAutoCompleteOptionsToStringArray = (options: TypeaheadOption[] | undefined): string[] => {
   if (!options) {
     return [];
   }
-  const isStringArray = options.length > 0 && options.every((value) => typeof value === "string");
-  if (isStringArray) {
+
+  if (isStringArray(options)) {
     return options as string[];
   }
+
   return (options as LabelValueOption[]).map((option) => option.value) as string[];
 };
 
@@ -18,66 +22,60 @@ const getSingleAutoCompleteValue = (options: TypeaheadOption[], value: string | 
   if (options[0] === undefined || value === undefined) {
     return undefined;
   }
+
   return options.find((x) => (typeof x === "string" ? x === value : x.value == value));
 };
 
 const getMultipleAutoCompleteValue = (options: TypeaheadOption[], value: string[] | undefined) => {
-  if (options[0] === undefined || value === undefined) {
+  if (options[0] === undefined || !value) {
     return undefined;
   }
-  return options.filter((x) => (typeof x === "string" ? value.includes(x) : value.includes(x.value as string))) as string[] | LabelValueOption[] | undefined;
+  return options.filter((x) => (typeof x === "string" ? value.includes(x) : value.includes(x.value as string))) as
+    | string[]
+    | LabelValueOption[]
+    | undefined;
 };
 
-const sortOptionsByGroup = (options: TypeaheadOption[]): TypeaheadOption[] => {
-  const isStringArray = options.length > 0 && options.every((value) => typeof value === "string");
-  if (isStringArray) return options.sort();
-  return options.sort((x, y) => {
-    const formattedX =  typeof x === "string" ? x : x.group?.name ?? "";
-    const formattedY = typeof y === "string" ? y : y.group?.name ?? "";
-    return formattedX.localeCompare(formattedY);
-  });
-};
+const sortOptionsByGroup = (options: TypeaheadOption[]): TypeaheadOption[] =>
+  options.sort((x, y) => (typeof x === "string" ? x : x.group?.name ?? "").localeCompare(typeof y === "string" ? y : y.group?.name ?? ""));
 
-const groupOptions = (option: TypeaheadOption): string => typeof option === "string" ? option : option.group?.name ?? "";
+const groupOptions = (option: TypeaheadOption): string => (typeof option === "string" ? option : option.group?.name ?? "");
 
 const isDisabledGroup = (option: TypeaheadOption): boolean => typeof option !== "string" && !!option.group?.disabled;
 
-const BootstrapInput = styled(InputBase)(({ theme }) => ({
-  "label + &": {
-    marginTop: theme.spacing(3),
-  },
-  "& .MuiInputBase-input": {
-    borderRadius: 4,
-    position: "relative",
-    backgroundColor: "#F3F6F9",
-    border: "1px solid",
-    borderColor: "#E0E3E7",
-    fontSize: 16,
-    width: "auto",
-    padding: "10px 12px",
-    transition: theme.transitions.create(["border-color", "background-color", "box-shadow"]),
-    // Use the system font instead of the default Roboto font.
-    fontFamily: [
-      "-apple-system",
-      "BlinkMacSystemFont",
-      '"Segoe UI"',
-      "Roboto",
-      '"Helvetica Neue"',
-      "Arial",
-      "sans-serif",
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"',
-    ].join(","),
-    "&:focus": {
-      boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
-      borderColor: theme.palette.primary.main,
-    },
-    ...theme.applyStyles("dark", {
-      backgroundColor: "#1A2027",
-      borderColor: "#2D3843",
-    }),
-  },
-}));
+function getUniqueOptions(source: TypeaheadOption[], comparison: TypeaheadOption[]) {
+  const comparisonSet = new Set(comparison.map((x) => (typeof x === "string" ? x : x.value)));
+  return source.filter((x) => (typeof x === "string" ? !comparisonSet.has(x) : !comparisonSet.has(x.value)));
+}
 
-export { convertAutoCompleteOptionsToStringArray, getSingleAutoCompleteValue, getMultipleAutoCompleteValue, sortOptionsByGroup, groupOptions, isDisabledGroup, BootstrapInput };
+const renderHighlightedOptionFunction = (
+  props: React.HTMLAttributes<HTMLLIElement>,
+  option: TypeaheadOption,
+  { inputValue }: AutocompleteRenderOptionState,
+) => {
+  const finalOption = typeof option === "string" ? option : option.label;
+  const matches = AutosuggestHighlightMatch(finalOption, inputValue, { insideWords: true });
+  const parts = AutosuggestHighlightParse(finalOption, matches) as Array<{ text: string; highlight: boolean }>;
+  return (
+    <li {...props}>
+      <div>
+        {parts.map((part, index) => (
+          <span key={index} style={{ fontWeight: part.highlight ? 700 : 400 }}>
+            {part.text}
+          </span>
+        ))}
+      </div>
+    </li>
+  );
+};
+
+export {
+  getSingleAutoCompleteValue,
+  getMultipleAutoCompleteValue,
+  convertAutoCompleteOptionsToStringArray,
+  sortOptionsByGroup,
+  isDisabledGroup,
+  groupOptions,
+  getUniqueOptions,
+  renderHighlightedOptionFunction,
+};
