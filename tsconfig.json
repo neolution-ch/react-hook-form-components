@@ -18,6 +18,6 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": "."
   },
-  "include": ["src", "test"],
+  "include": ["src", "test", "fix-autosuggest-highlight.js"],
   "exclude": ["node_modules", "dist"]
 }
