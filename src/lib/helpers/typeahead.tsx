@@ -71,7 +71,7 @@ const renderHighlightedOptionFunction = (
 };
 
 const bootstrapStyle: SxProps = {
-  "& .MuiOutlinedInput-root": {
+  ".MuiOutlinedInput-root": {
     fontFamily: [
       "-apple-system",
       "BlinkMacSystemFont",
@@ -87,18 +87,16 @@ const bootstrapStyle: SxProps = {
     border: "1px solid #ced4da",
     fontSize: "1rem",
     color: "#495057",
-    padding: 0.1,
-    backgroundColor: "#fff",
-    position: "relative",
+    paddingY: "0.5px !important",
+    paddingLeft: "0.1px !important",
     borderColor: "#E0E3E7",
-    width: "auto",
     transition: "border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out",
     "&.Mui-focused": {
       borderColor: "#80bdff",
       boxShadow: "0 0 0 0.2rem rgba(0,123,255,.25)",
     },
     "& .MuiAutocomplete-input": {
-      padding: "0.375rem 0.75rem",
+      padding: "0.375rem 0.75rem !important",
     },
     "&.Mui-error": {
       borderColor: "#dc3545",
@@ -106,34 +104,33 @@ const bootstrapStyle: SxProps = {
     "&.Mui-focused.Mui-error": {
       boxShadow: "0 0 0 0.2rem rgba(220,53,69,.25)",
     },
+    "& .MuiInputAdornment-positionStart": {
+      paddingLeft: 1.5,
+    },
+    "& .MuiChip-root": {
+      backgroundColor: "#e9ecef",
+      color: "#495057",
+      fontSize: "0.875rem",
+      borderRadius: "0.25rem",
+      display: "flex",
+    },
+    "& .MuiChip-deleteIcon": {
+      color: "#495057",
+      fontSize: "0.875rem",
+    },
   },
   "& fieldset": {
     border: "none",
   },
-  ".MuiInputAdornment-positionStart": {
-    paddingLeft: 1,
-  },
-  ".MuiInputLabel-root": {
+  "& .MuiInputLabel-root": {
     marginTop: "-1rem",
     marginLeft: "-0.8rem",
   },
-  ".MuiFormHelperText-root ": {
+  "& .MuiFormHelperText-root ": {
     marginLeft: "0.2rem",
     marginTop: "0.3rem",
   },
-  "& .MuiChip-root": {
-    backgroundColor: "#e9ecef",
-    color: "#495057",
-    fontSize: "0.875rem",
-    borderRadius: "0.25rem",
-    display: "flex",
-  },
-  ".MuiChip-deleteIcon": {
-    color: "#495057",
-    fontSize: "0.875rem",
-  },
 };
-
 export {
   getSingleAutoCompleteValue,
   getMultipleAutoCompleteValue,
