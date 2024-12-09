@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- :boom: `AsyncTypeAheadInput` based on MUI Autocomplete component.
+- :boom: `StaticTypeAheadInput` based on MUI Autocomplete component.
+
 ### dependabot: \#114 Bump the github-actions group with 3 updates
 
 ## [2.13.0] - 2024-10-16

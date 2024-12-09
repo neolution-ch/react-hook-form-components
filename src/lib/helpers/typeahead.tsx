@@ -3,6 +3,7 @@ import { LabelValueOption } from "../types/LabelValueOption";
 import { TypeaheadOption } from "../types/Typeahead";
 import AutosuggestHighlightMatch from "autosuggest-highlight/match";
 import AutosuggestHighlightParse from "autosuggest-highlight/parse";
+import { SxProps } from "@mui/material";
 
 const isStringArray = (options: TypeaheadOption[]): boolean => options.length > 0 && options.every((value) => typeof value === "string");
 
@@ -69,6 +70,70 @@ const renderHighlightedOptionFunction = (
   );
 };
 
+const bootstrapStyle: SxProps = {
+  "& .MuiOutlinedInput-root": {
+    fontFamily: [
+      "-apple-system",
+      "BlinkMacSystemFont",
+      '"Segoe UI"',
+      "Roboto",
+      '"Helvetica Neue"',
+      "Arial",
+      "sans-serif",
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(","),
+    border: "1px solid #ced4da",
+    fontSize: "1rem",
+    color: "#495057",
+    padding: 0.1,
+    backgroundColor: "#fff",
+    position: "relative",
+    borderColor: "#E0E3E7",
+    width: "auto",
+    transition: "border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out",
+    "&.Mui-focused": {
+      borderColor: "#80bdff",
+      boxShadow: "0 0 0 0.2rem rgba(0,123,255,.25)",
+    },
+    "& .MuiAutocomplete-input": {
+      padding: "0.375rem 0.75rem",
+    },
+    "&.Mui-error": {
+      borderColor: "#dc3545",
+    },
+    "&.Mui-focused.Mui-error": {
+      boxShadow: "0 0 0 0.2rem rgba(220,53,69,.25)",
+    },
+  },
+  "& fieldset": {
+    border: "none",
+  },
+  ".MuiInputAdornment-positionStart": {
+    paddingLeft: 1,
+  },
+  ".MuiInputLabel-root": {
+    marginTop: "-1rem",
+    marginLeft: "-0.8rem",
+  },
+  ".MuiFormHelperText-root ": {
+    marginLeft: "0.2rem",
+    marginTop: "0.3rem",
+  },
+  "& .MuiChip-root": {
+    backgroundColor: "#e9ecef",
+    color: "#495057",
+    fontSize: "0.875rem",
+    borderRadius: "0.25rem",
+    display: "flex",
+  },
+  ".MuiChip-deleteIcon": {
+    color: "#495057",
+    fontSize: "0.875rem",
+  },
+};
+
 export {
   getSingleAutoCompleteValue,
   getMultipleAutoCompleteValue,
@@ -78,4 +143,5 @@ export {
   groupOptions,
   getUniqueOptions,
   renderHighlightedOptionFunction,
+  bootstrapStyle,
 };

@@ -14,6 +14,7 @@ import {
   sortOptionsByGroup,
   groupOptions,
   renderHighlightedOptionFunction,
+  bootstrapStyle,
 } from "./helpers/typeahead";
 import { MergedAddonProps } from "./types/CommonInputProps";
 import DownloadingSharpIcon from "@mui/icons-material/DownloadingSharp";
@@ -85,6 +86,7 @@ const StaticTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(pro
     useGroupBy = false,
     readOnly,
     highlightOptions = true,
+    useBootstrapStyle = false,
     autocompleteProps,
   } = props;
 
@@ -201,6 +203,7 @@ const StaticTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(pro
       renderInput={(params) => (
         <TextField
           {...params}
+          sx={{ ...(useBootstrapStyle && bootstrapStyle) }}
           variant={variant}
           label={label}
           error={hasError}

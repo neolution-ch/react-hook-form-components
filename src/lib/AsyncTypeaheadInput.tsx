@@ -5,6 +5,7 @@ import { LabelValueOption } from "./types/LabelValueOption";
 import Autocomplete, { AutocompleteProps } from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import {
+  bootstrapStyle,
   convertAutoCompleteOptionsToStringArray,
   getMultipleAutoCompleteValue,
   getSingleAutoCompleteValue,
@@ -92,7 +93,6 @@ const AsyncTypeAheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
     placeholder,
     useGroupBy = false,
     readOnly,
-    autocompleteProps,
     highlightOptions = true,
     loadingText,
     queryFn,
@@ -103,6 +103,8 @@ const AsyncTypeAheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
     limitResults = defaultOptions.length,
     paginationText,
     paginationIcon,
+    useBootstrapStyle = false,
+    autocompleteProps,
   } = props;
 
   const [options, setOptions] = useState<TypeaheadOption[]>(defaultOptions);
@@ -248,6 +250,7 @@ const AsyncTypeAheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
       renderInput={(params) => (
         <TextField
           {...params}
+          sx={{ ...(useBootstrapStyle && bootstrapStyle) }}
           variant={variant}
           error={hasError}
           label={label}
