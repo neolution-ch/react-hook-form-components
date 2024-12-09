@@ -34,15 +34,14 @@
     "dist"
   ],
   "scripts": {
-    "fix-autosuggest-highlight": "node fix-autosuggest-highlight.js",
-    "build": "yarn fix-autosuggest-highlight && rollup -c",
+    "build": "yarn rollup -c",
     "build-storybook": "build-storybook",
     "lint": "eslint \"**/*.{ts,tsx}\" --cache --max-warnings 0",
     "prepack": "yarn build",
     "prepare-pr": "yarn prettier . --write && yarn lint && yarn build && yarn test\"",
     "prettier-check": "prettier --check .",
     "prettier-write": "prettier --write .",
-    "start": "yarn fix-autosuggest-highlight && rollup -c -w",
+    "start": "yarn rollup -c -w",
     "start-all": "concurrently \"yarn start\" \"yarn start-yalc\"",
     "start-yalc": "yarn nodemon --watch dist -x \"yarn yalc push\"",
     "storybook": "start-storybook -p 6006"
