@@ -30,8 +30,8 @@ const FormGroupLayoutLabel = <T extends FieldValues>(props: FormGroupLayoutLabel
   const checkboxLayout = layout === "checkbox";
 
   return (
-    <div  onClick={(e) => e.stopPropagation()}>
-      <Label check={checkboxLayout || switchLayout} for={fieldId} style={{ display: "flex", gap: 1 }}>
+    <>
+      <Label check={checkboxLayout || switchLayout} for={fieldId} style={{ display: "flex", gap: 1 }} onClick={(e) => e.stopPropagation()}>
         {finalLabel}
         {tooltip && (
            <svg
@@ -58,7 +58,7 @@ const FormGroupLayoutLabel = <T extends FieldValues>(props: FormGroupLayoutLabel
           {tooltip}
         </UncontrolledTooltip>
       )}
-    </div>
+    </>
   );
 };
 
