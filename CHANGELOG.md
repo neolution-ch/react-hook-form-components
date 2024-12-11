@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fixed tooltip icon and onclick event issues in <FormGroupLayoutLabel/> component.
-- 
+  
 ## [2.13.1] - 2024-12-02
 
 ### Fixed
