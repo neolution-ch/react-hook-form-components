@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### dependabot: \#121 Bump nanoid from 3.3.4 to 3.3.8 in /cypress
+
 ## [2.13.1] - 2024-12-02
 
 ### Fixed
