@@ -1,157 +1,245 @@
-import { Typeahead } from "react-bootstrap-typeahead";
-import { TypeaheadComponentProps } from "react-bootstrap-typeahead/types/components/Typeahead";
-import TypeheadRef from "react-bootstrap-typeahead/types/core/Typeahead";
-import { Controller, ControllerRenderProps, FieldError, FieldValues, get } from "react-hook-form";
+import { ReactNode, useMemo, useState } from "react";
+import { get, FieldValues, FieldError, useController } from "react-hook-form";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
-import { FormGroupLayout } from "./FormGroupLayout";
-import { convertTypeaheadOptionsToStringArray, renderMenu } from "./helpers/typeahead";
-import { CommonTypeaheadProps, TypeaheadOptions } from "./types/Typeahead";
-import { useMarkOnFocusHandler } from "./hooks/useMarkOnFocusHandler";
+import { CommonTypeaheadProps, TypeaheadOption } from "./types/Typeahead";
 import { useFormContext } from "./context/FormContext";
-import { useRef } from "react";
-import { LabelValueOption } from "./types/LabelValueOption";
+import Autocomplete, { AutocompleteProps } from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
+import { InputAdornment, IconButton } from "@mui/material";
+import {
+  convertAutoCompleteOptionsToStringArray,
+  getMultipleAutoCompleteValue,
+  getSingleAutoCompleteValue,
+  isDisabledGroup,
+  sortOptionsByGroup,
+  groupOptions,
+  renderHighlightedOptionFunction,
+  bootstrapStyle,
+} from "./helpers/typeahead";
+import { MergedAddonProps } from "./types/CommonInputProps";
+import DownloadingSharpIcon from "@mui/icons-material/DownloadingSharp";
 
-interface StaticTypeaheadInputProps<T extends FieldValues> extends CommonTypeaheadProps<T> {
-  options: TypeaheadOptions;
-  reactBootstrapTypeaheadProps?: Partial<TypeaheadComponentProps>;
+interface StaticTypeaheadInputProps<T extends FieldValues, TRenderAddon = unknown> extends CommonTypeaheadProps<T> {
+  options: TypeaheadOption[];
+  addonProps?: MergedAddonProps<TRenderAddon>;
+  autocompleteProps?: Omit<
+    AutocompleteProps<TypeaheadOption, boolean, boolean, boolean>,
+    | "defaultValue"
+    | "value"
+    | "options"
+    | "multiple"
+    | "getOptionLabel"
+    | "disabled"
+    | "selectOnFocus"
+    | "noOptionsText"
+    | "renderInput"
+    | "style"
+    | "className"
+    | "onClose"
+    | "onOpen"
+    | "clearIcon"
+    | "clearText"
+    | "openText"
+    | "closeText"
+    | "readOnly"
+    | "openOnFocus"
+    | "getOptionDisabled"
+    | "limitTags"
+    | "disableCloseOnSelect"
+    | "onInputChange"
+    | "onChange"
+  >;
 }
 
-const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInputProps<T>) => {
+const StaticTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(props: StaticTypeaheadInputProps<T, TRenderAddon>) => {
   const {
+    options,
+    multiple,
     disabled,
+    variant,
     label,
     helpText,
-    labelToolTip,
-    defaultSelected,
-    reactBootstrapTypeaheadProps,
+    hideValidationMessage,
     onChange,
     onInputChange,
+    onClose,
+    onOpen,
+    getOptionDisabled,
+    onBlur,
+    openOnFocus,
+    clearIcon,
+    clearText,
+    openText,
+    closeText,
+    paginationText,
+    paginationIcon,
+    limitResults = options.length,
+    limitTags,
     markAllOnFocus,
     addonLeft,
     addonRight,
+    addonProps,
     style,
-    className = "",
-    emptyLabel,
+    className,
+    noOptionsText,
     placeholder,
-    multiple,
-    invalidErrorMessage,
-    hideValidationMessage = false,
-    inputRef,
     useGroupBy = false,
+    readOnly,
+    highlightOptions = true,
+    useBootstrapStyle = false,
+    autocompleteProps,
   } = props;
-  const { name, id } = useSafeNameId(props.name, props.id);
+
+  const [pageSize, setPageSize] = useState(limitResults);
+  const [loadMoreOptions, setLoadMoreOptions] = useState<boolean>(limitResults < options.length);
+
+  const { name, id } = useSafeNameId(props?.name ?? "", props.id);
   const {
     control,
     disabled: formDisabled,
-    formState: { errors },
-    setError,
-    clearErrors,
-    getValues,
     getFieldState,
+    clearErrors,
+    watch,
+    formState: { errors },
   } = useFormContext();
-  const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
-  const ref = useRef<TypeheadRef | null>(null);
-  const fieldError = get(errors, name) as FieldError | undefined;
-  const hasError = !!fieldError;
-  const handleOnBlur = (field: ControllerRenderProps<FieldValues, string>) => {
-    const innerText = ref.current?.state.text;
-    // only check if the text is not empty and the typeahead is multiple or the selected array is empty (for single select, if the selected array is not empty, it means the user has already selected an option)
-    if (innerText && (!!multiple || !ref.current?.state.selected.length)) {
-      const isMatchingOption = (option: string | LabelValueOption) => {
-        const text = reactBootstrapTypeaheadProps?.caseSensitive ? innerText : innerText.toUpperCase();
-        let label = typeof option === "string" ? option : option.label;
-        label = reactBootstrapTypeaheadProps?.caseSensitive ? label : label.toUpperCase();
-        const value = typeof option === "string" ? option : option.value;
-        return !ref.current?.state.selected.find((x) => (typeof x === "string" ? x : x.value) === value) && label.includes(text);
-      };
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-      const matchingOptions = (props.options as any).filter((o: string | LabelValueOption) => isMatchingOption(o)) as TypeaheadOptions;
-      if (matchingOptions.length === 1) {
-        ref.current?.setState({
-          selected: [...(ref.current?.state.selected ?? []), ...matchingOptions],
-          text: "",
-          showMenu: false,
-        });
-
-        const newValue = typeof matchingOptions[0] == "string" ? matchingOptions[0] : matchingOptions[0].value;
-        if (multiple) {
-          field.onChange([...((getValues(name) as [] | undefined) ?? []), newValue]);
-        } else {
-          field.onChange(newValue);
-        }
-        clearErrors(name);
-      } else {
-        setError(name, { message: invalidErrorMessage ?? "Invalid Input" });
-      }
-    } else {
-      clearErrors(name);
-    }
-  };
+  const { field } = useController({
+    name,
+    control,
+    rules: {
+      validate: {
+        required: () => getFieldState(name)?.error?.message,
+      },
+    },
+  });
 
   const isDisabled = formDisabled || disabled;
+  const fieldError = get(errors, name) as FieldError | undefined;
+  const hasError = !!fieldError;
+  const errorMessage = String(fieldError?.message);
+
+  // autocomplete requires consistency between the form value and the options types
+  const fieldValue = watch(id) as string | string[] | undefined;
+
+  const value = useMemo(() => {
+    if (fieldValue === undefined) {
+      return undefined;
+    }
+    return typeof fieldValue === "string"
+      ? getSingleAutoCompleteValue(options, fieldValue)
+      : getMultipleAutoCompleteValue(options, fieldValue);
+  }, [fieldValue, options]);
+
+  const startAdornment = useMemo(
+    () =>
+      addonLeft instanceof Function && addonProps
+        ? (addonLeft as (props: TRenderAddon) => ReactNode)(addonProps)
+        : (addonLeft as ReactNode),
+    [addonLeft, addonProps],
+  );
+
+  const endAdornment = useMemo(
+    () =>
+      addonRight instanceof Function && addonProps
+        ? (addonRight as (props: TRenderAddon) => ReactNode)(addonProps)
+        : (addonRight as ReactNode),
+    [addonRight, addonProps],
+  );
+
+  const paginatedOptions = useMemo(() => options.slice(0, pageSize), [pageSize, options]);
 
   return (
-    <Controller
-      control={control}
-      name={name}
-      rules={{
-        validate: {
-          required: () => getFieldState(name)?.error?.message,
-        },
+    <Autocomplete<TypeaheadOption, boolean, boolean, boolean>
+      {...autocompleteProps}
+      {...field}
+      id={id}
+      multiple={multiple}
+      groupBy={useGroupBy ? groupOptions : undefined}
+      options={useGroupBy ? sortOptionsByGroup(paginatedOptions) : paginatedOptions}
+      disableCloseOnSelect={!!multiple || loadMoreOptions}
+      value={value || (multiple ? [] : null)}
+      getOptionLabel={(option: TypeaheadOption) => (typeof option === "string" ? option : option.label)}
+      getOptionDisabled={(option) =>
+        getOptionDisabled?.(option) ||
+        (useGroupBy && isDisabledGroup(option)) ||
+        (typeof option === "string" ? false : option.disabled ?? false)
+      }
+      disabled={isDisabled}
+      readOnly={readOnly}
+      limitTags={limitTags}
+      selectOnFocus={markAllOnFocus}
+      clearIcon={clearIcon}
+      clearText={clearText}
+      openText={openText}
+      closeText={closeText}
+      noOptionsText={noOptionsText}
+      style={style}
+      className={className}
+      onChange={(_, value) => {
+        const optionsArray = value ? (Array.isArray(value) ? value : [value]) : undefined;
+        const values = convertAutoCompleteOptionsToStringArray(optionsArray);
+        const finalValue = multiple ? values : values[0];
+
+        clearErrors(field.name);
+        if (onChange) {
+          onChange(finalValue);
+        }
+        field.onChange(finalValue);
       }}
-      render={({ field, fieldState: { error } }) => (
-        <FormGroupLayout
-          helpText={helpText}
-          name={name}
-          id={id}
+      onInputChange={(_e, value) => {
+        if (onInputChange) {
+          onInputChange(value);
+        }
+      }}
+      onBlur={() => {
+        if (onBlur) {
+          onBlur();
+        }
+        field.onBlur();
+      }}
+      openOnFocus={openOnFocus}
+      onClose={readOnly ? undefined : onClose}
+      onOpen={readOnly ? undefined : onOpen}
+      renderOption={highlightOptions ? renderHighlightedOptionFunction : undefined}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          sx={{ ...(useBootstrapStyle && bootstrapStyle) }}
+          variant={variant}
           label={label}
-          labelToolTip={labelToolTip}
-          addonLeft={addonLeft}
-          addonRight={addonRight}
-          addonProps={{
-            isDisabled,
+          error={hasError}
+          helperText={hasError && !hideValidationMessage ? errorMessage : helpText}
+          placeholder={placeholder}
+          slotProps={{
+            input: {
+              ...params.InputProps,
+              startAdornment: (
+                <>
+                  {startAdornment && <InputAdornment position="start">{startAdornment}</InputAdornment>}
+                  {params.InputProps.startAdornment}
+                </>
+              ),
+              endAdornment: (
+                <>
+                  {endAdornment && <InputAdornment position="start">{endAdornment}</InputAdornment>}
+                  {loadMoreOptions && (
+                    <IconButton
+                      title={paginationText ?? `Load ${limitResults} more`}
+                      size="small"
+                      onClick={() => {
+                        const nextChunk = options.slice(pageSize, pageSize + limitResults);
+                        setPageSize(pageSize + nextChunk.length);
+                        setLoadMoreOptions(pageSize + nextChunk.length < options.length);
+                      }}
+                    >
+                      {paginationIcon ?? <DownloadingSharpIcon />}
+                    </IconButton>
+                  )}
+                  {params.InputProps.endAdornment}
+                </>
+              ),
+            },
           }}
-          inputGroupStyle={props.inputGroupStyle}
-          hideValidationMessage={hideValidationMessage}
-        >
-          <Typeahead
-            {...field}
-            ref={(elem) => {
-              ref.current = elem;
-              if (inputRef) {
-                inputRef.current = elem;
-              }
-            }}
-            defaultSelected={defaultSelected}
-            multiple={multiple}
-            style={style}
-            isInvalid={hasError}
-            onChange={(options) => {
-              const values = convertTypeaheadOptionsToStringArray(options);
-              const finalValue = props.multiple ? values : values[0];
-              clearErrors(name);
-
-              if (onChange) {
-                onChange(finalValue);
-              }
-
-              field.onChange(finalValue);
-            }}
-            onInputChange={onInputChange}
-            onBlur={() => handleOnBlur(field)}
-            id={id}
-            options={props.options}
-            className={`${className} ${error ? "is-invalid" : ""}`}
-            inputProps={{ id }}
-            disabled={isDisabled}
-            onFocus={focusHandler}
-            emptyLabel={emptyLabel}
-            placeholder={placeholder}
-            {...reactBootstrapTypeaheadProps}
-            renderMenu={useGroupBy ? (results, menuProps) => renderMenu(results as LabelValueOption[], menuProps) : undefined}
-          />
-        </FormGroupLayout>
+        />
       )}
     />
   );
