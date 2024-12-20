@@ -31,7 +31,7 @@ const FormGroupLayoutLabel = <T extends FieldValues>(props: FormGroupLayoutLabel
 
   return (
     <>
-      <Label check={checkboxLayout || switchLayout} for={fieldId}>
+      <Label check={checkboxLayout || switchLayout} for={fieldId} onClick={(e) => e.stopPropagation()}>
         {finalLabel}
         {tooltip && (
           <svg
@@ -42,7 +42,10 @@ const FormGroupLayoutLabel = <T extends FieldValues>(props: FormGroupLayoutLabel
             stroke="currentColor"
             id={`Tooltip-${fieldId}`}
             className="tooltip--icon"
-          >
+            width="24"
+            height="24"
+            onClick={(e) => e.preventDefault()}
+         >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
