@@ -45,7 +45,7 @@ const FormGroupLayoutLabel = <T extends FieldValues>(props: FormGroupLayoutLabel
             width="24"
             height="24"
             onClick={(e) => e.preventDefault()}
-            >
+         >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
