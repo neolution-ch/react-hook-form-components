@@ -93,8 +93,9 @@ const StaticTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(pro
   const [pageSize, setPageSize] = useState(limitResults);
   const [loadMoreOptions, setLoadMoreOptions] = useState<boolean>(limitResults < options.length);
 
-  const { name, id } = useSafeNameId(props?.name ?? "", props.id);
+  const { name, id } = useSafeNameId(props.name ?? "", props.id);
   const {
+    requiredFields,
     control,
     disabled: formDisabled,
     getFieldState,
@@ -111,6 +112,9 @@ const StaticTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(pro
       },
     },
   });
+
+  const fieldIsRequired = label && typeof label == "string" && requiredFields.includes(props.name);
+  const finalLabel = fieldIsRequired ? `${String(label)} *` : label;
 
   const isDisabled = formDisabled || disabled;
   const fieldError = get(errors, name) as FieldError | undefined;
@@ -205,7 +209,7 @@ const StaticTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(pro
           {...params}
           sx={{ ...(useBootstrapStyle && bootstrapStyle) }}
           variant={variant}
-          label={label}
+          label={finalLabel}
           error={hasError}
           helperText={hasError && !hideValidationMessage ? errorMessage : helpText}
           placeholder={placeholder}

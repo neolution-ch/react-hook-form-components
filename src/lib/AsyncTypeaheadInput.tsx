@@ -101,7 +101,7 @@ const AsyncTypeAheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
     delay = 200,
     disableCloseOnSelect,
     defaultOptions = [],
-    limitResults = defaultOptions.length,
+    limitResults,
     paginationText,
     paginationIcon,
     useBootstrapStyle = false,
@@ -112,12 +112,13 @@ const AsyncTypeAheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
   const [selectedOptions, setSelectedOptions] = useState<TypeaheadOption[]>(defaultOptions);
   const [inputValue, setInputValue] = useState("");
   const [pageSize, setPageSize] = useState(limitResults);
-  const [loadMoreOptions, setLoadMoreOptions] = useState(limitResults < defaultOptions.length);
+  const [loadMoreOptions, setLoadMoreOptions] = useState(!!limitResults && limitResults < defaultOptions.length);
 
-  const { name, id } = useSafeNameId(props?.name ?? "", props.id);
+  const { name, id } = useSafeNameId(props.name ?? "", props.id);
   const { setDebounceSearch, loading } = useDebounceHook(queryFn, setOptions, onQueryError);
   const {
     control,
+    requiredFields,
     getFieldState,
     formState: { errors },
     clearErrors,
@@ -132,6 +133,9 @@ const AsyncTypeAheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
       },
     },
   });
+
+  const fieldIsRequired = label && typeof label == "string" && requiredFields.includes(props.name);
+  const finalLabel = fieldIsRequired ? `${String(label)} *` : label;
 
   const fieldError = get(errors, name) as FieldError | undefined;
   const hasError = !!fieldError;
@@ -166,18 +170,24 @@ const AsyncTypeAheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
     [addonRight, addonProps],
   );
 
-  const paginatedOptions = useMemo(() => options.slice(0, pageSize), [pageSize, options]);
+  const paginatedOptions = useMemo(
+    () => (pageSize !== undefined ? options.slice(0, pageSize) : options),
+    [pageSize, options]
+  );
 
   useEffect(() => {
     if (inputValue === "") {
       setOptions(selectedOptions);
+      setPageSize(limitResults);
     } else {
       setDebounceSearch({ delay, query: inputValue });
     }
-  }, [delay, inputValue, selectedOptions, setDebounceSearch]);
+  }, [delay, inputValue, limitResults, selectedOptions, setDebounceSearch]);
 
   useEffect(() => {
-    setLoadMoreOptions(pageSize < options.length);
+    if (pageSize !== undefined) {
+      setLoadMoreOptions(pageSize < options.length);
+    }
   }, [options, pageSize]);
 
   return (
@@ -254,7 +264,7 @@ const AsyncTypeAheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
           sx={{ ...(useBootstrapStyle && bootstrapStyle) }}
           variant={variant}
           error={hasError}
-          label={label}
+          label={finalLabel}
           helperText={hasError && !hideValidationMessage ? errorMessage : helpText}
           placeholder={placeholder}
           slotProps={{
@@ -275,7 +285,7 @@ const AsyncTypeAheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
                   ) : (
                     endAdornment && <InputAdornment position="end">{endAdornment}</InputAdornment>
                   )}
-                  {loadMoreOptions && (
+                  {loadMoreOptions && !!pageSize && !!limitResults && (
                     <IconButton
                       title={paginationText ?? `Load ${limitResults} more`}
                       size="small"
