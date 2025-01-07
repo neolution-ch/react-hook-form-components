@@ -72,11 +72,12 @@ const renderHighlightedOptionFunction = (
 
 const bootstrapStyle: SxProps = {
   ".MuiOutlinedInput-root": {
+    minHeight: "36.39px",
     border: "1px solid #dee2e6",
     fontSize: "0.875rem",
     fontWeight: "400",
     color: "#5d636d",
-    padding: "0.375rem 0.75rem !important",
+    padding: "6px 12px",
     borderColor: "#E0E3E7",
     transition: "border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out",
     "div &.Mui-focused": {
@@ -84,7 +85,7 @@ const bootstrapStyle: SxProps = {
       boxShadow: "0 0 0 0.2rem rgba(0,123,255,.25)",
     },
     "& .MuiAutocomplete-input": {
-      padding: "0.375rem 0.75rem !important",
+      padding: "0px 0px !important",
       fontSize: "14px",
     },
     "&.Mui-error": {
@@ -112,7 +113,7 @@ const bootstrapStyle: SxProps = {
     border: "none",
   },
   "& .MuiInputLabel-root": {
-    marginTop: "-1rem",
+    marginTop: "-1.3rem",
     marginLeft: "-0.8rem",
     color: "#8493A5",
     fontSize: "1.2rem",

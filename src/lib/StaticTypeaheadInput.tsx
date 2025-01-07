@@ -176,7 +176,7 @@ const StaticTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(pro
       openText={openText}
       closeText={closeText}
       noOptionsText={noOptionsText}
-      style={useBootstrapStyle ? { ...style, marginBottom: "2rem" } : style}
+      style={useBootstrapStyle ? { ...style, marginBottom: "1rem", marginTop: "2rem" } : style}
       className={className}
       onChange={(_, value) => {
         const optionsArray = value ? (Array.isArray(value) ? value : [value]) : undefined;

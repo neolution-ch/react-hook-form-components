@@ -215,7 +215,7 @@ const AsyncTypeAheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
       clearText={clearText}
       openText={openText}
       closeText={closeText}
-      style={useBootstrapStyle ? { ...style, marginBottom: "2rem" } : style}
+      style={useBootstrapStyle ? { ...style, marginBottom: "1rem", marginTop: "2rem" } : style}
       className={className}
       onBlur={() => {
         if (onBlur) {
