@@ -170,10 +170,7 @@ const AsyncTypeAheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
     [addonRight, addonProps],
   );
 
-  const paginatedOptions = useMemo(
-    () => (pageSize !== undefined ? options.slice(0, pageSize) : options),
-    [pageSize, options]
-  );
+  const paginatedOptions = useMemo(() => (pageSize !== undefined ? options.slice(0, pageSize) : options), [pageSize, options]);
 
   useEffect(() => {
     if (inputValue === "") {
@@ -218,7 +215,7 @@ const AsyncTypeAheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
       clearText={clearText}
       openText={openText}
       closeText={closeText}
-      style={style}
+      style={useBootstrapStyle ? { ...style, marginBottom: "2rem" } : style}
       className={className}
       onBlur={() => {
         if (onBlur) {

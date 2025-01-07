@@ -72,31 +72,20 @@ const renderHighlightedOptionFunction = (
 
 const bootstrapStyle: SxProps = {
   ".MuiOutlinedInput-root": {
-    fontFamily: [
-      "-apple-system",
-      "BlinkMacSystemFont",
-      '"Segoe UI"',
-      "Roboto",
-      '"Helvetica Neue"',
-      "Arial",
-      "sans-serif",
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"',
-    ].join(","),
-    border: "1px solid #ced4da",
-    fontSize: "1rem",
-    color: "#495057",
-    paddingY: "0.5px !important",
-    paddingLeft: "0.1px !important",
+    border: "1px solid #dee2e6",
+    fontSize: "0.875rem",
+    fontWeight: "400",
+    color: "#5d636d",
+    padding: "0.375rem 0.75rem !important",
     borderColor: "#E0E3E7",
     transition: "border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out",
-    "&.Mui-focused": {
+    "div &.Mui-focused": {
       borderColor: "#80bdff",
       boxShadow: "0 0 0 0.2rem rgba(0,123,255,.25)",
     },
     "& .MuiAutocomplete-input": {
       padding: "0.375rem 0.75rem !important",
+      fontSize: "14px",
     },
     "&.Mui-error": {
       borderColor: "#dc3545",
@@ -125,12 +114,15 @@ const bootstrapStyle: SxProps = {
   "& .MuiInputLabel-root": {
     marginTop: "-1rem",
     marginLeft: "-0.8rem",
+    color: "#8493A5",
+    fontSize: "1.2rem",
   },
   "& .MuiFormHelperText-root ": {
     marginLeft: "0.2rem",
     marginTop: "0.3rem",
   },
 };
+
 export {
   getSingleAutoCompleteValue,
   getMultipleAutoCompleteValue,
