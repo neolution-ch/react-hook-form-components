@@ -23,7 +23,7 @@ import DownloadingSharpIcon from "@mui/icons-material/DownloadingSharp";
 import { IconButton } from "@mui/material";
 import { useFormContext } from "./context/FormContext";
 
-interface AsyncTypeAheadInputProps<T extends FieldValues, TRenderAddon = unknown> extends CommonTypeaheadProps<T> {
+interface AsyncTypeaheadInputProps<T extends FieldValues, TRenderAddon = unknown> extends CommonTypeaheadProps<T> {
   queryFn: (query: string) => Promise<TypeaheadOption[]>;
   onQueryError?: (error: unknown) => void;
   delay?: number;
@@ -64,7 +64,7 @@ interface AsyncTypeAheadInputProps<T extends FieldValues, TRenderAddon = unknown
   >;
 }
 
-const AsyncTypeAheadInput = <T extends FieldValues, TRenderAddon = unknown>(props: AsyncTypeAheadInputProps<T, TRenderAddon>) => {
+const AsyncTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(props: AsyncTypeaheadInputProps<T, TRenderAddon>) => {
   const {
     multiple,
     disabled,
@@ -306,4 +306,4 @@ const AsyncTypeAheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
   );
 };
 
-export { AsyncTypeAheadInput, AsyncTypeAheadInputProps };
+export { AsyncTypeaheadInput, AsyncTypeaheadInputProps };
