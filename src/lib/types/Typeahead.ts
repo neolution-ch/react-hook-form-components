@@ -23,6 +23,8 @@ interface CommonTypeaheadProps<T extends FieldValues> extends Omit<CommonInputPr
   paginationIcon?: ReactNode;
   variant?: TextFieldVariants;
   highlightOptions?: boolean;
+  autoSelect?: boolean;
+  autoHighlight?: boolean;
   useBootstrapStyle?: boolean;
   getOptionDisabled?: (option: TypeaheadOption) => boolean;
   onChange?: (selected: string | string[]) => void;

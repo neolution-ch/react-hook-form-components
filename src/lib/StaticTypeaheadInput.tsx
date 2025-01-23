@@ -48,6 +48,8 @@ interface StaticTypeaheadInputProps<T extends FieldValues, TRenderAddon = unknow
     | "disableCloseOnSelect"
     | "onInputChange"
     | "onChange"
+    | "autoSelect"
+    | "autoHighlight"
   >;
 }
 
@@ -86,6 +88,8 @@ const StaticTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(pro
     useGroupBy = false,
     readOnly,
     highlightOptions = true,
+    autoHighlight = !multiple,
+    autoSelect = !multiple,
     useBootstrapStyle = false,
     autocompleteProps,
   } = props;
@@ -200,6 +204,8 @@ const StaticTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(pro
         }
         field.onBlur();
       }}
+      autoSelect={autoSelect}
+      autoHighlight={autoHighlight}
       openOnFocus={openOnFocus}
       onClose={readOnly ? undefined : onClose}
       onOpen={readOnly ? undefined : onOpen}
@@ -235,7 +241,7 @@ const StaticTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(pro
                         setLoadMoreOptions(pageSize + nextChunk.length < options.length);
                       }}
                     >
-                      {paginationIcon ?? <DownloadingSharpIcon />}
+                      {paginationIcon ?? <DownloadingSharpIcon fontSize="small" />}
                     </IconButton>
                   )}
                   {params.InputProps.endAdornment}

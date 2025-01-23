@@ -61,6 +61,8 @@ interface AsyncTypeaheadInputProps<T extends FieldValues, TRenderAddon = unknown
     | "getOptionDisabled"
     | "limitTags"
     | "disableCloseOnSelect"
+    | "autoSelect"
+    | "autoHighlight"
   >;
 }
 
@@ -95,6 +97,8 @@ const AsyncTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
     useGroupBy = false,
     readOnly,
     highlightOptions = true,
+    autoHighlight = true,
+    autoSelect = true,
     loadingText,
     queryFn,
     onQueryError,
@@ -217,6 +221,8 @@ const AsyncTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
       closeText={closeText}
       style={useBootstrapStyle ? { ...style, marginBottom: "1rem", marginTop: "2rem" } : style}
       className={className}
+      autoSelect={autoSelect}
+      autoHighlight={autoHighlight}
       onBlur={() => {
         if (onBlur) {
           onBlur();
@@ -292,7 +298,7 @@ const AsyncTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
                         setLoadMoreOptions(pageSize + nextChunk.length < options.length);
                       }}
                     >
-                      {paginationIcon ?? <DownloadingSharpIcon />}
+                      {paginationIcon ?? <DownloadingSharpIcon fontSize="small" />}
                     </IconButton>
                   )}
                   {params.InputProps.endAdornment}

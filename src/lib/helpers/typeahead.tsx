@@ -77,7 +77,7 @@ const bootstrapStyle: SxProps = {
     fontSize: "0.875rem",
     fontWeight: "400",
     color: "#5d636d",
-    padding: "6px 12px",
+    padding: "0px 12px",
     borderColor: "#E0E3E7",
     transition: "border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out",
     "div &.Mui-focused": {
@@ -94,9 +94,6 @@ const bootstrapStyle: SxProps = {
     "&.Mui-focused.Mui-error": {
       boxShadow: "0 0 0 0.2rem rgba(220,53,69,.25)",
     },
-    "& .MuiInputAdornment-positionStart": {
-      paddingLeft: 1.5,
-    },
     "& .MuiChip-root": {
       backgroundColor: "#e9ecef",
       color: "#495057",
@@ -107,6 +104,9 @@ const bootstrapStyle: SxProps = {
     "& .MuiChip-deleteIcon": {
       color: "#495057",
       fontSize: "0.875rem",
+    },
+    "& .MuiIconButton-root": {
+      padding: 0,
     },
   },
   "& fieldset": {
