@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### dependabot: \#122 Bump store2 from 2.14.2 to 2.14.4
+
 ## [2.13.1] - 2024-12-02
 
 ### Fixed
