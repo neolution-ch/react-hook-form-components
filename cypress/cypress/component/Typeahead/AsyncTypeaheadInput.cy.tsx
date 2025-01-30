@@ -34,10 +34,12 @@ it("works with multiple simple options and default selected", () => {
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: defaultSelectedOptions.map((o) => o.label) });
 
-  cy.get(`#${name}`).click().type("{backspace}".repeat(20));
+  cy.get(`#${name}`).click();
+  cy.get(`#${name}`).type("{backspace}".repeat(20));
 
   for (const changedOption of changedOptions) {
-    cy.get(`#${name}`).click().type(changedOption.label);
+    cy.get(`#${name}`).click();
+    cy.get(`#${name}`).type(changedOption.label);
     cy.get(`a[aria-label='${changedOption.label}']`).click();
   }
 
@@ -75,10 +77,12 @@ it("works with multiple object options and default selected", () => {
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: defaultSelectedOptions.map((o) => o.value) });
 
-  cy.get(`#${name}`).click().type("{backspace}".repeat(20));
+  cy.get(`#${name}`).click();
+  cy.get(`#${name}`).type("{backspace}".repeat(20));
 
   for (const changedOption of changedOptions) {
-    cy.get(`#${name}`).click().type(changedOption.label);
+    cy.get(`#${name}`).click();
+    cy.get(`#${name}`).type(changedOption.label);
     cy.get(`a[aria-label='${changedOption.label}']`).click();
   }
 
@@ -112,7 +116,9 @@ it("works with single object option and default selected", () => {
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: defaultSelectedOption.value });
 
-  cy.get(`#${name}`).clear().click().type(changedOption.label);
+  cy.get(`#${name}`).clear();
+  cy.get(`#${name}`).click();
+  cy.get(`#${name}`).type(changedOption.label);
   cy.get(`a[aria-label='${changedOption.label}']`).click();
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("have.been.calledWith", { [name]: changedOption.value });
@@ -146,7 +152,9 @@ it("works with single simple option and default selected", () => {
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: defaultSelectedOption.label });
 
-  cy.get(`#${name}`).clear().click().type(changedOption.label);
+  cy.get(`#${name}`).clear();
+  cy.get(`#${name}`).click();
+  cy.get(`#${name}`).type(changedOption.label);
   cy.get(`a[aria-label='${changedOption.label}']`).click();
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("have.been.calledWith", { [name]: changedOption.label });
@@ -164,8 +172,10 @@ it("select automatically single option - single", () => {
   );
 
   cy.get(`#${name}`).type(options.objectOptions[0].label, { delay: 100 });
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
   cy.wait(1000);
   cy.get(`#${name}`).blur();
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
   cy.wait(100);
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: options.objectOptions[0].value });
@@ -177,14 +187,14 @@ it("show error if multiple options are available - single", () => {
   const [firstOption] = options.objectOptions;
   const errorMessage = faker.random.words(3);
 
-  const additionalOption = { label: firstOption.label.concat("xyz"), value: faker.datatype.uuid() };
+  const additionalOption = { label: firstOption.label + "xyz", value: faker.datatype.uuid() };
 
   cy.mount(
     <Form onSubmit={cy.spy().as("onSubmitSpy")}>
       <AsyncTypeaheadInput
         name={name}
         label={name}
-        queryFn={async (query) => await fetchMock(options.objectOptions.concat(additionalOption), query, false)}
+        queryFn={async (query) => await fetchMock([...options.objectOptions, additionalOption], query, false)}
         invalidErrorMessage={errorMessage}
       />
       <input type="submit" />
@@ -192,15 +202,14 @@ it("show error if multiple options are available - single", () => {
   );
 
   cy.get(`#${name}`).type(options.objectOptions[0].label, { delay: 100 });
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
   cy.wait(1000);
   cy.get(`#${name}`).blur();
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
   cy.wait(100);
   cy.get("div[class=invalid-feedback]").should("be.visible").should("have.text", errorMessage);
-  cy.get("input[type=submit]")
-    .click({ force: true })
-    .then(() => {
-      cy.get("@onSubmitSpy").should("not.have.been.called");
-    });
+  cy.get("input[type=submit]").click({ force: true });
+  cy.get("@onSubmitSpy").should("not.have.been.called");
   cy.get("div[class=invalid-feedback]").should("be.visible").should("have.text", errorMessage);
 });
 
@@ -221,12 +230,16 @@ it("select automatically single option - multiple", () => {
   );
 
   cy.get(`#${name}`).type(options.objectOptions[0].label, { delay: 100 });
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
   cy.wait(1000);
   cy.get(`#${name}`).blur();
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
   cy.wait(100);
   cy.get(`#${name}`).type(options.objectOptions[1].label, { delay: 100 });
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
   cy.wait(1000);
   cy.get(`#${name}`).blur();
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
   cy.wait(100);
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: [options.objectOptions[0].value, options.objectOptions[1].value] });
@@ -238,14 +251,14 @@ it("show error if multiple options are available - multiple", () => {
   const [firstOption] = options.objectOptions;
   const errorMessage = faker.random.words(3);
 
-  const additionalOption = { label: firstOption.label.concat("xyz"), value: faker.datatype.uuid() };
+  const additionalOption = { label: firstOption.label + "xyz", value: faker.datatype.uuid() };
 
   cy.mount(
     <Form onSubmit={cy.spy().as("onSubmitSpy")}>
       <AsyncTypeaheadInput
         name={name}
         label={name}
-        queryFn={async (query) => await fetchMock(options.objectOptions.concat(additionalOption), query, false)}
+        queryFn={async (query) => await fetchMock([...options.objectOptions, additionalOption], query, false)}
         invalidErrorMessage={errorMessage}
         multiple
       />
@@ -254,15 +267,14 @@ it("show error if multiple options are available - multiple", () => {
   );
 
   cy.get(`#${name}`).type(options.objectOptions[0].label);
-  cy.wait(1000);
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
+  cy.wait(100);
   cy.get(`#${name}`).blur();
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
   cy.wait(100);
   cy.get("div[class=invalid-feedback]").should("be.visible").should("have.text", errorMessage);
-  cy.get("input[type=submit]")
-    .click({ force: true })
-    .then(() => {
-      cy.get("@onSubmitSpy").should("not.have.been.called");
-    });
+  cy.get("input[type=submit]").click({ force: true });
+  cy.get("@onSubmitSpy").should("not.have.been.called");
   cy.get("div[class=invalid-feedback]").should("be.visible").should("have.text", errorMessage);
 });
 
@@ -289,7 +301,9 @@ it("works with the correct value onChange", () => {
     </Form>,
   );
 
-  cy.get(`#${name}`).clear().click().type(changedOption.label);
+  cy.get(`#${name}`).clear();
+  cy.get(`#${name}`).click();
+  cy.get(`#${name}`).type(changedOption.label);
   cy.get(`a[aria-label='${changedOption.label}']`).click();
   cy.get("@OnChangeSpy").should("have.been.calledWith", changedOption.value);
 });
@@ -359,7 +373,9 @@ it("disabled options", () => {
     </Form>,
   );
 
-  cy.get(`#${name}`).clear().click().type(changedOption.label);
+  cy.get(`#${name}`).clear();
+  cy.get(`#${name}`).click();
+  cy.get(`#${name}`).type(changedOption.label);
   cy.get(`a[aria-label='${changedOption.label}']`).should("have.class", "disabled");
 });
 
@@ -393,7 +409,9 @@ it("empty label", () => {
     </Form>,
   );
 
-  cy.get(`#${name}`).clear().click().type(name);
+  cy.get(`#${name}`).clear();
+  cy.get(`#${name}`).click();
+  cy.get(`#${name}`).type(name);
   cy.get(".dropdown-menu > .dropdown-item").should("have.text", emptyLabel);
 });
 

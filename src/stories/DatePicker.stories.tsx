@@ -14,7 +14,7 @@ interface FormInterface {
 
 const Template: Story<DatePickerInputProps<FormInterface>> = (args) => (
   <React.Fragment>
-    <Form onSubmit={(data) => alert(JSON.stringify(data, null, 2))}>
+    <Form onSubmit={(data) => alert(JSON.stringify(data, undefined, 2))}>
       <DatePickerInput {...args} />
 
       <Button type="submit">Submit</Button>

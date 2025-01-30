@@ -18,7 +18,8 @@ it("text input label does not get rendered when undefined", () => {
     </Form>,
   );
 
-  cy.get(`input[name=${name}]`).click().type(randomText);
+  cy.get(`input[name=${name}]`).click();
+  cy.get(`input[name=${name}]`).type(randomText);
 
   cy.get("label").should("not.exist");
 

@@ -20,6 +20,7 @@ const FormGroupLayoutLabel = <T extends FieldValues>(props: FormGroupLayoutLabel
   }
 
   if (!label) {
+    // eslint-disable-next-line unicorn/no-null
     return null;
   }
 

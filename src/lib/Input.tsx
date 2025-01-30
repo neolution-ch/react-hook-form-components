@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 import { FieldValues } from "react-hook-form";
 import { FormGroup, Label } from "reactstrap";
 import { InputType } from "reactstrap/types/lib/Input";
@@ -10,7 +9,7 @@ import { LabelValueOption } from "./types/LabelValueOption";
 import { useFormContext } from "./context/FormContext";
 import { MutableRefObject } from "react";
 
-const invalidAddonTypes = ["switch", "radio", "checkbox"];
+const invalidAddonTypes = new Set(["switch", "radio", "checkbox"]);
 
 interface InputProps<T extends FieldValues> extends CommonInputProps<T> {
   type?: InputType;
@@ -51,7 +50,7 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
   if (type === "select" && !options) {
     throw new Error("options must be provided for select inputs");
   }
-  if ((addonLeft || addonRight) && type && invalidAddonTypes.includes(type)) {
+  if ((addonLeft || addonRight) && type && invalidAddonTypes.has(type)) {
     throw new Error("Addons can not be shown on switch, radio or checkbox types of inputs");
   }
   if (multiple && type !== "select") {
@@ -93,7 +92,7 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
     if (type === "checkbox") {
       return "checkbox";
     }
-    return undefined;
+    return;
   })();
 
   const { id: safeId } = useSafeNameId(name, id);

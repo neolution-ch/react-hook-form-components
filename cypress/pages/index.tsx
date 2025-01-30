@@ -10,14 +10,14 @@ import { Col, Row } from "reactstrap";
 type ConditionalSchema<T> = T extends string
   ? yup.StringSchema
   : T extends number
-  ? yup.NumberSchema
-  : T extends boolean
-  ? yup.BooleanSchema
-  : T extends Array<unknown>
-  ? yup.ArraySchema<never, never>
-  : T extends Record<never, never>
-  ? yup.AnyObjectSchema
-  : yup.AnySchema;
+    ? yup.NumberSchema
+    : T extends boolean
+      ? yup.BooleanSchema
+      : T extends Array<unknown>
+        ? yup.ArraySchema<never, never>
+        : T extends Record<never, never>
+          ? yup.AnyObjectSchema
+          : yup.AnySchema;
 
 type StronglyTypedShape<Fields> = {
   [Key in keyof Fields]: ConditionalSchema<Fields[Key]>;
@@ -52,7 +52,7 @@ export default function Home() {
         <Row>
           <Col>
             <div>
-              <Form<FormData> onSubmit={(data) => alert(JSON.stringify(data, null, 2))} resolver={yupResolver(schema)}>
+              <Form<FormData> onSubmit={(data) => alert(JSON.stringify(data, undefined, 2))} resolver={yupResolver(schema)}>
                 <Input<FormData> name="username" label={"Username"} />
 
                 <input type="submit" />

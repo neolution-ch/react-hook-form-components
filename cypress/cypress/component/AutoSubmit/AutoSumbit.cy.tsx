@@ -29,25 +29,25 @@ it("radio button multiple autosave works", () => {
   );
 
   cy.get("@onSubmitSpy1").should("have.callCount", 0);
-  options1.forEach(({ value, label }, i) => {
+  for (const [i, { value, label }] of options1.entries()) {
     cy.contains("label", label).click();
 
     cy.get("@onSubmitSpy1").should("have.callCount", i + 1);
     cy.get("@onSubmitSpy1")
       .its("lastCall.args.0")
       .should("deep.equal", { [name1]: value });
-  });
+  }
   cy.get("@onSubmitSpy1").should("callCount", options1.length);
 
   cy.get("@onSubmitSpy2").should("have.callCount", 0);
-  options2.forEach(({ value, label }, i) => {
+  for (const [i, { value, label }] of options2.entries()) {
     cy.contains("label", label).click();
 
     cy.get("@onSubmitSpy2").should("have.callCount", i + 1);
     cy.get("@onSubmitSpy2")
       .its("lastCall.args.0")
       .should("deep.equal", { [name2]: value });
-  });
+  }
   cy.get("@onSubmitSpy2").should("callCount", options2.length);
 });
 
@@ -67,11 +67,11 @@ it("radio button autosave only once", () => {
 
   cy.get("@onSubmitSpy").should("have.callCount", 0);
 
-  options.forEach(({ label }) => {
+  for (const { label } of options) {
     cy.contains("label", label).click();
-  });
+  }
 
-  cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: options[options.length - 1].value });
+  cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: options.at(-1)?.value });
   cy.get("@onSubmitSpy").should("have.callCount", 1);
 });
 
@@ -89,7 +89,8 @@ it("text input autosave only once", () => {
     </Form>,
   );
 
-  cy.contains("label", name).click().type(randomText);
+  cy.contains("label", name).click();
+  cy.focused().type(randomText);
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: randomText });
   cy.get("@onSubmitSpy").should("have.callCount", 1);
 });

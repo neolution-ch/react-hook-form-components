@@ -24,7 +24,7 @@ interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputPr
    * The onChange handler for the date picker component.
    * @param value The selected date or null if the user cleared the date.
    */
-  onChange?: (value: Date | null) => void;
+  onChange?: (value: Date | undefined) => void;
 
   /**
    * The IANA time zone identifier, e.g. "Europe/Berlin" for which the date should be displayed.
@@ -81,10 +81,10 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
     throw new Error("If you use ianaTimeZone, you have to include time in the dateFormat or set showTimeInput or showTimeSelect to true");
   }
 
-  const getInitialDate = (): Date | null => {
-    const value = getValues(name) as Date | null;
+  const getInitialDate = (): Date | undefined => {
+    const value = getValues(name) as Date | undefined;
 
-    if (!value) return null;
+    if (!value) return;
 
     if (!showTimeInputOrSelect) return getUtcTimeZeroDate(value);
 
@@ -94,8 +94,8 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
   };
 
   const getConvertedDate = useCallback(
-    (date: Date | null): Date | null => {
-      if (!date) return null;
+    (date: Date | undefined): Date | undefined => {
+      if (!date) return;
 
       if (!showTimeInputOrSelect) return getUtcTimeZeroDate(date);
 
@@ -106,7 +106,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
     [ianaTimeZone, showTimeInputOrSelect],
   );
 
-  const [selectedDate, setSelectedDate] = useState<Date | null>(getInitialDate());
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(getInitialDate());
 
   // setting the value here once the component is mounted
   // so we have the corrected date in the form
@@ -156,9 +156,10 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
             ref={(elem) => {
               // https://github.com/react-hook-form/react-hook-form/discussions/5413
               // https://codesandbox.io/s/react-hook-form-focus-forked-yyhsi?file=/src/index.js
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
-              elem && field.ref((elem as any).input);
-
+              if (elem) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                field.ref((elem as any).input);
+              }
               internalDatePickerRef.current = elem as DatePicker<never>;
 
               if (datePickerRef) {
@@ -170,16 +171,16 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
               field.onBlur();
             }}
             onChange={(date) => {
-              setSelectedDate(date);
+              setSelectedDate(date ?? undefined);
 
-              const convertedDate = getConvertedDate(date);
+              const convertedDate = getConvertedDate(date ?? undefined);
 
               if (props.onChange) props.onChange(convertedDate);
 
               field.onChange(convertedDate);
             }}
             onClickOutside={(e) => {
-              if (document.getElementById(formGroupId.current)?.contains(e.target as HTMLElement) && !disabled && !formDisabled) {
+              if (document.querySelector(`#${formGroupId.current}`)?.contains(e.target as HTMLElement) && !disabled && !formDisabled) {
                 internalDatePickerRef.current?.setOpen(true);
               }
 

@@ -51,7 +51,7 @@ it("select multiple works", () => {
 
 it("input is disabled", () => {
   const name = faker.random.word();
-  const options = [...Array<unknown>(5)].map<LabelValueOption>(() => {
+  const options = Array.from({ length: 5 }).map<LabelValueOption>(() => {
     const randomVal = faker.science.chemicalElement().name;
     return { label: randomVal, value: randomVal };
   });
@@ -71,7 +71,7 @@ it("input is disabled", () => {
 
 it("option is disabled", () => {
   const name = faker.random.word();
-  const options = [...Array<unknown>(5)].map<LabelValueOption>(() => {
+  const options = Array.from({ length: 5 }).map<LabelValueOption>(() => {
     const randomVal = faker.science.chemicalElement().name;
     return { label: randomVal, value: randomVal };
   });

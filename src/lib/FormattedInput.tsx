@@ -47,7 +47,7 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
       render={({ field: { name, onBlur, onChange, ref, value }, fieldState: { error } }) => {
         const commonProps: NumericFormatProps = {
           name: name,
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
           value: value,
           getInputRef: ref,
           className: classnames("form-control", { "is-invalid": error }, className),

@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { DatePickerInput, Form, getUtcTimeZeroDate } from "react-hook-form-components";
 import "react-datepicker/dist/react-datepicker.css";
 import { faker } from "@faker-js/faker";
@@ -7,8 +6,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, InputGroupText } from "reactstrap";
+// eslint-disable-next-line import/no-unresolved
 import { SinonSpy } from "cypress/types/sinon";
 import { useRef, useEffect, FC } from "react";
+// eslint-disable-next-line import/no-named-as-default
 import ReactDatePicker from "react-datepicker";
 
 it("selecting today works", () => {
@@ -45,14 +46,9 @@ it("setting intial value as iso string works", () => {
     [name]: yup.date().required(),
   });
 
-  const x = (values: unknown) => {
-    console.log(values);
-    console.log(JSON.stringify(values));
-  };
-
   cy.mount(
     <Form
-      onSubmit={cy.spy(x).as("onSubmitSpy")}
+      onSubmit={cy.spy().as("onSubmitSpy")}
       resolver={yupResolver(schema)}
       defaultValues={{
         [name]: randomDate.toISOString(),

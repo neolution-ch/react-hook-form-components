@@ -37,6 +37,7 @@
 // }
 
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Cypress {
     interface Chainable {
       setSliderValue(value: number): Chainable<void>;
@@ -48,21 +49,19 @@ declare global {
 }
 
 Cypress.Commands.add("setSliderValue", { prevSubject: "element" }, (subject, value) => {
-  // eslint-disable-next-line prefer-destructuring
   const element = subject[0];
 
-  const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value")?.set;
+  const nativeInputValueSetter = Object.getOwnPropertyDescriptor(globalThis.HTMLInputElement.prototype, "value")?.set;
 
   nativeInputValueSetter?.call(element, value);
   element.dispatchEvent(new Event("input", { bubbles: true }));
 });
 
 Cypress.Commands.add("getSelectedText", { prevSubject: "element" }, (subject) => {
-  // eslint-disable-next-line prefer-destructuring
   const inputField = subject[0] as HTMLInputElement;
   cy.wrap(
     inputField.selectionStart !== undefined && inputField.selectionEnd !== null
-      ? inputField.value.substring(inputField.selectionStart ?? 0, inputField.selectionEnd ?? 0)
+      ? inputField.value.slice(inputField.selectionStart ?? 0, inputField.selectionEnd ?? 0)
       : "",
   );
 });

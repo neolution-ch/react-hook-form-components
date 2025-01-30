@@ -29,7 +29,8 @@ it("works with single simple options", () => {
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: defaultSelectedOption });
 
-  cy.get(`#${name}`).clear().click();
+  cy.get(`#${name}`).clear();
+  cy.get(`#${name}`).click();
   cy.get(`a[aria-label='${changedOption}']`).click();
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledWith", { [name]: changedOption });
@@ -50,6 +51,7 @@ it("select automatically a single simple options - single", () => {
 
   cy.get(`#${name}`).type(firstOption);
   cy.get(`#${name}`).blur({ force: true });
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
   cy.wait(100);
   cy.get("div[class=invalid-feedback]").should("not.be.visible");
   cy.get("input[type=submit]").click({ force: true });
@@ -63,24 +65,22 @@ it("display an error if more than one options are found and not selected - singl
   const [firstOption] = randomOptions;
   const errorMessage = faker.random.words(3);
 
-  const additionalOption = firstOption.concat("xyz");
+  const additionalOption = firstOption + "xyz";
 
   cy.mount(
     <Form onSubmit={cy.spy().as("onSubmitSpy")}>
-      <StaticTypeaheadInput name={name} label={name} options={simpleOptions.concat(additionalOption)} invalidErrorMessage={errorMessage} />
+      <StaticTypeaheadInput name={name} label={name} options={[...simpleOptions, additionalOption]} invalidErrorMessage={errorMessage} />
       <input type="submit" />
     </Form>,
   );
 
   cy.get(`#${name}`).type(firstOption);
   cy.get(`#${name}`).blur({ force: true });
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
   cy.wait(100);
   cy.get("div[class=invalid-feedback]").should("be.visible").should("have.text", errorMessage);
-  cy.get("input[type=submit]")
-    .click({ force: true })
-    .then(() => {
-      cy.get("@onSubmitSpy").should("not.have.been.called");
-    });
+  cy.get("input[type=submit]").click({ force: true });
+  cy.get("@onSubmitSpy").should("not.have.been.called");
   cy.get("div[class=invalid-feedback]").should("be.visible").should("have.text", errorMessage);
 });
 
@@ -99,9 +99,11 @@ it("select automatically a single simple options - multiple", () => {
 
   cy.get(`#${name}`).type(firstOption);
   cy.get(`#${name}`).blur({ force: true });
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
   cy.wait(100);
   cy.get(`#${name}`).type(secondOption);
   cy.get(`#${name}`).blur({ force: true });
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
   cy.wait(100);
   cy.get("div[class=invalid-feedback]").should("not.be.visible");
   cy.get("input[type=submit]").click({ force: true });
@@ -115,14 +117,14 @@ it("display an error if more than one options are found and not selected - multi
   const [firstOption, secondOption] = randomOptions;
   const errorMessage = faker.random.words(3);
 
-  const additionalOption = secondOption.concat("xyz");
+  const additionalOption = secondOption + "xyz";
 
   cy.mount(
     <Form onSubmit={cy.spy().as("onSubmitSpy")}>
       <StaticTypeaheadInput
         name={name}
         label={name}
-        options={simpleOptions.concat(additionalOption)}
+        options={[...simpleOptions, additionalOption]}
         multiple
         invalidErrorMessage={errorMessage}
       />
@@ -132,16 +134,15 @@ it("display an error if more than one options are found and not selected - multi
 
   cy.get(`#${name}`).type(firstOption);
   cy.get(`#${name}`).blur({ force: true });
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
   cy.wait(100);
   cy.get(`#${name}`).type(secondOption);
   cy.get(`#${name}`).blur({ force: true });
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
   cy.wait(100);
   cy.get("div[class=invalid-feedback]").should("exist");
-  cy.get("input[type=submit]")
-    .click({ force: true })
-    .then(() => {
-      cy.get("@onSubmitSpy").should("not.have.been.called");
-    });
+  cy.get("input[type=submit]").click({ force: true });
+  cy.get("@onSubmitSpy").should("not.have.been.called");
   cy.get("div[class=invalid-feedback]").should("be.visible").should("have.text", errorMessage);
 });
 
@@ -170,7 +171,8 @@ it("works with multiple simple options", () => {
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: defaultSelectedOptions });
 
-  cy.get(`#${name}`).click().type("{backspace}".repeat(20));
+  cy.get(`#${name}`).click();
+  cy.get(`#${name}`).type("{backspace}".repeat(20));
 
   for (const option of changedOptions) {
     cy.get(`#${name}`).click();
@@ -202,7 +204,8 @@ it("works with single object options", () => {
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: defaultSelectedOption.value });
 
-  cy.get(`#${name}`).clear().click();
+  cy.get(`#${name}`).clear();
+  cy.get(`#${name}`).click();
   cy.get(`a[aria-label='${changedOption.label}']`).click();
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledWith", { [name]: changedOption.value });
@@ -232,10 +235,12 @@ it("works with multiple object options", () => {
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: defaultSelectedOptions.map((o) => o.value) });
 
-  cy.get(`#${name}`).click().type("{backspace}".repeat(20));
+  cy.get(`#${name}`).click();
+  cy.get(`#${name}`).type("{backspace}".repeat(20));
 
   for (const changedOption of changedOptions) {
-    cy.get(`#${name}`).click().type(changedOption.label);
+    cy.get(`#${name}`).click();
+    cy.get(`#${name}`).type(changedOption.label);
     cy.get(`a[aria-label='${changedOption.label}']`).click();
   }
 
@@ -285,7 +290,8 @@ it("works with the correct value onChange", () => {
     </Form>,
   );
 
-  cy.get(`#${name}`).clear().click();
+  cy.get(`#${name}`).clear();
+  cy.get(`#${name}`).click();
   cy.get(`a[aria-label='${randomOption}']`).click();
   cy.get("@OnChangeSpy").should("have.been.calledWith", randomOption);
 });
@@ -351,7 +357,8 @@ it("disabled options", () => {
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: defaultSelectedOptions });
 
-  cy.get(`#${name}`).click().type("{backspace}".repeat(20));
+  cy.get(`#${name}`).click();
+  cy.get(`#${name}`).type("{backspace}".repeat(20));
 
   for (const option of changedOptions) {
     cy.get(`#${name}`).click();
