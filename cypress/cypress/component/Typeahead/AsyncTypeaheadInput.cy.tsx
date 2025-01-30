@@ -481,11 +481,14 @@ it("use input-ref and handle on input change", () => {
   };
 
   cy.mount(<TestForm />);
-  cy.get(`#${name}`).clear().click().type(text);
+  cy.get(`#${name}`).clear();
+  cy.get(`#${name}`).click();
+  cy.get(`#${name}`).type(text);
   cy.get('input[type="submit"]').should("be.enabled");
   cy.get(`#${name}`).clear();
   cy.get('input[type="submit"]').should("be.disabled");
-  cy.get(`#${name}`).click().type(simpleOptions[0]);
+  cy.get(`#${name}`).click();
+  cy.get(`#${name}`).type(simpleOptions[0]);
   cy.get(`a[aria-label='${simpleOptions[0]}']`).click();
   cy.get(".rbt-menu.dropdown-menu.show").should("be.visible");
 });
@@ -509,10 +512,10 @@ it("grouping options", () => {
   cy.get(`#${name}`).type(groupedOptions[0].label);
   cy.get(".dropdown-header").first().should("be.visible").and("have.text", Sex.Male);
   cy.contains("a", groupedOptions[0].label).should("have.class", "disabled");
-  cy.get(`#${name}`)
-    .clear()
-    .type(groupedOptions[COUNT / 2].label);
+  cy.get(`#${name}`).clear();
+  cy.get(`#${name}`).type(groupedOptions[COUNT / 2].label);
   cy.get(".dropdown-header").first().should("be.visible").and("have.text", Sex.Female);
-  cy.get(`#${name}`).clear().type(groupedOptions[COUNT].label);
+  cy.get(`#${name}`).clear();
+  cy.get(`#${name}`).type(groupedOptions[COUNT].label);
   cy.contains("a", groupedOptions[COUNT].label).should("exist");
 });

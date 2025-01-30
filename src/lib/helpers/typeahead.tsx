@@ -40,7 +40,7 @@ const renderMenu = (results: LabelValueOption[], menuProps: RenderMenuProps): JS
           {index < groups.length - 1 && <Menu.Divider />}
         </React.Fragment>
       ))}
-      {!!anonymousOptions.length && <Menu.Divider />}
+      {anonymousOptions.length > 0 && <Menu.Divider />}
       {anonymousOptions.map((option) => (
         <MenuItem key={option.value} option={option} position={position++} disabled={option.disabled}>
           {option.label}

@@ -445,6 +445,9 @@ it("minlenght and maxlenght work", () => {
     </Form>,
   );
 
-  cy.get(`input[name=${name}]`).type(validInput).should("have.value", validInput);
-  cy.get(`input[name=${name}]`).clear().type(invalidInput).should("have.value", invalidInput.slice(0, maxLength));
+  cy.get(`input[name=${name}]`).type(validInput);
+  cy.get(`input[name=${name}]`).should("have.value", validInput);
+  cy.get(`input[name=${name}]`).clear();
+  cy.get(`input[name=${name}]`).type(invalidInput);
+  cy.get(`input[name=${name}]`).should("have.value", invalidInput.slice(0, maxLength));
 });

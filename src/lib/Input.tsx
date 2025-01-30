@@ -76,7 +76,7 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
     if (type && !["text", "password", "textarea", "search", "tel", "url", "email"].includes(type)) {
       throw new Error("minlength and maxlength can only be used with text, password, textarea, search, tel, url, or email inputs");
     }
-    const isNegativeOrInvalidNumber = (value: number | undefined) => value !== undefined && (isNaN(value) || value < 0);
+    const isNegativeOrInvalidNumber = (value: number | undefined) => value !== undefined && (Number.isNaN(value) || value < 0);
     if (isNegativeOrInvalidNumber(minLength) || isNegativeOrInvalidNumber(maxLength)) {
       throw new Error("minlength and maxlength, whether provided, must be 0 or positive valid numbers");
     }

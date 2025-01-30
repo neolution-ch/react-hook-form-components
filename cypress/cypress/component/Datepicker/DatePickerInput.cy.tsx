@@ -6,7 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, InputGroupText } from "reactstrap";
-// eslint-disable-next-line import/no-unresolved
+
 import { SinonSpy } from "cypress/types/sinon";
 import { useRef, useEffect, FC } from "react";
 // eslint-disable-next-line import/no-named-as-default
