@@ -50,6 +50,7 @@ interface StaticTypeaheadInputProps<T extends FieldValues, TRenderAddon = unknow
     | "onChange"
     | "autoSelect"
     | "autoHighlight"
+    | "disableClearable"
   >;
 }
 
@@ -90,6 +91,7 @@ const StaticTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(pro
     highlightOptions = true,
     autoHighlight = !multiple,
     autoSelect = !multiple,
+    disableClearable,
     useBootstrapStyle = false,
     autocompleteProps,
   } = props;
@@ -206,6 +208,7 @@ const StaticTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(pro
       }}
       autoSelect={autoSelect}
       autoHighlight={autoHighlight}
+      disableClearable={disableClearable}
       openOnFocus={openOnFocus}
       onClose={readOnly ? undefined : onClose}
       onOpen={readOnly ? undefined : onOpen}

@@ -25,6 +25,7 @@ interface CommonTypeaheadProps<T extends FieldValues> extends Omit<CommonInputPr
   highlightOptions?: boolean;
   autoSelect?: boolean;
   autoHighlight?: boolean;
+  disableClearable?: boolean;
   useBootstrapStyle?: boolean;
   getOptionDisabled?: (option: TypeaheadOption) => boolean;
   onChange?: (selected: string | string[]) => void;

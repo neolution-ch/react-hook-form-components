@@ -129,6 +129,8 @@ it("works with single object option and default selected", () => {
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: defaultSelectedOption.value });
   selectOption(name, changedOption.label);
+  cy.get(`#${name}`).click().type("e"); // simulate typo
+  cy.get(`#${name}`).blur();
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("have.been.calledWith", { [name]: changedOption.value });
 });
@@ -184,7 +186,7 @@ it("select automatically single option when one option is available - single (au
     </div>,
   );
 
-  cy.get(`#${name}`).type(options.objectOptions[0].label, { delay: 100 });
+  cy.get(`#${name}`).type(options.objectOptions[0].label);
   waitLoadingOptions();
   cy.get(`#${name}`).blur();
   cy.get("ul.MuiAutocomplete-listbox").should("not.exist");
@@ -192,7 +194,7 @@ it("select automatically single option when one option is available - single (au
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: options.objectOptions[0].value });
 });
 
-it("select automatically single option when multiple options are available - single (autoSelect/autoHighlight)", () => {
+it("select automatically single option when multiple options are available - single (autoSelect)", () => {
   const prefix = faker.random.alpha(3);
   const options = [
     { label: prefix + faker.random.alpha(7), value: faker.datatype.uuid() },
@@ -203,13 +205,18 @@ it("select automatically single option when multiple options are available - sin
   cy.mount(
     <div className="p-4">
       <Form onSubmit={cy.spy().as("onSubmitSpy")}>
-        <AsyncTypeaheadInput name={name} label={name} queryFn={async (query: string) => await fetchMock(options, query, false)} />
+        <AsyncTypeaheadInput
+          name={name}
+          label={name}
+          queryFn={async (query: string) => await fetchMock(options, query, false)}
+          autoSelect
+        />
         <input type="submit" className="mt-4" />
       </Form>
     </div>,
   );
 
-  cy.get(`#${name}`).type(prefix, { delay: 100 });
+  cy.get(`#${name}`).type(prefix);
   waitLoadingOptions();
   cy.get(`#${name}`).type("{downarrow}");
   cy.get(`#${name}`).blur();
@@ -236,12 +243,12 @@ it("select automatically single option - multiple (autoSelect/autoHighlight)", (
     </div>,
   );
 
-  cy.get(`#${name}`).type(options.objectOptions[0].label, { delay: 100 });
+  cy.get(`#${name}`).type(options.objectOptions[0].label);
   waitLoadingOptions();
   cy.get(`#${name}`).blur();
   waitForChip(options.objectOptions[0].label);
 
-  cy.get(`#${name}`).type(options.objectOptions[1].label, { delay: 100 });
+  cy.get(`#${name}`).type(options.objectOptions[1].label);
   waitLoadingOptions();
   cy.get(`#${name}`).blur();
   waitForChip(options.objectOptions[1].label);
@@ -262,7 +269,14 @@ it("select automatically single option when multiple options are available - mul
   cy.mount(
     <div className="p-4">
       <Form onSubmit={cy.spy().as("onSubmitSpy")}>
-        <AsyncTypeaheadInput name={name} label={name} queryFn={async (query: string) => await fetchMock(options, query, false)} multiple />
+        <AsyncTypeaheadInput
+          name={name}
+          label={name}
+          queryFn={async (query: string) => await fetchMock(options, query, false)}
+          multiple
+          autoHighlight
+          autoSelect
+        />
         <input type="submit" className="mt-4" />
       </Form>
     </div>,
@@ -466,7 +480,9 @@ it("placeholder", () => {
   cy.mount(
     <div className="p-4">
       <Form
-        onSubmit={cy.spy().as("onSubmitSpy")}
+        onSubmit={() => {
+          // Nothing to do
+        }}
         defaultValues={{
           [name]: simpleOptions,
         }}
@@ -478,7 +494,7 @@ it("placeholder", () => {
           queryFn={async (query) =>
             await fetchMock(
               simpleOptions.map((x) => ({ label: x, value: x })),
-              query as string,
+              query,
               false,
             )
           }
@@ -537,19 +553,21 @@ it("test grouping options", () => {
   const name = faker.random.alpha(10);
 
   cy.mount(
-    <Form
-      onSubmit={() => {
-        // Nothing to do
-      }}
-    >
-      <AsyncTypeaheadInput
-        name={name}
-        label={name}
-        useGroupBy
-        queryFn={async (query: string) => await fetchMock(groupedOptions, query, false)}
-      />
-      <input type="submit" />
-    </Form>,
+    <div className="p-4">
+      <Form
+        onSubmit={() => {
+          // Nothing to do
+        }}
+      >
+        <AsyncTypeaheadInput
+          name={name}
+          label={name}
+          useGroupBy
+          queryFn={async (query: string) => await fetchMock(groupedOptions, query, false)}
+        />
+        <input type="submit" className="mt-4" />
+      </Form>
+    </div>,
   );
 
   cy.get(`#${name}`).type(groupedOptions[0].label);
@@ -558,6 +576,41 @@ it("test grouping options", () => {
     .clear()
     .type(groupedOptions[COUNT / 2].label);
   cy.get("div.MuiAutocomplete-groupLabel").first().should("be.visible").and("have.text", Sex.Female);
-  cy.get(`#${name}`).clear().type(groupedOptions[COUNT].label);
-  cy.get('li[role="option"]').contains(groupedOptions[COUNT].label).should("exist");
+  selectOption(name, groupedOptions[COUNT].label);
+});
+
+it("test pagination 2 by 2", () => {
+  const name = faker.random.alpha(10);
+  const prefix = faker.random.alpha(3);
+  const options = [
+    { label: prefix + faker.random.alpha(7), value: faker.datatype.uuid() },
+    { label: prefix + faker.random.alpha(7), value: faker.datatype.uuid() },
+    { label: prefix + faker.random.alpha(7), value: faker.datatype.uuid() },
+    { label: prefix + faker.random.alpha(7), value: faker.datatype.uuid() },
+  ];
+
+  cy.mount(
+    <div className="p-4">
+      <Form
+        onSubmit={() => {
+          // Nothing to do
+        }}
+      >
+        <AsyncTypeaheadInput
+          name={name}
+          label={name}
+          queryFn={async (query: string) => await fetchMock(options, query, false)}
+          onChange={cy.spy().as("OnChangeSpy")}
+          limitResults={2}
+        />
+        <input type="submit" className="mt-4" />
+      </Form>
+    </div>,
+  );
+
+  cy.get(`#${name}`).clear().click().type(prefix);
+  waitLoadingOptions();
+  cy.get("ul.MuiAutocomplete-listbox").find("li").should("have.length", 2);
+  cy.get('button[title="Load 2 more"]').click();
+  cy.get("ul.MuiAutocomplete-listbox").find("li").should("have.length", 4);
 });

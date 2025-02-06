@@ -63,6 +63,7 @@ interface AsyncTypeaheadInputProps<T extends FieldValues, TRenderAddon = unknown
     | "disableCloseOnSelect"
     | "autoSelect"
     | "autoHighlight"
+    | "disableClearable"
   >;
 }
 
@@ -91,6 +92,7 @@ const AsyncTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
     addonRight,
     addonProps,
     style,
+    inputGroupStyle,
     className,
     noOptionsText,
     placeholder,
@@ -98,7 +100,8 @@ const AsyncTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
     readOnly,
     highlightOptions = true,
     autoHighlight = true,
-    autoSelect = true,
+    autoSelect,
+    disableClearable,
     loadingText,
     queryFn,
     onQueryError,
@@ -114,7 +117,6 @@ const AsyncTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
 
   const [options, setOptions] = useState<TypeaheadOption[]>(defaultOptions);
   const [selectedOptions, setSelectedOptions] = useState<TypeaheadOption[]>(defaultOptions);
-  const [inputValue, setInputValue] = useState("");
   const [pageSize, setPageSize] = useState(limitResults);
   const [loadMoreOptions, setLoadMoreOptions] = useState(!!limitResults && limitResults < defaultOptions.length);
 
@@ -148,15 +150,7 @@ const AsyncTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
   // autocomplete requires consistency between the form value and the options types
   const fieldValue = watch(name) as string | string[] | undefined;
 
-  const value = useMemo(() => {
-    if (fieldValue == undefined) {
-      return undefined;
-    }
-    const mergedArray = getUniqueOptions(selectedOptions, options);
-    return typeof fieldValue === "string"
-      ? getSingleAutoCompleteValue(options, fieldValue)
-      : getMultipleAutoCompleteValue([...options, ...mergedArray], fieldValue);
-  }, [fieldValue, options, selectedOptions]);
+  const [value, setValue] = useState<TypeaheadOption | TypeaheadOption[] | undefined>(multiple ? [] : undefined);
 
   const startAdornment = useMemo(
     () =>
@@ -177,19 +171,24 @@ const AsyncTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
   const paginatedOptions = useMemo(() => (pageSize !== undefined ? options.slice(0, pageSize) : options), [pageSize, options]);
 
   useEffect(() => {
-    if (inputValue === "") {
-      setOptions(selectedOptions);
-      setPageSize(limitResults);
-    } else {
-      setDebounceSearch({ delay, query: inputValue });
+    let currentValue = undefined;
+    if (fieldValue !== undefined) {
+      const mergedArray = getUniqueOptions(selectedOptions, options);
+      currentValue =
+        typeof fieldValue === "string"
+          ? getSingleAutoCompleteValue(options, fieldValue)
+          : getMultipleAutoCompleteValue([...options, ...mergedArray], fieldValue);
     }
-  }, [delay, inputValue, limitResults, selectedOptions, setDebounceSearch]);
+    setValue(currentValue || (multiple ? [] : undefined));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fieldValue]);
 
   useEffect(() => {
     if (pageSize !== undefined) {
-      setLoadMoreOptions(pageSize < options.length);
+      // paginate results whether the number of options exceeds the available ones
+      setLoadMoreOptions(pageSize < options.length - selectedOptions.length);
     }
-  }, [options, pageSize]);
+  }, [pageSize, options.length, selectedOptions.length]);
 
   return (
     <Autocomplete<TypeaheadOption, boolean, boolean, boolean>
@@ -203,7 +202,6 @@ const AsyncTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
       options={paginatedOptions}
       filterOptions={(currentOptions) => (multiple ? getUniqueOptions(currentOptions, selectedOptions) : currentOptions)}
       getOptionLabel={(option: TypeaheadOption) => (typeof option === "string" ? option : option.label)}
-      inputValue={multiple ? inputValue : undefined}
       value={value || (multiple ? [] : null)}
       getOptionDisabled={(option) =>
         getOptionDisabled?.(option) ||
@@ -219,24 +217,33 @@ const AsyncTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
       clearText={clearText}
       openText={openText}
       closeText={closeText}
-      style={useBootstrapStyle ? { ...style, marginBottom: "1rem", marginTop: "2rem" } : style}
+      style={useBootstrapStyle ? { ...inputGroupStyle, marginBottom: "1rem", marginTop: "3rem" } : inputGroupStyle}
       className={className}
-      autoSelect={autoSelect}
+      autoSelect={autoSelect ?? options.length === 1}
       autoHighlight={autoHighlight}
+      disableClearable={disableClearable}
       onBlur={() => {
         if (onBlur) {
           onBlur();
         }
         field.onBlur();
-        if (multiple) {
-          setInputValue("");
-        }
       }}
       onChange={(_e, value) => {
         const optionsArray = value ? (Array.isArray(value) ? value : [value]) : undefined;
         const values = convertAutoCompleteOptionsToStringArray(optionsArray);
         const finalValue = multiple ? values : values[0];
-        setSelectedOptions(optionsArray ?? defaultOptions);
+
+        if (optionsArray) {
+          if (multiple) {
+            // align available options with selected options
+            setSelectedOptions(optionsArray);
+            setOptions(optionsArray);
+          } else {
+            // align the selected option with the available options
+            setOptions(optionsArray);
+          }
+          setPageSize(limitResults);
+        }
 
         clearErrors(field.name);
         if (onChange) {
@@ -244,14 +251,17 @@ const AsyncTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
         }
 
         field.onChange(finalValue);
-        if (!disableCloseOnSelect) {
-          setInputValue("");
-        }
       }}
       onInputChange={(_e, query, reason) => {
-        if (reason === "input") {
-          setInputValue(query);
+        if (reason == "selectOption" || reason == "blur") {
+          // do not trigger any effect
+        } else if (reason == "clear") {
+          setOptions([]);
+          setPageSize(limitResults);
+        } else {
+          setDebounceSearch({ delay, query });
         }
+
         if (onInputChange) {
           onInputChange(query);
         }
@@ -264,8 +274,9 @@ const AsyncTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
       renderInput={(params) => (
         <TextField
           {...params}
+          style={style}
           sx={{ ...(useBootstrapStyle && bootstrapStyle) }}
-          variant={variant}
+          variant={useBootstrapStyle ? undefined : variant}
           error={hasError}
           label={finalLabel}
           helperText={hasError && !hideValidationMessage ? errorMessage : helpText}

@@ -44,10 +44,10 @@ const groupOptions = (option: TypeaheadOption): string => (typeof option === "st
 
 const isDisabledGroup = (option: TypeaheadOption): boolean => typeof option !== "string" && !!option.group?.disabled;
 
-function getUniqueOptions(source: TypeaheadOption[], comparison: TypeaheadOption[]) {
+const getUniqueOptions = (source: TypeaheadOption[], comparison: TypeaheadOption[]): TypeaheadOption[] => {
   const comparisonSet = new Set(comparison.map((x) => (typeof x === "string" ? x : x.value)));
   return source.filter((x) => (typeof x === "string" ? !comparisonSet.has(x) : !comparisonSet.has(x.value)));
-}
+};
 
 const renderHighlightedOptionFunction = (
   props: React.HTMLAttributes<HTMLLIElement>,
@@ -80,7 +80,7 @@ const bootstrapStyle: SxProps = {
     padding: "0px 12px",
     borderColor: "#E0E3E7",
     transition: "border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out",
-    "div &.Mui-focused": {
+    "&.Mui-focused": {
       borderColor: "#80bdff",
       boxShadow: "0 0 0 0.2rem rgba(0,123,255,.25)",
     },
@@ -113,9 +113,9 @@ const bootstrapStyle: SxProps = {
     border: "none",
   },
   "& .MuiInputLabel-root": {
-    marginTop: "-1.3rem",
+    marginTop: "-1.2rem",
     marginLeft: "-0.8rem",
-    color: "#8493A5",
+    color: "#8493A5 !important",
     fontSize: "1.2rem",
   },
   "& .MuiFormHelperText-root ": {
