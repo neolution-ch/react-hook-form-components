@@ -119,6 +119,7 @@ const AsyncTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
   const [selectedOptions, setSelectedOptions] = useState<TypeaheadOption[]>(defaultOptions);
   const [pageSize, setPageSize] = useState(limitResults);
   const [loadMoreOptions, setLoadMoreOptions] = useState(!!limitResults && limitResults < defaultOptions.length);
+  const [value, setValue] = useState<TypeaheadOption | TypeaheadOption[] | undefined>(multiple ? [] : undefined);
 
   const { name, id } = useSafeNameId(props.name ?? "", props.id);
   const { setDebounceSearch, loading } = useDebounceHook(queryFn, setOptions, onQueryError);
@@ -141,16 +142,11 @@ const AsyncTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
   });
 
   const fieldIsRequired = label && typeof label == "string" && requiredFields.includes(props.name);
-  const finalLabel = fieldIsRequired ? `${String(label)} *` : label;
+  const finalLabel = useMemo(() => fieldIsRequired ? `${String(label)} *` : label, [fieldIsRequired, label]);
 
   const fieldError = get(errors, name) as FieldError | undefined;
-  const hasError = !!fieldError;
-  const errorMessage = String(fieldError?.message);
-
-  // autocomplete requires consistency between the form value and the options types
-  const fieldValue = watch(name) as string | string[] | undefined;
-
-  const [value, setValue] = useState<TypeaheadOption | TypeaheadOption[] | undefined>(multiple ? [] : undefined);
+  const hasError = useMemo(() => !!fieldError, [fieldError]);
+  const errorMessage = useMemo(() => String(fieldError?.message), [fieldError]);
 
   const startAdornment = useMemo(
     () =>
@@ -169,6 +165,9 @@ const AsyncTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
   );
 
   const paginatedOptions = useMemo(() => (pageSize !== undefined ? options.slice(0, pageSize) : options), [pageSize, options]);
+
+  // autocomplete requires consistency between the form value and the options types
+  const fieldValue = watch(name) as string | string[] | undefined;
 
   useEffect(() => {
     let currentValue = undefined;
