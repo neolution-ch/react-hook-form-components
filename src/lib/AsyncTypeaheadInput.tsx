@@ -216,7 +216,7 @@ const AsyncTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
       clearText={clearText}
       openText={openText}
       closeText={closeText}
-      style={useBootstrapStyle ? { ...inputGroupStyle, marginBottom: "1rem", marginTop: "3rem" } : inputGroupStyle}
+      style={useBootstrapStyle ? { ...inputGroupStyle, marginBottom: "1rem", marginTop: "2rem" } : inputGroupStyle}
       className={className}
       autoSelect={autoSelect ?? options.length === 1}
       autoHighlight={autoHighlight}
