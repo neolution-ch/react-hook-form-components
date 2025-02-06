@@ -54,7 +54,6 @@
     "autosuggest-highlight": "^3.3.4",
     "classnames": "^2.3.2",
     "date-fns-tz": "^2.0.0",
-    "react-bootstrap-typeahead": "^6.3.4",
     "react-datepicker": "^4.11.0",
     "react-number-format": "^5.1.4",
     "use-debounce": "^9.0.4",

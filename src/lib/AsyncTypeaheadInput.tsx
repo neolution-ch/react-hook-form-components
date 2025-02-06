@@ -142,7 +142,7 @@ const AsyncTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
   });
 
   const fieldIsRequired = label && typeof label == "string" && requiredFields.includes(props.name);
-  const finalLabel = useMemo(() => fieldIsRequired ? `${String(label)} *` : label, [fieldIsRequired, label]);
+  const finalLabel = useMemo(() => (fieldIsRequired ? `${String(label)} *` : label), [fieldIsRequired, label]);
 
   const fieldError = get(errors, name) as FieldError | undefined;
   const hasError = useMemo(() => !!fieldError, [fieldError]);

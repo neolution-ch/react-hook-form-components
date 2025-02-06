@@ -80,12 +80,6 @@ const schema = yup.object({
 
 ## Typeahead
 
-To use typeahead you have to include their CSS file in your project:
-
-```jsx
-import "react-bootstrap-typeahead/css/Typeahead.css";
-```
-
 ### Static Typeahead
 
 Use the `StaticTypeaheadInput` component for a static list of options.
