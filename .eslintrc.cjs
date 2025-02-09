@@ -60,7 +60,7 @@ module.exports = {
     "max-lines": [
       "error",
       {
-        max: 400,
+        max: 220,
       },
     ],
     complexity: [

@@ -1,27 +1,20 @@
-import { ReactNode, useEffect, useMemo, useState } from "react";
-import { FieldError, FieldValues, useController, get } from "react-hook-form";
-import { CommonTypeaheadProps, TypeaheadOption } from "./types/Typeahead";
-import { LabelValueOption } from "./types/LabelValueOption";
-import Autocomplete, { AutocompleteProps } from "@mui/material/Autocomplete";
-import TextField from "@mui/material/TextField";
+import { useEffect, useMemo, useState, useRef } from "react";
+import { FieldValues, useController } from "react-hook-form";
+import { AsyncTypeaheadAutocompleteProps, CommonTypeaheadProps, TypeaheadOption } from "./types/Typeahead";
+import Autocomplete from "@mui/material/Autocomplete";
 import {
-  bootstrapStyle,
   convertAutoCompleteOptionsToStringArray,
   getMultipleAutoCompleteValue,
   getSingleAutoCompleteValue,
-  getUniqueOptions,
   groupOptions,
   isDisabledGroup,
   renderHighlightedOptionFunction,
 } from "./helpers/typeahead";
-import InputAdornment from "@mui/material/InputAdornment";
-import CircularProgress from "@mui/material/CircularProgress";
 import { useDebounceHook } from "./hooks/useDebounceHook";
 import { MergedAddonProps } from "./types/CommonInputProps";
 import { useSafeNameId } from "./hooks/useSafeNameId";
-import DownloadingSharpIcon from "@mui/icons-material/DownloadingSharp";
-import { IconButton } from "@mui/material";
 import { useFormContext } from "./context/FormContext";
+import { TypeaheadTextField } from "./TypeaheadTextField";
 
 interface AsyncTypeaheadInputProps<T extends FieldValues, TRenderAddon = unknown> extends CommonTypeaheadProps<T> {
   queryFn: (query: string) => Promise<TypeaheadOption[]>;
@@ -31,40 +24,7 @@ interface AsyncTypeaheadInputProps<T extends FieldValues, TRenderAddon = unknown
   addonProps?: MergedAddonProps<TRenderAddon>;
   disableCloseOnSelect?: boolean;
   defaultOptions?: TypeaheadOption[];
-  autocompleteProps?: Omit<
-    AutocompleteProps<LabelValueOption | string, boolean, boolean, boolean>,
-    | "options"
-    | "open"
-    | "loading"
-    | "loadingText"
-    | "defaultValue"
-    | "value"
-    | "options"
-    | "multiple"
-    | "onChange"
-    | "onInputChange"
-    | "getOptionLabel"
-    | "disabled"
-    | "selectOnFocus"
-    | "noOptionsText"
-    | "renderInput"
-    | "style"
-    | "className"
-    | "onClose"
-    | "onOpen"
-    | "clearIcon"
-    | "clearText"
-    | "openText"
-    | "closeText"
-    | "readOnly"
-    | "openOnFocus"
-    | "getOptionDisabled"
-    | "limitTags"
-    | "disableCloseOnSelect"
-    | "autoSelect"
-    | "autoHighlight"
-    | "disableClearable"
-  >;
+  autocompleteProps?: AsyncTypeaheadAutocompleteProps;
 }
 
 const AsyncTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(props: AsyncTypeaheadInputProps<T, TRenderAddon>) => {
@@ -115,22 +75,15 @@ const AsyncTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
     autocompleteProps,
   } = props;
 
-  const [options, setOptions] = useState<TypeaheadOption[]>(defaultOptions);
-  const [selectedOptions, setSelectedOptions] = useState<TypeaheadOption[]>(defaultOptions);
-  const [pageSize, setPageSize] = useState(limitResults);
-  const [loadMoreOptions, setLoadMoreOptions] = useState(!!limitResults && limitResults < defaultOptions.length);
-  const [value, setValue] = useState<TypeaheadOption | TypeaheadOption[] | undefined>(multiple ? [] : undefined);
+  const [options, setOptions] = useState<TypeaheadOption[]>([]);
+  const [value, setValue] = useState<TypeaheadOption[]>(defaultOptions);
+  const [page, setPage] = useState(1);
+  const [loadMoreOptions, setLoadMoreOptions] = useState(limitResults !== undefined && limitResults < defaultOptions.length);
+  const watchFieldValue = useRef<boolean>(true);
 
   const { name, id } = useSafeNameId(props.name ?? "", props.id);
-  const { setDebounceSearch, loading } = useDebounceHook(queryFn, setOptions, onQueryError);
-  const {
-    control,
-    requiredFields,
-    getFieldState,
-    formState: { errors },
-    clearErrors,
-    watch,
-  } = useFormContext();
+  const { setDebounceSearch, isLoading } = useDebounceHook(queryFn, setOptions, onQueryError);
+  const { control, disabled: formDisabled, getFieldState, clearErrors, watch } = useFormContext();
   const { field } = useController({
     name,
     control,
@@ -141,53 +94,32 @@ const AsyncTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
     },
   });
 
-  const fieldIsRequired = label && typeof label == "string" && requiredFields.includes(props.name);
-  const finalLabel = useMemo(() => (fieldIsRequired ? `${String(label)} *` : label), [fieldIsRequired, label]);
-
-  const fieldError = get(errors, name) as FieldError | undefined;
-  const hasError = useMemo(() => !!fieldError, [fieldError]);
-  const errorMessage = useMemo(() => String(fieldError?.message), [fieldError]);
-
-  const startAdornment = useMemo(
-    () =>
-      addonLeft instanceof Function && addonProps
-        ? (addonLeft as unknown as (props: TRenderAddon) => ReactNode)(addonProps)
-        : (addonLeft as ReactNode),
-    [addonLeft, addonProps],
+  const isDisabled = useMemo(() => formDisabled || disabled, [formDisabled, disabled]);
+  const paginatedOptions = useMemo(
+    () => (limitResults !== undefined ? options.slice(0, page * limitResults) : options),
+    [limitResults, page, options],
   );
 
-  const endAdornment = useMemo(
-    () =>
-      addonRight instanceof Function && addonProps
-        ? (addonRight as unknown as (props: TRenderAddon) => ReactNode)(addonProps)
-        : (addonRight as ReactNode),
-    [addonRight, addonProps],
-  );
-
-  const paginatedOptions = useMemo(() => (pageSize !== undefined ? options.slice(0, pageSize) : options), [pageSize, options]);
-
-  // autocomplete requires consistency between the form value and the options types
+  // listen to changes coming from the external consumer
   const fieldValue = watch(name) as string | string[] | undefined;
-
   useEffect(() => {
-    let currentValue = undefined;
-    if (fieldValue !== undefined) {
-      const mergedArray = getUniqueOptions(selectedOptions, options);
-      currentValue =
+    if (watchFieldValue.current) {
+      setValue(
         typeof fieldValue === "string"
-          ? getSingleAutoCompleteValue(options, fieldValue)
-          : getMultipleAutoCompleteValue([...options, ...mergedArray], fieldValue);
+          ? getSingleAutoCompleteValue(defaultOptions, fieldValue)
+          : getMultipleAutoCompleteValue(defaultOptions, fieldValue),
+      );
+    } else {
+      watchFieldValue.current = true;
     }
-    setValue(currentValue || (multiple ? [] : undefined));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fieldValue]);
 
   useEffect(() => {
-    if (pageSize !== undefined) {
-      // paginate results whether the number of options exceeds the available ones
-      setLoadMoreOptions(pageSize < options.length - selectedOptions.length);
+    if (limitResults !== undefined) {
+      setLoadMoreOptions(page * limitResults < options.length);
     }
-  }, [pageSize, options.length, selectedOptions.length]);
+  }, [options, page, limitResults]);
 
   return (
     <Autocomplete<TypeaheadOption, boolean, boolean, boolean>
@@ -195,19 +127,16 @@ const AsyncTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
       {...field}
       id={id}
       multiple={multiple}
-      disableCloseOnSelect={disableCloseOnSelect}
-      loading={loading}
-      loadingText={loadingText}
       options={paginatedOptions}
-      filterOptions={(currentOptions) => (multiple ? getUniqueOptions(currentOptions, selectedOptions) : currentOptions)}
+      value={(multiple ? value : value[0]) || null}
+      filterOptions={(currentOptions) => currentOptions}
       getOptionLabel={(option: TypeaheadOption) => (typeof option === "string" ? option : option.label)}
-      value={value || (multiple ? [] : null)}
       getOptionDisabled={(option) =>
         getOptionDisabled?.(option) ||
         (useGroupBy && isDisabledGroup(option)) ||
         (typeof option == "string" ? false : option.disabled ?? false)
       }
-      disabled={disabled}
+      disabled={isDisabled}
       readOnly={readOnly}
       limitTags={limitTags}
       noOptionsText={noOptionsText}
@@ -220,7 +149,14 @@ const AsyncTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
       className={className}
       autoSelect={autoSelect ?? options.length === 1}
       autoHighlight={autoHighlight}
+      disableCloseOnSelect={disableCloseOnSelect}
       disableClearable={disableClearable}
+      openOnFocus={openOnFocus}
+      loading={isLoading}
+      loadingText={loadingText}
+      onClose={readOnly ? undefined : onClose}
+      onOpen={readOnly ? undefined : onOpen}
+      groupBy={useGroupBy ? groupOptions : undefined}
       onBlur={() => {
         if (onBlur) {
           onBlur();
@@ -231,91 +167,47 @@ const AsyncTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
         const optionsArray = value ? (Array.isArray(value) ? value : [value]) : undefined;
         const values = convertAutoCompleteOptionsToStringArray(optionsArray);
         const finalValue = multiple ? values : values[0];
-
-        if (optionsArray) {
-          if (multiple) {
-            // align available options with selected options
-            setSelectedOptions(optionsArray);
-            setOptions(optionsArray);
-          } else {
-            // align the selected option with the available options
-            setOptions(optionsArray);
-          }
-          setPageSize(limitResults);
-        }
-
         clearErrors(field.name);
         if (onChange) {
           onChange(finalValue);
         }
-
+        // do not trigger the effect for the value update
+        watchFieldValue.current = false;
+        setValue(optionsArray ?? []);
         field.onChange(finalValue);
       }}
       onInputChange={(_e, query, reason) => {
-        if (reason == "selectOption" || reason == "blur") {
-          // do not trigger any effect
-        } else if (reason == "clear") {
+        if (reason == "blur" || reason == "clear" || (reason == "selectOption" && !disableCloseOnSelect)) {
           setOptions([]);
-          setPageSize(limitResults);
-        } else {
-          setDebounceSearch({ delay, query });
+          setPage(1);
+        } else if (reason == "input") {
+          setDebounceSearch({ delay, query, value });
         }
-
         if (onInputChange) {
           onInputChange(query);
         }
       }}
-      openOnFocus={openOnFocus}
-      onClose={readOnly ? undefined : onClose}
-      onOpen={readOnly ? undefined : onOpen}
-      groupBy={useGroupBy ? groupOptions : undefined}
       renderOption={highlightOptions ? renderHighlightedOptionFunction : undefined}
       renderInput={(params) => (
-        <TextField
-          {...params}
+        <TypeaheadTextField
+          isLoading={isLoading}
+          name={name}
+          label={label}
+          addonLeft={addonLeft}
+          addonRight={addonRight}
+          addonProps={addonProps}
           style={style}
-          sx={{ ...(useBootstrapStyle && bootstrapStyle) }}
-          variant={useBootstrapStyle ? undefined : variant}
-          error={hasError}
-          label={finalLabel}
-          helperText={hasError && !hideValidationMessage ? errorMessage : helpText}
+          hideValidationMessage={hideValidationMessage}
+          useBootstrapStyle={useBootstrapStyle}
+          helpText={helpText}
           placeholder={placeholder}
-          slotProps={{
-            input: {
-              ...params.InputProps,
-              startAdornment: (
-                <>
-                  {startAdornment && <InputAdornment position="start">{startAdornment}</InputAdornment>}
-                  {params.InputProps.startAdornment}
-                </>
-              ),
-              endAdornment: (
-                <>
-                  {loading ? (
-                    <InputAdornment position="end">
-                      <CircularProgress color="inherit" size={20} />
-                    </InputAdornment>
-                  ) : (
-                    endAdornment && <InputAdornment position="end">{endAdornment}</InputAdornment>
-                  )}
-                  {loadMoreOptions && !!pageSize && !!limitResults && (
-                    <IconButton
-                      title={paginationText ?? `Load ${limitResults} more`}
-                      size="small"
-                      onClick={() => {
-                        const nextChunk = options.slice(pageSize, pageSize + limitResults);
-                        setPageSize(pageSize + nextChunk.length);
-                        setLoadMoreOptions(pageSize + nextChunk.length < options.length);
-                      }}
-                    >
-                      {paginationIcon ?? <DownloadingSharpIcon fontSize="small" />}
-                    </IconButton>
-                  )}
-                  {params.InputProps.endAdornment}
-                </>
-              ),
-            },
-          }}
+          paginationIcon={paginationIcon}
+          paginationText={paginationText}
+          variant={variant}
+          limitResults={limitResults}
+          loadMoreOptions={loadMoreOptions}
+          setPage={setPage}
+          {...params}
         />
       )}
     />

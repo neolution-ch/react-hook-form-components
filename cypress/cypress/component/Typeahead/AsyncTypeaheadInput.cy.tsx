@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { AsyncTypeaheadInput, Form } from "react-hook-form-components";
 import { faker, Sex } from "@faker-js/faker";
 import { fetchMock, generateOptions } from "../../helpers/typeahead";
@@ -274,7 +275,6 @@ it("select automatically single option when multiple options are available - mul
           label={name}
           queryFn={async (query: string) => await fetchMock(options, query, false)}
           multiple
-          autoHighlight
           autoSelect
         />
         <input type="submit" className="mt-4" />

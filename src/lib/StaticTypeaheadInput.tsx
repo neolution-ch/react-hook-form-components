@@ -1,11 +1,9 @@
-import { ReactNode, useMemo, useState } from "react";
-import { get, FieldValues, FieldError, useController } from "react-hook-form";
+import { useEffect, useMemo, useState } from "react";
+import { FieldValues, useController } from "react-hook-form";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
-import { CommonTypeaheadProps, TypeaheadOption } from "./types/Typeahead";
+import { CommonTypeaheadProps, StaticTypeaheadAutocompleteProps, TypeaheadOption } from "./types/Typeahead";
 import { useFormContext } from "./context/FormContext";
-import Autocomplete, { AutocompleteProps } from "@mui/material/Autocomplete";
-import TextField from "@mui/material/TextField";
-import { InputAdornment, IconButton } from "@mui/material";
+import Autocomplete from "@mui/material/Autocomplete";
 import {
   convertAutoCompleteOptionsToStringArray,
   getMultipleAutoCompleteValue,
@@ -14,44 +12,14 @@ import {
   sortOptionsByGroup,
   groupOptions,
   renderHighlightedOptionFunction,
-  bootstrapStyle,
 } from "./helpers/typeahead";
 import { MergedAddonProps } from "./types/CommonInputProps";
-import DownloadingSharpIcon from "@mui/icons-material/DownloadingSharp";
+import { TypeaheadTextField } from "./TypeaheadTextField";
 
 interface StaticTypeaheadInputProps<T extends FieldValues, TRenderAddon = unknown> extends CommonTypeaheadProps<T> {
   options: TypeaheadOption[];
   addonProps?: MergedAddonProps<TRenderAddon>;
-  autocompleteProps?: Omit<
-    AutocompleteProps<TypeaheadOption, boolean, boolean, boolean>,
-    | "defaultValue"
-    | "value"
-    | "options"
-    | "multiple"
-    | "getOptionLabel"
-    | "disabled"
-    | "selectOnFocus"
-    | "noOptionsText"
-    | "renderInput"
-    | "style"
-    | "className"
-    | "onClose"
-    | "onOpen"
-    | "clearIcon"
-    | "clearText"
-    | "openText"
-    | "closeText"
-    | "readOnly"
-    | "openOnFocus"
-    | "getOptionDisabled"
-    | "limitTags"
-    | "disableCloseOnSelect"
-    | "onInputChange"
-    | "onChange"
-    | "autoSelect"
-    | "autoHighlight"
-    | "disableClearable"
-  >;
+  autocompleteProps?: StaticTypeaheadAutocompleteProps;
 }
 
 const StaticTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(props: StaticTypeaheadInputProps<T, TRenderAddon>) => {
@@ -76,39 +44,32 @@ const StaticTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(pro
     closeText,
     paginationText,
     paginationIcon,
-    limitResults = options.length,
+    limitResults,
     limitTags,
     markAllOnFocus,
     addonLeft,
     addonRight,
     addonProps,
     style,
+    inputGroupStyle,
     className,
     noOptionsText,
     placeholder,
     useGroupBy = false,
     readOnly,
     highlightOptions = true,
-    autoHighlight = !multiple,
-    autoSelect = !multiple,
+    autoHighlight = true,
+    autoSelect,
     disableClearable,
     useBootstrapStyle = false,
     autocompleteProps,
   } = props;
 
-  const [pageSize, setPageSize] = useState(limitResults);
-  const [loadMoreOptions, setLoadMoreOptions] = useState<boolean>(limitResults < options.length);
+  const [page, setPage] = useState(1);
+  const [loadMoreOptions, setLoadMoreOptions] = useState(limitResults !== undefined && limitResults < options.length);
 
   const { name, id } = useSafeNameId(props.name ?? "", props.id);
-  const {
-    requiredFields,
-    control,
-    disabled: formDisabled,
-    getFieldState,
-    clearErrors,
-    watch,
-    formState: { errors },
-  } = useFormContext();
+  const { control, disabled: formDisabled, getFieldState, clearErrors, watch } = useFormContext();
   const { field } = useController({
     name,
     control,
@@ -119,43 +80,27 @@ const StaticTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(pro
     },
   });
 
-  const fieldIsRequired = label && typeof label == "string" && requiredFields.includes(props.name);
-  const finalLabel = fieldIsRequired ? `${String(label)} *` : label;
+  const isDisabled = useMemo(() => formDisabled || disabled, [formDisabled, disabled]);
+  const paginatedOptions = useMemo(
+    () => (limitResults !== undefined ? options.slice(0, page * limitResults) : options),
+    [limitResults, page, options],
+  );
 
-  const isDisabled = formDisabled || disabled;
-  const fieldError = get(errors, name) as FieldError | undefined;
-  const hasError = !!fieldError;
-  const errorMessage = String(fieldError?.message);
-
-  // autocomplete requires consistency between the form value and the options types
-  const fieldValue = watch(id) as string | string[] | undefined;
-
+  const fieldValue = watch(name) as string | string[] | undefined;
   const value = useMemo(() => {
     if (fieldValue === undefined) {
-      return undefined;
+      return [];
     }
     return typeof fieldValue === "string"
       ? getSingleAutoCompleteValue(options, fieldValue)
       : getMultipleAutoCompleteValue(options, fieldValue);
   }, [fieldValue, options]);
 
-  const startAdornment = useMemo(
-    () =>
-      addonLeft instanceof Function && addonProps
-        ? (addonLeft as (props: TRenderAddon) => ReactNode)(addonProps)
-        : (addonLeft as ReactNode),
-    [addonLeft, addonProps],
-  );
-
-  const endAdornment = useMemo(
-    () =>
-      addonRight instanceof Function && addonProps
-        ? (addonRight as (props: TRenderAddon) => ReactNode)(addonProps)
-        : (addonRight as ReactNode),
-    [addonRight, addonProps],
-  );
-
-  const paginatedOptions = useMemo(() => options.slice(0, pageSize), [pageSize, options]);
+  useEffect(() => {
+    if (limitResults !== undefined) {
+      setLoadMoreOptions(page * limitResults < options.length);
+    }
+  }, [options, page, limitResults]);
 
   return (
     <Autocomplete<TypeaheadOption, boolean, boolean, boolean>
@@ -165,8 +110,8 @@ const StaticTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(pro
       multiple={multiple}
       groupBy={useGroupBy ? groupOptions : undefined}
       options={useGroupBy ? sortOptionsByGroup(paginatedOptions) : paginatedOptions}
-      disableCloseOnSelect={!!multiple || loadMoreOptions}
-      value={value || (multiple ? [] : null)}
+      disableCloseOnSelect={multiple}
+      value={(multiple ? value : value[0]) || null}
       getOptionLabel={(option: TypeaheadOption) => (typeof option === "string" ? option : option.label)}
       getOptionDisabled={(option) =>
         getOptionDisabled?.(option) ||
@@ -182,13 +127,24 @@ const StaticTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(pro
       openText={openText}
       closeText={closeText}
       noOptionsText={noOptionsText}
-      style={useBootstrapStyle ? { ...style, marginBottom: "1rem", marginTop: "2rem" } : style}
+      style={useBootstrapStyle ? { ...inputGroupStyle, marginBottom: "1rem", marginTop: "2rem" } : inputGroupStyle}
       className={className}
+      autoSelect={autoSelect}
+      autoHighlight={autoHighlight}
+      disableClearable={disableClearable}
+      openOnFocus={openOnFocus}
+      onClose={readOnly ? undefined : onClose}
+      onOpen={readOnly ? undefined : onOpen}
+      onBlur={() => {
+        if (onBlur) {
+          onBlur();
+        }
+        field.onBlur();
+      }}
       onChange={(_, value) => {
         const optionsArray = value ? (Array.isArray(value) ? value : [value]) : undefined;
         const values = convertAutoCompleteOptionsToStringArray(optionsArray);
         const finalValue = multiple ? values : values[0];
-
         clearErrors(field.name);
         if (onChange) {
           onChange(finalValue);
@@ -200,58 +156,27 @@ const StaticTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(pro
           onInputChange(value);
         }
       }}
-      onBlur={() => {
-        if (onBlur) {
-          onBlur();
-        }
-        field.onBlur();
-      }}
-      autoSelect={autoSelect}
-      autoHighlight={autoHighlight}
-      disableClearable={disableClearable}
-      openOnFocus={openOnFocus}
-      onClose={readOnly ? undefined : onClose}
-      onOpen={readOnly ? undefined : onOpen}
       renderOption={highlightOptions ? renderHighlightedOptionFunction : undefined}
       renderInput={(params) => (
-        <TextField
-          {...params}
-          sx={{ ...(useBootstrapStyle && bootstrapStyle) }}
-          variant={variant}
-          label={finalLabel}
-          error={hasError}
-          helperText={hasError && !hideValidationMessage ? errorMessage : helpText}
+        <TypeaheadTextField
+          isLoading={false}
+          name={name}
+          label={label}
+          addonLeft={addonLeft}
+          addonRight={addonRight}
+          addonProps={addonProps}
+          style={style}
+          hideValidationMessage={hideValidationMessage}
+          useBootstrapStyle={useBootstrapStyle}
+          helpText={helpText}
           placeholder={placeholder}
-          slotProps={{
-            input: {
-              ...params.InputProps,
-              startAdornment: (
-                <>
-                  {startAdornment && <InputAdornment position="start">{startAdornment}</InputAdornment>}
-                  {params.InputProps.startAdornment}
-                </>
-              ),
-              endAdornment: (
-                <>
-                  {endAdornment && <InputAdornment position="start">{endAdornment}</InputAdornment>}
-                  {loadMoreOptions && (
-                    <IconButton
-                      title={paginationText ?? `Load ${limitResults} more`}
-                      size="small"
-                      onClick={() => {
-                        const nextChunk = options.slice(pageSize, pageSize + limitResults);
-                        setPageSize(pageSize + nextChunk.length);
-                        setLoadMoreOptions(pageSize + nextChunk.length < options.length);
-                      }}
-                    >
-                      {paginationIcon ?? <DownloadingSharpIcon fontSize="small" />}
-                    </IconButton>
-                  )}
-                  {params.InputProps.endAdornment}
-                </>
-              ),
-            },
-          }}
+          paginationIcon={paginationIcon}
+          paginationText={paginationText}
+          variant={variant}
+          limitResults={limitResults}
+          loadMoreOptions={loadMoreOptions}
+          setPage={setPage}
+          {...params}
         />
       )}
     />

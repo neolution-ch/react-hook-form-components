@@ -20,6 +20,6 @@
     "typeRoots": ["./node_modules/@types", "./types"],
     "types": []
   },
-  "include": ["src", "test", "fix-autosuggest-highlight.js"],
+  "include": ["src", "test"],
   "exclude": ["node_modules", "dist"]
 }

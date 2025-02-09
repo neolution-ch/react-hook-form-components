@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { Form, StaticTypeaheadInput } from "react-hook-form-components";
 import { faker, Sex } from "@faker-js/faker";
 import * as yup from "yup";
@@ -53,7 +54,7 @@ it("select automatically a single simple options - single (autoSelect/autoHighli
   cy.mount(
     <div className="p-4">
       <Form onSubmit={cy.spy().as("onSubmitSpy")}>
-        <StaticTypeaheadInput name={name} label={name} options={simpleOptions} />
+        <StaticTypeaheadInput name={name} label={name} options={simpleOptions} autoSelect />
         <input type="submit" className="mt-4" />
       </Form>
     </div>,
@@ -74,7 +75,7 @@ it("select automatically a single simple options - multiple (when autoSelect/aut
   cy.mount(
     <div className="p-4">
       <Form onSubmit={cy.spy().as("onSubmitSpy")}>
-        <StaticTypeaheadInput name={name} label={name} options={simpleOptions} multiple autoHighlight autoSelect />
+        <StaticTypeaheadInput name={name} label={name} options={simpleOptions} multiple autoSelect />
         <input type="submit" className="mt-4" />
       </Form>
     </div>,
@@ -103,7 +104,7 @@ it("select automatically single option when multiple options are available - sin
   cy.mount(
     <div className="p-4">
       <Form onSubmit={cy.spy().as("onSubmitSpy")}>
-        <StaticTypeaheadInput name={name} label={name} options={options} />
+        <StaticTypeaheadInput name={name} label={name} options={options} autoSelect />
         <input type="submit" className="mt-4" />
       </Form>
     </div>,

@@ -19,22 +19,19 @@ const convertAutoCompleteOptionsToStringArray = (options: TypeaheadOption[] | un
   return (options as LabelValueOption[]).map((option) => option.value) as string[];
 };
 
-const getSingleAutoCompleteValue = (options: TypeaheadOption[], value: string | number | undefined) => {
-  if (options[0] === undefined || value === undefined) {
-    return undefined;
-  }
+const getSingleAutoCompleteValue = (options: TypeaheadOption[], value: LabelValueOption["value"]): TypeaheadOption[] =>
+  value ? options.filter((x) => (typeof x === "string" ? x == value : x.value == value)) : [];
 
-  return options.find((x) => (typeof x === "string" ? x === value : x.value == value));
-};
+const getMultipleAutoCompleteValue = (options: TypeaheadOption[], value: (string | number)[] | undefined): TypeaheadOption[] =>
+  value
+    ? options.filter((x) =>
+        typeof x === "string" || typeof x === "number" ? value.includes(x) : value.includes(x.value as string | number),
+      )
+    : [];
 
-const getMultipleAutoCompleteValue = (options: TypeaheadOption[], value: string[] | undefined) => {
-  if (options[0] === undefined || !value) {
-    return undefined;
-  }
-  return options.filter((x) => (typeof x === "string" ? value.includes(x) : value.includes(x.value as string))) as
-    | string[]
-    | LabelValueOption[]
-    | undefined;
+const getUniqueOptions = (source: TypeaheadOption[], comparison: TypeaheadOption[]): TypeaheadOption[] => {
+  const comparisonSet = new Set(comparison.map((x) => (typeof x === "string" ? x : x.value)));
+  return source.filter((x) => (typeof x === "string" ? !comparisonSet.has(x) : !comparisonSet.has(x.value)));
 };
 
 const sortOptionsByGroup = (options: TypeaheadOption[]): TypeaheadOption[] =>
@@ -44,16 +41,11 @@ const groupOptions = (option: TypeaheadOption): string => (typeof option === "st
 
 const isDisabledGroup = (option: TypeaheadOption): boolean => typeof option !== "string" && !!option.group?.disabled;
 
-const getUniqueOptions = (source: TypeaheadOption[], comparison: TypeaheadOption[]): TypeaheadOption[] => {
-  const comparisonSet = new Set(comparison.map((x) => (typeof x === "string" ? x : x.value)));
-  return source.filter((x) => (typeof x === "string" ? !comparisonSet.has(x) : !comparisonSet.has(x.value)));
-};
-
 const renderHighlightedOptionFunction = (
   props: React.HTMLAttributes<HTMLLIElement>,
   option: TypeaheadOption,
   { inputValue }: AutocompleteRenderOptionState,
-) => {
+): JSX.Element => {
   const finalOption = typeof option === "string" ? option : option.label;
   const matches = AutosuggestHighlightMatch(finalOption, inputValue, { insideWords: true });
   const parts = AutosuggestHighlightParse(finalOption, matches) as Array<{ text: string; highlight: boolean }>;

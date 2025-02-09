@@ -3,10 +3,12 @@ import { FieldValues } from "react-hook-form";
 import { CommonInputProps } from "./CommonInputProps";
 import { LabelValueOption } from "./LabelValueOption";
 import { AutocompleteCloseReason, TextFieldVariants } from "@mui/material";
+import { AutocompleteProps } from "@mui/material/Autocomplete";
 
 export type TypeaheadOption = LabelValueOption | string;
 
-interface CommonTypeaheadProps<T extends FieldValues> extends Omit<CommonInputProps<T>, "onChange"> {
+interface CommonTypeaheadProps<T extends FieldValues>
+  extends Omit<CommonInputProps<T>, "onChange" | "labelToolTip" | "inputOnly" | "minLength" | "maxLength"> {
   multiple?: boolean;
   noOptionsText?: string;
   placeholder?: string;
@@ -35,4 +37,70 @@ interface CommonTypeaheadProps<T extends FieldValues> extends Omit<CommonInputPr
   onBlur?: () => void;
 }
 
-export { CommonTypeaheadProps };
+type AsyncTypeaheadAutocompleteProps = Omit<
+  AutocompleteProps<LabelValueOption | string, boolean, boolean, boolean>,
+  | "options"
+  | "open"
+  | "loading"
+  | "loadingText"
+  | "defaultValue"
+  | "value"
+  | "options"
+  | "multiple"
+  | "onChange"
+  | "onInputChange"
+  | "getOptionLabel"
+  | "disabled"
+  | "selectOnFocus"
+  | "noOptionsText"
+  | "renderInput"
+  | "style"
+  | "className"
+  | "onClose"
+  | "onOpen"
+  | "clearIcon"
+  | "clearText"
+  | "openText"
+  | "closeText"
+  | "readOnly"
+  | "openOnFocus"
+  | "getOptionDisabled"
+  | "limitTags"
+  | "disableCloseOnSelect"
+  | "autoSelect"
+  | "autoHighlight"
+  | "disableClearable"
+>;
+
+type StaticTypeaheadAutocompleteProps = Omit<
+  AutocompleteProps<TypeaheadOption, boolean, boolean, boolean>,
+  | "defaultValue"
+  | "value"
+  | "options"
+  | "multiple"
+  | "getOptionLabel"
+  | "disabled"
+  | "selectOnFocus"
+  | "noOptionsText"
+  | "renderInput"
+  | "style"
+  | "className"
+  | "onClose"
+  | "onOpen"
+  | "clearIcon"
+  | "clearText"
+  | "openText"
+  | "closeText"
+  | "readOnly"
+  | "openOnFocus"
+  | "getOptionDisabled"
+  | "limitTags"
+  | "disableCloseOnSelect"
+  | "onInputChange"
+  | "onChange"
+  | "autoSelect"
+  | "autoHighlight"
+  | "disableClearable"
+>;
+
+export { CommonTypeaheadProps, AsyncTypeaheadAutocompleteProps, StaticTypeaheadAutocompleteProps };
