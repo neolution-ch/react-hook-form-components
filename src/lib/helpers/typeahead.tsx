@@ -104,12 +104,6 @@ const bootstrapStyle: SxProps = {
   "& fieldset": {
     border: "none",
   },
-  "& .MuiInputLabel-root": {
-    marginTop: "-1.2rem",
-    marginLeft: "-0.8rem",
-    color: "#8493A5 !important",
-    fontSize: "1.2rem",
-  },
   "& .MuiFormHelperText-root ": {
     marginLeft: "0.2rem",
     marginTop: "0.3rem",

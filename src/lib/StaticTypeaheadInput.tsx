@@ -15,6 +15,7 @@ import {
 } from "./helpers/typeahead";
 import { MergedAddonProps } from "./types/CommonInputProps";
 import { TypeaheadTextField } from "./TypeaheadTextField";
+import { FormGroupLayout } from "./FormGroupLayout";
 
 interface StaticTypeaheadInputProps<T extends FieldValues, TRenderAddon = unknown> extends CommonTypeaheadProps<T> {
   options: TypeaheadOption[];
@@ -103,83 +104,90 @@ const StaticTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(pro
   }, [options, page, limitResults]);
 
   return (
-    <Autocomplete<TypeaheadOption, boolean, boolean, boolean>
-      {...autocompleteProps}
-      {...field}
-      id={id}
-      multiple={multiple}
-      groupBy={useGroupBy ? groupOptions : undefined}
-      options={useGroupBy ? sortOptionsByGroup(paginatedOptions) : paginatedOptions}
-      disableCloseOnSelect={multiple}
-      value={(multiple ? value : value[0]) || null}
-      getOptionLabel={(option: TypeaheadOption) => (typeof option === "string" ? option : option.label)}
-      getOptionDisabled={(option) =>
-        getOptionDisabled?.(option) ||
-        (useGroupBy && isDisabledGroup(option)) ||
-        (typeof option === "string" ? false : option.disabled ?? false)
-      }
-      disabled={isDisabled}
-      readOnly={readOnly}
-      limitTags={limitTags}
-      selectOnFocus={markAllOnFocus}
-      clearIcon={clearIcon}
-      clearText={clearText}
-      openText={openText}
-      closeText={closeText}
-      noOptionsText={noOptionsText}
-      style={useBootstrapStyle ? { ...inputGroupStyle, marginBottom: "1rem", marginTop: "2rem" } : inputGroupStyle}
-      className={className}
-      autoSelect={autoSelect}
-      autoHighlight={autoHighlight}
-      disableClearable={disableClearable}
-      openOnFocus={openOnFocus}
-      onClose={readOnly ? undefined : onClose}
-      onOpen={readOnly ? undefined : onOpen}
-      onBlur={() => {
-        if (onBlur) {
-          onBlur();
+    <FormGroupLayout
+      name={name}
+      label={useBootstrapStyle ? label : undefined}
+      labelStyle={useBootstrapStyle ? { color: "#8493A5", fontSize: 14 } : undefined}
+      layout="typeahead"
+    >
+      <Autocomplete<TypeaheadOption, boolean, boolean, boolean>
+        {...autocompleteProps}
+        {...field}
+        id={id}
+        multiple={multiple}
+        groupBy={useGroupBy ? groupOptions : undefined}
+        options={useGroupBy ? sortOptionsByGroup(paginatedOptions) : paginatedOptions}
+        disableCloseOnSelect={multiple}
+        value={(multiple ? value : value[0]) || null}
+        getOptionLabel={(option: TypeaheadOption) => (typeof option === "string" ? option : option.label)}
+        getOptionDisabled={(option) =>
+          getOptionDisabled?.(option) ||
+          (useGroupBy && isDisabledGroup(option)) ||
+          (typeof option === "string" ? false : option.disabled ?? false)
         }
-        field.onBlur();
-      }}
-      onChange={(_, value) => {
-        const optionsArray = value ? (Array.isArray(value) ? value : [value]) : undefined;
-        const values = convertAutoCompleteOptionsToStringArray(optionsArray);
-        const finalValue = multiple ? values : values[0];
-        clearErrors(field.name);
-        if (onChange) {
-          onChange(finalValue);
-        }
-        field.onChange(finalValue);
-      }}
-      onInputChange={(_e, value) => {
-        if (onInputChange) {
-          onInputChange(value);
-        }
-      }}
-      renderOption={highlightOptions ? renderHighlightedOptionFunction : undefined}
-      renderInput={(params) => (
-        <TypeaheadTextField
-          isLoading={false}
-          name={name}
-          label={label}
-          addonLeft={addonLeft}
-          addonRight={addonRight}
-          addonProps={addonProps}
-          style={style}
-          hideValidationMessage={hideValidationMessage}
-          useBootstrapStyle={useBootstrapStyle}
-          helpText={helpText}
-          placeholder={placeholder}
-          paginationIcon={paginationIcon}
-          paginationText={paginationText}
-          variant={variant}
-          limitResults={limitResults}
-          loadMoreOptions={loadMoreOptions}
-          setPage={setPage}
-          {...params}
-        />
-      )}
-    />
+        disabled={isDisabled}
+        readOnly={readOnly}
+        limitTags={limitTags}
+        selectOnFocus={markAllOnFocus}
+        clearIcon={clearIcon}
+        clearText={clearText}
+        openText={openText}
+        closeText={closeText}
+        noOptionsText={noOptionsText}
+        style={inputGroupStyle}
+        className={className}
+        autoSelect={autoSelect}
+        autoHighlight={autoHighlight}
+        disableClearable={disableClearable}
+        openOnFocus={openOnFocus}
+        onClose={readOnly ? undefined : onClose}
+        onOpen={readOnly ? undefined : onOpen}
+        onBlur={() => {
+          if (onBlur) {
+            onBlur();
+          }
+          field.onBlur();
+        }}
+        onChange={(_, value) => {
+          const optionsArray = value ? (Array.isArray(value) ? value : [value]) : undefined;
+          const values = convertAutoCompleteOptionsToStringArray(optionsArray);
+          const finalValue = multiple ? values : values[0];
+          clearErrors(field.name);
+          if (onChange) {
+            onChange(finalValue);
+          }
+          field.onChange(finalValue);
+        }}
+        onInputChange={(_e, value) => {
+          if (onInputChange) {
+            onInputChange(value);
+          }
+        }}
+        renderOption={highlightOptions ? renderHighlightedOptionFunction : undefined}
+        renderInput={(params) => (
+          <TypeaheadTextField
+            isLoading={false}
+            name={name}
+            label={label}
+            addonLeft={addonLeft}
+            addonRight={addonRight}
+            addonProps={addonProps}
+            style={style}
+            hideValidationMessage={hideValidationMessage}
+            useBootstrapStyle={useBootstrapStyle}
+            helpText={helpText}
+            placeholder={placeholder}
+            paginationIcon={paginationIcon}
+            paginationText={paginationText}
+            variant={variant}
+            limitResults={limitResults}
+            loadMoreOptions={loadMoreOptions}
+            setPage={setPage}
+            {...params}
+          />
+        )}
+      />
+    </FormGroupLayout>
   );
 };
 

@@ -76,7 +76,7 @@ const TypeaheadTextField = <T extends FieldValues, TRenderAddon = unknown>(props
       sx={{ ...(useBootstrapStyle && bootstrapStyle) }}
       variant={useBootstrapStyle ? undefined : variant}
       error={hasError}
-      label={finalLabel}
+      label={useBootstrapStyle ? undefined : finalLabel}
       helperText={hasError && !hideValidationMessage ? errorMessage : helpText}
       placeholder={placeholder}
       slotProps={{

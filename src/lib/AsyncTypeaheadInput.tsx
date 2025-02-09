@@ -15,6 +15,7 @@ import { MergedAddonProps } from "./types/CommonInputProps";
 import { useSafeNameId } from "./hooks/useSafeNameId";
 import { useFormContext } from "./context/FormContext";
 import { TypeaheadTextField } from "./TypeaheadTextField";
+import { FormGroupLayout } from "./FormGroupLayout";
 
 interface AsyncTypeaheadInputProps<T extends FieldValues, TRenderAddon = unknown> extends CommonTypeaheadProps<T> {
   queryFn: (query: string) => Promise<TypeaheadOption[]>;
@@ -122,6 +123,12 @@ const AsyncTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
   }, [options, page, limitResults]);
 
   return (
+    <FormGroupLayout
+      name={name}
+      label={useBootstrapStyle ? label : undefined}
+      labelStyle={useBootstrapStyle ? { color: "#8493A5", fontSize: 14 } : undefined}
+      layout="typeahead"
+    >
     <Autocomplete<TypeaheadOption, boolean, boolean, boolean>
       {...autocompleteProps}
       {...field}
@@ -145,7 +152,7 @@ const AsyncTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
       clearText={clearText}
       openText={openText}
       closeText={closeText}
-      style={useBootstrapStyle ? { ...inputGroupStyle, marginBottom: "1rem", marginTop: "2rem" } : inputGroupStyle}
+      style={inputGroupStyle}
       className={className}
       autoSelect={autoSelect ?? options.length === 1}
       autoHighlight={autoHighlight}
@@ -211,6 +218,7 @@ const AsyncTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(prop
         />
       )}
     />
+    </FormGroupLayout>
   );
 };
 

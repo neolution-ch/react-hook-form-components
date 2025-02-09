@@ -8,7 +8,7 @@ import { AutocompleteProps } from "@mui/material/Autocomplete";
 export type TypeaheadOption = LabelValueOption | string;
 
 interface CommonTypeaheadProps<T extends FieldValues>
-  extends Omit<CommonInputProps<T>, "onChange" | "labelToolTip" | "inputOnly" | "minLength" | "maxLength"> {
+  extends Omit<CommonInputProps<T>, "onChange" | "inputOnly" | "labelTooltip" | "minLength" | "maxLength"> {
   multiple?: boolean;
   noOptionsText?: string;
   placeholder?: string;
