@@ -8,11 +8,7 @@ interface DebounceSearch {
   value: TypeaheadOption[];
 }
 
-const useDebounceHook = (
-  queryFn: (query: string) => Promise<TypeaheadOption[]>,
-  setOptions: (results: TypeaheadOption[]) => void,
-  onQueryError?: ((error: unknown) => void) | undefined,
-) => {
+const useDebounceHook = (queryFn: (query: string) => Promise<TypeaheadOption[]>, setOptions: (results: TypeaheadOption[]) => void) => {
   const queryRef = useRef("");
   const [isLoading, setIsLoading] = useState(false);
   const [debounceSearch, setDebounceSearch] = useState<DebounceSearch | undefined>(undefined);
@@ -43,7 +39,6 @@ const useDebounceHook = (
               setIsLoading(false);
             }
           } catch (error) {
-            onQueryError && onQueryError(error);
             setIsLoading(false);
           }
         })();
@@ -60,7 +55,7 @@ const useDebounceHook = (
 
     // not all paths returns a value
     return undefined;
-  }, [queryFn, setOptions, onQueryError, debounceSearch]);
+  }, [queryFn, setOptions, debounceSearch]);
 
   return { setDebounceSearch, isLoading };
 };

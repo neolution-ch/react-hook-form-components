@@ -373,7 +373,15 @@ it("test empty label", () => {
           [name]: simpleOptions,
         }}
       >
-        <StaticTypeaheadInput multiple name={name} label={name} options={simpleOptions} noOptionsText={emptyLabel} />
+        <StaticTypeaheadInput
+          multiple
+          name={name}
+          label={name}
+          options={simpleOptions}
+          autocompleteProps={{
+            noOptionsText: emptyLabel,
+          }}
+        />
         <input type="submit" className="mt-4" />
       </Form>
     </div>,

@@ -459,8 +459,10 @@ it("test empty label and loading label", () => {
             )
           }
           defaultOptions={simpleOptions}
-          noOptionsText={emptyLabel}
-          loadingText={loadingLabel}
+          autocompleteProps={{
+            noOptionsText: emptyLabel,
+            loadingText: loadingLabel,
+          }}
         />
         <input type="submit" className="mt-4" />
       </Form>

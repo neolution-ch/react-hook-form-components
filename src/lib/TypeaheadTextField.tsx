@@ -10,7 +10,7 @@ import { FieldError, FieldValues, get } from "react-hook-form";
 import { MergedAddonProps } from "./types/CommonInputProps";
 import { useFormContext } from "./context/FormContext";
 
-interface TypeaheadTextFieldProps<T extends FieldValues, TRenderAddon = unknown>
+interface TypeaheadTextFieldProps<T extends FieldValues, TRenderAddon>
   extends Omit<CommonTypeaheadProps<T>, "id" | "disabled" | "onChange">,
     AutocompleteRenderInputParams {
   isLoading: boolean;
@@ -84,7 +84,11 @@ const TypeaheadTextField = <T extends FieldValues, TRenderAddon = unknown>(props
           ...params.InputProps,
           startAdornment: (
             <>
-              {startAdornment && <InputAdornment position="start">{startAdornment}</InputAdornment>}
+              {startAdornment && (
+                <InputAdornment position="start" disablePointerEvents={addonProps?.isDisabled}>
+                  {startAdornment}
+                </InputAdornment>
+              )}
               {params.InputProps.startAdornment}
             </>
           ),
@@ -95,7 +99,11 @@ const TypeaheadTextField = <T extends FieldValues, TRenderAddon = unknown>(props
                   <CircularProgress color="inherit" size={20} />
                 </InputAdornment>
               ) : (
-                endAdornment && <InputAdornment position="end">{endAdornment}</InputAdornment>
+                endAdornment && (
+                  <InputAdornment position="end" disablePointerEvents={addonProps?.isDisabled}>
+                    {endAdornment}
+                  </InputAdornment>
+                )
               )}
               {loadMoreOptions && limitResults && (
                 <IconButton title={paginationText ?? `Load ${limitResults} more`} size="small" onClick={() => setPage((prev) => prev + 1)}>

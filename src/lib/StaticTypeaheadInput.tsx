@@ -13,17 +13,15 @@ import {
   groupOptions,
   renderHighlightedOptionFunction,
 } from "./helpers/typeahead";
-import { MergedAddonProps } from "./types/CommonInputProps";
 import { TypeaheadTextField } from "./TypeaheadTextField";
 import { FormGroupLayout } from "./FormGroupLayout";
 
-interface StaticTypeaheadInputProps<T extends FieldValues, TRenderAddon = unknown> extends CommonTypeaheadProps<T> {
+interface StaticTypeaheadInputProps<T extends FieldValues> extends CommonTypeaheadProps<T> {
   options: TypeaheadOption[];
-  addonProps?: MergedAddonProps<TRenderAddon>;
   autocompleteProps?: StaticTypeaheadAutocompleteProps;
 }
 
-const StaticTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(props: StaticTypeaheadInputProps<T, TRenderAddon>) => {
+const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInputProps<T>) => {
   const {
     options,
     multiple,
@@ -38,30 +36,21 @@ const StaticTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(pro
     onOpen,
     getOptionDisabled,
     onBlur,
-    openOnFocus,
-    clearIcon,
-    clearText,
-    openText,
-    closeText,
     paginationText,
     paginationIcon,
     limitResults,
-    limitTags,
     markAllOnFocus,
     addonLeft,
     addonRight,
-    addonProps,
     style,
     inputGroupStyle,
     className,
-    noOptionsText,
     placeholder,
     useGroupBy = false,
     readOnly,
     highlightOptions = true,
     autoHighlight = true,
     autoSelect,
-    disableClearable,
     useBootstrapStyle = false,
     autocompleteProps,
   } = props;
@@ -127,19 +116,11 @@ const StaticTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(pro
         }
         disabled={isDisabled}
         readOnly={readOnly}
-        limitTags={limitTags}
         selectOnFocus={markAllOnFocus}
-        clearIcon={clearIcon}
-        clearText={clearText}
-        openText={openText}
-        closeText={closeText}
-        noOptionsText={noOptionsText}
         style={inputGroupStyle}
         className={className}
         autoSelect={autoSelect}
         autoHighlight={autoHighlight}
-        disableClearable={disableClearable}
-        openOnFocus={openOnFocus}
         onClose={readOnly ? undefined : onClose}
         onOpen={readOnly ? undefined : onOpen}
         onBlur={() => {
@@ -171,7 +152,9 @@ const StaticTypeaheadInput = <T extends FieldValues, TRenderAddon = unknown>(pro
             label={label}
             addonLeft={addonLeft}
             addonRight={addonRight}
-            addonProps={addonProps}
+            addonProps={{
+              isDisabled,
+            }}
             style={style}
             hideValidationMessage={hideValidationMessage}
             useBootstrapStyle={useBootstrapStyle}
