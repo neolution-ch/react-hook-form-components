@@ -44,11 +44,13 @@ const TypeaheadTextField = <T extends FieldValues, TRenderAddon = unknown>(props
   const {
     formState: { errors },
     requiredFields,
+    hideValidationMessages,
   } = useFormContext();
 
   const fieldError = get(errors, name) as FieldError | undefined;
   const hasError = useMemo(() => !!fieldError, [fieldError]);
   const errorMessage = useMemo(() => String(fieldError?.message), [fieldError]);
+  const hideErrorMessage = useMemo(() => hideValidationMessages || hideValidationMessage, [hideValidationMessages, hideValidationMessage]);
 
   const fieldIsRequired = label && typeof label == "string" && requiredFields.includes(name);
   const finalLabel = useMemo(() => (fieldIsRequired ? `${String(label)} *` : label), [fieldIsRequired, label]);
@@ -77,7 +79,7 @@ const TypeaheadTextField = <T extends FieldValues, TRenderAddon = unknown>(props
       variant={useBootstrapStyle ? undefined : variant}
       error={hasError}
       label={useBootstrapStyle ? undefined : finalLabel}
-      helperText={hasError && !hideValidationMessage ? errorMessage : helpText}
+      helperText={hasError && !hideErrorMessage ? errorMessage : helpText}
       placeholder={placeholder}
       slotProps={{
         input: {

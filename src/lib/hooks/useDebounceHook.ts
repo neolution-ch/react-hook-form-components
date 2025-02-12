@@ -1,5 +1,5 @@
 ﻿import { useEffect, useRef, useState } from "react";
-import { TypeaheadOption } from "../types/Typeahead";
+import { TypeaheadOption, TypeaheadOptions } from "../types/Typeahead";
 import { getUniqueOptions } from "../helpers/typeahead";
 
 interface DebounceSearch {
@@ -8,7 +8,7 @@ interface DebounceSearch {
   value: TypeaheadOption[];
 }
 
-const useDebounceHook = (queryFn: (query: string) => Promise<TypeaheadOption[]>, setOptions: (results: TypeaheadOption[]) => void) => {
+const useDebounceHook = (queryFn: (query: string) => Promise<TypeaheadOptions>, setOptions: (results: TypeaheadOption[]) => void) => {
   const queryRef = useRef("");
   const [isLoading, setIsLoading] = useState(false);
   const [debounceSearch, setDebounceSearch] = useState<DebounceSearch | undefined>(undefined);

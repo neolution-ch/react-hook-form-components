@@ -19,25 +19,25 @@ const convertAutoCompleteOptionsToStringArray = (options: TypeaheadOption[] | un
   return (options as LabelValueOption[]).map((option) => option.value) as string[];
 };
 
-const getSingleAutoCompleteValue = (options: TypeaheadOption[], value: string | number | undefined): TypeaheadOption[] => {
-  if (value == undefined) {
+const getSingleAutoCompleteValue = (options: TypeaheadOption[], fieldValue: string | number | undefined): TypeaheadOption[] => {
+  if (fieldValue == undefined) {
     return [];
   }
   return options.filter((x) =>
     // loose equality check to handle different types between form value and option value
-    typeof x === "string" ? x == value : x.value == value,
+    typeof x === "string" ? x == fieldValue : x.value == fieldValue,
   );
 };
 
-const getMultipleAutoCompleteValue = (options: TypeaheadOption[], value: (string | number)[] | undefined): TypeaheadOption[] => {
-  if (value == undefined) {
+const getMultipleAutoCompleteValue = (options: TypeaheadOption[], fieldValue: (string | number)[] | undefined): TypeaheadOption[] => {
+  if (fieldValue == undefined) {
     return [];
   }
   return options.filter((x) =>
     typeof x === "string"
-      ? value.includes(x)
+      ? fieldValue.includes(x)
       : // ensure that form values matches options values even if they are of different types
-        value.map(String).includes(String(x.value as string | number)),
+        fieldValue.map(String).includes(String(x.value as string | number)),
   );
 };
 

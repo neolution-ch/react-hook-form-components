@@ -1,11 +1,10 @@
-import { useEffect, useMemo, useState, useRef } from "react";
+/* eslint-disable max-lines */
+import { useEffect, useMemo, useState, MutableRefObject, useImperativeHandle } from "react";
 import { FieldValues, useController } from "react-hook-form";
-import { AsyncTypeaheadAutocompleteProps, CommonTypeaheadProps, TypeaheadOption } from "./types/Typeahead";
+import { AsyncTypeaheadAutocompleteProps, CommonTypeaheadProps, TypeaheadOption, TypeaheadOptions } from "./types/Typeahead";
 import Autocomplete from "@mui/material/Autocomplete";
 import {
   convertAutoCompleteOptionsToStringArray,
-  getMultipleAutoCompleteValue,
-  getSingleAutoCompleteValue,
   groupOptions,
   isDisabledGroup,
   renderHighlightedOptionFunction,
@@ -16,15 +15,24 @@ import { useFormContext } from "./context/FormContext";
 import { TypeaheadTextField } from "./TypeaheadTextField";
 import { FormGroupLayout } from "./FormGroupLayout";
 
+interface AsyncTypeaheadInputRef {
+  resetValues: () => void;
+  clearValues: () => void;
+  updateValues: (values: TypeaheadOptions) => void;
+}
+
 interface AsyncTypeaheadInputProps<T extends FieldValues> extends CommonTypeaheadProps<T> {
-  queryFn: (query: string) => Promise<TypeaheadOption[]>;
+  queryFn: (query: string) => Promise<TypeaheadOptions>;
   delay?: number;
-  defaultOptions?: TypeaheadOption[];
+  defaultOptions?: TypeaheadOptions;
+  defaultSelected?: TypeaheadOptions;
+  inputRef?: MutableRefObject<AsyncTypeaheadInputRef | null>;
   autocompleteProps?: AsyncTypeaheadAutocompleteProps;
 }
 
 const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputProps<T>) => {
   const {
+    inputRef,
     multiple,
     disabled,
     variant,
@@ -52,6 +60,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
     queryFn,
     delay = 200,
     defaultOptions = [],
+    defaultSelected = [],
     limitResults,
     paginationText,
     paginationIcon,
@@ -59,15 +68,14 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
     autocompleteProps,
   } = props;
 
-  const [options, setOptions] = useState<TypeaheadOption[]>([]);
-  const [value, setValue] = useState<TypeaheadOption[]>(defaultOptions);
+  const [options, setOptions] = useState<TypeaheadOption[]>(defaultOptions);
+  const [value, setValue] = useState<TypeaheadOption[]>(defaultSelected);
   const [page, setPage] = useState(1);
   const [loadMoreOptions, setLoadMoreOptions] = useState(limitResults !== undefined && limitResults < defaultOptions.length);
-  const watchFieldValue = useRef<boolean>(true);
-
   const { name, id } = useSafeNameId(props.name ?? "", props.id);
   const { setDebounceSearch, isLoading } = useDebounceHook(queryFn, setOptions);
-  const { control, disabled: formDisabled, getFieldState, clearErrors, watch } = useFormContext();
+  const { control, disabled: formDisabled, getFieldState, setValue: setFormValue } = useFormContext();
+
   const { field } = useController({
     name,
     control,
@@ -84,20 +92,29 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
     [limitResults, page, options],
   );
 
-  // listen to changes coming from the external consumer
-  const fieldValue = watch(name) as string | number | (string | number)[] | undefined;
-  useEffect(() => {
-    if (watchFieldValue.current) {
-      setValue(
-        !multiple
-          ? getSingleAutoCompleteValue(defaultOptions, fieldValue as string | number)
-          : getMultipleAutoCompleteValue(defaultOptions, fieldValue as (string | number)[]),
-      );
-    } else {
-      watchFieldValue.current = true;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fieldValue]);
+  useImperativeHandle(
+    inputRef,
+    () => ({
+      clearValues: () => {
+        setValue([]);
+        setFormValue(name, undefined);
+      },
+      resetValues: () => {
+        setValue(defaultSelected);
+        setFormValue(
+          name,
+          defaultSelected.map((x) => (typeof x === "string" ? x : x.value)),
+        );
+      },
+      updateValues: (options: TypeaheadOption[]) => {
+        const values = convertAutoCompleteOptionsToStringArray(options);
+        const finalValue = multiple ? values : values[0];
+        setValue(options);
+        setFormValue(name, finalValue);
+      },
+    }),
+    [setFormValue, name, defaultSelected, multiple],
+  );
 
   useEffect(() => {
     if (limitResults !== undefined) {
@@ -145,15 +162,12 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
         }}
         onChange={(_e, value) => {
           const optionsArray = value ? (Array.isArray(value) ? value : [value]) : undefined;
+          setValue(optionsArray ?? []);
           const values = convertAutoCompleteOptionsToStringArray(optionsArray);
           const finalValue = multiple ? values : values[0];
-          clearErrors(field.name);
           if (onChange) {
             onChange(finalValue);
           }
-          // do not trigger the effect for the value update
-          watchFieldValue.current = false;
-          setValue(optionsArray ?? []);
           field.onChange(finalValue);
         }}
         onInputChange={(_e, query, reason) => {
@@ -197,4 +211,4 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
   );
 };
 
-export { AsyncTypeaheadInput, AsyncTypeaheadInputProps };
+export { AsyncTypeaheadInput, AsyncTypeaheadInputProps, AsyncTypeaheadInputRef };

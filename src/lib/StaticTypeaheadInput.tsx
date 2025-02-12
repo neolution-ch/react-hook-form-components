@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { FieldValues, useController } from "react-hook-form";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
-import { CommonTypeaheadProps, StaticTypeaheadAutocompleteProps, TypeaheadOption } from "./types/Typeahead";
+import { CommonTypeaheadProps, StaticTypeaheadAutocompleteProps, TypeaheadOption, TypeaheadOptions } from "./types/Typeahead";
 import { useFormContext } from "./context/FormContext";
 import Autocomplete from "@mui/material/Autocomplete";
 import {
@@ -17,7 +17,8 @@ import { TypeaheadTextField } from "./TypeaheadTextField";
 import { FormGroupLayout } from "./FormGroupLayout";
 
 interface StaticTypeaheadInputProps<T extends FieldValues> extends CommonTypeaheadProps<T> {
-  options: TypeaheadOption[];
+  options: TypeaheadOptions;
+  isLoading?: boolean;
   autocompleteProps?: StaticTypeaheadAutocompleteProps;
 }
 
@@ -52,6 +53,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
     autoHighlight = true,
     autoSelect,
     useBootstrapStyle = false,
+    isLoading = false,
     autocompleteProps,
   } = props;
 
@@ -76,12 +78,12 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
     [limitResults, page, options],
   );
 
-  const fieldValue = watch(name) as string | number | (string | number)[] | undefined;
+  const fieldValue = watch(name) as string | number | string[] | number[] | undefined;
   const value = useMemo(
     () =>
       !multiple
         ? getSingleAutoCompleteValue(options, fieldValue as string | number | undefined)
-        : getMultipleAutoCompleteValue(options, fieldValue as (string | number)[] | undefined),
+        : getMultipleAutoCompleteValue(options, fieldValue as string[] | number[] | undefined),
     [fieldValue, multiple, options],
   );
 
@@ -146,7 +148,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
         renderOption={highlightOptions ? renderHighlightedOptionFunction : undefined}
         renderInput={(params) => (
           <TypeaheadTextField
-            isLoading={false}
+            isLoading={isLoading}
             name={name}
             label={label}
             addonLeft={addonLeft}

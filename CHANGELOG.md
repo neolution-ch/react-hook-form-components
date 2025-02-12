@@ -10,10 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - :boom: `AsyncTypeAheadInput` based on MUI Autocomplete component.
+- :boom: `AsyncTypeaheadProps` to `AsyncTypeaheadInputProps`.
 
 1. The component is fully **form** controlled.
-2. Any ref exposed anymore.
-3. No need to specify a `defaultSelected` option. Trust the form value and provide the necessary `defaultOptions`, instead.
+2. A ref is exposed to clear, reset or set new selected options externally to the component.
+3. Trust the form value and provide the necessary `defaultSelected` options.
 4. No `invalidErrorMessage` anymore. In case of unmatched input-text, the current form value is maintained.
 5. Use `autoSelect` (combined with `autoHighlight`, already active by default) to auto select a matched option.
 6. The component has MUI style by default. Use `useBootstrapStyle` for applying a bootstrap-like style.
@@ -27,9 +28,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 5. Use `autoSelect` (combined with `autoHighlight`, already active by default) to auto select a matched option.
 6. The component has MUI style by default. Use `useBootstrapStyle` for applying a bootstrap-like style.
 
-### Changed
+### Added
 
-- :boom: `TypeaheadOptions` renamed to be `TypeaheadOption = LabelValueOption | string;`. Hence, a `TypeaheadOption` is now just single option (string or label-value pair).
+- `TypeaheadOption`as single option (string or label-value pair).
 
 ## [2.13.1] - 2024-12-02
 

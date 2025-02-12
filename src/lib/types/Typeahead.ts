@@ -5,6 +5,7 @@ import { LabelValueOption } from "./LabelValueOption";
 import { AutocompleteCloseReason, TextFieldVariants } from "@mui/material";
 import { AutocompleteProps } from "@mui/material/Autocomplete";
 
+export type TypeaheadOptions = LabelValueOption[] | string[];
 export type TypeaheadOption = LabelValueOption | string;
 
 interface CommonTypeaheadProps<T extends FieldValues>
@@ -61,6 +62,7 @@ type StaticTypeaheadAutocompleteProps = Omit<
   | "getOptionLabel"
   | "disabled"
   | "renderInput"
+  | "loading"
   | "style"
   | "className"
   | "onClose"

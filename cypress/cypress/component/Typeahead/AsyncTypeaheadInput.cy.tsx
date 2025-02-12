@@ -1,8 +1,8 @@
 /* eslint-disable max-lines */
-import { AsyncTypeaheadInput, Form } from "react-hook-form-components";
+import { AsyncTypeaheadInput, AsyncTypeaheadInputRef, Form } from "react-hook-form-components";
 import { faker, Sex } from "@faker-js/faker";
 import { fetchMock, generateOptions } from "../../helpers/typeahead";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 const waitLoadingOptions = () => {
   cy.get(".MuiCircularProgress-indeterminate").should("be.visible");
@@ -18,6 +18,161 @@ const selectOption = (name: string, text: string) => {
 const waitForChip = (text: string) => {
   cy.get(`span.MuiChip-label:contains(${text})`).should("be.visible");
 };
+
+it("reset values works", () => {
+  const options = generateOptions();
+  const name = faker.random.alpha(10);
+  const [defaultSelectedOption, changedOption] = faker.helpers.arrayElements(options.objectOptions, 2);
+
+  const TestForm = () => {
+    const ref = useRef<AsyncTypeaheadInputRef | null>(null);
+
+    return (
+      <Form
+        onSubmit={cy.spy().as("onSubmitSpy")}
+        defaultValues={{
+          [name]: defaultSelectedOption.value,
+        }}
+      >
+        <AsyncTypeaheadInput
+          inputRef={ref}
+          name={name}
+          label={name}
+          queryFn={async (query: string) => await fetchMock(options.objectOptions, query, false)}
+          defaultSelected={[defaultSelectedOption]}
+        />
+        <input type="submit" className="mt-4" />
+        <button
+          type="button"
+          className="mt-4 ms-2 reset"
+          onClick={() => {
+            if (ref.current) {
+              ref.current.resetValues();
+            }
+          }}
+        >
+          reset
+        </button>
+      </Form>
+    );
+  };
+
+  cy.mount(
+    <div className="p-4">
+      <TestForm />
+    </div>,
+  );
+
+  cy.get(`#${name}`).should("have.value", defaultSelectedOption.label);
+  selectOption(name, changedOption.label);
+  cy.get(`#${name}`).should("have.value", changedOption.label);
+  cy.get("button.reset").click({ force: true });
+  cy.get(`#${name}`).should("have.value", defaultSelectedOption.label);
+  cy.get("input[type=submit]").click({ force: true });
+  cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: [defaultSelectedOption.value] });
+});
+
+it("set values works", () => {
+  const options = generateOptions();
+  const name = faker.random.alpha(10);
+  const [defaultSelectedOption, changedOption] = faker.helpers.arrayElements(options.objectOptions, 2);
+
+  const TestForm = () => {
+    const ref = useRef<AsyncTypeaheadInputRef | null>(null);
+
+    return (
+      <Form
+        onSubmit={cy.spy().as("onSubmitSpy")}
+        defaultValues={{
+          [name]: defaultSelectedOption.value,
+        }}
+      >
+        <AsyncTypeaheadInput
+          inputRef={ref}
+          name={name}
+          label={name}
+          queryFn={async (query: string) => await fetchMock(options.randomSubset, query, false)}
+          defaultSelected={[defaultSelectedOption]}
+        />
+        <input type="submit" className="mt-4" />
+        <button
+          type="button"
+          className="mt-4 ms-2 set"
+          onClick={() => {
+            if (ref.current) {
+              ref.current.updateValues([changedOption]);
+            }
+          }}
+        >
+          set new value
+        </button>
+      </Form>
+    );
+  };
+
+  cy.mount(
+    <div className="p-4">
+      <TestForm />
+    </div>,
+  );
+
+  cy.get(`#${name}`).should("have.value", defaultSelectedOption.label);
+  cy.get("button.set").click({ force: true });
+  cy.get(`#${name}`).should("have.value", changedOption.label);
+  cy.get("input[type=submit]").click({ force: true });
+  cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: changedOption.value });
+});
+
+it("clear values works", () => {
+  const options = generateOptions();
+  const name = faker.random.alpha(10);
+  const [defaultSelectedOption] = faker.helpers.arrayElements(options.objectOptions, 1);
+
+  const TestForm = () => {
+    const ref = useRef<AsyncTypeaheadInputRef | null>(null);
+
+    return (
+      <Form
+        onSubmit={cy.spy().as("onSubmitSpy")}
+        defaultValues={{
+          [name]: defaultSelectedOption.value,
+        }}
+      >
+        <AsyncTypeaheadInput
+          inputRef={ref}
+          name={name}
+          label={name}
+          queryFn={async (query: string) => await fetchMock(options.randomSubset, query, false)}
+          defaultSelected={[defaultSelectedOption]}
+        />
+        <input type="submit" className="mt-4" />
+        <button
+          type="button"
+          className="mt-4 ms-2 clear"
+          onClick={() => {
+            if (ref.current) {
+              ref.current.clearValues();
+            }
+          }}
+        >
+          clear
+        </button>
+      </Form>
+    );
+  };
+
+  cy.mount(
+    <div className="p-4">
+      <TestForm />
+    </div>,
+  );
+
+  cy.get(`#${name}`).should("have.value", defaultSelectedOption.label);
+  cy.get("button.clear").click({ force: true });
+  cy.get(`#${name}`).should("have.value", "");
+  cy.get("input[type=submit]").click({ force: true });
+  cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: undefined });
+});
 
 it("works with multiple simple options and default selected", () => {
   const options = generateOptions();
@@ -40,7 +195,7 @@ it("works with multiple simple options and default selected", () => {
           multiple
           name={name}
           label={name}
-          defaultOptions={defaultSelectedOptions}
+          defaultSelected={defaultSelectedOptions}
           queryFn={async (query: string) => await fetchMock(options.objectOptions, query)}
         />
         <input type="submit" className="mt-4" />
@@ -118,7 +273,7 @@ it("works with single object option and default selected", () => {
         <AsyncTypeaheadInput
           name={name}
           label={name}
-          defaultOptions={[defaultSelectedOption]}
+          defaultSelected={[defaultSelectedOption]}
           queryFn={async (query: string) => await fetchMock(options.objectOptions, query, false)}
         />
         <input type="submit" className="mt-4" />
@@ -154,7 +309,7 @@ it("works with single simple option and default selected", () => {
         <AsyncTypeaheadInput
           name={name}
           label={name}
-          defaultOptions={[defaultSelectedOption.label]}
+          defaultSelected={[defaultSelectedOption.label]}
           queryFn={async (query: string) => await fetchMock(options.objectOptions, query)}
         />
         <input type="submit" className="mt-4" />
@@ -276,6 +431,7 @@ it("select automatically single option when multiple options are available - mul
           queryFn={async (query: string) => await fetchMock(options, query, false)}
           multiple
           autoSelect
+          autoHighlight
         />
         <input type="submit" className="mt-4" />
       </Form>
@@ -390,7 +546,7 @@ it("auto mark on focus", () => {
         }}
       >
         <AsyncTypeaheadInput
-          defaultOptions={[randomOption.label]}
+          defaultSelected={[randomOption.label]}
           name={name}
           label={name}
           queryFn={async (query: string) => await fetchMock(options.objectOptions, query)}
@@ -458,7 +614,7 @@ it("test empty label and loading label", () => {
               false,
             )
           }
-          defaultOptions={simpleOptions}
+          defaultSelected={simpleOptions}
           autocompleteProps={{
             noOptionsText: emptyLabel,
             loadingText: loadingLabel,
