@@ -85,13 +85,13 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
   );
 
   // listen to changes coming from the external consumer
-  const fieldValue = watch(name) as string | string[] | undefined;
+  const fieldValue = watch(name) as string | number | (string | number)[] | undefined;
   useEffect(() => {
     if (watchFieldValue.current) {
       setValue(
-        typeof fieldValue === "string"
-          ? getSingleAutoCompleteValue(defaultOptions, fieldValue)
-          : getMultipleAutoCompleteValue(defaultOptions, fieldValue),
+        !multiple
+          ? getSingleAutoCompleteValue(defaultOptions, fieldValue as string | number)
+          : getMultipleAutoCompleteValue(defaultOptions, fieldValue as (string | number)[]),
       );
     } else {
       watchFieldValue.current = true;

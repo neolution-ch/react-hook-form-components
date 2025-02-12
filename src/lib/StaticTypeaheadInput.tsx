@@ -76,15 +76,14 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
     [limitResults, page, options],
   );
 
-  const fieldValue = watch(name) as string | string[] | undefined;
-  const value = useMemo(() => {
-    if (fieldValue === undefined) {
-      return [];
-    }
-    return typeof fieldValue === "string"
-      ? getSingleAutoCompleteValue(options, fieldValue)
-      : getMultipleAutoCompleteValue(options, fieldValue);
-  }, [fieldValue, options]);
+  const fieldValue = watch(name) as string | number | (string | number)[] | undefined;
+  const value = useMemo(
+    () =>
+      !multiple
+        ? getSingleAutoCompleteValue(options, fieldValue as string | number | undefined)
+        : getMultipleAutoCompleteValue(options, fieldValue as (string | number)[] | undefined),
+    [fieldValue, multiple, options],
+  );
 
   useEffect(() => {
     if (limitResults !== undefined) {

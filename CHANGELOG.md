@@ -29,7 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- :boom: `TypeaheadOption` to be `TypeaheadOption = LabelValueOption | string;` instead of an array of the mentioned type. Hence, a `TypeaheadOption` is now just single option (string or label-value pair).
+- :boom: `TypeaheadOptions` renamed to be `TypeaheadOption = LabelValueOption | string;`. Hence, a `TypeaheadOption` is now just single option (string or label-value pair).
 
 ## [2.13.1] - 2024-12-02
 
