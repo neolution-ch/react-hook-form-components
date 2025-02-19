@@ -23,6 +23,7 @@ interface InputProps<T extends FieldValues> extends CommonInputProps<T> {
   plainText?: boolean;
   placeholder?: string;
   step?: number;
+  autoComplete?: string;
   innerRef?: MutableRefObject<HTMLInputElement | HTMLTextAreaElement | null>;
 }
 
