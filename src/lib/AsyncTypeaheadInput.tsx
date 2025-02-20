@@ -178,7 +178,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
             setDebounceSearch({ delay, query, value });
           }
           if (onInputChange) {
-            onInputChange(query);
+            onInputChange(query, reason);
           }
         }}
         renderOption={highlightOptions ? renderHighlightedOptionFunction : undefined}
