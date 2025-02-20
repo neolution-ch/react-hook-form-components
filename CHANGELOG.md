@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   4. No `invalidErrorMessage` anymore. In case of unmatched input-text, the current form value is maintained.
   5. Use `autoSelect` (combined with `autoHighlight`, already active by default) to auto select a matched option.
   6. The component has MUI style by default. Use `useBootstrapStyle` for applying a "bootstrap-like" style.
+  7. `onInputChange` exposes the reason why the input-text changes. Check whether reason is `input` for checking only the typing event.
 
 - :boom: `StaticTypeAheadInput` based on MUI Autocomplete component.
 
@@ -27,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   4. No `invalidErrorMessage` anymore. In case of unmatched input-text, the current form value is maintained.
   5. Use `autoSelect` (combined with `autoHighlight`, already active by default) to auto select a matched option.
   6. The component has MUI style by default. Use `useBootstrapStyle` for applying a "bootstrap-like" style.
+  7. `onInputChange` exposes the reason why the input-text changes. Check whether reason is `input` for checking only the typing event.
 
 ### Added
 
