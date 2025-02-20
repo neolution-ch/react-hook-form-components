@@ -140,9 +140,9 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
           }
           field.onChange(finalValue);
         }}
-        onInputChange={(_e, value) => {
+        onInputChange={(_e, value, reason) => {
           if (onInputChange) {
-            onInputChange(value);
+            onInputChange(value, reason);
           }
         }}
         renderOption={highlightOptions ? renderHighlightedOptionFunction : undefined}
