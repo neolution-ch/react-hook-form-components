@@ -34,6 +34,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `TypeaheadOption` as single option (string or label-value pair).
 
+## [2.14.0] - 2025-02-20
+
+### Added
+
+- `autoComplete` prop to `Input` component
+
 ## [2.13.1] - 2024-12-02
 
 ### Fixed
@@ -458,7 +464,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Created package :tada:
 
-[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/2.13.1...HEAD
+[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/2.14.0...HEAD
 [0.1.2]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.1...0.1.2
 [0.1.1]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.1.0
@@ -483,6 +489,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.4.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.3.0...0.4.0
 [0.3.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.2.0...0.3.0
 [0.2.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.2.0
+[2.14.0]: https://github.com/neolution-ch/react-hook-form-components/compare/2.13.1...2.14.0
 [2.13.1]: https://github.com/neolution-ch/react-hook-form-components/compare/2.13.0...2.13.1
 [2.13.0]: https://github.com/neolution-ch/react-hook-form-components/compare/2.12.0...2.13.0
 [2.12.0]: https://github.com/neolution-ch/react-hook-form-components/compare/2.11.0...2.12.0
