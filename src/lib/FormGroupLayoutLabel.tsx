@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { CSSProperties, ReactNode } from "react";
 import { useFormContext } from "./context/FormContext";
 import { FieldPath, FieldValues } from "react-hook-form";
 import { Label, UncontrolledTooltip } from "reactstrap";
@@ -8,11 +8,12 @@ interface FormGroupLayoutLabelProps<T extends FieldValues> {
   tooltip?: ReactNode;
   fieldName: FieldPath<T>;
   fieldId: string;
-  layout?: "checkbox" | "switch";
+  layout?: "checkbox" | "switch" | "typeahead";
+  labelStyle?: CSSProperties;
 }
 
 const FormGroupLayoutLabel = <T extends FieldValues>(props: FormGroupLayoutLabelProps<T>) => {
-  const { label, tooltip, fieldName, layout, fieldId } = props;
+  const { label, tooltip, fieldName, layout, fieldId, labelStyle } = props;
   const { requiredFields } = useFormContext<T>();
 
   if (!label && !!tooltip) {
@@ -31,7 +32,7 @@ const FormGroupLayoutLabel = <T extends FieldValues>(props: FormGroupLayoutLabel
 
   return (
     <>
-      <Label check={checkboxLayout || switchLayout} for={fieldId}>
+      <Label check={checkboxLayout || switchLayout} for={fieldId} style={labelStyle}>
         {finalLabel}
         {tooltip && (
           <svg

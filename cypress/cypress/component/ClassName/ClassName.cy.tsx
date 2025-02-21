@@ -53,7 +53,7 @@ it("async typeahead input has correct classname", () => {
     </Form>,
   );
 
-  cy.get(".rbt").should("have.class", "mt-0 text-white");
+  cy.get(".MuiAutocomplete-root").should("have.class", "mt-0 text-white");
 });
 
 it("static typeahead input has correct classname", () => {
@@ -70,7 +70,7 @@ it("static typeahead input has correct classname", () => {
     </Form>,
   );
 
-  cy.get(".rbt").should("have.class", "mt-0 text-white");
+  cy.get(".MuiAutocomplete-root").should("have.class", "mt-0 text-white");
 });
 
 it("formatted input has correct classname", () => {
