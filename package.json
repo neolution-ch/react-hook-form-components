@@ -51,7 +51,6 @@
     "@emotion/styled": "^11.13.5",
     "@mui/icons-material": "^6.1.10",
     "@mui/material": "^6.1.7",
-    "@mui/styled-engine-sc": "^6.4.3",
     "autosuggest-highlight": "^3.3.4",
     "classnames": "^2.3.2",
     "date-fns-tz": "^2.0.0",
@@ -59,9 +58,6 @@
     "react-number-format": "^5.1.4",
     "use-debounce": "^9.0.4",
     "uuid": "^9.0.1"
-  },
-  "resolutions": {
-    "@mui/styled-engine": "@mui/styled-engine-sc"
   },
   "devDependencies": {
     "@babel/core": "^7.21.8",
