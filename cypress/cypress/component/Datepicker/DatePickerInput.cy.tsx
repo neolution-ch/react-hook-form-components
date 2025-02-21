@@ -9,8 +9,7 @@ import { Button, InputGroupText } from "reactstrap";
 
 import { SinonSpy } from "cypress/types/sinon";
 import { useRef, useEffect, FC } from "react";
-// eslint-disable-next-line import/no-named-as-default
-import ReactDatePicker from "react-datepicker";
+import ReactDatePickers from "react-datepicker";
 
 it("selecting today works", () => {
   const name = faker.random.alpha(10);
@@ -220,7 +219,7 @@ it("passing the ref works", () => {
   });
 
   const DatePickerWithRef: FC = () => {
-    const ref = useRef<ReactDatePicker<never, undefined>>(null);
+    const ref = useRef<ReactDatePickers<never, undefined>>(null);
 
     useEffect(() => {
       if (ref && ref.current) {

@@ -48,7 +48,7 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
         const commonProps: NumericFormatProps = {
           name: name,
 
-          value: value,
+          value: value as string | number,
           getInputRef: ref,
           className: classnames("form-control", { "is-invalid": error }, className),
           "aria-invalid": !!error,

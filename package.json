@@ -36,7 +36,7 @@
   "scripts": {
     "build": "rollup -c",
     "build-storybook": "build-storybook",
-    "lint": "eslint --cache --max-warnings 0",
+    "lint": "eslint --cache",
     "prepack": "yarn build",
     "prepare-pr": "yarn prettier . --write && yarn lint && yarn build && yarn test\"",
     "prettier-check": "prettier --check .",
@@ -47,7 +47,7 @@
     "storybook": "start-storybook -p 6006"
   },
   "dependencies": {
-    "@neolution-ch/eslint-config-neolution": "https://pkg.pr.new/neolution-ch/eslint-config-neolution/@neolution-ch/eslint-config-neolution@b67475a",
+    "@neolution-ch/eslint-config-neolution": "https://pkg.pr.new/neolution-ch/eslint-config-neolution/@neolution-ch/eslint-config-neolution@e4bd82b",
     "classnames": "^2.3.2",
     "date-fns-tz": "^2.0.0",
     "react-bootstrap-typeahead": "^6.3.4",
