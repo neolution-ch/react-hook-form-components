@@ -82,7 +82,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
   }
 
   const getInitialDate = (): Date | null => {
-    const value = getValues(name) as Date | undefined;
+    const value = getValues(name) as Date | null;
 
     if (!value) return null;
 
