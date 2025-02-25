@@ -22,6 +22,7 @@ interface InputProps<T extends FieldValues> extends CommonInputProps<T> {
   plainText?: boolean;
   placeholder?: string;
   step?: number;
+  autoComplete?: string;
   innerRef?: MutableRefObject<HTMLInputElement | HTMLTextAreaElement | null>;
 }
 
@@ -42,6 +43,7 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
     step,
     minLength,
     maxLength,
+    autoComplete,
   } = props;
 
   if (type === "radio" && !options) {
@@ -83,6 +85,9 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
     if (minLength !== undefined && maxLength !== undefined && minLength > maxLength) {
       throw new Error("minlength must be less than or equal to maxlength");
     }
+  }
+  if (autoComplete && (type === "checkbox" || type === "file" || type === "radio" || type === "range" || type === "switch")) {
+    throw new Error("autoComplete can only be used with text, numeric or select inputs");
   }
 
   const formGroupLayout = (() => {
