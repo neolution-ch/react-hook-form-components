@@ -30,23 +30,23 @@ it("radio button multiple autosave works", () => {
 
   cy.get("@onSubmitSpy1").should("have.callCount", 0);
   for (const [i, { value, label }] of options1.entries()) {
-    cy.contains("label", label).click();
+    cy.contains("label", label as string).click();
 
     cy.get("@onSubmitSpy1").should("have.callCount", i + 1);
     cy.get("@onSubmitSpy1")
       .its("lastCall.args.0")
-      .should("deep.equal", { [name1]: value });
+      .should("deep.equal", { [name1]: value as string });
   }
   cy.get("@onSubmitSpy1").should("callCount", options1.length);
 
   cy.get("@onSubmitSpy2").should("have.callCount", 0);
   for (const [i, { value, label }] of options2.entries()) {
-    cy.contains("label", label).click();
+    cy.contains("label", label as string).click();
 
     cy.get("@onSubmitSpy2").should("have.callCount", i + 1);
     cy.get("@onSubmitSpy2")
       .its("lastCall.args.0")
-      .should("deep.equal", { [name2]: value });
+      .should("deep.equal", { [name2]: value as string });
   }
   cy.get("@onSubmitSpy2").should("callCount", options2.length);
 });

@@ -87,7 +87,7 @@ it("validation works", () => {
       .number()
       .nullable()
       .required(errorMessage)
-      .transform((_, val) => (Number.isNaN(Number.parseFloat(val)) ? undefined : Number(val))),
+      .transform((_, val: string) => (Number.isNaN(Number.parseFloat(val)) ? undefined : Number(val))),
   });
 
   const randomNumber = faker.datatype.number({
@@ -123,7 +123,7 @@ it("validation works for nested fields", () => {
         .number()
         .nullable()
         .required(errorMessage)
-        .transform((_, val) => (Number.isNaN(Number.parseFloat(val)) ? undefined : Number(val))),
+        .transform((_, val: string) => (Number.isNaN(Number.parseFloat(val)) ? undefined : Number(val))),
     }),
   });
 

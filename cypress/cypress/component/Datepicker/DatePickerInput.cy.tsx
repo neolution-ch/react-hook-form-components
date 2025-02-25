@@ -7,6 +7,7 @@ import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, InputGroupText } from "reactstrap";
 
+// eslint-disable-next-line import/no-unresolved
 import { SinonSpy } from "cypress/types/sinon";
 import { useRef, useEffect, FC } from "react";
 import ReactDatePickers from "react-datepicker";
@@ -45,9 +46,14 @@ it("setting intial value as iso string works", () => {
     [name]: yup.date().required(),
   });
 
+  const x = (values: unknown) => {
+    console.log(values);
+    console.log(JSON.stringify(values));
+  };
+
   cy.mount(
     <Form
-      onSubmit={cy.spy().as("onSubmitSpy")}
+      onSubmit={cy.spy(x).as("onSubmitSpy")}
       resolver={yupResolver(schema)}
       defaultValues={{
         [name]: randomDate.toISOString(),

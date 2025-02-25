@@ -1651,9 +1651,9 @@
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
 
-"@neolution-ch/eslint-config-neolution@https://pkg.pr.new/neolution-ch/eslint-config-neolution/@neolution-ch/eslint-config-neolution@b67475a":
+"@neolution-ch/eslint-config-neolution@https://pkg.pr.new/neolution-ch/eslint-config-neolution/@neolution-ch/eslint-config-neolution@43683b1":
   version "1.3.0"
-  resolved "https://pkg.pr.new/neolution-ch/eslint-config-neolution/@neolution-ch/eslint-config-neolution@b67475a#db1e3dbd20e500e07dc5521f553cbe7464ed51d4"
+  resolved "https://pkg.pr.new/neolution-ch/eslint-config-neolution/@neolution-ch/eslint-config-neolution@43683b1#98a62d426de412b604dffe69ff469233ffbf5e93"
   dependencies:
     "@eslint/compat" "^1.2.5"
     "@eslint/eslintrc" "^3.2.0"
@@ -1662,16 +1662,18 @@
     eslint-import-resolver-typescript "^3.7.0"
     eslint-plugin-cypress "^4.1.0"
     eslint-plugin-import "^2.31.0"
+    eslint-plugin-jsdoc "^50.6.3"
     eslint-plugin-no-only-tests "^3.3.0"
+    eslint-plugin-only-error "^1.0.2"
     eslint-plugin-prettier "^5.2.2"
     eslint-plugin-react "^7.37.4"
     eslint-plugin-react-hooks "^5.1.0"
     eslint-plugin-unicorn "^56.0.1"
     typescript-eslint "^8.20.0"
 
-"@neolution-ch/eslint-config-neolution@https://pkg.pr.new/neolution-ch/eslint-config-neolution/@neolution-ch/eslint-config-neolution@e4bd82b":
+"@neolution-ch/eslint-config-neolution@https://pkg.pr.new/neolution-ch/eslint-config-neolution/@neolution-ch/eslint-config-neolution@b64d3d8":
   version "1.3.0"
-  resolved "https://pkg.pr.new/neolution-ch/eslint-config-neolution/@neolution-ch/eslint-config-neolution@e4bd82b#040e8e079d92aaca190d8dafb8231c75c8613b5c"
+  resolved "https://pkg.pr.new/neolution-ch/eslint-config-neolution/@neolution-ch/eslint-config-neolution@b64d3d8#30da159af383978012f3d2d8ebfc0333cb8113c0"
   dependencies:
     "@eslint/compat" "^1.2.5"
     "@eslint/eslintrc" "^3.2.0"

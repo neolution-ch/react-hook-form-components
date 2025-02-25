@@ -8,7 +8,7 @@
     "cyo": "yarn cy open",
     "cyr": "yarn cy run --component",
     "dev": "next dev",
-    "lint": "eslint --cache --max-warnings 0",
+    "lint": "eslint --cache",
     "start": "next start"
   },
   "dependencies": {
@@ -16,7 +16,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@hookform/resolvers": "^2.9.10",
-    "@neolution-ch/eslint-config-neolution": "https://pkg.pr.new/neolution-ch/eslint-config-neolution/@neolution-ch/eslint-config-neolution@d472920",
+    "@neolution-ch/eslint-config-neolution": "https://pkg.pr.new/neolution-ch/eslint-config-neolution/@neolution-ch/eslint-config-neolution@b64d3d8",
     "@types/node": "18.11.9",
     "@types/react": "18.0.25",
     "@types/react-dom": "18.0.8",

@@ -24,7 +24,7 @@ interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputPr
    * The onChange handler for the date picker component.
    * @param value The selected date or null if the user cleared the date.
    */
-  onChange?: (value: Date | undefined) => void;
+  onChange?: (value: Date | null) => void;
 
   /**
    * The IANA time zone identifier, e.g. "Europe/Berlin" for which the date should be displayed.
@@ -81,10 +81,10 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
     throw new Error("If you use ianaTimeZone, you have to include time in the dateFormat or set showTimeInput or showTimeSelect to true");
   }
 
-  const getInitialDate = (): Date | undefined => {
+  const getInitialDate = (): Date | null => {
     const value = getValues(name) as Date | undefined;
 
-    if (!value) return;
+    if (!value) return null;
 
     if (!showTimeInputOrSelect) return getUtcTimeZeroDate(value);
 
@@ -94,8 +94,8 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
   };
 
   const getConvertedDate = useCallback(
-    (date: Date | undefined): Date | undefined => {
-      if (!date) return;
+    (date: Date | null): Date | null => {
+      if (!date) return null;
 
       if (!showTimeInputOrSelect) return getUtcTimeZeroDate(date);
 
@@ -106,7 +106,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
     [ianaTimeZone, showTimeInputOrSelect],
   );
 
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(getInitialDate());
+  const [selectedDate, setSelectedDate] = useState<Date | null>(getInitialDate());
 
   // setting the value here once the component is mounted
   // so we have the corrected date in the form
@@ -171,9 +171,9 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
               field.onBlur();
             }}
             onChange={(date) => {
-              setSelectedDate(date ?? undefined);
+              setSelectedDate(date);
 
-              const convertedDate = getConvertedDate(date ?? undefined);
+              const convertedDate = getConvertedDate(date);
 
               if (props.onChange) props.onChange(convertedDate);
 

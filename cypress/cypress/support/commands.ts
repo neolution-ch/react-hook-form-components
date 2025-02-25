@@ -51,7 +51,7 @@ declare global {
 Cypress.Commands.add("setSliderValue", { prevSubject: "element" }, (subject, value) => {
   const element = subject[0];
 
-  const nativeInputValueSetter = Object.getOwnPropertyDescriptor(globalThis.HTMLInputElement.prototype, "value")?.set;
+  const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value")?.set;
 
   nativeInputValueSetter?.call(element, value);
   element.dispatchEvent(new Event("input", { bubbles: true }));

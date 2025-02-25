@@ -5,6 +5,6 @@ export default [
   {
     ignores: ["**/cypress/"],
   },
-  ...neolutionEslintConfig.configs.flat.nextjs,
+  ...neolutionEslintConfig.configs.flat["react-library"],
   ...storybook.configs["flat/recommended"],
 ];
