@@ -85,8 +85,6 @@ it("async typeahead input contains pencil icon and inputGroup has correct style"
   const options = generateOptions(100);
 
   const customStyle = "background-color: black;";
-  const defaultStyle = "flex-wrap: nowrap; align-items: center; ";
-  const style = defaultStyle.concat(customStyle);
 
   cy.mount(
     <Form
@@ -110,7 +108,7 @@ it("async typeahead input contains pencil icon and inputGroup has correct style"
   );
 
   cy.get(`label[for=${name}]`).parent().find("svg[data-icon=pencil]");
-  cy.get(".input-group").should("have.attr", "style", style);
+  cy.get("div.MuiAutocomplete-root").should("have.attr", "style", customStyle);
 });
 
 it("static typeahead input contains pencil icon and inputGroup has correct style", () => {
@@ -118,8 +116,6 @@ it("static typeahead input contains pencil icon and inputGroup has correct style
   const { simpleOptions } = generateOptions(100);
 
   const customStyle = "background-color: black;";
-  const defaultStyle = "flex-wrap: nowrap; align-items: center; ";
-  const style = defaultStyle.concat(customStyle);
 
   cy.mount(
     <Form
@@ -143,5 +139,5 @@ it("static typeahead input contains pencil icon and inputGroup has correct style
   );
 
   cy.get(`label[for=${name}]`).parent().find("svg[data-icon=pencil]");
-  cy.get(".input-group").should("have.attr", "style", style);
+  cy.get("div.MuiAutocomplete-root").should("have.attr", "style", customStyle);
 });

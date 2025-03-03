@@ -1,163 +1,214 @@
-import { useRef, useState } from "react";
-import { AsyncTypeahead, UseAsyncProps } from "react-bootstrap-typeahead";
-import { Controller, FieldError, FieldValues, get } from "react-hook-form";
-import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
-import { FormGroupLayout } from "./FormGroupLayout";
-import { convertTypeaheadOptionsToStringArray, renderMenu } from "./helpers/typeahead";
-import { CommonTypeaheadProps, TypeaheadOptions } from "./types/Typeahead";
-import { useMarkOnFocusHandler } from "./hooks/useMarkOnFocusHandler";
+/* eslint-disable max-lines */
+import { useEffect, useMemo, useState, MutableRefObject, useImperativeHandle } from "react";
+import { FieldValues, useController } from "react-hook-form";
+import { AsyncTypeaheadAutocompleteProps, CommonTypeaheadProps, TypeaheadOption, TypeaheadOptions } from "./types/Typeahead";
+import Autocomplete from "@mui/material/Autocomplete";
+import {
+  convertAutoCompleteOptionsToStringArray,
+  groupOptions,
+  isDisabledGroup,
+  renderHighlightedOptionFunction,
+} from "./helpers/typeahead";
+import { useDebounceHook } from "./hooks/useDebounceHook";
+import { useSafeNameId } from "./hooks/useSafeNameId";
 import { useFormContext } from "./context/FormContext";
-import TypeheadRef from "react-bootstrap-typeahead/types/core/Typeahead";
-import { LabelValueOption } from "./types/LabelValueOption";
+import { TypeaheadTextField } from "./TypeaheadTextField";
+import { FormGroupLayout } from "./FormGroupLayout";
 
-interface AsyncTypeaheadProps<T extends FieldValues> extends CommonTypeaheadProps<T> {
-  queryFn: (query: string) => Promise<TypeaheadOptions>;
-  reactBootstrapTypeaheadProps?: Partial<UseAsyncProps>;
+interface AsyncTypeaheadInputRef {
+  resetValues: () => void;
+  clearValues: () => void;
+  updateValues: (values: TypeaheadOptions) => void;
 }
 
-const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadProps<T>) => {
+interface AsyncTypeaheadInputProps<T extends FieldValues> extends CommonTypeaheadProps<T> {
+  queryFn: (query: string) => Promise<TypeaheadOptions>;
+  delay?: number;
+  defaultOptions?: TypeaheadOptions;
+  defaultSelected?: TypeaheadOptions;
+  inputRef?: MutableRefObject<AsyncTypeaheadInputRef | null>;
+  autocompleteProps?: AsyncTypeaheadAutocompleteProps;
+}
+
+const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputProps<T>) => {
   const {
+    inputRef,
+    multiple,
     disabled,
+    variant,
     label,
     helpText,
-    labelToolTip,
-    defaultSelected,
-    reactBootstrapTypeaheadProps,
+    hideValidationMessage,
+    onBlur,
     onChange,
     onInputChange,
+    onClose,
+    onOpen,
+    getOptionDisabled,
     markAllOnFocus,
     addonLeft,
     addonRight,
-    className = "",
     style,
-    emptyLabel,
+    inputGroupStyle,
+    className,
     placeholder,
-    multiple,
-    invalidErrorMessage,
-    hideValidationMessage = false,
-    inputRef,
     useGroupBy = false,
+    readOnly,
+    highlightOptions = true,
+    autoHighlight = true,
+    autoSelect,
+    queryFn,
+    delay = 200,
+    defaultOptions = [],
+    defaultSelected = [],
+    limitResults,
+    paginationText,
+    paginationIcon,
+    useBootstrapStyle = false,
+    autocompleteProps,
   } = props;
-  const { name, id } = useSafeNameId(props.name, props.id);
-  const ref = useRef<TypeheadRef | null>(null);
 
-  const {
+  const [options, setOptions] = useState<TypeaheadOption[]>(defaultOptions);
+  const [value, setValue] = useState<TypeaheadOption[]>(defaultSelected);
+  const [page, setPage] = useState(1);
+  const [loadMoreOptions, setLoadMoreOptions] = useState(limitResults !== undefined && limitResults < defaultOptions.length);
+  const { name, id } = useSafeNameId(props.name ?? "", props.id);
+  const { setDebounceSearch, isLoading } = useDebounceHook(queryFn, setOptions);
+  const { control, disabled: formDisabled, getFieldState, setValue: setFormValue } = useFormContext();
+
+  const { field } = useController({
+    name,
     control,
-    disabled: formDisabled,
-    formState: { errors },
-    setError,
-    clearErrors,
-    getValues,
-    getFieldState,
-  } = useFormContext();
-  const fieldError = get(errors, name) as FieldError | undefined;
-  const hasError = !!fieldError;
-  const [isLoading, setIsLoading] = useState(false);
-  const [options, setOptions] = useState<TypeaheadOptions>([]);
-  const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
+    rules: {
+      validate: {
+        required: () => getFieldState(name)?.error?.message,
+      },
+    },
+  });
 
-  const isDisabled = formDisabled || disabled;
+  const isDisabled = useMemo(() => formDisabled || disabled, [formDisabled, disabled]);
+  const paginatedOptions = useMemo(
+    () => (limitResults !== undefined ? options.slice(0, page * limitResults) : options),
+    [limitResults, page, options],
+  );
+
+  useImperativeHandle(
+    inputRef,
+    () => ({
+      clearValues: () => {
+        setValue([]);
+        setFormValue(name, undefined);
+      },
+      resetValues: () => {
+        setValue(defaultSelected);
+        setFormValue(
+          name,
+          defaultSelected.map((x) => (typeof x === "string" ? x : x.value)),
+        );
+      },
+      updateValues: (options: TypeaheadOption[]) => {
+        const values = convertAutoCompleteOptionsToStringArray(options);
+        const finalValue = multiple ? values : values[0];
+        setValue(options);
+        setFormValue(name, finalValue);
+      },
+    }),
+    [setFormValue, name, defaultSelected, multiple],
+  );
+
+  useEffect(() => {
+    if (limitResults !== undefined) {
+      setLoadMoreOptions(page * limitResults < options.length);
+    }
+  }, [options, page, limitResults]);
 
   return (
-    <Controller
-      control={control}
+    <FormGroupLayout
       name={name}
-      rules={{
-        validate: {
-          required: () => getFieldState(name)?.error?.message,
-        },
-      }}
-      render={({ field, fieldState: { error } }) => (
-        <FormGroupLayout
-          helpText={helpText}
-          name={name}
-          id={id}
-          label={label}
-          labelToolTip={labelToolTip}
-          addonLeft={addonLeft}
-          addonRight={addonRight}
-          addonProps={{
-            isDisabled,
-          }}
-          inputGroupStyle={props.inputGroupStyle}
-          hideValidationMessage={hideValidationMessage}
-        >
-          <AsyncTypeahead
-            {...field}
-            id={id}
-            ref={(elem) => {
-              ref.current = elem;
-              if (inputRef) {
-                inputRef.current = elem;
-              }
-            }}
-            multiple={multiple}
-            defaultSelected={defaultSelected}
-            isInvalid={hasError}
-            onChange={(e) => {
-              const values = convertTypeaheadOptionsToStringArray(e);
-              const finalValue = multiple ? values : values[0];
-              clearErrors(name);
-
-              if (onChange) {
-                onChange(finalValue);
-              }
-
-              field.onChange(finalValue);
-
-              // if not multiple, clear options to prevent the dropdown from showing multiple again when activating
-              if (!multiple) setOptions([]);
-            }}
-            onInputChange={onInputChange}
-            className={`${className} ${error ? "is-invalid" : ""}`}
-            inputProps={{ id }}
+      label={useBootstrapStyle ? label : undefined}
+      labelStyle={useBootstrapStyle ? { color: "#8493A5", fontSize: 14 } : undefined}
+      layout="typeahead"
+    >
+      <Autocomplete<TypeaheadOption, boolean, boolean, boolean>
+        {...autocompleteProps}
+        {...field}
+        id={id}
+        multiple={multiple}
+        loading={isLoading}
+        options={paginatedOptions}
+        value={(multiple ? value : value[0]) || null}
+        filterOptions={(currentOptions) => currentOptions}
+        getOptionLabel={(option: TypeaheadOption) => (typeof option === "string" ? option : option.label)}
+        getOptionDisabled={(option) =>
+          getOptionDisabled?.(option) ||
+          (useGroupBy && isDisabledGroup(option)) ||
+          (typeof option == "string" ? false : option.disabled ?? false)
+        }
+        disabled={isDisabled}
+        readOnly={readOnly}
+        selectOnFocus={markAllOnFocus}
+        style={inputGroupStyle}
+        className={className}
+        autoSelect={autoSelect ?? options.length === 1}
+        autoHighlight={autoHighlight}
+        onClose={readOnly ? undefined : onClose}
+        onOpen={readOnly ? undefined : onOpen}
+        groupBy={useGroupBy ? groupOptions : undefined}
+        onBlur={() => {
+          if (onBlur) {
+            onBlur();
+          }
+          field.onBlur();
+        }}
+        onChange={(_e, value) => {
+          const optionsArray = value ? (Array.isArray(value) ? value : [value]) : undefined;
+          setValue(optionsArray ?? []);
+          const values = convertAutoCompleteOptionsToStringArray(optionsArray);
+          const finalValue = multiple ? values : values[0];
+          if (onChange) {
+            onChange(finalValue);
+          }
+          field.onChange(finalValue);
+        }}
+        onInputChange={(_e, query, reason) => {
+          if (reason == "blur" || reason == "clear" || (reason == "selectOption" && !autocompleteProps?.disableCloseOnSelect)) {
+            setOptions([]);
+            setPage(1);
+          } else if (reason == "input") {
+            setDebounceSearch({ delay, query, value });
+          }
+          if (onInputChange) {
+            onInputChange(query, reason);
+          }
+        }}
+        renderOption={highlightOptions ? renderHighlightedOptionFunction : undefined}
+        renderInput={(params) => (
+          <TypeaheadTextField
             isLoading={isLoading}
-            options={options}
-            filterBy={() => true}
-            onSearch={(query) => {
-              void (async () => {
-                setIsLoading(true);
-                const results = await props.queryFn(query);
-                setOptions(results);
-                setIsLoading(false);
-              })();
+            name={name}
+            label={label}
+            addonLeft={addonLeft}
+            addonRight={addonRight}
+            addonProps={{
+              isDisabled,
             }}
-            onBlur={() => {
-              if (options.length === 1 && ref.current?.state.text.length) {
-                ref.current?.setState({
-                  selected: [...(ref.current?.state.selected ?? []), ...options],
-                  text: "",
-                  showMenu: false,
-                });
-
-                const newValue = typeof options[0] == "string" ? options[0] : options[0].value;
-                if (multiple) {
-                  field.onChange([...((getValues(name) as [] | undefined) ?? []), newValue]);
-                } else {
-                  field.onChange(newValue);
-                }
-                clearErrors(name);
-              } else if (ref.current?.state.text.length && (!!multiple || !ref.current?.state.selected.length)) {
-                // only set error if the text is not empty and the typeahead is multiple or the selected array is empty (for single select, if the selected array is not empty, it means the user has already selected an option)
-                setError(name, { message: invalidErrorMessage ?? "Invalid Input" });
-              } else {
-                clearErrors(name);
-              }
-            }}
-            disabled={isDisabled}
-            onFocus={(event) => {
-              focusHandler?.(event);
-            }}
-            {...reactBootstrapTypeaheadProps}
             style={style}
-            emptyLabel={emptyLabel}
+            hideValidationMessage={hideValidationMessage}
+            useBootstrapStyle={useBootstrapStyle}
+            helpText={helpText}
             placeholder={placeholder}
-            renderMenu={useGroupBy ? (results, menuProps) => renderMenu(results as LabelValueOption[], menuProps) : undefined}
+            paginationIcon={paginationIcon}
+            paginationText={paginationText}
+            variant={variant}
+            limitResults={limitResults}
+            loadMoreOptions={loadMoreOptions}
+            setPage={setPage}
+            {...params}
           />
-        </FormGroupLayout>
-      )}
-    />
+        )}
+      />
+    </FormGroupLayout>
   );
 };
 
-export { AsyncTypeaheadInput, AsyncTypeaheadProps };
+export { AsyncTypeaheadInput, AsyncTypeaheadInputProps, AsyncTypeaheadInputRef };

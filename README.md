@@ -80,12 +80,6 @@ const schema = yup.object({
 
 ## Typeahead
 
-To use typeahead you have to include their CSS file in your project:
-
-```jsx
-import "react-bootstrap-typeahead/css/Typeahead.css";
-```
-
 ### Static Typeahead
 
 Use the `StaticTypeaheadInput` component for a static list of options.
@@ -140,6 +134,43 @@ And also here you can have an array of `LabelValueOption` objects.
   }}
   label="Async Typeahead"
 />
+```
+
+You may need to set a default selected option
+
+```jsx
+<AsyncTypeaheadInput
+  name="inputName"
+  queryFn={async (query) => {
+    return [
+      { value: "one", label: "one" },
+      { value: "two", label: "two" },
+    ];
+  }}
+  defaultSelected={[{ value: "one", label: "one" }]}
+  label="Async Typeahead already filled with a selected option"
+/>
+```
+
+or to update with different selected options. The form value is updated consequently.
+
+```jsx
+const ref = useRef<AsyncTypeaheadInputRef | null>(null);
+
+<AsyncTypeaheadInput
+  name="inputName"
+  queryFn={async (query) => {
+    return [
+      { value: "one", label: "one" },
+      { value: "two", label: "two" },
+    ];
+  }}
+  inputRef={ref}
+  defaultSelected={[{ value: "one", label: "one" }]}
+  label="Async Typeahead already filled with a selected option"
+/>
+
+<button onClick={() => ref.current?.updateValues([{ value: "three", label: "three" }])}>Change</button>
 ```
 
 ## Datepicker

@@ -108,8 +108,8 @@ it("show validation messages", () => {
   cy.mount(<ValidationForm />);
   cy.get(`button[type=submit]`).click();
   cy.get(`label[for=name`).parent().find(".invalid-feedback").should("exist");
-  cy.get(`label[for=surname`).parent().find(".invalid-feedback").should("exist");
-  cy.get(`label[for=place`).parent().find(".invalid-feedback").should("exist");
+  cy.get(`label[for=surname`).parent().find("#surname-helper-text").should("exist");
+  cy.get(`label[for=place`).parent().find("#place-helper-text").should("exist");
   cy.get(`label[for=age`).parent().find(".invalid-feedback").should("exist");
   cy.get(`label[for=dateOfBirth`).parent().find(".invalid-feedback").should("exist");
 });

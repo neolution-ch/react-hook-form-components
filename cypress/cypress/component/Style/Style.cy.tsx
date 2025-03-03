@@ -22,9 +22,7 @@ it("input has correct style", () => {
 it("async typeahead input has correct style", () => {
   const name = faker.random.word();
   const options = generateOptions(100);
-  const customStyle = "background-color: black; margin-top: 10px; ";
-  const defaultStyle = "outline: none; position: relative;";
-  const style = customStyle.concat(defaultStyle);
+  const customStyle = "background-color: black; margin-top: 10px;";
 
   cy.mount(
     <Form
@@ -41,15 +39,13 @@ it("async typeahead input has correct style", () => {
     </Form>,
   );
 
-  cy.get(".rbt").should("have.attr", "style", style);
+  cy.get("div.MuiFormControl-root").should("have.attr", "style", customStyle);
 });
 
 it("static typeahead input has correct style", () => {
   const name = faker.random.word();
   const { simpleOptions } = generateOptions(100);
-  const customStyle = "background-color: black; margin-top: 10px; ";
-  const defaultStyle = "outline: none; position: relative;";
-  const style = customStyle.concat(defaultStyle);
+  const customStyle = "background-color: black; margin-top: 10px;";
 
   cy.mount(
     <Form
@@ -61,5 +57,5 @@ it("static typeahead input has correct style", () => {
     </Form>,
   );
 
-  cy.get(".rbt").should("have.attr", "style", style);
+  cy.get("div.MuiFormControl-root").should("have.attr", "style", customStyle);
 });
