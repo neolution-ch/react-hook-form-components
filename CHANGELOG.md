@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.1] - 2025-03-05
+
 ### Fixed
 
 - Selected option was wrongly filtered when using single `AsyncTypeAheadInput`. This is now fixed and active option is visible on searching even if has been selected.
@@ -472,7 +474,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Created package :tada:
 
-[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/3.0.0...HEAD
+[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/3.0.1...HEAD
 [0.1.2]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.1...0.1.2
 [0.1.1]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.1.0
@@ -497,6 +499,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.4.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.3.0...0.4.0
 [0.3.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.2.0...0.3.0
 [0.2.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.2.0
+[3.0.1]: https://github.com/neolution-ch/react-hook-form-components/compare/3.0.0...3.0.1
 [3.0.0]: https://github.com/neolution-ch/react-hook-form-components/compare/2.14.0...3.0.0
 [2.14.0]: https://github.com/neolution-ch/react-hook-form-components/compare/2.13.1...2.14.0
 [2.13.1]: https://github.com/neolution-ch/react-hook-form-components/compare/2.13.0...2.13.1
