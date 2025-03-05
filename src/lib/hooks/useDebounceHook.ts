@@ -1,11 +1,9 @@
 ﻿import { useEffect, useRef, useState } from "react";
 import { TypeaheadOption, TypeaheadOptions } from "../types/Typeahead";
-import { getUniqueOptions } from "../helpers/typeahead";
 
 interface DebounceSearch {
   query: string;
   delay: number;
-  value: TypeaheadOption[];
 }
 
 const useDebounceHook = (queryFn: (query: string) => Promise<TypeaheadOptions>, setOptions: (results: TypeaheadOption[]) => void) => {
@@ -15,7 +13,7 @@ const useDebounceHook = (queryFn: (query: string) => Promise<TypeaheadOptions>, 
 
   useEffect(() => {
     if (debounceSearch) {
-      const { delay: counter, query, value } = debounceSearch;
+      const { delay: counter, query } = debounceSearch;
       queryRef.current = query;
 
       const timer =
@@ -35,7 +33,11 @@ const useDebounceHook = (queryFn: (query: string) => Promise<TypeaheadOptions>, 
           try {
             const results = await queryFn(query);
             if (queryRef.current === query) {
-              setOptions(getUniqueOptions(results, value));
+              if (queryRef.current === "") {
+                setOptions([]);
+              } else {
+                setOptions(results);
+              }
               setIsLoading(false);
             }
           } catch (error) {

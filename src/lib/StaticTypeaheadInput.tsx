@@ -107,6 +107,10 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
         multiple={multiple}
         groupBy={useGroupBy ? groupOptions : undefined}
         options={useGroupBy ? sortOptionsByGroup(paginatedOptions) : paginatedOptions}
+        getOptionKey={
+          autocompleteProps?.getOptionKey ??
+          ((option: TypeaheadOption) => (typeof option === "string" ? option : `${option.label}-${option.value ?? ""}`))
+        }
         disableCloseOnSelect={multiple}
         value={(multiple ? value : value[0]) || null}
         getOptionLabel={(option: TypeaheadOption) => (typeof option === "string" ? option : option.label)}

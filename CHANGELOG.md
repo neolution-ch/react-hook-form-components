@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Selected option was wrongly filtered when using single `AsyncTypeAheadInput`. This is now fixed and active option is visible on searching even if has been selected.
+- Both `AsyncTypeAheadInput` and `StaticTypeAheadInput` rendering options issue due to duplicated labels. By default, the new key is the concatenation of label and value in case of typeahead option type, and label in case of string option type. In case the issue persist with above change, you can use the `getOptionKey` property to override it with a unique key.
+- Query for `AsyncTypeAheadInput`, which was wrongly executed with empty search string once the input was manually cleaned-up.
+
 ## [3.0.0] - 2025-03-03
 
 ### Changed

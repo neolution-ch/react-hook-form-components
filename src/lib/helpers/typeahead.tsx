@@ -41,11 +41,6 @@ const getMultipleAutoCompleteValue = (options: TypeaheadOption[], fieldValue: (s
   );
 };
 
-const getUniqueOptions = (source: TypeaheadOption[], comparison: TypeaheadOption[]): TypeaheadOption[] => {
-  const comparisonSet = new Set(comparison.map((x) => (typeof x === "string" ? x : x.value)));
-  return source.filter((x) => (typeof x === "string" ? !comparisonSet.has(x) : !comparisonSet.has(x.value)));
-};
-
 const sortOptionsByGroup = (options: TypeaheadOption[]): TypeaheadOption[] =>
   options.sort((x, y) => (typeof x === "string" ? x : x.group?.name ?? "").localeCompare(typeof y === "string" ? y : y.group?.name ?? ""));
 
@@ -129,7 +124,6 @@ export {
   sortOptionsByGroup,
   isDisabledGroup,
   groupOptions,
-  getUniqueOptions,
   renderHighlightedOptionFunction,
   bootstrapStyle,
 };
