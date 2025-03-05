@@ -27,6 +27,7 @@ interface AsyncTypeaheadInputProps<T extends FieldValues> extends CommonTypeahea
   defaultOptions?: TypeaheadOptions;
   defaultSelected?: TypeaheadOptions;
   inputRef?: MutableRefObject<AsyncTypeaheadInputRef | null>;
+  executeQueryForEmptySearchString?: boolean;
   autocompleteProps?: AsyncTypeaheadAutocompleteProps;
 }
 
@@ -137,8 +138,12 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
         loading={isLoading}
         options={paginatedOptions}
         value={(multiple ? value : value[0]) || null}
-        filterSelectedOptions={multiple}
+        filterSelectedOptions={autocompleteProps?.filterSelectedOptions ?? multiple}
         filterOptions={(currentOptions) => currentOptions}
+        getOptionKey={
+          autocompleteProps?.getOptionKey ??
+          ((option: TypeaheadOption) => (typeof option === "string" ? option : `${option.label}-${option.value ?? ""}`))
+        }
         getOptionLabel={(option: TypeaheadOption) => (typeof option === "string" ? option : option.label)}
         getOptionDisabled={(option) =>
           getOptionDisabled?.(option) ||

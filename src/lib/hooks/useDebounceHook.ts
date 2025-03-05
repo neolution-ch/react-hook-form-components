@@ -33,7 +33,11 @@ const useDebounceHook = (queryFn: (query: string) => Promise<TypeaheadOptions>, 
           try {
             const results = await queryFn(query);
             if (queryRef.current === query) {
-              setOptions(results);
+              if (queryRef.current === "") {
+                setOptions([]);
+              } else {
+                setOptions(results);
+              }
               setIsLoading(false);
             }
           } catch (error) {
