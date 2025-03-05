@@ -27,7 +27,6 @@ interface AsyncTypeaheadInputProps<T extends FieldValues> extends CommonTypeahea
   defaultOptions?: TypeaheadOptions;
   defaultSelected?: TypeaheadOptions;
   inputRef?: MutableRefObject<AsyncTypeaheadInputRef | null>;
-  executeQueryForEmptySearchString?: boolean;
   autocompleteProps?: AsyncTypeaheadAutocompleteProps;
 }
 
