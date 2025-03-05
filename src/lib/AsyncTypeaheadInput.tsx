@@ -137,6 +137,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
         loading={isLoading}
         options={paginatedOptions}
         value={(multiple ? value : value[0]) || null}
+        filterSelectedOptions={multiple}
         filterOptions={(currentOptions) => currentOptions}
         getOptionLabel={(option: TypeaheadOption) => (typeof option === "string" ? option : option.label)}
         getOptionDisabled={(option) =>
@@ -175,7 +176,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
             setOptions([]);
             setPage(1);
           } else if (reason == "input") {
-            setDebounceSearch({ delay, query, value });
+            setDebounceSearch({ delay, query });
           }
           if (onInputChange) {
             onInputChange(query, reason);
