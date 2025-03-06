@@ -1651,9 +1651,9 @@
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
 
-"@neolution-ch/eslint-config-neolution@https://pkg.pr.new/neolution-ch/eslint-config-neolution/@neolution-ch/eslint-config-neolution@43683b1":
+"@neolution-ch/eslint-config-neolution@https://pkg.pr.new/neolution-ch/eslint-config-neolution/@neolution-ch/eslint-config-neolution@b64d3d8":
   version "1.3.0"
-  resolved "https://pkg.pr.new/neolution-ch/eslint-config-neolution/@neolution-ch/eslint-config-neolution@43683b1#98a62d426de412b604dffe69ff469233ffbf5e93"
+  resolved "https://pkg.pr.new/neolution-ch/eslint-config-neolution/@neolution-ch/eslint-config-neolution@b64d3d8#30da159af383978012f3d2d8ebfc0333cb8113c0"
   dependencies:
     "@eslint/compat" "^1.2.5"
     "@eslint/eslintrc" "^3.2.0"
@@ -1671,9 +1671,9 @@
     eslint-plugin-unicorn "^56.0.1"
     typescript-eslint "^8.20.0"
 
-"@neolution-ch/eslint-config-neolution@https://pkg.pr.new/neolution-ch/eslint-config-neolution/@neolution-ch/eslint-config-neolution@b64d3d8":
+"@neolution-ch/eslint-config-neolution@https://pkg.pr.new/neolution-ch/eslint-config-neolution/@neolution-ch/eslint-config-neolution@d195fd9":
   version "1.3.0"
-  resolved "https://pkg.pr.new/neolution-ch/eslint-config-neolution/@neolution-ch/eslint-config-neolution@b64d3d8#30da159af383978012f3d2d8ebfc0333cb8113c0"
+  resolved "https://pkg.pr.new/neolution-ch/eslint-config-neolution/@neolution-ch/eslint-config-neolution@d195fd9#7a691100e0b2f535af5367a395d963facbc4948f"
   dependencies:
     "@eslint/compat" "^1.2.5"
     "@eslint/eslintrc" "^3.2.0"
