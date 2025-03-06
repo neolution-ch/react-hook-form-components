@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { useEffect, useMemo, useState, MutableRefObject, useImperativeHandle } from "react";
 import { FieldValues, useController } from "react-hook-form";
 import { AsyncTypeaheadAutocompleteProps, CommonTypeaheadProps, TypeaheadOption, TypeaheadOptions } from "./types/Typeahead";
@@ -88,7 +87,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
 
   const isDisabled = useMemo(() => formDisabled || disabled, [formDisabled, disabled]);
   const paginatedOptions = useMemo(
-    () => (limitResults !== undefined ? options.slice(0, page * limitResults) : options),
+    () => (limitResults === undefined ? options : options.slice(0, page * limitResults)),
     [limitResults, page, options],
   );
 
@@ -147,7 +146,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
         getOptionDisabled={(option) =>
           getOptionDisabled?.(option) ||
           (useGroupBy && isDisabledGroup(option)) ||
-          (typeof option == "string" ? false : option.disabled ?? false)
+          (typeof option == "string" ? false : (option.disabled ?? false))
         }
         disabled={isDisabled}
         readOnly={readOnly}
