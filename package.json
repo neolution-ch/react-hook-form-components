@@ -1,6 +1,6 @@
 {
   "name": "@neolution-ch/react-hook-form-components",
-  "version": "2.14.0",
+  "version": "3.0.1",
   "description": "a collection of react hook form components to reduce boilerplate and figuring out how to integrate react hook form with other libraries",
   "homepage": "https://neolution-ch.github.io/react-hook-form-components",
   "repository": {
@@ -34,23 +34,27 @@
     "dist"
   ],
   "scripts": {
-    "build": "rollup -c",
+    "build": "yarn rollup -c",
     "build-storybook": "build-storybook",
     "lint": "eslint --cache",
     "prepack": "yarn build",
     "prepare-pr": "yarn prettier . --write && yarn lint && yarn build && yarn test\"",
     "prettier-check": "prettier --check .",
     "prettier-write": "prettier --write .",
-    "start": "rollup -c -w",
+    "start": "yarn rollup -c -w",
     "start-all": "concurrently \"yarn start\" \"yarn start-yalc\"",
     "start-yalc": "yarn nodemon --watch dist -x \"yarn yalc push\"",
     "storybook": "start-storybook -p 6006"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.5",
+    "@emotion/styled": "^11.13.5",
+    "@mui/icons-material": "^6.1.10",
+    "@mui/material": "^6.1.7",
+    "autosuggest-highlight": "^3.3.4",
     "@neolution-ch/eslint-config-neolution": "https://pkg.pr.new/neolution-ch/eslint-config-neolution/@neolution-ch/eslint-config-neolution@d195fd9",
     "classnames": "^2.3.2",
     "date-fns-tz": "^2.0.0",
-    "react-bootstrap-typeahead": "^6.3.4",
     "react-datepicker": "^4.11.0",
     "react-number-format": "^5.1.4",
     "use-debounce": "^9.0.4",
@@ -68,6 +72,7 @@
     "@storybook/addon-interactions": "^6.5.13",
     "@storybook/addon-links": "^6.5.13",
     "@storybook/react": "^6.5.13",
+    "@types/autosuggest-highlight": "^3.2.3",
     "@types/node": "^18.16.3",
     "@types/react": "^18.2.5",
     "@types/react-datepicker": "^4.11.2",

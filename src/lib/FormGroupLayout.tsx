@@ -11,12 +11,13 @@ interface FormGroupLayoutProps<T extends FieldValues, TRenderAddon>
   extends PropsWithChildren<
     Pick<CommonInputProps<T>, "helpText" | "label" | "name" | "id" | "labelToolTip" | "inputOnly" | "hideValidationMessage">
   > {
-  layout?: "checkbox" | "switch";
+  layout?: "checkbox" | "switch" | "typeahead";
   addonLeft?: ReactNode | ((props: TRenderAddon) => ReactNode);
   addonRight?: ReactNode | ((props: TRenderAddon) => ReactNode);
   addonProps?: MergedAddonProps<TRenderAddon>;
   inputGroupStyle?: CSSProperties;
   formGroupId?: string;
+  labelStyle?: CSSProperties;
 }
 
 const FormGroupLayout = <T extends FieldValues, TRenderAddon = unknown>(props: FormGroupLayoutProps<T, TRenderAddon>) => {
@@ -33,6 +34,7 @@ const FormGroupLayout = <T extends FieldValues, TRenderAddon = unknown>(props: F
     formGroupId,
     addonProps,
     hideValidationMessage = false,
+    labelStyle,
   } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
   const {
@@ -45,6 +47,7 @@ const FormGroupLayout = <T extends FieldValues, TRenderAddon = unknown>(props: F
 
   const switchLayout = layout === "switch";
   const checkboxLayout = layout === "checkbox";
+  const typeaheadLayout = layout === "typeahead";
 
   if (inputOnly && (switchLayout || checkboxLayout)) {
     throw new Error("'inputOnly' is not possible with switches or checkboxes");
@@ -75,8 +78,15 @@ const FormGroupLayout = <T extends FieldValues, TRenderAddon = unknown>(props: F
     </>
   ) : (
     <FormGroup id={formGroupId} switch={switchLayout ? true : undefined} check={checkboxLayout ? true : undefined}>
-      <FormGroupLayoutLabel<T> label={label} fieldName={props.name} fieldId={id} tooltip={labelToolTip} layout={layout} />
-      {switchLayout || checkboxLayout ? (
+      <FormGroupLayoutLabel<T>
+        label={label}
+        labelStyle={labelStyle}
+        fieldName={props.name}
+        fieldId={id}
+        tooltip={labelToolTip}
+        layout={layout}
+      />
+      {switchLayout || checkboxLayout || typeaheadLayout ? (
         children
       ) : (
         <InputGroup
@@ -92,8 +102,12 @@ const FormGroupLayout = <T extends FieldValues, TRenderAddon = unknown>(props: F
           {effectiveAddonRight}
         </InputGroup>
       )}
-      {!hideErrorMessage && <FormFeedback>{errorMessage}</FormFeedback>}
-      {helpText && <FormText>{helpText}</FormText>}
+      {!typeaheadLayout && (
+        <>
+          {!hideErrorMessage && <FormFeedback>{errorMessage}</FormFeedback>}
+          {helpText && <FormText>{helpText}</FormText>}
+        </>
+      )}
     </FormGroup>
   );
 };

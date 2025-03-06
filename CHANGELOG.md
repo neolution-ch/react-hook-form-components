@@ -11,6 +11,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - migrated to eslint 9 flat config
 
+## [3.0.1] - 2025-03-05
+
+### Fixed
+
+- Selected option was wrongly filtered when using single `AsyncTypeAheadInput`. This is now fixed and active option is visible on searching even if has been selected.
+- Both `AsyncTypeAheadInput` and `StaticTypeAheadInput` rendering options issue due to duplicated labels. By default, the new key is the concatenation of label and value in case of typeahead option type, and label in case of string option type. In case the issue persist with above change, you can use the `getOptionKey` property to override it with a unique key.
+- Query for `AsyncTypeAheadInput`, which was wrongly executed with empty search string once the input was manually cleaned-up.
+
+## [3.0.0] - 2025-03-03
+
+### Changed
+
+- :boom: `AsyncTypeAheadInput` based on MUI Autocomplete component.
+- :boom: renamed `AsyncTypeaheadProps` to `AsyncTypeaheadInputProps`.
+
+  1. The component is by default **form** controlled. However, updating values using form methods could lead to an unexpected behavior because MUI library requires consistency between options and value. In order to manually to control the input, a ref is exposed which allows to mutually modify input value and form value.
+  2. `inputRef` is exposed to clear, reset or set new selected options, as mentioned in point 1.
+  3. `defaultSelected` options is still needed as in previous version.
+  4. No `invalidErrorMessage` anymore. In case of unmatched input-text, the current form value is maintained.
+  5. Use `autoSelect` (combined with `autoHighlight`, already active by default) to auto select a matched option.
+  6. The component has MUI style by default. Use `useBootstrapStyle` for applying a "bootstrap-like" style.
+  7. `onInputChange` exposes the reason why the input-text changes. Check whether reason is `input` for checking only the typing event.
+
+- :boom: `StaticTypeAheadInput` based on MUI Autocomplete component.
+
+  1. The component is fully **form** controlled.
+  2. In order to control input value, use form methods being sure to be consistent between the set value and available options. Therefore, any input ref is exposed anymore.
+  3. No need to specify a `defaultSelected` option according to point 1. The input automatically select options based on form value.
+  4. No `invalidErrorMessage` anymore. In case of unmatched input-text, the current form value is maintained.
+  5. Use `autoSelect` (combined with `autoHighlight`, already active by default) to auto select a matched option.
+  6. The component has MUI style by default. Use `useBootstrapStyle` for applying a "bootstrap-like" style.
+  7. `onInputChange` exposes the reason why the input-text changes. Check whether reason is `input` for checking only the typing event.
+
+### Added
+
+- `TypeaheadOption` as single option (string or label-value pair).
+
 ## [2.14.0] - 2025-02-20
 
 ### Added
@@ -441,7 +478,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Created package :tada:
 
-[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/2.14.0...HEAD
+[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/3.0.1...HEAD
 [0.1.2]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.1...0.1.2
 [0.1.1]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.1.0
@@ -466,6 +503,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.4.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.3.0...0.4.0
 [0.3.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.2.0...0.3.0
 [0.2.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.2.0
+[3.0.1]: https://github.com/neolution-ch/react-hook-form-components/compare/3.0.0...3.0.1
+[3.0.0]: https://github.com/neolution-ch/react-hook-form-components/compare/2.14.0...3.0.0
 [2.14.0]: https://github.com/neolution-ch/react-hook-form-components/compare/2.13.1...2.14.0
 [2.13.1]: https://github.com/neolution-ch/react-hook-form-components/compare/2.13.0...2.13.1
 [2.13.0]: https://github.com/neolution-ch/react-hook-form-components/compare/2.12.0...2.13.0
