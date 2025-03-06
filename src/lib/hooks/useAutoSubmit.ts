@@ -19,7 +19,7 @@ interface UseAutoSubmitProps<T extends FieldValues> {
   autoSubmitConfig?: AutoSubmitConfig;
 }
 
-type AutoSubmitHandler = (e?: React.FormEvent<HTMLFormElement> | undefined) => void;
+type AutoSubmitHandler = (e?: React.FormEvent<HTMLFormElement>) => void;
 
 export interface AutoSubmitConfig extends Options {
   /**
@@ -33,7 +33,7 @@ const useAutoSubmit = <T extends FieldValues>({ onSubmit, formMethods, autoSubmi
   const isSubmitting = useRef(false);
 
   const submitHandler = useCallback(
-    (e?: React.FormEvent<HTMLFormElement> | undefined) => {
+    (e?: React.FormEvent<HTMLFormElement>) => {
       e?.preventDefault();
       void (async () => {
         await handleSubmit(onSubmit)(e);
@@ -43,7 +43,7 @@ const useAutoSubmit = <T extends FieldValues>({ onSubmit, formMethods, autoSubmi
   );
 
   const debouncedSubmitHandler = useDebouncedCallback(
-    (e?: React.FormEvent<HTMLFormElement> | undefined) => {
+    (e?: React.FormEvent<HTMLFormElement>) => {
       e?.preventDefault();
 
       if (isSubmitting.current) {

@@ -74,16 +74,16 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
 
   const isDisabled = useMemo(() => formDisabled || disabled, [formDisabled, disabled]);
   const paginatedOptions = useMemo(
-    () => (limitResults !== undefined ? options.slice(0, page * limitResults) : options),
+    () => (limitResults === undefined ? options : options.slice(0, page * limitResults)),
     [limitResults, page, options],
   );
 
   const fieldValue = watch(name) as string | number | string[] | number[] | undefined;
   const value = useMemo(
     () =>
-      !multiple
-        ? getSingleAutoCompleteValue(options, fieldValue as string | number | undefined)
-        : getMultipleAutoCompleteValue(options, fieldValue as string[] | number[] | undefined),
+      multiple
+        ? getMultipleAutoCompleteValue(options, fieldValue as string[] | number[] | undefined)
+        : getSingleAutoCompleteValue(options, fieldValue as string | number | undefined),
     [fieldValue, multiple, options],
   );
 
@@ -117,7 +117,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
         getOptionDisabled={(option) =>
           getOptionDisabled?.(option) ||
           (useGroupBy && isDisabledGroup(option)) ||
-          (typeof option === "string" ? false : option.disabled ?? false)
+          (typeof option === "string" ? false : (option.disabled ?? false))
         }
         disabled={isDisabled}
         readOnly={readOnly}

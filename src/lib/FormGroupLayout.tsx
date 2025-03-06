@@ -50,7 +50,7 @@ const FormGroupLayout = <T extends FieldValues, TRenderAddon = unknown>(props: F
   const typeaheadLayout = layout === "typeahead";
 
   if (inputOnly && (switchLayout || checkboxLayout)) {
-    throw "'inputOnly' is not possible with switches or checkboxes";
+    throw new Error("'inputOnly' is not possible with switches or checkboxes");
   }
 
   const effectiveAddonLeft = useMemo(

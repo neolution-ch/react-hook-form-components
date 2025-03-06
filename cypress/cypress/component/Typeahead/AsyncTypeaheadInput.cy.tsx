@@ -206,7 +206,8 @@ it("works with multiple simple options and default selected", () => {
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: defaultSelectedOptions.map((o) => o.label) });
 
-  cy.get(`#${name}`).click().type("{backspace}".repeat(20));
+  cy.get(`#${name}`).click();
+  cy.get(`#${name}`).type("{backspace}".repeat(20));
 
   for (const changedOption of changedOptions) {
     selectOption(name, changedOption.label);
@@ -247,7 +248,8 @@ it("works with multiple object options and default selected", () => {
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: defaultSelectedOptions.map((o) => o.value) });
 
-  cy.get(`#${name}`).click().type("{backspace}".repeat(20));
+  cy.get(`#${name}`).click();
+  cy.get(`#${name}`).type("{backspace}".repeat(20));
 
   for (const changedOption of changedOptions) {
     selectOption(name, changedOption.label);
@@ -699,7 +701,9 @@ it("test on input change", () => {
   };
 
   cy.mount(<TestForm />);
-  cy.get(`#${name}`).clear().click().type(text);
+  cy.get(`#${name}`).clear();
+  cy.get(`#${name}`).click();
+  cy.get(`#${name}`).type(text);
   cy.get('input[type="submit"]').should("be.enabled");
   cy.get(`#${name}`).clear();
   cy.get('input[type="submit"]').should("be.disabled");

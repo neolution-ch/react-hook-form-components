@@ -42,9 +42,11 @@ const getMultipleAutoCompleteValue = (options: TypeaheadOption[], fieldValue: (s
 };
 
 const sortOptionsByGroup = (options: TypeaheadOption[]): TypeaheadOption[] =>
-  options.sort((x, y) => (typeof x === "string" ? x : x.group?.name ?? "").localeCompare(typeof y === "string" ? y : y.group?.name ?? ""));
+  options.sort((x, y) =>
+    (typeof x === "string" ? x : (x.group?.name ?? "")).localeCompare(typeof y === "string" ? y : (y.group?.name ?? "")),
+  );
 
-const groupOptions = (option: TypeaheadOption): string => (typeof option === "string" ? option : option.group?.name ?? "");
+const groupOptions = (option: TypeaheadOption): string => (typeof option === "string" ? option : (option.group?.name ?? ""));
 
 const isDisabledGroup = (option: TypeaheadOption): boolean => typeof option !== "string" && !!option.group?.disabled;
 

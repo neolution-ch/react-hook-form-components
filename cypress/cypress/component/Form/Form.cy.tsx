@@ -16,7 +16,7 @@ it("submitting through the ref works", () => {
   });
 
   const randomNumber = faker.datatype.number({
-    min: 10000,
+    min: 10_000,
   });
 
   const FormWithRef = () => {
@@ -32,7 +32,8 @@ it("submitting through the ref works", () => {
   };
   cy.mount(<FormWithRef />);
 
-  cy.contains("label", name).click().type(randomNumber.toString());
+  cy.contains("label", name).click();
+  cy.focused().type(randomNumber.toString());
   cy.get(`input[id=${name}]`).should("have.value", numericFormatter(randomNumber.toString(), numericFormat));
   cy.get("span[id=testButton]").click();
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: randomNumber });
@@ -45,7 +46,7 @@ it("submitting through the ref checks for yup errors", () => {
   });
 
   const randomNumber = faker.datatype.number({
-    min: 10000,
+    min: 10_000,
   });
 
   const FormWithRef = () => {
@@ -61,7 +62,8 @@ it("submitting through the ref checks for yup errors", () => {
   };
   cy.mount(<FormWithRef />);
 
-  cy.contains("label", name).click().type(randomNumber.toString());
+  cy.contains("label", name).click();
+  cy.focused().type(randomNumber.toString());
   cy.get(`input[id=${name}]`).should("have.value", numericFormatter(randomNumber.toString(), numericFormat));
   cy.get("span[id=testButton]").click();
   cy.get("@onSubmitSpy").should("not.be.calledOnceWith", { [name]: randomNumber });

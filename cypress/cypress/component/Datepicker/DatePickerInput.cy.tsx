@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { DatePickerInput, Form, getUtcTimeZeroDate } from "react-hook-form-components";
 import "react-datepicker/dist/react-datepicker.css";
 import { faker } from "@faker-js/faker";
@@ -7,9 +6,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, InputGroupText } from "reactstrap";
+
+// eslint-disable-next-line import/no-unresolved
 import { SinonSpy } from "cypress/types/sinon";
 import { useRef, useEffect, FC } from "react";
-import ReactDatePicker from "react-datepicker";
+import ReactDatePickers from "react-datepicker";
 
 it("selecting today works", () => {
   const name = faker.random.alpha(10);
@@ -224,7 +225,7 @@ it("passing the ref works", () => {
   });
 
   const DatePickerWithRef: FC = () => {
-    const ref = useRef<ReactDatePicker<never, undefined>>(null);
+    const ref = useRef<ReactDatePickers<never, undefined>>(null);
 
     useEffect(() => {
       if (ref && ref.current) {

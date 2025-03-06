@@ -212,7 +212,8 @@ it("works with multiple object options", () => {
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: defaultSelectedOptions.map((o) => o.value) });
 
-  cy.get(`#${name}`).click().type("{backspace}".repeat(20));
+  cy.get(`#${name}`).click();
+  cy.get(`#${name}`).type("{backspace}".repeat(20));
 
   for (const changedOption of changedOptions) {
     selectOption(name, changedOption.label);

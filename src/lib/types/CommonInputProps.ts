@@ -1,4 +1,4 @@
-import { ReactNode, CSSProperties } from "react";
+import React, { ReactNode, CSSProperties } from "react";
 import { FieldPath, FieldValues } from "react-hook-form";
 
 interface DefaultAddonProps {
@@ -22,7 +22,7 @@ interface CommonInputProps<T extends FieldValues, TRenderAddon = unknown> {
   /**
    * Component prop that represents an additional className attribute
    * Adding a new className will NOT override the existing one, but it's added to the existing className attributes
-   * @type {React.HTMLAttributes<T>["className"]}
+   * @type {React.HTMLAttributes<HTMLInputElement>["className"]}
    * @example <Input<T> type="text" className="text-white" />
    */
   className?: React.HTMLAttributes<T>["className"];
@@ -43,7 +43,6 @@ interface CommonInputProps<T extends FieldValues, TRenderAddon = unknown> {
    * @type {React.ReactNode}
    * @example <caption>Render a string by wrapping it inside a `InputGroupText` component</caption>
    * addonLeft={<InputGroupText>@</InputGroupText>}
-   *
    * @example <caption>Render a `Button` component</caption>
    * addonLeft={<Button>Button</Button>}
    */
@@ -56,7 +55,6 @@ interface CommonInputProps<T extends FieldValues, TRenderAddon = unknown> {
    * @type {React.ReactNode}
    * @example <caption>Render a string by wrapping it inside a `InputGroupText` component</caption>
    * addonRight={<InputGroupText>@</InputGroupText>}
-   *
    * @example <caption>Render a `Button` component</caption>
    * addonRight={<Button>Button</Button>}
    */

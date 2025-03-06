@@ -26,7 +26,7 @@ it("radio button works", () => {
 
 it("renders disabled radio buttons", () => {
   const name = faker.random.word();
-  const options = [...Array<unknown>(5)].map<LabelValueOption>(() => {
+  const options = Array.from({ length: 5 }).map<LabelValueOption>(() => {
     const randomVal = faker.science.chemicalElement().name;
     return { label: randomVal, value: randomVal };
   });
@@ -41,7 +41,7 @@ it("renders disabled radio buttons", () => {
     </Form>,
   );
 
-  options.forEach(({ value }) => {
+  for (const { value } of options) {
     cy.get(`input[value=${value}]`).should("be.disabled");
-  });
+  }
 });
