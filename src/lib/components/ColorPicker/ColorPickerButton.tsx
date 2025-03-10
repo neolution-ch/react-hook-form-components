@@ -14,7 +14,7 @@ const BG_IMAGE_FALLBACK =
 
 const ColorPickerButton = (props: ColorPickerButtonProps) => {
   const { popupState, color, disabled } = props;
-
+  console.log(popupState);
   return (
     <Button
       {...bindTrigger(popupState)}
