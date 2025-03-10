@@ -13,7 +13,7 @@ import {
   groupOptions,
   renderHighlightedOptionFunction,
 } from "./helpers/typeahead";
-import { TypeaheadTextField } from "./TypeaheadTextField";
+import { TypeaheadTextField } from "./components/Typeahead/TypeaheadTextField";
 import { FormGroupLayout } from "./FormGroupLayout";
 
 interface StaticTypeaheadInputProps<T extends FieldValues> extends CommonTypeaheadProps<T> {

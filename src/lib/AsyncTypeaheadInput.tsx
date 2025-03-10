@@ -12,7 +12,7 @@ import {
 import { useDebounceHook } from "./hooks/useDebounceHook";
 import { useSafeNameId } from "./hooks/useSafeNameId";
 import { useFormContext } from "./context/FormContext";
-import { TypeaheadTextField } from "./TypeaheadTextField";
+import { TypeaheadTextField } from "./components/Typeahead/TypeaheadTextField";
 import { FormGroupLayout } from "./FormGroupLayout";
 
 interface AsyncTypeaheadInputRef {
