@@ -10,7 +10,7 @@ import { useFormContext } from "../../context/FormContext";
 import { useMemo } from "react";
 import { TinyColor } from "@ctrl/tinycolor";
 import Popover from "@mui/material/Popover";
-import { Colorful } from "@uiw/react-color";
+import Colorful from "@uiw/react-color-colorful";
 
 const ColorPicker = <T extends FieldValues>(props: ColorPickerInputProps<T>) => {
   const {
