@@ -2,6 +2,7 @@ import { TinyColor } from "@ctrl/tinycolor";
 import Button from "@mui/material/Button";
 import { bindTrigger } from "material-ui-popup-state";
 import { PopupState } from "material-ui-popup-state/hooks";
+import { useMemo } from "react";
 
 interface ColorPickerButtonProps {
   popupState: PopupState;
@@ -14,10 +15,11 @@ const BG_IMAGE_FALLBACK =
 
 const ColorPickerButton = (props: ColorPickerButtonProps) => {
   const { popupState, color, disabled } = props;
-  console.log(popupState);
+
+  const popoverMethods = useMemo(() => bindTrigger(popupState), [popupState])
   return (
     <Button
-      {...bindTrigger(popupState)}
+      {...popoverMethods}
       variant="text"
       aria-describedby="color"
       style={{
@@ -38,6 +40,8 @@ const ColorPickerButton = (props: ColorPickerButtonProps) => {
       onClick={(e) => {
         if (disabled) {
           e.preventDefault();
+        } else {
+          popoverMethods.onClick(e);
         }
       }}
     />
