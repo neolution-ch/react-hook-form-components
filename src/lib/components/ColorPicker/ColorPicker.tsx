@@ -10,11 +10,22 @@ import { useFormContext } from "../../context/FormContext";
 import { useMemo } from "react";
 import { TinyColor } from "@ctrl/tinycolor";
 import Popover from "@mui/material/Popover";
-import Colorful from "@uiw/react-color-colorful";
+import Colorful from "@uiw/react-color-colorful"; // must be imported as default, otherwise it will provide a runtime error in nextjs
+
+const getColorByFormat = <T extends FieldValues>(color: TinyColor, format: ColorPickerInputProps<T>["format"]) => {
+  switch (format) {
+    case "hex":
+      return color.toHexString();
+    case "rgb":
+      return color.toRgbString();
+    default:
+      throw new Error(`Unsupported color format: ${String(format)}`);
+  }
+}
 
 const ColorPicker = <T extends FieldValues>(props: ColorPickerInputProps<T>) => {
   const {
-    convertColorToFormatOrUndefinedOnBlur,
+    convertColorToFormatOrUndefinedOnBlur = true,
     name,
     id,
     label,
@@ -28,6 +39,7 @@ const ColorPicker = <T extends FieldValues>(props: ColorPickerInputProps<T>) => 
     useBootstrapStyle = false,
     hideValidationMessage,
     placeholder,
+    format,
   } = props;
   const {
     control,
@@ -65,6 +77,7 @@ const ColorPicker = <T extends FieldValues>(props: ColorPickerInputProps<T>) => 
           <TextField
             {...field}
             id={id}
+            fullWidth
             className={`MuiColorInput-TextField ${className}`}
             sx={{ ...(useBootstrapStyle && textFieldBootstrapStyle) }}
             style={style}
@@ -83,7 +96,7 @@ const ColorPicker = <T extends FieldValues>(props: ColorPickerInputProps<T>) => 
             }}
             onBlur={(e) => {
               if (convertColorToFormatOrUndefinedOnBlur) {
-                setValue(name, (color.isValid ? color.toHexString() : undefined) as never); // Need to cast as never as type is too complex
+                setValue(name, (color.isValid ? getColorByFormat(color, format) : undefined) as never); // Need to cast as never as type is too complex
               }
 
               propsOnBlur && propsOnBlur(e);
@@ -111,12 +124,25 @@ const ColorPicker = <T extends FieldValues>(props: ColorPickerInputProps<T>) => 
               disableAlpha
               color={color.isValid ? color.toHexString() : undefined}
               onChange={(value) => {
+                const tinyColor = new TinyColor(value.hex);
+                let color: string;
+                switch (format) {
+                  case "hex":
+                    color = tinyColor.toHexString();
+                    break;
+                  case "rgb":
+                    color = tinyColor.toRgbString();
+                    break;
+                  default:
+                    throw new Error(`Unsupported color format: ${String(format)}`);
+                }
+
                 if (propsOnChange) {
-                  propsOnChange(value.hex);
+                  propsOnChange(color);
                 }
 
                 // we cannot use field.onChange here because the color picker doesn't return an event
-                setValue(name, value.hex as never); // Need to cast as never as type is too complex
+                setValue(name, color as never); // Need to cast as never as type is too complex
               }}
             />
           </Popover>

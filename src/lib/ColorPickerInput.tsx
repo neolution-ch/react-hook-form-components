@@ -13,6 +13,7 @@ interface ColorPickerInputProps<T extends FieldValues>
   onChange?: (color: string | undefined) => void;
   onBlur?: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
   placeholder?: string;
+  format: "hex" | "rgb";
 }
 
 const ColorPickerInput = <T extends FieldValues>(props: ColorPickerInputProps<T>) => {
