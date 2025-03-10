@@ -1,6 +1,6 @@
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
-import PopupState, { bindPopover, bindTrigger } from "material-ui-popup-state";
+import PopupState, { bindPopover } from "material-ui-popup-state";
 import { ColorPickerButton } from "./ColorPickerButton";
 import { FieldError, FieldValues, get, useController } from "react-hook-form";
 import { ColorPickerInputProps } from "../../ColorPickerInput";
@@ -87,7 +87,6 @@ const ColorPicker = <T extends FieldValues>(props: ColorPickerInputProps<T>) => 
               }
 
               propsOnBlur && propsOnBlur(e);
-
               field.onBlur();
             }}
             value={field.value}
@@ -95,7 +94,7 @@ const ColorPicker = <T extends FieldValues>(props: ColorPickerInputProps<T>) => 
               input: {
                 startAdornment: (
                   <InputAdornment position="start">
-                    <ColorPickerButton color={color} disabled={isDisabled} bindTrigger={bindTrigger(popupState)} />
+                    <ColorPickerButton color={color} disabled={isDisabled} popupState={popupState} />
                   </InputAdornment>
                 ),
               },

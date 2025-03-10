@@ -98,7 +98,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
       name={name}
       label={useBootstrapStyle ? label : undefined}
       labelStyle={useBootstrapStyle ? { color: "#8493A5", fontSize: 14 } : undefined}
-      layout="typeahead"
+      layout="muiInput"
     >
       <Autocomplete<TypeaheadOption, boolean, boolean, boolean>
         {...autocompleteProps}

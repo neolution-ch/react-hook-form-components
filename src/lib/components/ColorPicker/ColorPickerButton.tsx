@@ -1,9 +1,10 @@
 import { TinyColor } from "@ctrl/tinycolor";
 import Button from "@mui/material/Button";
 import { bindTrigger } from "material-ui-popup-state";
+import { PopupState } from "material-ui-popup-state/hooks";
 
 interface ColorPickerButtonProps {
-  bindTrigger: ReturnType<typeof bindTrigger>;
+  popupState: PopupState;
   color: TinyColor;
   disabled?: boolean;
 }
@@ -12,11 +13,11 @@ const BG_IMAGE_FALLBACK =
   "linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(135deg, #ccc 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(135deg, transparent 75%, #ccc 75%) /*! @noflip */";
 
 const ColorPickerButton = (props: ColorPickerButtonProps) => {
-  const { bindTrigger, color, disabled } = props;
+  const { popupState, color, disabled } = props;
 
   return (
     <Button
-      {...bindTrigger}
+      {...bindTrigger(popupState)}
       variant="text"
       aria-describedby="color"
       style={{

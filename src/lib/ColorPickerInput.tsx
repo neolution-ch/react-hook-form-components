@@ -16,7 +16,7 @@ interface ColorPickerInputProps<T extends FieldValues>
 }
 
 const ColorPickerInput = <T extends FieldValues>(props: ColorPickerInputProps<T>) => {
-  const { label, helpText, inputGroupStyle, labelToolTip, hideValidationMessage = false } = props;
+  const { label, helpText, inputGroupStyle, labelToolTip, hideValidationMessage = false, useBootstrapStyle } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
 
   return (
@@ -24,10 +24,12 @@ const ColorPickerInput = <T extends FieldValues>(props: ColorPickerInputProps<T>
       helpText={helpText}
       name={name}
       id={id}
-      label={label}
       labelToolTip={labelToolTip}
       inputGroupStyle={inputGroupStyle}
       hideValidationMessage={hideValidationMessage}
+      label={useBootstrapStyle ? label : undefined}
+      labelStyle={useBootstrapStyle ? { color: "#8493A5", fontSize: 14 } : undefined}
+      layout="muiInput"
     >
       <ColorPicker {...props} name={name} id={id} />
     </FormGroupLayout>

@@ -8,7 +8,7 @@ interface FormGroupLayoutLabelProps<T extends FieldValues> {
   tooltip?: ReactNode;
   fieldName: FieldPath<T>;
   fieldId: string;
-  layout?: "checkbox" | "switch" | "typeahead";
+  layout?: "checkbox" | "switch" | "muiInput";
   labelStyle?: CSSProperties;
 }
 
