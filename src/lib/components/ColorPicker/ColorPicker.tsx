@@ -21,7 +21,7 @@ const getColorByFormat = <T extends FieldValues>(color: TinyColor, format: Color
     default:
       throw new Error(`Unsupported color format: ${String(format)}`);
   }
-}
+};
 
 const ColorPicker = <T extends FieldValues>(props: ColorPickerInputProps<T>) => {
   const {
@@ -69,7 +69,7 @@ const ColorPicker = <T extends FieldValues>(props: ColorPickerInputProps<T>) => 
   const errorMessage = useMemo(() => String(fieldError?.message), [fieldError]);
   const fieldIsRequired = label && typeof label == "string" && requiredFields.includes(name);
   const finalLabel = useMemo(() => (fieldIsRequired ? `${String(label)} *` : label), [fieldIsRequired, label]);
-  
+
   return (
     <PopupState variant="popover" popupId={`popover-${name}`}>
       {(popupState) => (

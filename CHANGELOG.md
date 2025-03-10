@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `ColorPickerInput` component which provide both text input and color picker in order to choose color.
+  1. The inputs accepts color in any format, but the picker will set the color in the format you provided as props. By default, this behaviour is prevented and onBlur the provided color will be parsed to specified format. In case you want to disable this behaviour, you can provide the `convertColorToFormatOrUndefinedOnBlur` property as false.
+  2. Color Picker is by default with MUI style, use `useBootstrapStyle` property for applying a "bootstrap-like" style.
+
 ## [3.0.1] - 2025-03-05
 
 ### Fixed
