@@ -1,9 +1,9 @@
 import { FieldValues, get, FieldError } from "react-hook-form";
 import { Input } from "reactstrap";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
-import { InputProps } from "./Input";
-import { useMarkOnFocusHandler } from "./hooks/useMarkOnFocusHandler";
-import { useFormContext } from "./context/FormContext";
+import { InputProps } from "../../Input";
+import { useMarkOnFocusHandler } from "../../hooks/useMarkOnFocusHandler";
+import { useFormContext } from "../../context/FormContext";
 
 // This is two random guids concatenated. It is used to set the value of the option to undefined.
 const UNDEFINED_OPTION_VALUE = "CABB7A27DB754DA58C89D43ADB03FE0EC5EE3E25A6624D749F35CF2E92CFA784";
