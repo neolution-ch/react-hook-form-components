@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { DatePickerInput, Form, getUtcTimeZeroDate } from "react-hook-form-components";
 import "react-datepicker/dist/react-datepicker.css";
 import { faker } from "@faker-js/faker";
@@ -7,7 +8,6 @@ import { faCalendar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, InputGroupText } from "reactstrap";
 
-// eslint-disable-next-line import/no-unresolved
 import { SinonSpy } from "cypress/types/sinon";
 import { useRef, useEffect, FC } from "react";
 import ReactDatePickers from "react-datepicker";

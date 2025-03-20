@@ -22,6 +22,7 @@ interface StaticTypeaheadInputProps<T extends FieldValues> extends CommonTypeahe
   autocompleteProps?: StaticTypeaheadAutocompleteProps;
 }
 
+// eslint-disable-next-line complexity
 const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInputProps<T>) => {
   const {
     options,

@@ -49,6 +49,7 @@ declare global {
 }
 
 Cypress.Commands.add("setSliderValue", { prevSubject: "element" }, (subject, value) => {
+  // eslint-disable-next-line prefer-destructuring
   const element = subject[0];
 
   const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value")?.set;

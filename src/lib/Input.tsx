@@ -26,6 +26,7 @@ interface InputProps<T extends FieldValues> extends CommonInputProps<T> {
   innerRef?: MutableRefObject<HTMLInputElement | HTMLTextAreaElement | null>;
 }
 
+// eslint-disable-next-line complexity
 const Input = <T extends FieldValues>(props: InputProps<T>) => {
   const {
     type,

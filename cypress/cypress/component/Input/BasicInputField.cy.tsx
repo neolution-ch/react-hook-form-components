@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { Form, Input } from "react-hook-form-components";
 import { faker } from "@faker-js/faker";
 import * as yup from "yup";

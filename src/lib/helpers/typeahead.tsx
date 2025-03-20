@@ -20,17 +20,17 @@ const convertAutoCompleteOptionsToStringArray = (options: TypeaheadOption[] | un
 };
 
 const getSingleAutoCompleteValue = (options: TypeaheadOption[], fieldValue: string | number | undefined): TypeaheadOption[] => {
-  if (fieldValue == undefined) {
+  if (fieldValue === undefined) {
     return [];
   }
   return options.filter((x) =>
     // loose equality check to handle different types between form value and option value
-    typeof x === "string" ? x == fieldValue : x.value == fieldValue,
+    typeof x === "string" ? x === fieldValue : x.value === fieldValue,
   );
 };
 
 const getMultipleAutoCompleteValue = (options: TypeaheadOption[], fieldValue: (string | number)[] | undefined): TypeaheadOption[] => {
-  if (fieldValue == undefined) {
+  if (fieldValue === undefined) {
     return [];
   }
   return options.filter((x) =>

@@ -7,7 +7,9 @@ import { generateOptions } from "../../helpers/typeahead";
 import { useState } from "react";
 
 const selectOption = (name: string, text: string) => {
-  cy.get(`#${name}`).clear().click().type(text);
+  cy.get(`#${name}`).clear();
+  cy.get(`#${name}`).click();
+  cy.focused().type(text);
   cy.get('li[role="option"]').contains(text).click();
 };
 
@@ -144,7 +146,8 @@ it("works with multiple simple options", () => {
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: defaultSelectedOptions.map((o) => o.value) });
 
-  cy.get(`#${name}`).click().type("{backspace}".repeat(20));
+  cy.get(`#${name}`).click();
+  cy.focused().type("{backspace}".repeat(20));
 
   for (const changedOption of changedOptions) {
     selectOption(name, changedOption.label);
@@ -180,7 +183,8 @@ it("works with single object options", () => {
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: defaultSelectedOption.value });
 
-  cy.get(`#${name}`).clear().click();
+  cy.get(`#${name}`).clear();
+  cy.get(`#${name}`).click();
   selectOption(name, changedOption.label);
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledWith", { [name]: changedOption.value });
@@ -357,7 +361,9 @@ it("try to select a disabled option", () => {
     </div>,
   );
 
-  cy.get(`#${name}`).clear().click().type(randomOption.label);
+  cy.get(`#${name}`).clear();
+  cy.get(`#${name}`).click();
+  cy.focused().type(randomOption.label);
   cy.get('li[role="option"]').should("have.attr", "aria-disabled", "true");
 });
 
@@ -388,7 +394,9 @@ it("test empty label", () => {
     </div>,
   );
 
-  cy.get(`#${name}`).clear().click().type(name);
+  cy.get(`#${name}`).clear();
+  cy.get(`#${name}`).click();
+  cy.focused().type(name);
   cy.get("div.MuiAutocomplete-noOptions").should("have.text", emptyLabel);
 });
 
@@ -442,7 +450,9 @@ it("test on input change", () => {
   };
 
   cy.mount(<TestForm />);
-  cy.get(`#${name}`).clear().click().type(text);
+  cy.get(`#${name}`).clear();
+  cy.get(`#${name}`).click();
+  cy.focused().type(text);
   cy.get('input[type="submit"]').should("be.enabled");
   cy.get(`#${name}`).clear();
   cy.get('input[type="submit"]').should("be.disabled");
@@ -468,10 +478,10 @@ it("test grouping options", () => {
 
   cy.get(`#${name}`).type(groupedOptions[0].label);
   cy.get("div.MuiAutocomplete-groupLabel").first().should("be.visible").and("have.text", Sex.Male);
-  cy.get(`#${name}`)
-    .clear()
-    .type(groupedOptions[COUNT / 2].label);
+  cy.get(`#${name}`).clear();
+  cy.get(`#${name}`).type(groupedOptions[COUNT / 2].label);
   cy.get("div.MuiAutocomplete-groupLabel").first().should("be.visible").and("have.text", Sex.Female);
-  cy.get(`#${name}`).clear().type(groupedOptions[COUNT].label);
+  cy.get(`#${name}`).clear();
+  cy.get(`#${name}`).type(groupedOptions[COUNT].label);
   cy.get('li[role="option"]').contains(groupedOptions[COUNT].label).should("exist");
 });

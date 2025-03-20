@@ -49,6 +49,7 @@ interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputPr
 const DEFAULT_DATE_FORMAT = "dd.MM.yyyy";
 const DEFAULT_DATE_TIME_FORMAT = "dd.MM.yyyy HH:mm";
 
+// eslint-disable-next-line complexity
 const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) => {
   const {
     disabled,

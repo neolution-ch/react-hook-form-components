@@ -52,7 +52,6 @@
     "@mui/icons-material": "^6.1.10",
     "@mui/material": "^6.1.7",
     "autosuggest-highlight": "^3.3.4",
-    "@neolution-ch/eslint-config-neolution": "https://pkg.pr.new/neolution-ch/eslint-config-neolution/@neolution-ch/eslint-config-neolution@d195fd9",
     "classnames": "^2.3.2",
     "date-fns-tz": "^2.0.0",
     "react-datepicker": "^4.11.0",
@@ -62,6 +61,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.21.8",
+    "@neolution-ch/eslint-config-neolution": "https://pkg.pr.new/neolution-ch/eslint-config-neolution/@neolution-ch/eslint-config-neolution@dd11c66",
     "@popperjs/core": "^2.11.7",
     "@release-it/keep-a-changelog": "^3.1.0",
     "@rollup/plugin-commonjs": "^24.1.0",
@@ -112,7 +112,7 @@
     "reactstrap": "^8.0.0 || ^9.0.0"
   },
   "engines": {
-    "node": ">=14"
+    "node": ">=18"
   },
   "publishConfig": {
     "access": "public",
