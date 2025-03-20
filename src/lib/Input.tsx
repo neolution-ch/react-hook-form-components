@@ -3,7 +3,7 @@ import { FormGroup, Label } from "reactstrap";
 import { InputType } from "reactstrap/types/lib/Input";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";
-import { InputInternal } from "./InputInternal";
+import { InputInternal } from "./components/Input/InputInternal";
 import { CommonInputProps } from "./types/CommonInputProps";
 import { LabelValueOption } from "./types/LabelValueOption";
 import { useFormContext } from "./context/FormContext";

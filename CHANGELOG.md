@@ -11,6 +11,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - migrated to eslint 9 flat config
 
+### Changed
+
+- migrated to eslint 9 flat config
+
+## [3.1.0] - 2025-03-17
+
+### Added
+
+- `ColorPickerInput` component which provide both text input and color picker in order to choose color.
+  1. The inputs accepts color in any format, but the picker will set the color in the format you provided as props. By default, this behaviour is prevented and onBlur the provided color will be parsed to specified format. In case you want to disable this behaviour, you can provide the `convertColorToFormatOrUndefinedOnBlur` property as false.
+  2. Color Picker is by default with MUI style, use `useBootstrapStyle` property for applying a "bootstrap-like" style.
+
 ## [3.0.1] - 2025-03-05
 
 ### Fixed
@@ -478,7 +490,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Created package :tada:
 
-[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/3.0.1...HEAD
+[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/3.1.0...HEAD
 [0.1.2]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.1...0.1.2
 [0.1.1]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.1.0
@@ -503,6 +515,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.4.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.3.0...0.4.0
 [0.3.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.2.0...0.3.0
 [0.2.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.2.0
+[3.1.0]: https://github.com/neolution-ch/react-hook-form-components/compare/3.0.1...3.1.0
 [3.0.1]: https://github.com/neolution-ch/react-hook-form-components/compare/3.0.0...3.0.1
 [3.0.0]: https://github.com/neolution-ch/react-hook-form-components/compare/2.14.0...3.0.0
 [2.14.0]: https://github.com/neolution-ch/react-hook-form-components/compare/2.13.1...2.14.0

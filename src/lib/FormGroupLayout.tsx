@@ -11,7 +11,7 @@ interface FormGroupLayoutProps<T extends FieldValues, TRenderAddon>
   extends PropsWithChildren<
     Pick<CommonInputProps<T>, "helpText" | "label" | "name" | "id" | "labelToolTip" | "inputOnly" | "hideValidationMessage">
   > {
-  layout?: "checkbox" | "switch" | "typeahead";
+  layout?: "checkbox" | "switch" | "muiInput";
   addonLeft?: ReactNode | ((props: TRenderAddon) => ReactNode);
   addonRight?: ReactNode | ((props: TRenderAddon) => ReactNode);
   addonProps?: MergedAddonProps<TRenderAddon>;
@@ -48,7 +48,7 @@ const FormGroupLayout = <T extends FieldValues, TRenderAddon = unknown>(props: F
 
   const switchLayout = layout === "switch";
   const checkboxLayout = layout === "checkbox";
-  const typeaheadLayout = layout === "typeahead";
+  const muiInputLayout = layout === "muiInput";
 
   if (inputOnly && (switchLayout || checkboxLayout)) {
     throw new Error("'inputOnly' is not possible with switches or checkboxes");
@@ -87,7 +87,7 @@ const FormGroupLayout = <T extends FieldValues, TRenderAddon = unknown>(props: F
         tooltip={labelToolTip}
         layout={layout}
       />
-      {switchLayout || checkboxLayout || typeaheadLayout ? (
+      {switchLayout || checkboxLayout || muiInputLayout ? (
         children
       ) : (
         <InputGroup
@@ -103,7 +103,7 @@ const FormGroupLayout = <T extends FieldValues, TRenderAddon = unknown>(props: F
           {effectiveAddonRight}
         </InputGroup>
       )}
-      {!typeaheadLayout && (
+      {!muiInputLayout && (
         <>
           {!hideErrorMessage && <FormFeedback>{errorMessage}</FormFeedback>}
           {helpText && <FormText>{helpText}</FormText>}

@@ -1,14 +1,14 @@
 ﻿import TextField from "@mui/material/TextField";
-import { bootstrapStyle } from "./helpers/typeahead";
+import { textFieldBootstrapStyle } from "../../helpers/mui";
 import InputAdornment from "@mui/material/InputAdornment";
 import CircularProgress from "@mui/material/CircularProgress";
 import DownloadingSharpIcon from "@mui/icons-material/DownloadingSharp";
 import { AutocompleteRenderInputParams, IconButton } from "@mui/material";
 import { ReactNode, useMemo } from "react";
-import { CommonTypeaheadProps } from "./types/Typeahead";
+import { CommonTypeaheadProps } from "../../types/Typeahead";
 import { FieldError, FieldValues, get } from "react-hook-form";
-import { MergedAddonProps } from "./types/CommonInputProps";
-import { useFormContext } from "./context/FormContext";
+import { MergedAddonProps } from "../../types/CommonInputProps";
+import { useFormContext } from "../../context/FormContext";
 
 interface TypeaheadTextFieldProps<T extends FieldValues, TRenderAddon>
   extends Omit<CommonTypeaheadProps<T>, "id" | "disabled" | "onChange">,
@@ -76,7 +76,7 @@ const TypeaheadTextField = <T extends FieldValues, TRenderAddon = unknown>(props
     <TextField
       {...params}
       style={style}
-      sx={{ ...(useBootstrapStyle && bootstrapStyle) }}
+      sx={{ ...(useBootstrapStyle && textFieldBootstrapStyle) }}
       variant={useBootstrapStyle ? undefined : variant}
       error={hasError}
       label={useBootstrapStyle ? undefined : finalLabel}
