@@ -49,6 +49,7 @@ interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputPr
 const DEFAULT_DATE_FORMAT = "dd.MM.yyyy";
 const DEFAULT_DATE_TIME_FORMAT = "dd.MM.yyyy HH:mm";
 
+// eslint-disable-next-line complexity
 const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) => {
   const {
     disabled,
@@ -156,9 +157,10 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
             ref={(elem) => {
               // https://github.com/react-hook-form/react-hook-form/discussions/5413
               // https://codesandbox.io/s/react-hook-form-focus-forked-yyhsi?file=/src/index.js
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
-              elem && field.ref((elem as any).input);
-
+              if (elem) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
+                field.ref((elem as any).input);
+              }
               internalDatePickerRef.current = elem as DatePicker<never>;
 
               if (datePickerRef) {
@@ -179,7 +181,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
               field.onChange(convertedDate);
             }}
             onClickOutside={(e) => {
-              if (document.getElementById(formGroupId.current)?.contains(e.target as HTMLElement) && !disabled && !formDisabled) {
+              if (document.querySelector(`#${formGroupId.current}`)?.contains(e.target as HTMLElement) && !disabled && !formDisabled) {
                 internalDatePickerRef.current?.setOpen(true);
               }
 

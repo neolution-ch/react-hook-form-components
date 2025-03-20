@@ -25,7 +25,8 @@ describe("Input.cy.tsx", () => {
       </Form>,
     );
 
-    cy.contains("label", name).click().type(randomWord.toString());
+    cy.contains("label", name).click();
+    cy.focused().type(randomWord.toString());
     cy.get("input[type=submit]").click({ force: true });
 
     cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: randomWord });
@@ -86,7 +87,8 @@ describe("Input.cy.tsx", () => {
       </Form>,
     );
 
-    cy.contains("label", name).click().type(randomNumber.toString());
+    cy.contains("label", name).click();
+    cy.focused().type(randomNumber.toString());
     cy.get("input[type=submit]").click({ force: true });
 
     cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: randomNumber });
@@ -110,9 +112,11 @@ describe("Input.cy.tsx", () => {
       </Form>,
     );
 
-    cy.contains("label", name).click().type(randomNumber.toString());
+    cy.contains("label", name).click();
+    cy.focused().type(randomNumber.toString());
     cy.get(`input[id=${name}]`).should("have.attr", "step", step.toString());
-    cy.get(`input[id=${name}]`).click({ force: true }).type("{uparrow}");
+    cy.get(`input[id=${name}]`).click({ force: true });
+    cy.get(`input[id=${name}]`).type("{uparrow}");
     cy.get("input[type=submit]").click({ force: true });
 
     cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: expectedResult });
@@ -154,12 +158,14 @@ describe("Input.cy.tsx", () => {
       </Form>,
     );
 
-    cy.get(`input[id=${name}]`).type(randomWord).clear();
+    cy.get(`input[id=${name}]`).type(randomWord);
+    cy.get(`input[id=${name}]`).clear();
     cy.get("input[type=submit]").click({ force: true });
     cy.get(`input[id="${name}"]`).should("have.attr", "class").and("contain", "is-invalid");
     cy.get(`input[id="${name}"]`).parents("div").find(".invalid-feedback").should("be.visible").should("have.text", errorMessage);
 
-    cy.contains("label", name).click().type(randomWord.toString());
+    cy.contains("label", name).click();
+    cy.focused().type(randomWord.toString());
     cy.get("input[type=submit]").click({ force: true });
 
     cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: randomWord });
@@ -186,12 +192,14 @@ describe("Input.cy.tsx", () => {
       </Form>,
     );
 
-    cy.get(`input[id="${name}"]`).type(randomWord).clear();
+    cy.get(`input[id="${name}"]`).type(randomWord);
+    cy.get(`input[id="${name}"]`).clear();
     cy.get("input[type=submit]").click({ force: true });
     cy.get(`input[id="${name}"]`).parents("div").find(".invalid-feedback").should("be.visible").should("have.text", errorMessage);
     cy.get(`input[id="${name}"]`).should("have.attr", "class").and("contain", "is-invalid");
 
-    cy.contains("label", name).click().type(randomWord.toString());
+    cy.contains("label", name).click();
+    cy.focused().type(randomWord.toString());
     cy.get("input[type=submit]").click({ force: true });
 
     cy.get("@onSubmitSpy").should("be.calledOnceWith", { [objectName]: { [propertyName]: randomWord } });
@@ -213,7 +221,8 @@ describe("Input.cy.tsx", () => {
       </Form>,
     );
 
-    cy.contains("label", name).click().type(randomWord.toString());
+    cy.contains("label", name).click();
+    cy.focused().type(randomWord.toString());
     cy.get("@onChangeSpy").should("be.calledWithMatch", { target: { value: randomWord } });
     cy.get("@onChangeSpy").should("have.callCount", randomWord.length);
   });
@@ -234,7 +243,8 @@ describe("Input.cy.tsx", () => {
       </Form>,
     );
 
-    cy.contains("label", name).click().type(randomWord.toString());
+    cy.contains("label", name).click();
+    cy.focused().type(randomWord.toString());
     cy.get("input[type=submit]").click({ force: true });
     cy.get("@onBlurSpy").should("be.calledWithMatch", { target: { value: randomWord } });
   });
@@ -257,7 +267,8 @@ describe("Input.cy.tsx", () => {
       </Form>,
     );
 
-    cy.contains("label", name).click().type(randomWords.toString());
+    cy.contains("label", name).click();
+    cy.focused().type(randomWords.toString());
     cy.get("textarea").should("have.attr", "rows", textAreaRows);
     cy.get("input[type=submit]").click({ force: true });
 
@@ -281,11 +292,13 @@ describe("Input.cy.tsx", () => {
       </Form>,
     );
 
-    cy.contains("label", name).click().type(invalidEmail.toString());
+    cy.contains("label", name).click();
+    cy.focused().type(invalidEmail.toString());
     cy.get("input[type=submit]").click({ force: true });
     cy.get("@onSubmitSpy").should("have.callCount", 0);
 
-    cy.get(`input[id=${name}]`).clear().type(validEmail.toString());
+    cy.get(`input[id=${name}]`).clear();
+    cy.get(`input[id=${name}]`).type(validEmail.toString());
     cy.get("input[type=submit]").click({ force: true });
     cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: validEmail });
   });
@@ -306,7 +319,8 @@ describe("Input.cy.tsx", () => {
       </Form>,
     );
 
-    cy.contains("label", name).click().type(randomWord.toString());
+    cy.contains("label", name).click();
+    cy.focused().type(randomWord.toString());
     cy.get("input[type=submit]").click({ force: true });
 
     cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: randomWord });
@@ -432,6 +446,9 @@ it("minlenght and maxlenght work", () => {
     </Form>,
   );
 
-  cy.get(`input[name=${name}]`).type(validInput).should("have.value", validInput);
-  cy.get(`input[name=${name}]`).clear().type(invalidInput).should("have.value", invalidInput.slice(0, maxLength));
+  cy.get(`input[name=${name}]`).type(validInput);
+  cy.get(`input[name=${name}]`).should("have.value", validInput);
+  cy.get(`input[name=${name}]`).clear();
+  cy.get(`input[name=${name}]`).type(invalidInput);
+  cy.get(`input[name=${name}]`).should("have.value", invalidInput.slice(0, maxLength));
 });

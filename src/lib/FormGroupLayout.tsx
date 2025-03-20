@@ -20,6 +20,7 @@ interface FormGroupLayoutProps<T extends FieldValues, TRenderAddon>
   labelStyle?: CSSProperties;
 }
 
+// eslint-disable-next-line complexity
 const FormGroupLayout = <T extends FieldValues, TRenderAddon = unknown>(props: FormGroupLayoutProps<T, TRenderAddon>) => {
   const {
     label,
@@ -50,7 +51,7 @@ const FormGroupLayout = <T extends FieldValues, TRenderAddon = unknown>(props: F
   const muiInputLayout = layout === "muiInput";
 
   if (inputOnly && (switchLayout || checkboxLayout)) {
-    throw "'inputOnly' is not possible with switches or checkboxes";
+    throw new Error("'inputOnly' is not possible with switches or checkboxes");
   }
 
   const effectiveAddonLeft = useMemo(

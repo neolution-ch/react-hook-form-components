@@ -19,6 +19,7 @@ interface TypeaheadTextFieldProps<T extends FieldValues, TRenderAddon>
   addonProps?: MergedAddonProps<TRenderAddon>;
 }
 
+// eslint-disable-next-line complexity
 const TypeaheadTextField = <T extends FieldValues, TRenderAddon = unknown>(props: TypeaheadTextFieldProps<T, TRenderAddon>) => {
   const {
     name,
@@ -52,7 +53,7 @@ const TypeaheadTextField = <T extends FieldValues, TRenderAddon = unknown>(props
   const errorMessage = useMemo(() => String(fieldError?.message), [fieldError]);
   const hideErrorMessage = useMemo(() => hideValidationMessages || hideValidationMessage, [hideValidationMessages, hideValidationMessage]);
 
-  const fieldIsRequired = label && typeof label == "string" && requiredFields.includes(name);
+  const fieldIsRequired = label && typeof label === "string" && requiredFields.includes(name);
   const finalLabel = useMemo(() => (fieldIsRequired ? `${String(label)} *` : label), [fieldIsRequired, label]);
 
   const startAdornment = useMemo(
