@@ -30,3 +30,4 @@ storybook-static
 terraform
 
 .npmrc
+.yarn/install-state.gz

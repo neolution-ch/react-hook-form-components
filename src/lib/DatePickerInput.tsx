@@ -82,14 +82,16 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
   }
 
   const getInitialDate = (): Date | null => {
-    const value = getValues(name) as Date | null;
-
+    let value = getValues(name) as Date | string | null;
+  
     if (!value) return null;
-
+  
+    if (typeof value === "string") value = new Date(value);
+  
     if (!showTimeInputOrSelect) return getUtcTimeZeroDate(value);
-
+  
     if (!ianaTimeZone) return value;
-
+  
     return utcToZonedTime(value, ianaTimeZone);
   };
 
