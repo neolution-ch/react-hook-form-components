@@ -33,7 +33,7 @@ const schema = yup.object<StronglyTypedShape<FormData>>({
   username: yup.string().required(),
 });
 
-export default () => {
+const Home = () => {
   return (
     <div className={styles.container}>
       <Head>
@@ -79,3 +79,5 @@ export default () => {
     </div>
   );
 };
+
+export default Home;
