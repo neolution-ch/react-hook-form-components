@@ -14,6 +14,7 @@ import { useSafeNameId } from "./hooks/useSafeNameId";
 import { useFormContext } from "./context/FormContext";
 import { TypeaheadTextField } from "./components/Typeahead/TypeaheadTextField";
 import { FormGroupLayout } from "./FormGroupLayout";
+import { LabelValueOption } from "./types/LabelValueOption";
 
 interface AsyncTypeaheadInputRef {
   resetValues: () => void;
@@ -140,6 +141,10 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
         value={(multiple ? value : value[0]) || null}
         filterSelectedOptions={autocompleteProps?.filterSelectedOptions ?? multiple}
         filterOptions={(currentOptions) => currentOptions}
+        isOptionEqualToValue={
+          autocompleteProps?.isOptionEqualToValue ??
+          ((option, value) => (typeof option === "string" ? option === value : option.value === (value as LabelValueOption).value))
+        }
         getOptionKey={
           autocompleteProps?.getOptionKey ??
           ((option: TypeaheadOption) => (typeof option === "string" ? option : `${option.label}-${option.value ?? ""}`))
