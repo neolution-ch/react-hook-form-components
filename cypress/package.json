@@ -21,6 +21,7 @@
     "@types/react-dom": "18.0.8",
     "eslint": "^9.18.0",
     "eslint-config-next": "13.0.2",
+    "jiti": "^2.4.2",
     "next": "13.0.2",
     "react": "link:../node_modules/react",
     "react-dom": "link:../node_modules/react-dom",
@@ -31,7 +32,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",
-    "@neolution-ch/eslint-config-neolution": "https://pkg.pr.new/neolution-ch/eslint-config-neolution/@neolution-ch/eslint-config-neolution@dd11c66",
+    "@neolution-ch/eslint-config-neolution": "2.1.0",
     "cypress": "^11.0.0"
   }
 }

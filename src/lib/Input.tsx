@@ -115,6 +115,7 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
       }}
     >
       {type === "radio" ? (
+        // eslint-disable-next-line react/jsx-no-useless-fragment
         <>
           {options?.map((option, i) => {
             const optionId = `${safeId}-${i}`;
@@ -135,6 +136,7 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
           })}
         </>
       ) : (
+        // eslint-disable-next-line react/jsx-no-useless-fragment
         <>
           <InputInternal {...props} />
         </>

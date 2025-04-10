@@ -65,7 +65,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.21.8",
-    "@neolution-ch/eslint-config-neolution": "https://pkg.pr.new/neolution-ch/eslint-config-neolution/@neolution-ch/eslint-config-neolution@dd11c66",
+    "@neolution-ch/eslint-config-neolution": "2.1.0",
     "@popperjs/core": "^2.11.7",
     "@release-it/keep-a-changelog": "^3.1.0",
     "@rollup/plugin-commonjs": "^24.1.0",
