@@ -108,7 +108,9 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
         multiple={multiple}
         groupBy={useGroupBy ? groupOptions : undefined}
         options={useGroupBy ? sortOptionsByGroup(paginatedOptions) : paginatedOptions}
-        isOptionEqualToValue={(option, value) => typeof option === "string" ? option === value : option.value === (value as LabelValueOption).value}
+        isOptionEqualToValue={(option, value) =>
+          typeof option === "string" ? option === value : option.value === (value as LabelValueOption).value
+        }
         getOptionKey={
           autocompleteProps?.getOptionKey ??
           ((option: TypeaheadOption) => (typeof option === "string" ? option : `${option.label}-${option.value ?? ""}`))

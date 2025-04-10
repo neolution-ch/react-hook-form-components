@@ -140,7 +140,9 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
         value={(multiple ? value : value[0]) || null}
         filterSelectedOptions={autocompleteProps?.filterSelectedOptions ?? multiple}
         filterOptions={(currentOptions) => currentOptions}
-        isOptionEqualToValue={(option, value) => typeof option === "string" ? option === value : option.value === (value as LabelValueOption).value}
+        isOptionEqualToValue={(option, value) =>
+          typeof option === "string" ? option === value : option.value === (value as LabelValueOption).value
+        }
         getOptionKey={
           autocompleteProps?.getOptionKey ??
           ((option: TypeaheadOption) => (typeof option === "string" ? option : `${option.label}-${option.value ?? ""}`))
