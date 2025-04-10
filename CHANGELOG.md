@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Selected options were still visible and selectable using multiple `AsyncTypeAheadInput`. This is now fixed and active options are now filtered on searching once have been previously selected.
+
 ## [3.1.0] - 2025-03-17
 
 ### Added
