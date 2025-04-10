@@ -772,3 +772,33 @@ it("test pagination 2 by 2", () => {
   cy.get('button[title="Load 2 more"]').click();
   cy.get("ul.MuiAutocomplete-listbox").find("li").should("have.length", 4);
 });
+
+it("cannot select already selected option when multiple", () => {
+  const options = generateOptions();
+  const name = faker.random.alpha(10);
+  const [defaultSelectedOption] = faker.helpers.arrayElements(options.objectOptions, 1);
+
+  cy.mount(
+    <div className="p-4">
+      <Form
+        onSubmit={cy.spy().as("onSubmitSpy")}
+        defaultValues={{
+          [name]: defaultSelectedOption.value,
+        }}
+      >
+        <AsyncTypeaheadInput
+          multiple
+          name={name}
+          label={name}
+          defaultSelected={[defaultSelectedOption]}
+          queryFn={async (query: string) => await fetchMock(options.objectOptions, query, false)}
+        />
+        <input type="submit" className="mt-4" />
+      </Form>
+    </div>,
+  );
+
+  cy.get(`#${name}`).clear().click().type(defaultSelectedOption.label);
+  waitLoadingOptions();
+  cy.get('div[role="presentation"]').should("have.class", "MuiAutocomplete-noOptions");
+});
