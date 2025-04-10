@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import Head from "next/head";
 import Image from "next/image";
 import { Form, Input } from "react-hook-form-components";
@@ -10,14 +12,14 @@ import { Col, Row } from "reactstrap";
 type ConditionalSchema<T> = T extends string
   ? yup.StringSchema
   : T extends number
-  ? yup.NumberSchema
-  : T extends boolean
-  ? yup.BooleanSchema
-  : T extends Array<unknown>
-  ? yup.ArraySchema<never, never>
-  : T extends Record<never, never>
-  ? yup.AnyObjectSchema
-  : yup.AnySchema;
+    ? yup.NumberSchema
+    : T extends boolean
+      ? yup.BooleanSchema
+      : T extends Array<unknown>
+        ? yup.ArraySchema<never, never>
+        : T extends Record<never, never>
+          ? yup.AnyObjectSchema
+          : yup.AnySchema;
 
 type StronglyTypedShape<Fields> = {
   [Key in keyof Fields]: ConditionalSchema<Fields[Key]>;
@@ -31,7 +33,7 @@ const schema = yup.object<StronglyTypedShape<FormData>>({
   username: yup.string().required(),
 });
 
-export default function Home() {
+const Home = () => {
   return (
     <div className={styles.container}>
       <Head>
@@ -52,7 +54,7 @@ export default function Home() {
         <Row>
           <Col>
             <div>
-              <Form<FormData> onSubmit={(data) => alert(JSON.stringify(data, null, 2))} resolver={yupResolver(schema)}>
+              <Form<FormData> onSubmit={(data) => alert(JSON.stringify(data, undefined, 2))} resolver={yupResolver(schema)}>
                 <Input<FormData> name="username" label={"Username"} />
 
                 <input type="submit" />
@@ -76,4 +78,6 @@ export default function Home() {
       </footer>
     </div>
   );
-}
+};
+
+export default Home;

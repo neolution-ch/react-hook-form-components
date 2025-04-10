@@ -24,7 +24,7 @@ const FormGroupLayoutLabel = <T extends FieldValues>(props: FormGroupLayoutLabel
     return null;
   }
 
-  const fieldIsRequired = typeof label == "string" && requiredFields.includes(fieldName);
+  const fieldIsRequired = typeof label === "string" && requiredFields.includes(fieldName);
   const finalLabel = fieldIsRequired ? `${String(label)} *` : label;
 
   const switchLayout = layout === "switch";

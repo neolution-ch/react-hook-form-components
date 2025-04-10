@@ -47,6 +47,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
   const hasError = !!fieldError;
 
   return (
+    // eslint-disable-next-line react/jsx-no-useless-fragment
     <>
       <Input
         invalid={hasError}

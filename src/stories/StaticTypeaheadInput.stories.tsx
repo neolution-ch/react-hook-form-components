@@ -13,6 +13,7 @@ interface FormInterface {
 }
 
 const Template: Story<StaticTypeaheadInputProps<FormInterface>> = (args) => (
+  // eslint-disable-next-line react/jsx-no-useless-fragment
   <React.Fragment>
     <Form onSubmit={(data) => alert(JSON.stringify(data, null, 2))}>
       <StaticTypeaheadInput {...args} />
@@ -31,6 +32,7 @@ StaticTypeaheadInputExample.args = {
 } as StaticTypeaheadInputProps<FormInterface>;
 StaticTypeaheadInputExample.decorators = [
   (StoryComponent) => (
+    // eslint-disable-next-line react/jsx-no-useless-fragment
     <React.Fragment>
       <StoryComponent />
     </React.Fragment>

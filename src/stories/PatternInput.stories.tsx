@@ -13,6 +13,7 @@ interface FormInterface {
 }
 
 const Template: Story<FormattedInputProps<FormInterface>> = (args) => (
+  // eslint-disable-next-line react/jsx-no-useless-fragment
   <React.Fragment>
     <Form onSubmit={(data) => alert(JSON.stringify(data, null, 2))}>
       <FormattedInput {...args} />
@@ -33,6 +34,7 @@ PatternInputExample.args = {
 } as FormattedInputProps<FormInterface>;
 PatternInputExample.decorators = [
   (StoryComponent) => (
+    // eslint-disable-next-line react/jsx-no-useless-fragment
     <React.Fragment>
       <StoryComponent />
     </React.Fragment>

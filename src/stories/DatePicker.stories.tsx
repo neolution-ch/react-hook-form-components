@@ -13,6 +13,7 @@ interface FormInterface {
 }
 
 const Template: Story<DatePickerInputProps<FormInterface>> = (args) => (
+  // eslint-disable-next-line react/jsx-no-useless-fragment
   <React.Fragment>
     <Form onSubmit={(data) => alert(JSON.stringify(data, null, 2))}>
       <DatePickerInput {...args} />
@@ -30,6 +31,7 @@ DatePickerExample.args = {
 } as DatePickerInputProps<FormInterface>;
 DatePickerExample.decorators = [
   (StoryComponent) => (
+    // eslint-disable-next-line react/jsx-no-useless-fragment
     <React.Fragment>
       <StoryComponent />
     </React.Fragment>
