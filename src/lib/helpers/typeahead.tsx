@@ -1,12 +1,12 @@
 import { AutocompleteRenderOptionState } from "@mui/material/Autocomplete";
 import { LabelValueOption } from "../types/LabelValueOption";
-import { TypeaheadOption } from "../types/Typeahead";
+import { TypeaheadOption, TypeaheadOptions } from "../types/Typeahead";
 import AutosuggestHighlightMatch from "autosuggest-highlight/match";
 import AutosuggestHighlightParse from "autosuggest-highlight/parse";
 
-const isStringArray = (options: TypeaheadOption[]): boolean => options.length > 0 && options.every((value) => typeof value === "string");
+const isStringArray = (options: TypeaheadOptions): boolean => options.length > 0 && (options as TypeaheadOption[]).every((value) => typeof value === "string");
 
-const convertAutoCompleteOptionsToStringArray = (options: TypeaheadOption[] | undefined): string[] => {
+const convertAutoCompleteOptionsToStringArray = (options: TypeaheadOptions | undefined): string[] => {
   if (!options) {
     return [];
   }
@@ -18,29 +18,29 @@ const convertAutoCompleteOptionsToStringArray = (options: TypeaheadOption[] | un
   return (options as LabelValueOption[]).map((option) => option.value) as string[];
 };
 
-const getSingleAutoCompleteValue = (options: TypeaheadOption[], fieldValue: string | number | undefined): TypeaheadOption[] => {
+const getSingleAutoCompleteValue = (options: TypeaheadOptions, fieldValue: string | number | undefined): TypeaheadOptions => {
   if (fieldValue == undefined) {
     return [];
   }
-  return options.filter((x) =>
+  return (options as TypeaheadOption[]).filter((x) =>
     // loose equality check to handle different types between form value and option value
     typeof x === "string" ? x == fieldValue : x.value == fieldValue,
-  );
+  ) as TypeaheadOptions;
 };
 
-const getMultipleAutoCompleteValue = (options: TypeaheadOption[], fieldValue: (string | number)[] | undefined): TypeaheadOption[] => {
+const getMultipleAutoCompleteValue = (options: TypeaheadOptions, fieldValue: (string | number)[] | undefined): TypeaheadOptions => {
   if (fieldValue == undefined) {
     return [];
   }
-  return options.filter((x) =>
+  return (options as TypeaheadOption[]).filter((x: TypeaheadOption) =>
     typeof x === "string"
       ? fieldValue.includes(x)
       : // ensure that form values matches options values even if they are of different types
         fieldValue.map(String).includes(String(x.value as string | number)),
-  );
+  ) as TypeaheadOptions;
 };
 
-const sortOptionsByGroup = (options: TypeaheadOption[]): TypeaheadOption[] =>
+const sortOptionsByGroup = (options: TypeaheadOptions): TypeaheadOptions =>
   options.sort((x, y) => (typeof x === "string" ? x : x.group?.name ?? "").localeCompare(typeof y === "string" ? y : y.group?.name ?? ""));
 
 const groupOptions = (option: TypeaheadOption): string => (typeof option === "string" ? option : option.group?.name ?? "");
