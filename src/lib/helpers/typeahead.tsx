@@ -4,7 +4,8 @@ import { TypeaheadOption, TypeaheadOptions } from "../types/Typeahead";
 import AutosuggestHighlightMatch from "autosuggest-highlight/match";
 import AutosuggestHighlightParse from "autosuggest-highlight/parse";
 
-const isStringArray = (options: TypeaheadOptions): boolean => options.length > 0 && (options as TypeaheadOption[]).every((value) => typeof value === "string");
+const isStringArray = (options: TypeaheadOptions): boolean =>
+  options.length > 0 && (options as TypeaheadOption[]).every((value) => typeof value === "string");
 
 const convertAutoCompleteOptionsToStringArray = (options: TypeaheadOptions | undefined): string[] => {
   if (!options) {
@@ -32,7 +33,7 @@ const getMultipleAutoCompleteValue = (options: TypeaheadOptions, fieldValue: (st
   if (fieldValue == undefined) {
     return [];
   }
-  return (options as TypeaheadOption[]).filter((x: TypeaheadOption) =>
+  return (options as TypeaheadOption[]).filter((x) =>
     typeof x === "string"
       ? fieldValue.includes(x)
       : // ensure that form values matches options values even if they are of different types

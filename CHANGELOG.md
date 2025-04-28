@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Export typeahead helpers and `useDebounceHook` hook.
+- Typeahead helpers return type from `TypeaheadOption[]` to `TypeaheadOptions`, since typeaheads are not intended to be used with mixed `string` and `LabelValueOption` options.
 
 ### Fixed
 
