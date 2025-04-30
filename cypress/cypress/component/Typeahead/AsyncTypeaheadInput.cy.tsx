@@ -641,9 +641,6 @@ it("placeholder", () => {
         onSubmit={() => {
           // Nothing to do
         }}
-        defaultValues={{
-          [name]: simpleOptions,
-        }}
       >
         <AsyncTypeaheadInput
           multiple
@@ -662,7 +659,10 @@ it("placeholder", () => {
       </Form>
     </div>,
   );
+
   cy.get(`#${name}`).should("have.attr", "placeholder", placeholder);
+  simpleOptions.slice(0, 2).forEach((option) => selectOption(name, option));
+  cy.get(`#${name}`).should("not.have.attr", "placeholder");
 });
 
 it("test on input change", () => {

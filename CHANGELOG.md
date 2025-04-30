@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Export typeahead helpers and `useDebounceHook` hook.
+
+### Fixed
+
+- Hide placeholder on multiple `AsyncTypeAheadInput` and `StaticTypeAheadInput` when at least one option is selected.
+- Typeahead helpers return type from `TypeaheadOption[]` to `TypeaheadOptions`, since typeaheads are not intended to be used with mixed `string` and `LabelValueOption` options.
+
 ## [3.1.1] - 2025-04-10
 
 ### Fixed

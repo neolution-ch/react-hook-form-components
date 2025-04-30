@@ -1,12 +1,12 @@
 ﻿import { useEffect, useRef, useState } from "react";
-import { TypeaheadOption, TypeaheadOptions } from "../types/Typeahead";
+import { TypeaheadOptions } from "../types/Typeahead";
 
 interface DebounceSearch {
   query: string;
   delay: number;
 }
 
-const useDebounceHook = (queryFn: (query: string) => Promise<TypeaheadOptions>, setOptions: (results: TypeaheadOption[]) => void) => {
+const useDebounceHook = (queryFn: (query: string) => Promise<TypeaheadOptions>, setOptions: (results: TypeaheadOptions) => void) => {
   const queryRef = useRef("");
   const [isLoading, setIsLoading] = useState(false);
   const [debounceSearch, setDebounceSearch] = useState<DebounceSearch | undefined>(undefined);

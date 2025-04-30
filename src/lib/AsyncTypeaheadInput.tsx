@@ -69,8 +69,8 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
     autocompleteProps,
   } = props;
 
-  const [options, setOptions] = useState<TypeaheadOption[]>(defaultOptions);
-  const [value, setValue] = useState<TypeaheadOption[]>(defaultSelected);
+  const [options, setOptions] = useState<TypeaheadOptions>(defaultOptions);
+  const [value, setValue] = useState<TypeaheadOptions>(defaultSelected);
   const [page, setPage] = useState(1);
   const [loadMoreOptions, setLoadMoreOptions] = useState(limitResults !== undefined && limitResults < defaultOptions.length);
   const { name, id } = useSafeNameId(props.name ?? "", props.id);
@@ -107,7 +107,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
           defaultSelected.map((x) => (typeof x === "string" ? x : x.value)),
         );
       },
-      updateValues: (options: TypeaheadOption[]) => {
+      updateValues: (options: TypeaheadOptions) => {
         const values = convertAutoCompleteOptionsToStringArray(options);
         const finalValue = multiple ? values : values[0];
         setValue(options);
@@ -171,7 +171,9 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
           field.onBlur();
         }}
         onChange={(_e, value) => {
-          const optionsArray = value ? (Array.isArray(value) ? value : [value]) : undefined;
+          // value is typed as Autocomplete<Value> (aka TypeaheadOption) or an array of Autocomplete<Value> (aka TypeaheadOption[])
+          // however, the component is not intended to be used with mixed types
+          const optionsArray = value ? ((Array.isArray(value) ? value : [value]) as TypeaheadOptions) : undefined;
           setValue(optionsArray ?? []);
           const values = convertAutoCompleteOptionsToStringArray(optionsArray);
           const finalValue = multiple ? values : values[0];
@@ -206,7 +208,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
             hideValidationMessage={hideValidationMessage}
             useBootstrapStyle={useBootstrapStyle}
             helpText={helpText}
-            placeholder={placeholder}
+            placeholder={multiple && value.length > 0 ? undefined : placeholder}
             paginationIcon={paginationIcon}
             paginationText={paginationText}
             variant={variant}
