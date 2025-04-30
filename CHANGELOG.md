@@ -7,9 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Changed
+### Added
 
-- Export typeahead helpers and `useDebounceHook` hook.
+- Export of typeahead helpers and `useDebounceHook` hook.
 
 ### Fixed
 
