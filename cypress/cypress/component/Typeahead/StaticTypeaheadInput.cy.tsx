@@ -471,3 +471,25 @@ it("test grouping options", () => {
   cy.get(`#${name}`).clear().type(groupedOptions[COUNT].label);
   cy.get('li[role="option"]').contains(groupedOptions[COUNT].label).should("exist");
 });
+
+it("test options style", () => {
+  const { simpleOptions } = generateOptions();
+  const name = faker.random.alpha(10);
+  const [firstOption] = simpleOptions;
+
+  cy.mount(
+    <div className="p-4">
+      <Form onSubmit={cy.spy().as("onSubmitSpy")}>
+        <StaticTypeaheadInput
+          name={name}
+          label={name}
+          options={simpleOptions}
+          renderOptionStyle={(option) => (firstOption == (option as string) ? { color: "red" } : {})}
+        />
+      </Form>
+    </div>,
+  );
+
+  cy.get(`#${name}`).click();
+  cy.get('li[role="option"]').contains(firstOption).should("have.css", "color", "rgb(255, 0, 0)");
+});

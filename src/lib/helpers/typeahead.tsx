@@ -1,8 +1,8 @@
-import { AutocompleteRenderOptionState } from "@mui/material/Autocomplete";
 import { LabelValueOption } from "../types/LabelValueOption";
 import { TypeaheadOption, TypeaheadOptions } from "../types/Typeahead";
 import AutosuggestHighlightMatch from "autosuggest-highlight/match";
 import AutosuggestHighlightParse from "autosuggest-highlight/parse";
+import { CSSProperties } from "react";
 
 const isStringArray = (options: TypeaheadOptions): boolean =>
   options.length > 0 && (options as TypeaheadOption[]).every((value) => typeof value === "string");
@@ -48,16 +48,28 @@ const groupOptions = (option: TypeaheadOption): string => (typeof option === "st
 
 const isDisabledGroup = (option: TypeaheadOption): boolean => typeof option !== "string" && !!option.group?.disabled;
 
-const renderHighlightedOptionFunction = (
+const renderOption = (
   props: React.HTMLAttributes<HTMLLIElement>,
   option: TypeaheadOption,
-  { inputValue }: AutocompleteRenderOptionState,
+  inputValue: string,
+  index: number,
+  highlight: boolean,
+  style?: CSSProperties | ((option: TypeaheadOption, index: number) => CSSProperties),
 ): JSX.Element => {
   const finalOption = typeof option === "string" ? option : option.label;
+
+  if (!highlight) {
+    return (
+      <li {...props}>
+        <div>{finalOption}</div>
+      </li>
+    );
+  }
+
   const matches = AutosuggestHighlightMatch(finalOption, inputValue, { insideWords: true });
   const parts = AutosuggestHighlightParse(finalOption, matches) as Array<{ text: string; highlight: boolean }>;
   return (
-    <li {...props}>
+    <li {...props} style={typeof style === "function" ? style(option, index) : style}>
       <div>
         {parts.map((part, index) => (
           <span key={index} style={{ fontWeight: part.highlight ? 700 : 400 }}>
@@ -76,5 +88,5 @@ export {
   sortOptionsByGroup,
   isDisabledGroup,
   groupOptions,
-  renderHighlightedOptionFunction,
+  renderOption,
 };

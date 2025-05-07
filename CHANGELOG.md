@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- helper function `renderHighlightedOptionFunction` to the more generic `renderOption` in order to allow the customization of each option style.
+
 ## [3.2.0] - 2025-04-30
 
 ### Added

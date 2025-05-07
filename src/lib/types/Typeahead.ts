@@ -1,4 +1,4 @@
-import { ReactNode, SyntheticEvent } from "react";
+import { CSSProperties, ReactNode, SyntheticEvent } from "react";
 import { FieldValues } from "react-hook-form";
 import { CommonInputProps } from "./CommonInputProps";
 import { LabelValueOption } from "./LabelValueOption";
@@ -22,6 +22,7 @@ interface CommonTypeaheadProps<T extends FieldValues>
   autoSelect?: boolean;
   autoHighlight?: boolean;
   useBootstrapStyle?: boolean;
+  renderOptionStyle?: CSSProperties | ((option: TypeaheadOption, index: number) => CSSProperties);
   getOptionDisabled?: (option: TypeaheadOption) => boolean;
   onChange?: (selected: string | string[]) => void;
   onInputChange?: (text: string, reason: AutocompleteInputChangeReason) => void;
