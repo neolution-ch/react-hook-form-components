@@ -58,25 +58,19 @@ const renderOption = (
 ): JSX.Element => {
   const finalOption = typeof option === "string" ? option : option.label;
   const finalStyle = typeof style === "function" ? style(option, index) : style;
+  const matches = highlight ? AutosuggestHighlightMatch(finalOption, inputValue, { insideWords: true }) : undefined;
+  const parts = highlight && matches ? AutosuggestHighlightParse(finalOption, matches) : undefined;
 
-  if (!highlight) {
-    return (
-      <li {...props} style={finalStyle}>
-        <div>{finalOption}</div>
-      </li>
-    );
-  }
-
-  const matches = AutosuggestHighlightMatch(finalOption, inputValue, { insideWords: true });
-  const parts = AutosuggestHighlightParse(finalOption, matches) as Array<{ text: string; highlight: boolean }>;
   return (
     <li {...props} style={finalStyle}>
       <div>
-        {parts.map((part, index) => (
-          <span key={index} style={{ fontWeight: part.highlight ? 700 : 400 }}>
-            {part.text}
-          </span>
-        ))}
+        {highlight
+          ? parts?.map((part, index) => (
+              <span key={index} style={{ fontWeight: part.highlight ? 700 : 400 }}>
+                {part.text}
+              </span>
+            ))
+          : finalOption}
       </div>
     </li>
   );
