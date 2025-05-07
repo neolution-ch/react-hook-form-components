@@ -57,10 +57,11 @@ const renderOption = (
   style?: CSSProperties | ((option: TypeaheadOption, index: number) => CSSProperties),
 ): JSX.Element => {
   const finalOption = typeof option === "string" ? option : option.label;
+  const finalStyle = typeof style === "function" ? style(option, index) : style;
 
   if (!highlight) {
     return (
-      <li {...props}>
+      <li {...props} style={finalStyle}>
         <div>{finalOption}</div>
       </li>
     );
@@ -69,7 +70,7 @@ const renderOption = (
   const matches = AutosuggestHighlightMatch(finalOption, inputValue, { insideWords: true });
   const parts = AutosuggestHighlightParse(finalOption, matches) as Array<{ text: string; highlight: boolean }>;
   return (
-    <li {...props} style={typeof style === "function" ? style(option, index) : style}>
+    <li {...props} style={finalStyle}>
       <div>
         {parts.map((part, index) => (
           <span key={index} style={{ fontWeight: part.highlight ? 700 : 400 }}>
