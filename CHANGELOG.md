@@ -7,9 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Changed
+## [3.2.0] - 2025-04-30
 
-- Export typeahead helpers and `useDebounceHook` hook.
+### Added
+
+- Export of typeahead helpers and `useDebounceHook` hook.
 
 ### Fixed
 
@@ -497,7 +499,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Created package :tada:
 
-[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/3.1.1...HEAD
+[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/3.2.0...HEAD
 [0.1.2]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.1...0.1.2
 [0.1.1]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.1.0
@@ -522,6 +524,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.4.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.3.0...0.4.0
 [0.3.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.2.0...0.3.0
 [0.2.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.2.0
+[3.2.0]: https://github.com/neolution-ch/react-hook-form-components/compare/3.1.1...3.2.0
 [3.1.1]: https://github.com/neolution-ch/react-hook-form-components/compare/3.1.0...3.1.1
 [3.1.0]: https://github.com/neolution-ch/react-hook-form-components/compare/3.0.1...3.1.0
 [3.0.1]: https://github.com/neolution-ch/react-hook-form-components/compare/3.0.0...3.0.1
