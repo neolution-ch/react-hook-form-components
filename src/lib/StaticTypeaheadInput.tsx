@@ -11,7 +11,7 @@ import {
   isDisabledGroup,
   sortOptionsByGroup,
   groupOptions,
-  renderHighlightedOptionFunction,
+  renderOption,
 } from "./helpers/typeahead";
 import { TypeaheadTextField } from "./components/Typeahead/TypeaheadTextField";
 import { FormGroupLayout } from "./FormGroupLayout";
@@ -53,6 +53,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
     highlightOptions = true,
     autoHighlight = true,
     autoSelect,
+    renderOptionStyle,
     useBootstrapStyle = false,
     isLoading = false,
     autocompleteProps,
@@ -156,7 +157,9 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
             onInputChange(value, reason);
           }
         }}
-        renderOption={highlightOptions ? renderHighlightedOptionFunction : undefined}
+        renderOption={(props, option, { inputValue, index }) =>
+          renderOption(props, option, inputValue, index, highlightOptions, renderOptionStyle)
+        }
         renderInput={(params) => (
           <TypeaheadTextField
             isLoading={isLoading}

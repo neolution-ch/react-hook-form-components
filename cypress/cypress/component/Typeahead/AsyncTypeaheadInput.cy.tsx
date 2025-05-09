@@ -802,3 +802,25 @@ it("cannot select already selected option when multiple", () => {
   waitLoadingOptions();
   cy.get('div[role="presentation"]').should("have.class", "MuiAutocomplete-noOptions");
 });
+
+it("test options style", () => {
+  const { objectOptions } = generateOptions(3);
+  const name = faker.random.alpha(10);
+
+  cy.mount(
+    <div className="p-4">
+      <Form onSubmit={cy.spy().as("onSubmitSpy")}>
+        <AsyncTypeaheadInput
+          name={name}
+          label={name}
+          defaultOptions={objectOptions}
+          queryFn={async (query: string) => await fetchMock(objectOptions, query, false)}
+          renderOptionStyle={(_, index) => (index === objectOptions.length - 1 ? { borderTop: "1px solid rgb(0, 0, 0)" } : {})}
+        />
+      </Form>
+    </div>,
+  );
+
+  cy.get(`#${name}`).click();
+  cy.get('li[role="option"]').eq(2).should("have.css", "border-top", "1px solid rgb(0, 0, 0)");
+});

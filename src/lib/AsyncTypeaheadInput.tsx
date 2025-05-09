@@ -3,12 +3,7 @@ import { useEffect, useMemo, useState, MutableRefObject, useImperativeHandle } f
 import { FieldValues, useController } from "react-hook-form";
 import { AsyncTypeaheadAutocompleteProps, CommonTypeaheadProps, TypeaheadOption, TypeaheadOptions } from "./types/Typeahead";
 import Autocomplete from "@mui/material/Autocomplete";
-import {
-  convertAutoCompleteOptionsToStringArray,
-  groupOptions,
-  isDisabledGroup,
-  renderHighlightedOptionFunction,
-} from "./helpers/typeahead";
+import { convertAutoCompleteOptionsToStringArray, groupOptions, isDisabledGroup, renderOption } from "./helpers/typeahead";
 import { useDebounceHook } from "./hooks/useDebounceHook";
 import { useSafeNameId } from "./hooks/useSafeNameId";
 import { useFormContext } from "./context/FormContext";
@@ -65,6 +60,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
     limitResults,
     paginationText,
     paginationIcon,
+    renderOptionStyle,
     useBootstrapStyle = false,
     autocompleteProps,
   } = props;
@@ -193,7 +189,9 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
             onInputChange(query, reason);
           }
         }}
-        renderOption={highlightOptions ? renderHighlightedOptionFunction : undefined}
+        renderOption={(props, option, { inputValue, index }) =>
+          renderOption(props, option, inputValue, index, highlightOptions, renderOptionStyle)
+        }
         renderInput={(params) => (
           <TypeaheadTextField
             isLoading={isLoading}
