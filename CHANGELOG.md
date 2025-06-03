@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- property `placeholder` to `FormattedInput` component.
+
 ## [3.2.0] - 2025-04-30
 
 ### Added
