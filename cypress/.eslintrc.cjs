@@ -19,7 +19,7 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: "module",
   },
-  plugins: ["@typescript-eslint", "import"],
+  plugins: ["@typescript-eslint", "import", "no-only-tests"],
   settings: {
     "import/parsers": {
       "@typescript-eslint/parser": [".ts", ".tsx"],
@@ -71,5 +71,7 @@ module.exports = {
 
     // cypress
     "@typescript-eslint/no-namespace": "off",
+
+    "no-only-tests/no-only-tests": ["error", { fix: true }],
   },
 };
