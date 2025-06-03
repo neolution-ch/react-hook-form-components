@@ -1,6 +1,6 @@
 import classnames from "classnames";
 import { Controller, FieldValues } from "react-hook-form";
-import { NumericFormat, NumericFormatProps, PatternFormat, PatternFormatProps } from "react-number-format";
+import { NumberFormatValues, NumericFormat, NumericFormatProps, PatternFormat, PatternFormatProps } from "react-number-format";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";
 import { CommonInputProps } from "./types/CommonInputProps";
@@ -10,6 +10,8 @@ import { useFormContext } from "./context/FormContext";
 interface FormattedInputProps<T extends FieldValues> extends CommonInputProps<T> {
   patternFormat?: PatternFormatProps;
   numericFormat?: NumericFormatProps;
+  placeholder?: string;
+  isAllowed?: ((values: NumberFormatValues) => boolean) | undefined
 }
 
 const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) => {
@@ -33,6 +35,8 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
     addonRight,
     className = "",
     hideValidationMessage = false,
+    placeholder,
+    isAllowed,
   } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
   const { control, disabled: formDisabled } = useFormContext();
@@ -89,6 +93,8 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
                   }}
                   onFocus={focusHandler}
                   style={style}
+                  placeholder={placeholder}
+                  isAllowed={isAllowed}
                 ></NumericFormat>
               )}
 
