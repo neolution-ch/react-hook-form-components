@@ -20,17 +20,17 @@ const convertAutoCompleteOptionsToStringArray = (options: TypeaheadOptions | und
 };
 
 const getSingleAutoCompleteValue = (options: TypeaheadOptions, fieldValue: string | number | undefined): TypeaheadOptions => {
-  if (fieldValue == undefined) {
+  if (fieldValue === undefined) {
     return [];
   }
   return (options as TypeaheadOption[]).filter((x) =>
     // loose equality check to handle different types between form value and option value
-    typeof x === "string" ? x == fieldValue : x.value == fieldValue,
+    typeof x === "string" ? x === fieldValue : x.value === fieldValue,
   ) as TypeaheadOptions;
 };
 
 const getMultipleAutoCompleteValue = (options: TypeaheadOptions, fieldValue: (string | number)[] | undefined): TypeaheadOptions => {
-  if (fieldValue == undefined) {
+  if (fieldValue === undefined) {
     return [];
   }
   return (options as TypeaheadOption[]).filter((x) =>
@@ -42,7 +42,9 @@ const getMultipleAutoCompleteValue = (options: TypeaheadOptions, fieldValue: (st
 };
 
 const sortOptionsByGroup = (options: TypeaheadOptions): TypeaheadOptions =>
-  options.sort((x, y) => (typeof x === "string" ? x : x.group?.name ?? "").localeCompare(typeof y === "string" ? y : y.group?.name ?? ""));
+  options.sort((x, y) =>
+    (typeof x === "string" ? x : (x.group?.name ?? "")).localeCompare(typeof y === "string" ? y : (y.group?.name ?? "")),
+  );
 
 const groupOptions = (option: TypeaheadOption): string => (typeof option === "string" ? option : (option.group?.name ?? ""));
 
