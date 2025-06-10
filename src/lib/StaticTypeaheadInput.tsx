@@ -141,7 +141,9 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
           field.onBlur();
         }}
         onChange={(_, value) => {
-          const optionsArray = value ? (Array.isArray(value) ? value : [value]) : undefined;
+          // value is typed as Autocomplete<Value> (aka TypeaheadOption) or an array of Autocomplete<Value> (aka TypeaheadOption[])
+          // however, the component is not intended to be used with mixed types
+          const optionsArray = value ? ((Array.isArray(value) ? value : [value]) as TypeaheadOptions) : undefined;
           const values = convertAutoCompleteOptionsToStringArray(optionsArray);
           const finalValue = multiple ? values : values[0];
           clearErrors(field.name);
@@ -170,7 +172,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
             hideValidationMessage={hideValidationMessage}
             useBootstrapStyle={useBootstrapStyle}
             helpText={helpText}
-            placeholder={placeholder}
+            placeholder={multiple && value.length > 0 ? undefined : placeholder}
             paginationIcon={paginationIcon}
             paginationText={paginationText}
             variant={variant}

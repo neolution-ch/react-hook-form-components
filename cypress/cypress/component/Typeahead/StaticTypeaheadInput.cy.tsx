@@ -407,12 +407,7 @@ it("placeholder", () => {
 
   cy.mount(
     <div className="p-4">
-      <Form
-        onSubmit={cy.spy().as("onSubmitSpy")}
-        defaultValues={{
-          [name]: simpleOptions,
-        }}
-      >
+      <Form onSubmit={cy.spy().as("onSubmitSpy")}>
         <StaticTypeaheadInput multiple name={name} label={name} options={simpleOptions} placeholder={placeholder} />
         <input type="submit" className="mt-4" />
       </Form>
@@ -420,6 +415,8 @@ it("placeholder", () => {
   );
 
   cy.get(`#${name}`).should("have.attr", "placeholder", placeholder);
+  simpleOptions.slice(0, 2).forEach((option) => selectOption(name, option));
+  cy.get(`#${name}`).should("not.have.attr", "placeholder");
 });
 
 it("test on input change", () => {

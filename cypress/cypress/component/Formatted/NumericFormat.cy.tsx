@@ -167,3 +167,20 @@ it("style is correcly applied", () => {
 
   cy.get(`input[id=${name}]`).should("have.attr", "style", style);
 });
+
+it("has placeholder", () => {
+  const name = faker.random.word();
+  const placeholder = faker.random.words(5);
+
+  cy.mount(
+    <Form
+      onSubmit={() => {
+        // Do nothing
+      }}
+    >
+      <FormattedInput name={name} label={name} numericFormat={numericFormat} placeholder={placeholder} />
+    </Form>,
+  );
+
+  cy.get(`#${name}`).should("have.attr", "placeholder", placeholder);
+});
