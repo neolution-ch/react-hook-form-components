@@ -10,7 +10,9 @@ const waitLoadingOptions = () => {
 };
 
 const selectOption = (name: string, text: string) => {
-  cy.get(`#${name}`).clear().click().type(text);
+  cy.get(`#${name}`).clear();
+  cy.get(`#${name}`).click();
+  cy.focused().type(text);
   waitLoadingOptions();
   cy.get('li[role="option"]').contains(text).click();
 };
@@ -206,7 +208,8 @@ it("works with multiple simple options and default selected", () => {
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: defaultSelectedOptions.map((o) => o.label) });
 
-  cy.get(`#${name}`).click().type("{backspace}".repeat(20));
+  cy.get(`#${name}`).click();
+  cy.get(`#${name}`).type("{backspace}".repeat(20));
 
   for (const changedOption of changedOptions) {
     selectOption(name, changedOption.label);
@@ -247,7 +250,8 @@ it("works with multiple object options and default selected", () => {
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: defaultSelectedOptions.map((o) => o.value) });
 
-  cy.get(`#${name}`).click().type("{backspace}".repeat(20));
+  cy.get(`#${name}`).click();
+  cy.get(`#${name}`).type("{backspace}".repeat(20));
 
   for (const changedOption of changedOptions) {
     selectOption(name, changedOption.label);
@@ -285,7 +289,8 @@ it("works with single object option and default selected", () => {
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: defaultSelectedOption.value });
   selectOption(name, changedOption.label);
-  cy.get(`#${name}`).click().type("e"); // simulate typo
+  cy.get(`#${name}`).click();
+  cy.focused().type("e"); // simulate typo
   cy.get(`#${name}`).blur();
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("have.been.calledWith", { [name]: changedOption.value });
@@ -584,7 +589,9 @@ it("try to select a disabled option", () => {
     </div>,
   );
 
-  cy.get(`#${name}`).clear().click().type(randomOption.label);
+  cy.get(`#${name}`).clear();
+  cy.get(`#${name}`).click();
+  cy.focused().type(randomOption.label);
   waitLoadingOptions();
   cy.get('li[role="option"]').should("have.attr", "aria-disabled", "true");
 });
@@ -625,7 +632,9 @@ it("test empty label and loading label", () => {
     </div>,
   );
 
-  cy.get(`#${name}`).clear().click().type(name);
+  cy.get(`#${name}`).clear();
+  cy.get(`#${name}`).click();
+  cy.focused().type(name);
   cy.get("div.MuiAutocomplete-loading").should("have.text", loadingLabel);
   cy.get("div.MuiAutocomplete-noOptions").should("have.text", emptyLabel);
 });
@@ -699,7 +708,9 @@ it("test on input change", () => {
   };
 
   cy.mount(<TestForm />);
-  cy.get(`#${name}`).clear().click().type(text);
+  cy.get(`#${name}`).clear();
+  cy.get(`#${name}`).click();
+  cy.get(`#${name}`).type(text);
   cy.get('input[type="submit"]').should("be.enabled");
   cy.get(`#${name}`).clear();
   cy.get('input[type="submit"]').should("be.disabled");
@@ -730,9 +741,8 @@ it("test grouping options", () => {
 
   cy.get(`#${name}`).type(groupedOptions[0].label);
   cy.get("div.MuiAutocomplete-groupLabel").first().should("be.visible").and("have.text", Sex.Male);
-  cy.get(`#${name}`)
-    .clear()
-    .type(groupedOptions[COUNT / 2].label);
+  cy.get(`#${name}`).clear();
+  cy.get(`#${name}`).type(groupedOptions[COUNT / 2].label);
   cy.get("div.MuiAutocomplete-groupLabel").first().should("be.visible").and("have.text", Sex.Female);
   selectOption(name, groupedOptions[COUNT].label);
 });
@@ -766,7 +776,9 @@ it("test pagination 2 by 2", () => {
     </div>,
   );
 
-  cy.get(`#${name}`).clear().click().type(prefix);
+  cy.get(`#${name}`).clear();
+  cy.get(`#${name}`).click();
+  cy.focused().type(prefix);
   waitLoadingOptions();
   cy.get("ul.MuiAutocomplete-listbox").find("li").should("have.length", 2);
   cy.get('button[title="Load 2 more"]').click();

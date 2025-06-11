@@ -67,7 +67,7 @@ const ColorPicker = <T extends FieldValues>(props: ColorPickerInputProps<T>) => 
   const hideErrorMessage = useMemo(() => hideValidationMessages || hideValidationMessage, [hideValidationMessages, hideValidationMessage]);
   const hasError = useMemo(() => !!fieldError, [fieldError]);
   const errorMessage = useMemo(() => String(fieldError?.message), [fieldError]);
-  const fieldIsRequired = label && typeof label == "string" && requiredFields.includes(name);
+  const fieldIsRequired = label && typeof label === "string" && requiredFields.includes(name);
   const finalLabel = useMemo(() => (fieldIsRequired ? `${String(label)} *` : label), [fieldIsRequired, label]);
 
   return (
@@ -99,7 +99,10 @@ const ColorPicker = <T extends FieldValues>(props: ColorPickerInputProps<T>) => 
                 setValue(name, (color.isValid ? getColorByFormat(color, format) : undefined) as never); // Need to cast as never as type is too complex
               }
 
-              propsOnBlur && propsOnBlur(e);
+              if (propsOnBlur) {
+                propsOnBlur(e);
+              }
+
               field.onBlur();
             }}
             value={field.value}

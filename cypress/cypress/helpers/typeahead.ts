@@ -21,7 +21,7 @@ const generateOptions = (count = 10): GenerateOptionsResult => {
 
   const randomSubset = faker.helpers
     .arrayElements(objectOptions, 2)
-    .sort((a, b) => objectOptions.findIndex((x) => x.value == a.value) - objectOptions.findIndex((x) => x.value == b.value));
+    .sort((a, b) => objectOptions.findIndex((x) => x.value === a.value) - objectOptions.findIndex((x) => x.value === b.value));
 
   const disabledOptions: LabelValueOption[] = objectOptions.map((o) => ({ value: o.value, label: o.label, disabled: true }));
   const groupedOptions: LabelValueOption[] = [
