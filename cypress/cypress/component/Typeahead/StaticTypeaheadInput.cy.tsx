@@ -415,7 +415,9 @@ it("placeholder", () => {
   );
 
   cy.get(`#${name}`).should("have.attr", "placeholder", placeholder);
-  simpleOptions.slice(0, 2).forEach((option) => selectOption(name, option));
+  for (const option of simpleOptions.slice(0, 2)) {
+    selectOption(name, option);
+  }
   cy.get(`#${name}`).should("not.have.attr", "placeholder");
 });
 
