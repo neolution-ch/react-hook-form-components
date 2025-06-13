@@ -44,7 +44,8 @@ it("basic text input only works", () => {
   );
 
   cy.get(".mb-3").should("have.length", 0);
-  cy.get("input[type=text]").click().type(randomWord.toString());
+  cy.get("input[type=text]").click();
+  cy.get("input[type=text]").type(randomWord.toString());
   cy.get("input[type=submit]").click({ force: true });
 
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: randomWord });
@@ -69,7 +70,8 @@ it("text area only works", () => {
   );
 
   cy.get(".mb-3").should("have.length", 0);
-  cy.get("textarea").click().type(randomWords.toString());
+  cy.get("textarea").click();
+  cy.get("textarea").type(randomWords.toString());
   cy.get("textarea").should("have.attr", "rows", textAreaRows);
   cy.get("input[type=submit]").click({ force: true });
 

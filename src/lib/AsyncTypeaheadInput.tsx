@@ -31,6 +31,7 @@ interface AsyncTypeaheadInputProps<T extends FieldValues> extends CommonTypeahea
   autocompleteProps?: AsyncTypeaheadAutocompleteProps;
 }
 
+// eslint-disable-next-line complexity
 const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputProps<T>) => {
   const {
     inputRef,
@@ -89,7 +90,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
 
   const isDisabled = useMemo(() => formDisabled || disabled, [formDisabled, disabled]);
   const paginatedOptions = useMemo(
-    () => (limitResults !== undefined ? options.slice(0, page * limitResults) : options),
+    () => (limitResults === undefined ? options : options.slice(0, page * limitResults)),
     [limitResults, page, options],
   );
 
@@ -152,7 +153,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
         getOptionDisabled={(option) =>
           getOptionDisabled?.(option) ||
           (useGroupBy && isDisabledGroup(option)) ||
-          (typeof option == "string" ? false : option.disabled ?? false)
+          (typeof option === "string" ? false : (option.disabled ?? false))
         }
         disabled={isDisabled}
         readOnly={readOnly}
@@ -183,10 +184,10 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
           field.onChange(finalValue);
         }}
         onInputChange={(_e, query, reason) => {
-          if (reason == "blur" || reason == "clear" || (reason == "selectOption" && !autocompleteProps?.disableCloseOnSelect)) {
+          if (reason === "blur" || reason === "clear" || (reason === "selectOption" && !autocompleteProps?.disableCloseOnSelect)) {
             setOptions([]);
             setPage(1);
-          } else if (reason == "input") {
+          } else if (reason === "input") {
             setDebounceSearch({ delay, query });
           }
           if (onInputChange) {

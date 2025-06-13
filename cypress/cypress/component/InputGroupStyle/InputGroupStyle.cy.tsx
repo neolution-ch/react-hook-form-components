@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { DatePickerInput, Form, Input, AsyncTypeaheadInput, StaticTypeaheadInput } from "react-hook-form-components";
 import "react-datepicker/dist/react-datepicker.css";
 import { faker } from "@faker-js/faker";

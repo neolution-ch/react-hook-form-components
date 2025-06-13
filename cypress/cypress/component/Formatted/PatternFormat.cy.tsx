@@ -26,7 +26,8 @@ it("pattern format works", () => {
     </Form>,
   );
 
-  cy.contains("label", name).click().type(randomDigits.toString());
+  cy.contains("label", name).click();
+  cy.focused().type(randomDigits.toString());
   cy.get(`input[id=${name}]`).should("have.value", patternFormatter(randomDigits, patternFormat));
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: patternFormatter(randomDigits, patternFormat) });

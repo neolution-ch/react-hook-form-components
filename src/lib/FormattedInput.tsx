@@ -10,6 +10,7 @@ import { useFormContext } from "./context/FormContext";
 interface FormattedInputProps<T extends FieldValues> extends CommonInputProps<T> {
   patternFormat?: PatternFormatProps;
   numericFormat?: NumericFormatProps;
+  placeholder?: string;
 }
 
 const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) => {
@@ -33,6 +34,7 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
     addonRight,
     className = "",
     hideValidationMessage = false,
+    placeholder,
   } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
   const { control, disabled: formDisabled } = useFormContext();
@@ -47,8 +49,8 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
       render={({ field: { name, onBlur, onChange, ref, value }, fieldState: { error } }) => {
         const commonProps: NumericFormatProps = {
           name: name,
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          value: value,
+
+          value: value as string | number,
           getInputRef: ref,
           className: classnames("form-control", { "is-invalid": error }, className),
           "aria-invalid": !!error,
@@ -89,6 +91,7 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
                   }}
                   onFocus={focusHandler}
                   style={style}
+                  placeholder={placeholder}
                 ></NumericFormat>
               )}
 

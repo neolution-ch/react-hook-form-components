@@ -15,7 +15,7 @@ it("numeric format works", () => {
   });
 
   const randomNumber = faker.datatype.number({
-    min: 10000,
+    min: 10_000,
   });
 
   cy.mount(
@@ -26,7 +26,8 @@ it("numeric format works", () => {
     </Form>,
   );
 
-  cy.contains("label", name).click().type(randomNumber.toString());
+  cy.contains("label", name).click();
+  cy.focused().type(randomNumber.toString());
   cy.get(`input[id=${name}]`).should("have.value", numericFormatter(randomNumber.toString(), numericFormat));
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: randomNumber });
@@ -51,7 +52,7 @@ it("is disabled", () => {
 it("auto mark on focus", () => {
   const name = faker.random.word();
   const randomNumber = faker.datatype.number({
-    min: 10000000,
+    min: 10_000_000,
   });
 
   cy.mount(
@@ -86,11 +87,11 @@ it("validation works", () => {
       .number()
       .nullable()
       .required(errorMessage)
-      .transform((_, val) => (isNaN(parseFloat(val)) ? null : Number(val))),
+      .transform((_, val: string) => (Number.isNaN(Number.parseFloat(val)) ? undefined : Number(val))),
   });
 
   const randomNumber = faker.datatype.number({
-    min: 10000,
+    min: 10_000,
   });
 
   cy.mount(
@@ -101,7 +102,8 @@ it("validation works", () => {
     </Form>,
   );
 
-  cy.get(`input[id=${name}]`).type(randomNumber.toString()).clear();
+  cy.get(`input[id=${name}]`).type(randomNumber.toString());
+  cy.get(`input[id=${name}]`).clear();
   cy.get("input[type=submit]").click({ force: true });
   cy.contains(errorMessage);
 
@@ -121,13 +123,13 @@ it("validation works for nested fields", () => {
         .number()
         .nullable()
         .required(errorMessage)
-        .transform((_, val) => (isNaN(parseFloat(val)) ? null : Number(val))),
+        .transform((_, val: string) => (Number.isNaN(Number.parseFloat(val)) ? undefined : Number(val))),
     }),
   });
 
   const name = `${objectName}.${propertyName}`;
   const randomNumber = faker.datatype.number({
-    min: 10000,
+    min: 10_000,
   });
 
   cy.mount(
@@ -138,11 +140,13 @@ it("validation works for nested fields", () => {
     </Form>,
   );
 
-  cy.get(`input[id="${name}"]`).type(randomNumber.toString()).clear();
+  cy.get(`input[id="${name}"]`).type(randomNumber.toString());
+  cy.get(`input[id="${name}"]`).clear();
   cy.get("input[type=submit]").click({ force: true });
   cy.contains(errorMessage);
 
-  cy.contains("label", name).click().type(randomNumber.toString());
+  cy.contains("label", name).click();
+  cy.focused().type(randomNumber.toString());
   cy.get("input[type=submit]").click({ force: true });
 
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [objectName]: { [propertyName]: randomNumber } });
@@ -162,4 +166,21 @@ it("style is correcly applied", () => {
   );
 
   cy.get(`input[id=${name}]`).should("have.attr", "style", style);
+});
+
+it("has placeholder", () => {
+  const name = faker.random.word();
+  const placeholder = faker.random.words(5);
+
+  cy.mount(
+    <Form
+      onSubmit={() => {
+        // Do nothing
+      }}
+    >
+      <FormattedInput name={name} label={name} numericFormat={numericFormat} placeholder={placeholder} />
+    </Form>,
+  );
+
+  cy.get(`#${name}`).should("have.attr", "placeholder", placeholder);
 });
