@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- New typeahead helper function `getAutosuggestHighlightParts`.
+
 ## [3.5.0] - 2025-06-18
 
 ### Changed
