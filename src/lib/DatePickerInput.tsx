@@ -4,7 +4,7 @@ import { FormGroupLayout } from "./FormGroupLayout";
 import { CommonInputProps } from "./types/CommonInputProps";
 import DatePicker, { ReactDatePickerProps } from "react-datepicker";
 import { useCallback, useEffect, useState, MutableRefObject, useRef } from "react";
-import { utcToZonedTime, zonedTimeToUtc } from "date-fns-tz";
+import { toZonedTime, fromZonedTime } from "date-fns-tz";
 import { useFormContext } from "./context/FormContext";
 import { v4 as guidGen } from "uuid";
 import { getUtcTimeZeroDate } from "./helpers/dateUtils";
@@ -91,7 +91,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
 
     if (!ianaTimeZone) return value;
 
-    return utcToZonedTime(value, ianaTimeZone);
+    return toZonedTime(value, ianaTimeZone);
   };
 
   const getConvertedDate = useCallback(
@@ -102,7 +102,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
 
       if (!ianaTimeZone) return date;
 
-      return zonedTimeToUtc(date, ianaTimeZone);
+      return fromZonedTime(date, ianaTimeZone);
     },
     [ianaTimeZone, showTimeInputOrSelect],
   );

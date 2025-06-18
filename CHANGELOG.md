@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- - `date-fns` is now installed as dependency
+
+### Fixed
+
+- removed not needed dev dependencies
+
 ## [3.4.0] - 2025-06-11
 
 ### Changed
