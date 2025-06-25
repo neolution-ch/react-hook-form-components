@@ -55,9 +55,7 @@ const renderHighlightedOptionFunction = (
   option: TypeaheadOption,
   { inputValue }: AutocompleteRenderOptionState,
 ): JSX.Element => {
-  const finalOption = typeof option === "string" ? option : option.label;
-  const matches = AutosuggestHighlightMatch(finalOption, inputValue, { insideWords: true });
-  const parts = AutosuggestHighlightParse(finalOption, matches) as Array<{ text: string; highlight: boolean }>;
+  const parts = getAutosuggestHighlightParts(option, inputValue);
   return (
     <li {...props}>
       <div>
@@ -71,6 +69,12 @@ const renderHighlightedOptionFunction = (
   );
 };
 
+const getAutosuggestHighlightParts = (option: TypeaheadOption, inputValue: string): Array<{ text: string; highlight: boolean }> => {
+  const finalOption = typeof option === "string" ? option : option.label;
+  const matches = AutosuggestHighlightMatch(finalOption, inputValue, { insideWords: true });
+  return AutosuggestHighlightParse(finalOption, matches);
+};
+
 export {
   getSingleAutoCompleteValue,
   getMultipleAutoCompleteValue,
@@ -79,4 +83,5 @@ export {
   isDisabledGroup,
   groupOptions,
   renderHighlightedOptionFunction,
+  getAutosuggestHighlightParts,
 };
