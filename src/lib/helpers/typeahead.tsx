@@ -51,13 +51,13 @@ const groupOptions = (option: TypeaheadOption): string => (typeof option === "st
 const isDisabledGroup = (option: TypeaheadOption): boolean => typeof option !== "string" && !!option.group?.disabled;
 
 const renderHighlightedOptionFunction = (
-  props: React.HTMLAttributes<HTMLLIElement>,
+  { key, ...rest }: React.HTMLAttributes<HTMLLIElement> & { key?: unknown }, // same definition as Autocomplete's renderOption
   option: TypeaheadOption,
   { inputValue }: AutocompleteRenderOptionState,
 ): JSX.Element => {
   const parts = getAutosuggestHighlightParts(option, inputValue);
   return (
-    <li {...props}>
+    <li key={key as string} {...rest}>
       <div>
         {parts.map((part, index) => (
           <span key={index} style={{ fontWeight: part.highlight ? 700 : 400 }}>
