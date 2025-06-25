@@ -51,7 +51,7 @@ const groupOptions = (option: TypeaheadOption): string => (typeof option === "st
 const isDisabledGroup = (option: TypeaheadOption): boolean => typeof option !== "string" && !!option.group?.disabled;
 
 const renderHighlightedOptionFunction = (
-  { key, ...rest }: React.HTMLAttributes<HTMLLIElement> & { key: unknown }, // same definition as Autocomplete's renderOption
+  { key, ...rest }: React.HTMLAttributes<HTMLLIElement> & { key?: unknown }, // same definition as Autocomplete's renderOption
   option: TypeaheadOption,
   { inputValue }: AutocompleteRenderOptionState,
 ): JSX.Element => {
