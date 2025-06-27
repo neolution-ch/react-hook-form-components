@@ -1,12 +1,13 @@
 import { Form, Input, DatePickerInput, AsyncTypeaheadInput, StaticTypeaheadInput, FormattedInput } from "react-hook-form-components";
 import { faker } from "@faker-js/faker";
 import { fetchMock, generateOptions } from "../../helpers/typeahead";
+import { mount } from "cypress/react18";
 
 it("input has correct classname", () => {
   const name = faker.random.alpha(10);
   const value = faker.random.alpha(10);
 
-  cy.mount(
+  mount(
     <Form
       onSubmit={() => {
         // Do nothing
@@ -21,7 +22,7 @@ it("input has correct classname", () => {
 it("datepicker input has correct classname", () => {
   const name = faker.random.word();
 
-  cy.mount(
+  mount(
     <Form
       onSubmit={() => {
         // Do nothing
@@ -38,7 +39,7 @@ it("async typeahead input has correct classname", () => {
   const name = faker.random.word();
   const options = generateOptions(100);
 
-  cy.mount(
+  mount(
     <Form
       onSubmit={() => {
         // Do nothing
@@ -60,7 +61,7 @@ it("static typeahead input has correct classname", () => {
   const name = faker.random.word();
   const { simpleOptions } = generateOptions(100);
 
-  cy.mount(
+  mount(
     <Form
       onSubmit={() => {
         // Do nothing
@@ -76,7 +77,7 @@ it("static typeahead input has correct classname", () => {
 it("formatted input has correct classname", () => {
   const name = faker.random.alpha(10);
 
-  cy.mount(
+  mount(
     <Form
       onSubmit={() => {
         // Do nothing
