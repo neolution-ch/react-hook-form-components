@@ -11,6 +11,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - move cypress declarations into type file
 
+## [3.6.1] - 2025-06-25
+
+### Fixed
+
+- wrong spread provided by MUI on `renderHighlightedOptionFunction`
+
+## [3.6.0] - 2025-06-24
+
+### Added
+
+- New typeahead helper function `getAutosuggestHighlightParts`.
+
+## [3.5.0] - 2025-06-18
+
+### Changed
+
+- - `date-fns` is now installed as dependency
+
+### Fixed
+
+- removed not needed dev dependencies
+
 ## [3.4.0] - 2025-06-11
 
 ### Changed
@@ -515,7 +537,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Created package :tada:
 
-[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/3.4.0...HEAD
+[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/3.6.1...HEAD
 [0.1.2]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.1...0.1.2
 [0.1.1]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.1.0
@@ -540,6 +562,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.4.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.3.0...0.4.0
 [0.3.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.2.0...0.3.0
 [0.2.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.2.0
+[3.6.1]: https://github.com/neolution-ch/react-hook-form-components/compare/3.6.0...3.6.1
+[3.6.0]: https://github.com/neolution-ch/react-hook-form-components/compare/3.5.0...3.6.0
+[3.5.0]: https://github.com/neolution-ch/react-hook-form-components/compare/3.4.0...3.5.0
 [3.4.0]: https://github.com/neolution-ch/react-hook-form-components/compare/3.3.0...3.4.0
 [3.3.0]: https://github.com/neolution-ch/react-hook-form-components/compare/3.2.0...3.3.0
 [3.2.0]: https://github.com/neolution-ch/react-hook-form-components/compare/3.1.1...3.2.0
