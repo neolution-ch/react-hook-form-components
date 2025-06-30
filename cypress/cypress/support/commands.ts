@@ -36,18 +36,6 @@
 //   }
 // }
 
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace Cypress {
-    interface Chainable {
-      setSliderValue(value: number): Chainable<void>;
-      getSelectedText(): Chainable<void>;
-
-      // containsExactly(text: string): Chainable<JQuery>;
-    }
-  }
-}
-
 Cypress.Commands.add("setSliderValue", { prevSubject: "element" }, (subject, value) => {
   // eslint-disable-next-line prefer-destructuring
   const element = subject[0];
