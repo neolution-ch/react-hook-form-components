@@ -51,6 +51,11 @@ interface FormProps<T extends FieldValues> {
    * hide the validation messages for all form inputs.
    */
   hideValidationMessages?: boolean;
+
+  /**
+   * the autoComplete attribute for the form
+   */
+  autoComplete?: string;
 }
 
 const Form = <T extends FieldValues>({
@@ -63,6 +68,7 @@ const Form = <T extends FieldValues>({
   autoSubmitConfig,
   formRef,
   hideValidationMessages = false,
+  autoComplete,
 }: FormProps<T>) => {
   const revivedDefaultValues = defaultValues
     ? (JSON.parse(JSON.stringify(defaultValues), jsonIsoDateReviver) as DeepPartial<T>)
@@ -81,6 +87,7 @@ const Form = <T extends FieldValues>({
         }}
         onSubmit={autoSubmitHandler}
         method="POST"
+        autoComplete={autoComplete}
       >
         {children instanceof Function ? children({ ...formMethods, disabled, requiredFields, hideValidationMessages }) : children}
       </form>
