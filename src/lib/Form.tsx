@@ -53,7 +53,8 @@ interface FormProps<T extends FieldValues> {
   hideValidationMessages?: boolean;
 
   /**
-   * the autoComplete attribute for the form
+   * controls browser autocomplete behavior for the form.
+   * @see https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete
    */
   autoComplete?: string;
 }
