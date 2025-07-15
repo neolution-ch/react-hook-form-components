@@ -10,7 +10,6 @@ export type MergedAddonProps<TRenderAddon> = TRenderAddon & DefaultAddonProps;
 interface CommonInputProps<T extends FieldValues, TRenderAddon = unknown> {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
-  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   label?: ReactNode;
   name: FieldPath<T>;
   id?: string;
@@ -87,6 +86,13 @@ interface CommonInputProps<T extends FieldValues, TRenderAddon = unknown> {
    * @example <Input<T> type="text" maxlength={10} />
    */
   maxLength?: number;
+
+  /**
+   * Component prop that represents the onKeyDown event handler for the input element
+   * @type {(e: React.KeyboardEvent<HTMLInputElement>) => void}
+   * @example <Input<T> type="text" onKeyDown={(e) => console.log(e.key)} />
+   */
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 export { CommonInputProps };
