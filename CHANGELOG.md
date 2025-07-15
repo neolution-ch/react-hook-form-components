@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- property `onKeyDown` to `Input` component
+
 ## [3.7.0] - 2025-07-08
 
 ### Added
