@@ -5,6 +5,11 @@ export interface FormContextProps<T extends FieldValues> extends UseFormReturn<T
   requiredFields: FieldPath<T>[];
   disabled: boolean;
   hideValidationMessages: boolean;
+  /**
+   * disable autofill values stored in the user's browser
+   * @see https://www.w3.org/WAI/WCAG21/Understanding/identify-input-purpose.html
+   */
+  disableAriaAutocomplete: boolean;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
