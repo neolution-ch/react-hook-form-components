@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- hide all browser user profile suggestions when `autoComplete` is set to `off`
+
 ## [3.7.0] - 2025-07-08
 
 ### Added
