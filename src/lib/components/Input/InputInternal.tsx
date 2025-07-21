@@ -14,6 +14,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
     type,
     onBlur,
     onChange,
+    onKeyDown,
     value,
     options,
     multiple,
@@ -93,6 +94,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
             await rest.onChange(e);
           })();
         }}
+        onKeyDown={onKeyDown}
         onFocus={focusHandler}
         className={className}
       >
