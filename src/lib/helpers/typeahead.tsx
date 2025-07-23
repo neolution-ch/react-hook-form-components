@@ -19,10 +19,19 @@ const convertAutoCompleteOptionsToStringArray = (options: TypeaheadOptions | und
   return (options as LabelValueOption[]).map((option) => option.value) as string[];
 };
 
-const getSingleAutoCompleteValue = (options: TypeaheadOptions, fieldValue: string | number | undefined): TypeaheadOptions => {
+const getSingleAutoCompleteValue = (
+  options: TypeaheadOptions,
+  fieldValue: string | number | LabelValueOption | undefined,
+): TypeaheadOptions => {
   if (fieldValue === undefined) {
     return [];
   }
+
+  // If fieldValue is an object, extract the value property
+  if (typeof fieldValue === "object" && "value" in fieldValue) {
+    return getSingleAutoCompleteValue(options, fieldValue.value);
+  }
+
   return (options as TypeaheadOption[]).filter((x) =>
     // loose equality check to handle different types between form value and option value
     typeof x === "string" ? x === fieldValue : x.value === fieldValue,
@@ -38,6 +47,23 @@ const getMultipleAutoCompleteValue = (options: TypeaheadOptions, fieldValue: (st
       ? fieldValue.includes(x)
       : // ensure that form values matches options values even if they are of different types
         fieldValue.map(String).includes(String(x.value as string | number)),
+  ) as TypeaheadOptions;
+};
+
+const combineOptions = (options?: TypeaheadOptions, options2?: TypeaheadOptions): TypeaheadOptions => {
+  if (!options) {
+    return options2 || [];
+  }
+
+  if (!options2) {
+    return options;
+  }
+
+  return [...(options as TypeaheadOption[]), ...(options2 as TypeaheadOption[])].filter(
+    (option, i, options) =>
+      options.findIndex((o) =>
+        typeof o === "string" ? o === option : typeof option === "object" && "value" in option && o.value === option.value,
+      ) === i,
   ) as TypeaheadOptions;
 };
 
@@ -75,6 +101,10 @@ const getAutosuggestHighlightParts = (option: TypeaheadOption, inputValue: strin
   return AutosuggestHighlightParse(finalOption, matches);
 };
 
+const getOptionLabel = (option: TypeaheadOption): string => (typeof option === "string" ? option : option.label);
+
+const getOptionValue = (option: TypeaheadOption): string | number | undefined => (typeof option === "string" ? option : option.value);
+
 export {
   getSingleAutoCompleteValue,
   getMultipleAutoCompleteValue,
@@ -84,4 +114,7 @@ export {
   groupOptions,
   renderHighlightedOptionFunction,
   getAutosuggestHighlightParts,
+  getOptionLabel,
+  getOptionValue,
+  combineOptions,
 };

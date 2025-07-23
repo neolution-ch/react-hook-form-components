@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { useEffect, useMemo, useState } from "react";
 import { FieldValues, useController } from "react-hook-form";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
@@ -12,10 +13,14 @@ import {
   sortOptionsByGroup,
   groupOptions,
   renderHighlightedOptionFunction,
+  getOptionLabel,
+  getOptionValue,
+  combineOptions,
 } from "./helpers/typeahead";
 import { TypeaheadTextField } from "./components/Typeahead/TypeaheadTextField";
 import { FormGroupLayout } from "./FormGroupLayout";
 import { LabelValueOption } from "./types/LabelValueOption";
+import { Chip } from "@mui/material";
 
 interface StaticTypeaheadInputProps<T extends FieldValues> extends CommonTypeaheadProps<T> {
   options: TypeaheadOptions;
@@ -57,6 +62,8 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
     useBootstrapStyle = false,
     isLoading = false,
     autocompleteProps,
+    fixedOptions,
+    withFixedOptionsInValue = true,
   } = props;
 
   const [page, setPage] = useState(1);
@@ -84,10 +91,23 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
   const value = useMemo(
     () =>
       multiple
-        ? getMultipleAutoCompleteValue(options, fieldValue as string[] | number[] | undefined)
+        ? getMultipleAutoCompleteValue(combineOptions(options, fixedOptions), fieldValue as string[] | number[] | undefined)
         : getSingleAutoCompleteValue(options, fieldValue as string | number | undefined),
-    [fieldValue, multiple, options],
+    [fieldValue, multiple, options, fixedOptions],
   );
+
+  // If fixedOptions are provided, ensure they are used with multiple typeahead inputs
+  if (fixedOptions && !multiple) {
+    throw new Error("Fixed options can only be used with multiple typeahead inputs.");
+  }
+
+  if (fixedOptions && withFixedOptionsInValue && fixedOptions.some((option) => getSingleAutoCompleteValue(value, option).length === 0)) {
+    throw new Error("Fixed options must be included in the value if withFixedOptionsInValue is true.");
+  }
+
+  if (fixedOptions && !withFixedOptionsInValue && fixedOptions.some((option) => getSingleAutoCompleteValue(value, option).length > 0)) {
+    throw new Error("Fixed options must not be included in the value if withFixedOptionsInValue is false.");
+  }
 
   useEffect(() => {
     if (limitResults !== undefined) {
@@ -118,7 +138,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
           ((option: TypeaheadOption) => (typeof option === "string" ? option : `${option.label}-${option.value ?? ""}`))
         }
         disableCloseOnSelect={multiple}
-        value={(multiple ? value : value[0]) || null}
+        value={(multiple ? (fixedOptions && !withFixedOptionsInValue ? combineOptions(fixedOptions, value) : value) : value[0]) || null}
         getOptionLabel={(option: TypeaheadOption) => (typeof option === "string" ? option : option.label)}
         getOptionDisabled={(option) =>
           getOptionDisabled?.(option) ||
@@ -145,7 +165,15 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
           // however, the component is not intended to be used with mixed types
           const optionsArray = value ? ((Array.isArray(value) ? value : [value]) as TypeaheadOptions) : undefined;
           const values = convertAutoCompleteOptionsToStringArray(optionsArray);
-          const finalValue = multiple ? values : values[0];
+          const finalValue = multiple
+            ? fixedOptions
+              ? withFixedOptionsInValue
+                ? [...convertAutoCompleteOptionsToStringArray(fixedOptions), ...values].filter(
+                    (option, i, options) => options.indexOf(option) === i,
+                  )
+                : values.filter((option) => !fixedOptions.some((fixedOption) => getOptionValue(fixedOption) === option))
+              : values
+            : values[0];
           clearErrors(field.name);
           if (onChange) {
             onChange(finalValue);
@@ -182,6 +210,23 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
             {...params}
           />
         )}
+        renderTags={
+          fixedOptions
+            ? (tagValue, getTagProps) =>
+                tagValue.map((option, index) => {
+                  const { key, ...tagProps } = getTagProps({ index });
+                  const optionValue = getOptionValue(option);
+                  return (
+                    <Chip
+                      key={key}
+                      label={getOptionLabel(option)}
+                      {...tagProps}
+                      disabled={getSingleAutoCompleteValue(fixedOptions, optionValue).length > 0}
+                    />
+                  );
+                })
+            : undefined
+        }
       />
     </FormGroupLayout>
   );
