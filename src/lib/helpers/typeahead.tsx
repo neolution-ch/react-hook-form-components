@@ -175,11 +175,11 @@ const resolveInputValue = (
 };
 
 const getOptionsFromValue = (
-  value: TypeaheadOptions | TypeaheadOption | null,
+  value: TypeaheadOptions | TypeaheadOption[] | TypeaheadOption | null,
   fixedOptions: TypeaheadOptions | undefined,
   withFixedOptionsInValue: boolean,
 ): TypeaheadOptions | undefined => {
-  let finalOptions = value ? ((Array.isArray(value) ? value : [value]) as TypeaheadOption[]) : undefined;
+  let finalOptions = value ? (Array.isArray(value) ? value : [value]) : undefined;
 
   if (fixedOptions) {
     if (withFixedOptionsInValue) {
