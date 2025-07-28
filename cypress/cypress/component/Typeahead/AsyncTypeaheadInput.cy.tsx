@@ -670,7 +670,9 @@ it("placeholder", () => {
   );
 
   cy.get(`#${name}`).should("have.attr", "placeholder", placeholder);
-  simpleOptions.slice(0, 2).forEach((option) => selectOption(name, option));
+  for (const option of simpleOptions.slice(0, 2)) {
+    selectOption(name, option);
+  }
   cy.get(`#${name}`).should("not.have.attr", "placeholder");
 });
 
@@ -810,7 +812,9 @@ it("cannot select already selected option when multiple", () => {
     </div>,
   );
 
-  cy.get(`#${name}`).clear().click().type(defaultSelectedOption.label);
+  cy.get(`#${name}`).clear();
+  cy.get(`#${name}`).click();
+  cy.focused().type(defaultSelectedOption.label);
   waitLoadingOptions();
   cy.get('div[role="presentation"]').should("have.class", "MuiAutocomplete-noOptions");
 });

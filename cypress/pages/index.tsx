@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import Head from "next/head";
 import Image from "next/image";
 import { Form, Input } from "react-hook-form-components";
