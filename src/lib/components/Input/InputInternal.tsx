@@ -14,6 +14,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
     type,
     onBlur,
     onChange,
+    onKeyDown,
     value,
     options,
     multiple,
@@ -37,6 +38,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
     register,
     formState: { errors },
     disabled: formDisabled,
+    disableAriaAutocomplete,
   } = useFormContext();
 
   const { ref, ...rest } = register(name, {
@@ -59,6 +61,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
           }
           ref(elem);
         }}
+        aria-autocomplete={disableAriaAutocomplete ? "none" : undefined}
         min={rangeMin}
         max={rangeMax}
         minLength={minLength}
@@ -91,6 +94,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
             await rest.onChange(e);
           })();
         }}
+        onKeyDown={onKeyDown}
         onFocus={focusHandler}
         className={className}
       >

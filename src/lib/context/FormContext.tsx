@@ -5,6 +5,7 @@ export interface FormContextProps<T extends FieldValues> extends UseFormReturn<T
   requiredFields: FieldPath<T>[];
   disabled: boolean;
   hideValidationMessages: boolean;
+  disableAriaAutocomplete: boolean;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
