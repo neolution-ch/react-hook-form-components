@@ -116,9 +116,6 @@ const validateFixedOptions = (
     throw new Error("Fixed options cannot be used with renderTags in autocompleteProps.");
   }
 
-  console.log("fixedOptions", fixedOptions);
-  console.log("value", value);
-
   // If fixedOptions are provided and withFixedOptionsInValue is true, ensure that they are all included in the value
   if (
     fixedOptions &&
