@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- property `fixedOptions` to `AsyncTypeaheadInput` and `StaticTypeaheadInput` component, to allow the option, to fix certain options and make them unremovable
+- property `withFixedOptionsInValue` to `AsyncTypeaheadInput` and `StaticTypeaheadInput` component, to define, if the fixed options are included in the actual value or not, default is `true`
+  - if yes, the fixed options have to be in the default form value (or defaultSelected for `AsyncTypeaheadInput`) and will always be included in the form value
+  - if not, the fixed options are not allowed in the default form value (or defaultSelected for `AsyncTypeaheadInput`) and will never be added to the form value
+
 ## [3.8.0] - 2025-07-21
 
 ### Added
