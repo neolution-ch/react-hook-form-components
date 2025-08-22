@@ -818,3 +818,114 @@ it("cannot select already selected option when multiple", () => {
   waitLoadingOptions();
   cy.get('div[role="presentation"]').should("have.class", "MuiAutocomplete-noOptions");
 });
+
+it("works with fixed options included", () => {
+  const options = generateOptions();
+  const name = faker.random.alpha(10);
+  const randomOptions = faker.helpers.arrayElements(options.objectOptions, 5);
+
+  const [defaultSelectedAndFixedOption, changedOption] = randomOptions;
+
+  cy.mount(
+    <div className="p-4">
+      <Form
+        onSubmit={cy.spy().as("onSubmitSpy")}
+        defaultValues={{
+          [name]: [defaultSelectedAndFixedOption.value],
+        }}
+      >
+        <AsyncTypeaheadInput
+          name={name}
+          label={name}
+          defaultSelected={[defaultSelectedAndFixedOption]}
+          queryFn={async (query: string) => await fetchMock(options.objectOptions, query, false)}
+          fixedOptions={[defaultSelectedAndFixedOption]}
+          multiple
+          withFixedOptionsInValue={true}
+        />
+        <input type="submit" className="mt-4" />
+      </Form>
+    </div>,
+  );
+
+  // Check that the default value is set correctly
+  cy.get("div.Mui-disabled span.MuiChip-label").should("have.text", defaultSelectedAndFixedOption.label).should("be.visible");
+  cy.get("input[type=submit]").click({ force: true });
+  cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: [defaultSelectedAndFixedOption.value] });
+
+  // Reset the spy's history and call count
+  cy.get("@onSubmitSpy").invoke("resetHistory");
+
+  // Clear the input, select a new option, and check that the new value and fixed option are submitted
+  selectOption(name, changedOption.label);
+  cy.get("div.Mui-disabled span.MuiChip-label").should("have.text", defaultSelectedAndFixedOption.label).should("be.visible");
+  cy.get("input[type=submit]").click({ force: true });
+  cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: [defaultSelectedAndFixedOption.value, changedOption.value] });
+
+  // Reset the spy's history and call count
+  cy.get("@onSubmitSpy").invoke("resetHistory");
+
+  // Clear the input and check that the fixed option is still present
+  cy.get(`#${name}`).click();
+  cy.get("button[title=Clear]").click({ force: true });
+  cy.get("div.Mui-disabled span.MuiChip-label").should("have.text", defaultSelectedAndFixedOption.label).should("be.visible");
+  cy.get("input[type=submit]").click({ force: true });
+  cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: [defaultSelectedAndFixedOption.value] });
+});
+
+it("works with fixed options excluded", () => {
+  const options = generateOptions();
+  const name = faker.random.alpha(10);
+  const randomOptions = faker.helpers.arrayElements(options.objectOptions, 5);
+  const {
+    objectOptions: [defaultFixedOption],
+  } = generateOptions(1);
+
+  const [defaultSelectedOption, changedOption] = randomOptions;
+
+  cy.mount(
+    <div className="p-4">
+      <Form
+        onSubmit={cy.spy().as("onSubmitSpy")}
+        defaultValues={{
+          [name]: [defaultSelectedOption.value],
+        }}
+      >
+        <AsyncTypeaheadInput
+          name={name}
+          label={name}
+          defaultSelected={[defaultSelectedOption]}
+          queryFn={async (query: string) => await fetchMock(options.objectOptions, query, false)}
+          fixedOptions={[defaultFixedOption]}
+          multiple
+          withFixedOptionsInValue={false}
+        />
+        <input type="submit" className="mt-4" />
+      </Form>
+    </div>,
+  );
+
+  // Check that the default value is set correctly and the fixed option is present
+  cy.get("div.Mui-disabled span.MuiChip-label").should("have.text", defaultFixedOption.label).should("be.visible");
+  cy.get("input[type=submit]").click({ force: true });
+  cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: [defaultSelectedOption.value] });
+
+  // Reset the spy's history and call count
+  cy.get("@onSubmitSpy").invoke("resetHistory");
+
+  // Clear the input, select a new option, and check that the new value is also submitted, but the fixed option is still present
+  selectOption(name, changedOption.label);
+  cy.get("div.Mui-disabled span.MuiChip-label").should("have.text", defaultFixedOption.label).should("be.visible");
+  cy.get("input[type=submit]").click({ force: true });
+  cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: [defaultSelectedOption.value, changedOption.value] });
+
+  // Reset the spy's history and call count
+  cy.get("@onSubmitSpy").invoke("resetHistory");
+
+  // Clear the input and check that nothing is submitted, but the fixed option is still present
+  cy.get(`#${name}`).click();
+  cy.get("button[title=Clear]").click({ force: true });
+  cy.get("div.Mui-disabled span.MuiChip-label").should("have.text", defaultFixedOption.label).should("be.visible");
+  cy.get("input[type=submit]").click({ force: true });
+  cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: [] });
+});

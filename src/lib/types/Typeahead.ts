@@ -22,6 +22,8 @@ interface CommonTypeaheadProps<T extends FieldValues>
   autoSelect?: boolean;
   autoHighlight?: boolean;
   useBootstrapStyle?: boolean;
+  fixedOptions?: TypeaheadOptions;
+  withFixedOptionsInValue?: boolean;
   getOptionDisabled?: (option: TypeaheadOption) => boolean;
   onChange?: (selected: string | string[]) => void;
   onInputChange?: (text: string, reason: AutocompleteInputChangeReason) => void;
