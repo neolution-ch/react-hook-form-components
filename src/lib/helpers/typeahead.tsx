@@ -3,6 +3,7 @@ import { LabelValueOption } from "../types/LabelValueOption";
 import { TypeaheadOption, TypeaheadOptions } from "../types/Typeahead";
 import AutosuggestHighlightMatch from "autosuggest-highlight/match";
 import AutosuggestHighlightParse from "autosuggest-highlight/parse";
+import { JSX } from "react";
 
 const isStringArray = (options: TypeaheadOptions): boolean =>
   options.length > 0 && (options as TypeaheadOption[]).every((value) => typeof value === "string");

@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { DeepPartial, FieldPath, FieldValues, Resolver, SubmitHandler, useForm, UseFormReturn } from "react-hook-form";
+import { DeepPartial, DefaultValues, FieldPath, FieldValues, Resolver, SubmitHandler, useForm, UseFormReturn } from "react-hook-form";
 import { jsonIsoDateReviver } from "./helpers/dateUtils";
 import { FormContext, FormContextProps } from "./context/FormContext";
 import { AutoSubmitConfig, useAutoSubmit } from "./hooks/useAutoSubmit";
@@ -45,7 +45,7 @@ interface FormProps<T extends FieldValues> {
   /**
    * the form ref
    */
-  formRef?: React.MutableRefObject<HTMLFormElement | null>;
+  formRef?: React.RefObject<HTMLFormElement | null>;
 
   /**
    * hide the validation messages for all form inputs.
@@ -72,11 +72,11 @@ const Form = <T extends FieldValues>({
   autoComplete,
 }: FormProps<T>) => {
   const revivedDefaultValues = defaultValues
-    ? (JSON.parse(JSON.stringify(defaultValues), jsonIsoDateReviver) as DeepPartial<T>)
+    ? (JSON.parse(JSON.stringify(defaultValues), jsonIsoDateReviver) as DefaultValues<T>)
     : defaultValues;
 
   const disableAriaAutocomplete = autoComplete === "off";
-  const formMethods = useForm<T>({ resolver, defaultValues: revivedDefaultValues });
+  const formMethods = useForm<T, unknown, T>({ resolver, defaultValues: revivedDefaultValues });
   const autoSubmitHandler = useAutoSubmit({ onSubmit, formMethods, autoSubmitConfig });
 
   return (
