@@ -85,7 +85,7 @@ jobs:
           cache: "yarn"
 
       - run: yarn --frozen-lockfile
-      - run: yarn add react@${{ matrix.react-version }} react-dom@${{ matrix.react-version }} --dev
+      - run: yarn add react@${{ matrix.react-version }} react-dom@${{ matrix.react-version }} --dev --verbose
       - run: yarn lint
       - run: yarn build
       - run: yarn prettier-check
