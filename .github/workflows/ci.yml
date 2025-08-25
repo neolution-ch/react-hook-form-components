@@ -98,7 +98,7 @@ jobs:
       # Run cypress tests
       - run: yarn --frozen-lockfile
         working-directory: ./cypress
-      - run: yarn add next@^13.0.0
+      - run: yarn add next@^12.0.0
         working-directory: ./cypress
         if: ${{ matrix.react-version == '^16.0.0' || matrix.react-version == '^17.0.0' }}
       # - run: yarn lint
