@@ -10,14 +10,14 @@ const input = "src/index.ts";
 
 const plugins = [
   css({
-    output: "dist/styles.css",
+    output: "styles.css",
   }),
   external({
     includeDependencies: true,
   }),
   typescript({
     clean: true,
-    exclude: ["**/__tests__", "**/*.test.ts", "**/stories/**/*"],
+    exclude: ["**/__tests__", "**/*.test.ts", "**/stories"],
   }),
   commonjs({
     include: /\/node_modules\//,

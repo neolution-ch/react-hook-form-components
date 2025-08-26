@@ -14,8 +14,8 @@
 // ***********************************************************
 
 import "bootstrap/dist/css/bootstrap.min.css";
-import "../../../dist/styles.css";
 import "../../../node_modules/react-datepicker/dist/react-datepicker.css";
+import "react-hook-form-components/styles.css";
 
 // Import commands.js using ES2015 syntax:
 import "./commands";

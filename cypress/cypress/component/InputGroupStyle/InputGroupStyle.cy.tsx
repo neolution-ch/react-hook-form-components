@@ -1,5 +1,5 @@
 import { DatePickerInput, Form, Input, AsyncTypeaheadInput, StaticTypeaheadInput } from "react-hook-form-components";
-import "../../../node_modules/react-datepicker/dist/react-datepicker.css";
+import "react-hook-form-components/styles.css";
 import { faker } from "@faker-js/faker";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
