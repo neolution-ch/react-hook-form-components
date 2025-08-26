@@ -103,6 +103,10 @@ jobs:
         if: ${{ matrix.react-version == '^16.0.0' || matrix.react-version == '^17.0.0' }}
       # - run: yarn lint
       #   working-directory: ./cypress
+      - name: Print directory structure
+        uses: xdtesting/print-directory-structure@v1
+        with:
+          path: . # Specify the path to print the tree from
       - run: yarn cypress run --component
         working-directory: ./cypress
 
