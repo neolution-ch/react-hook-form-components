@@ -103,10 +103,12 @@ jobs:
         if: ${{ matrix.react-version == '^16.0.0' || matrix.react-version == '^17.0.0' }}
       # - run: yarn lint
       #   working-directory: ./cypress
-      - name: Print directory structure
-        uses: xdtesting/print-directory-structure@v1
+      - name: Print Folder Tree
+        uses: jaywcjlove/github-action-folder-tree@main
         with:
-          path: . # Specify the path to print the tree from
+          exclude: "node_modules|dist|.git|.husky"
+          path: .
+          depth: 4
       - run: yarn cypress run --component
         working-directory: ./cypress
 
