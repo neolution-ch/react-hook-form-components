@@ -14,7 +14,7 @@
 // ***********************************************************
 
 import "bootstrap/dist/css/bootstrap.min.css";
-import "react-datepicker/dist/react-datepicker.css";
+import "../../../node_modules/react-datepicker/dist/react-datepicker.css";
 import "react-hook-form-components/styles.css";
 
 // Import commands.js using ES2015 syntax:
@@ -23,9 +23,19 @@ import "./commands";
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 
-import { mount } from "cypress/react18";
+import { mount } from "cypress/react";
 
 Cypress.Commands.add("mount", mount);
+
+Cypress.on("test:before:run", () => {
+  console.log("Test is about to run");
+  Cypress.automation("remote:debugger:protocol", {
+    command: "Emulation.setTimezoneOverride",
+    params: {
+      timezoneId: "UTC",
+    },
+  });
+});
 
 // Example use:
 // cy.mount(<MyComponent />)
