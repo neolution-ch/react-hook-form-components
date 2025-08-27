@@ -1,11 +1,12 @@
 import { Form, Input } from "react-hook-form-components";
 import { faker } from "@faker-js/faker";
+import { mount } from "cypress/react18";
 
 it("it has form-control-plaintext class", () => {
   const name = faker.random.alpha(10);
   const value = faker.random.alpha(10);
 
-  cy.mount(
+  mount(
     <Form
       onSubmit={() => {
         // Do nothing
@@ -21,7 +22,7 @@ it("it has the correct style", () => {
   const name = faker.random.alpha(10);
   const value = faker.random.alpha(10);
 
-  cy.mount(
+  mount(
     <Form
       onSubmit={() => {
         // Do nothing
