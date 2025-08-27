@@ -6,7 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { InputGroupText } from "reactstrap";
-import { useRef } from "react";
+import { useRef, version } from "react";
 
 describe("Input.cy.tsx", () => {
   it("basic text input works", () => {
@@ -223,6 +223,7 @@ describe("Input.cy.tsx", () => {
 
     cy.contains("label", name).click();
     cy.focused().type(randomWord.toString());
+    cy.log(`React version: ${version}`);
     cy.get("@onChangeSpy").should("be.calledWithMatch", { target: { value: randomWord } });
     cy.get("@onChangeSpy").should("have.callCount", randomWord.length);
   });
