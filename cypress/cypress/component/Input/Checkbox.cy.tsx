@@ -3,7 +3,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Form, Input } from "react-hook-form-components";
 import * as yup from "yup";
 import { generateOptions } from "../../helpers/typeahead";
-import { mount } from "cypress/react18";
+import { mount } from "cypress/react";
 
 it("checkbox works", () => {
   const name = faker.random.alpha(10);

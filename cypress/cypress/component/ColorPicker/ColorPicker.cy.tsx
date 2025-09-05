@@ -1,6 +1,6 @@
 import { Form, ColorPickerInput } from "react-hook-form-components";
 import { faker } from "@faker-js/faker";
-import { mount } from "cypress/react18";
+import { mount } from "cypress/react";
 
 it("select correct color by specific format", () => {
   const hexName = faker.random.alpha(10);

@@ -2,6 +2,7 @@ import { faker } from "@faker-js/faker";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Form, Input, LabelValueOption } from "react-hook-form-components";
 import * as yup from "yup";
+import { mount } from "cypress/react";
 
 it("radio button works", () => {
   const name = faker.random.alpha(10);
@@ -12,7 +13,7 @@ it("radio button works", () => {
   const options = faker.helpers.uniqueArray<LabelValueOption>(() => ({ value: faker.random.alpha(10), label: faker.random.alpha(10) }), 3);
   const selectedOption = faker.helpers.arrayElement(options);
 
-  cy.mount(
+  mount(
     <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
       <Input type="radio" label="hello" name={name} helpText="help" options={options} />
       <input type={"submit"} />
@@ -31,7 +32,7 @@ it("renders disabled radio buttons", () => {
     return { label: randomVal, value: randomVal };
   });
 
-  cy.mount(
+  mount(
     <Form
       onSubmit={() => {
         // Do nothing

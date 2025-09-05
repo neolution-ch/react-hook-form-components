@@ -3,6 +3,7 @@ import { AsyncTypeaheadInput, AsyncTypeaheadInputRef, Form } from "react-hook-fo
 import { faker, Sex } from "@faker-js/faker";
 import { fetchMock, generateOptions } from "../../helpers/typeahead";
 import { useRef, useState } from "react";
+import { mount } from "cypress/react";
 
 const waitLoadingOptions = () => {
   cy.get(".MuiCircularProgress-indeterminate").should("be.visible");
@@ -59,7 +60,7 @@ it("reset values works", () => {
     );
   };
 
-  cy.mount(
+  mount(
     <div className="p-4">
       <TestForm />
     </div>,
@@ -112,7 +113,7 @@ it("set values works", () => {
     );
   };
 
-  cy.mount(
+  mount(
     <div className="p-4">
       <TestForm />
     </div>,
@@ -163,7 +164,7 @@ it("clear values works", () => {
     );
   };
 
-  cy.mount(
+  mount(
     <div className="p-4">
       <TestForm />
     </div>,
@@ -185,7 +186,7 @@ it("works with multiple simple options and default selected", () => {
   const defaultSelectedOptions = randomOptions.slice(0, half);
   const changedOptions = randomOptions.slice(half);
 
-  cy.mount(
+  mount(
     <div className="p-4">
       <Form
         onSubmit={cy.spy().as("onSubmitSpy")}
@@ -228,7 +229,7 @@ it("works with multiple object options and default selected", () => {
   const defaultSelectedOptions = randomOptions.slice(0, half);
   const changedOptions = randomOptions.slice(half);
 
-  cy.mount(
+  mount(
     <div className="p-4">
       <Form
         onSubmit={cy.spy().as("onSubmitSpy")}
@@ -266,7 +267,7 @@ it("works with single object option and default selected", () => {
   const name = faker.random.alpha(10);
   const [defaultSelectedOption, changedOption] = faker.helpers.arrayElements(options.objectOptions, 2);
 
-  cy.mount(
+  mount(
     <div className="p-4">
       <Form
         onSubmit={cy.spy().as("onSubmitSpy")}
@@ -303,7 +304,7 @@ it("works with single simple option and default selected", () => {
 
   const [defaultSelectedOption, changedOption] = randomOptions;
 
-  cy.mount(
+  mount(
     <div className="p-4">
       <Form
         onSubmit={cy.spy().as("onSubmitSpy")}
@@ -334,7 +335,7 @@ it("select automatically single option when one option is available - single (au
   const options = generateOptions();
   const name = faker.random.alpha(10);
 
-  cy.mount(
+  mount(
     <div className="p-4">
       <Form onSubmit={cy.spy().as("onSubmitSpy")}>
         <AsyncTypeaheadInput
@@ -363,7 +364,7 @@ it("select automatically single option when multiple options are available - sin
   ];
   const name = faker.random.alpha(10);
 
-  cy.mount(
+  mount(
     <div className="p-4">
       <Form onSubmit={cy.spy().as("onSubmitSpy")}>
         <AsyncTypeaheadInput
@@ -390,7 +391,7 @@ it("select automatically single option - multiple (autoSelect/autoHighlight)", (
   const options = generateOptions();
   const name = faker.random.alpha(10);
 
-  cy.mount(
+  mount(
     <div className="p-4">
       <Form onSubmit={cy.spy().as("onSubmitSpy")}>
         <AsyncTypeaheadInput
@@ -427,7 +428,7 @@ it("select automatically single option when multiple options are available - mul
   ];
   const name = faker.random.alpha(10);
 
-  cy.mount(
+  mount(
     <div className="p-4">
       <Form onSubmit={cy.spy().as("onSubmitSpy")}>
         <AsyncTypeaheadInput
@@ -464,7 +465,7 @@ it("works with the correct value onChange", () => {
 
   const [changedOption] = randomOptions;
 
-  cy.mount(
+  mount(
     <div className="p-4">
       <Form
         onSubmit={() => {
@@ -490,7 +491,7 @@ it("it is disabled", () => {
   const name = faker.random.word();
   const options = generateOptions();
 
-  cy.mount(
+  mount(
     <div className="p-4">
       <Form
         onSubmit={() => {
@@ -514,7 +515,7 @@ it("it is readonly", () => {
   const name = faker.random.word();
   const options = generateOptions();
 
-  cy.mount(
+  mount(
     <div className="p-4">
       <Form
         onSubmit={() => {
@@ -540,7 +541,7 @@ it("auto mark on focus", () => {
   const name = faker.random.alpha(10);
   const [randomOption] = faker.helpers.arrayElements(options.objectOptions, 1);
 
-  cy.mount(
+  mount(
     <div className="p-4">
       <Form
         onSubmit={() => {
@@ -571,7 +572,7 @@ it("try to select a disabled option", () => {
   const randomOptions = faker.helpers.arrayElements(disabledOptions, 1);
   const [randomOption] = randomOptions;
 
-  cy.mount(
+  mount(
     <div className="p-4">
       <Form
         onSubmit={() => {
@@ -602,7 +603,7 @@ it("test empty label and loading label", () => {
   const emptyLabel = faker.random.words(5);
   const loadingLabel = faker.random.words(5);
 
-  cy.mount(
+  mount(
     <div className="p-4">
       <Form
         onSubmit={cy.spy().as("onSubmitSpy")}
@@ -644,7 +645,7 @@ it("placeholder", () => {
   const name = faker.random.alpha(10);
   const placeholder = faker.random.words(5);
 
-  cy.mount(
+  mount(
     <div className="p-4">
       <Form
         onSubmit={() => {
@@ -709,7 +710,7 @@ it("test on input change", () => {
     );
   };
 
-  cy.mount(<TestForm />);
+  mount(<TestForm />);
   cy.get(`#${name}`).clear();
   cy.get(`#${name}`).click();
   cy.get(`#${name}`).type(text);
@@ -723,7 +724,7 @@ it("test grouping options", () => {
   const { groupedOptions } = generateOptions(COUNT);
   const name = faker.random.alpha(10);
 
-  cy.mount(
+  mount(
     <div className="p-4">
       <Form
         onSubmit={() => {
@@ -759,7 +760,7 @@ it("test pagination 2 by 2", () => {
     { label: prefix + faker.random.alpha(7), value: faker.datatype.uuid() },
   ];
 
-  cy.mount(
+  mount(
     <div className="p-4">
       <Form
         onSubmit={() => {
@@ -792,7 +793,7 @@ it("cannot select already selected option when multiple", () => {
   const name = faker.random.alpha(10);
   const [defaultSelectedOption] = faker.helpers.arrayElements(options.objectOptions, 1);
 
-  cy.mount(
+  mount(
     <div className="p-4">
       <Form
         onSubmit={cy.spy().as("onSubmitSpy")}
@@ -826,7 +827,7 @@ it("works with fixed options included", () => {
 
   const [defaultSelectedAndFixedOption, changedOption] = randomOptions;
 
-  cy.mount(
+  mount(
     <div className="p-4">
       <Form
         onSubmit={cy.spy().as("onSubmitSpy")}
@@ -883,7 +884,7 @@ it("works with fixed options excluded", () => {
 
   const [defaultSelectedOption, changedOption] = randomOptions;
 
-  cy.mount(
+  mount(
     <div className="p-4">
       <Form
         onSubmit={cy.spy().as("onSubmitSpy")}
