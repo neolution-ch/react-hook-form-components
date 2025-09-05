@@ -92,7 +92,10 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
   if (autoComplete && (type === "checkbox" || type === "file" || type === "radio" || type === "range" || type === "switch")) {
     throw new Error("autoComplete can only be used with text, numeric or select inputs");
   }
-  if (autoFocus && (type === "checkbox" || type === "file" || type === "radio" || type === "range" || type === "switch" || type === "select")) {
+  if (
+    autoFocus &&
+    (type === "checkbox" || type === "file" || type === "radio" || type === "range" || type === "switch" || type === "select")
+  ) {
     throw new Error("autoComplete can only be used with text or numeric inputs");
   }
 
