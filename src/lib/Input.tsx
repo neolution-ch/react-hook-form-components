@@ -24,6 +24,7 @@ interface InputProps<T extends FieldValues> extends CommonInputProps<T> {
   step?: number;
   autoComplete?: string;
   innerRef?: MutableRefObject<HTMLInputElement | HTMLTextAreaElement | null>;
+  autoFocus?: boolean;
 }
 
 // eslint-disable-next-line complexity
