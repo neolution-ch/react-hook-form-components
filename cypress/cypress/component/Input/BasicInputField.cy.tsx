@@ -243,4 +243,20 @@ describe("Input.cy.tsx", () => {
 
     cy.get(`input[name=${name}]`).should("be.disabled");
   });
+
+  it("is auto focused", () => {
+    const name = faker.random.word();
+
+    cy.mount(
+      <Form
+        onSubmit={() => {
+          // Do nothing
+        }}
+      >
+        <Input name={name} label={name} autoFocus={true} />
+      </Form>,
+    );
+
+    cy.get(`input[name=${name}]`).should("be.focused");
+  });
 });
