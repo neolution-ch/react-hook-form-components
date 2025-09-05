@@ -1,5 +1,5 @@
 import React from "react";
-import { Story, Meta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react-webpack5";
 import { Form, Input, InputProps } from "../../src";
 import { Button } from "reactstrap";
 
@@ -12,7 +12,7 @@ interface FormInterface {
   name: string;
 }
 
-const Template: Story<InputProps<FormInterface>> = (args) => (
+const Template: StoryFn<InputProps<FormInterface>> = (args) => (
   // eslint-disable-next-line react/jsx-no-useless-fragment
   <React.Fragment>
     <Form onSubmit={(data) => alert(JSON.stringify(data, null, 2))}>
