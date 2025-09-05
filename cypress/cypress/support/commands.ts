@@ -36,16 +36,6 @@
 //   }
 // }
 
-declare global {
-  namespace Cypress {
-    interface Chainable {
-      setSliderValue(value: number): Chainable<void>;
-
-      // containsExactly(text: string): Chainable<JQuery>;
-    }
-  }
-}
-
 Cypress.Commands.add("setSliderValue", { prevSubject: "element" }, (subject, value) => {
   // eslint-disable-next-line prefer-destructuring
   const element = subject[0];
@@ -54,6 +44,15 @@ Cypress.Commands.add("setSliderValue", { prevSubject: "element" }, (subject, val
 
   nativeInputValueSetter?.call(element, value);
   element.dispatchEvent(new Event("input", { bubbles: true }));
+});
+
+Cypress.Commands.add("getSelectedText", { prevSubject: "element" }, (subject) => {
+  const inputField = subject[0] as HTMLInputElement;
+  cy.wrap(
+    inputField.selectionStart !== undefined && inputField.selectionEnd !== null
+      ? inputField.value.slice(inputField.selectionStart ?? 0, inputField.selectionEnd ?? 0)
+      : "",
+  );
 });
 
 // Cypress.Commands.add(

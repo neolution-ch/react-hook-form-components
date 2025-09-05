@@ -1,57 +1,171 @@
-import { Controller, FieldValues, useFormContext } from "react-hook-form";
+import { Controller, FieldValues } from "react-hook-form";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";
 import { CommonInputProps } from "./types/CommonInputProps";
 import DatePicker, { ReactDatePickerProps } from "react-datepicker";
-import { useEffect, useState } from "react";
-import { setUtcTimeToZero } from "./helpers/dateUtils";
+import { useCallback, useEffect, useState, MutableRefObject, useRef } from "react";
+import { toZonedTime, fromZonedTime } from "date-fns-tz";
+import { useFormContext } from "./context/FormContext";
+import { v4 as guidGen } from "uuid";
+import { getUtcTimeZeroDate } from "./helpers/dateUtils";
+import classNames from "classnames";
 
-interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputProps<T>, "onChange"> {
-  datePickerProps?: Omit<ReactDatePickerProps, "onChange" | "selected" | "id" | "className" | "onBlur">;
-  onChange?: (value: Date | null) => void;
+interface DatePickerRenderAddonProps {
+  toggleDatePicker: () => void;
 }
 
+interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputProps<T, DatePickerRenderAddonProps>, "onChange" | "style"> {
+  /**
+   * The props for the date picker component: https://reactdatepicker.com/
+   */
+  datePickerProps?: Omit<ReactDatePickerProps, "onChange" | "selected" | "id" | "className" | "onBlur" | "autoComplete">;
+
+  /**
+   * The onChange handler for the date picker component.
+   * @param value The selected date or null if the user cleared the date.
+   */
+  onChange?: (value: Date | null) => void;
+
+  /**
+   * The IANA time zone identifier, e.g. "Europe/Berlin" for which the date should be displayed.
+   * By default the date is displayed in the local time zone of the user / browser.
+   * @example "Europe/Berlin"
+   * @example "America/New_York"
+   */
+  ianaTimeZone?: string;
+
+  /**
+   * The ref of the date picker component.
+   */
+  datePickerRef?: MutableRefObject<DatePicker<never, undefined> | null>;
+
+  /**
+   * The autoComplete property for the date picker component.
+   * By default set as "off".
+   */
+  autoComplete?: string;
+}
+
+const DEFAULT_DATE_FORMAT = "dd.MM.yyyy";
+const DEFAULT_DATE_TIME_FORMAT = "dd.MM.yyyy HH:mm";
+
+// eslint-disable-next-line complexity
 const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) => {
-  const { disabled, label, helpText, datePickerProps, labelToolTip } = props;
-  const { name, id } = useSafeNameId(props.name, props.id);
+  const {
+    disabled,
+    label,
+    helpText,
+    datePickerProps = {},
+    labelToolTip,
+    addonLeft,
+    addonRight,
+    ianaTimeZone,
+    className = "",
+    autoComplete = "off",
+    inputGroupStyle,
+    datePickerRef,
+    name: initialName,
+    id: initialId,
+    hideValidationMessage = false,
+  } = props;
 
-  const { control, getValues, setValue } = useFormContext();
+  const { id, name } = useSafeNameId(initialName, initialId);
+  const { control, getValues, setValue, disabled: formDisabled } = useFormContext();
+  const internalDatePickerRef = useRef<DatePicker>();
+  const formGroupId = useRef(guidGen());
+  const { calendarStartDay = 1, showTimeInput = false, showTimeSelect = false, dateFormat } = datePickerProps;
+  const showTimeInputOrSelect = showTimeInput || showTimeSelect;
+  const effectiveDateFormat = dateFormat || (showTimeInputOrSelect ? DEFAULT_DATE_TIME_FORMAT : DEFAULT_DATE_FORMAT);
+  const isDisabled = disabled || formDisabled;
 
-  const dateFormat = datePickerProps?.dateFormat || "dd.MM.yyyy";
-  const calendarStartDay = datePickerProps?.calendarStartDay || 1;
+  if (ianaTimeZone && !showTimeInputOrSelect) {
+    throw new Error("If you use ianaTimeZone, you have to include time in the dateFormat or set showTimeInput or showTimeSelect to true");
+  }
 
-  const initialDate = getValues(name) as Date | null;
-  setUtcTimeToZero(initialDate);
+  const getInitialDate = (): Date | null => {
+    const value = getValues(name) as Date | null;
 
-  const [selectedDate, setSelectedDate] = useState<Date | null>(initialDate);
+    if (!value) return null;
+
+    if (!showTimeInputOrSelect) return getUtcTimeZeroDate(value);
+
+    if (!ianaTimeZone) return value;
+
+    return toZonedTime(value, ianaTimeZone);
+  };
+
+  const getConvertedDate = useCallback(
+    (date: Date | null): Date | null => {
+      if (!date) return null;
+
+      if (!showTimeInputOrSelect) return getUtcTimeZeroDate(date);
+
+      if (!ianaTimeZone) return date;
+
+      return fromZonedTime(date, ianaTimeZone);
+    },
+    [ianaTimeZone, showTimeInputOrSelect],
+  );
+
+  const [selectedDate, setSelectedDate] = useState<Date | null>(getInitialDate());
 
   // setting the value here once the component is mounted
   // so we have the corrected date in the form
   useEffect(() => {
-    setValue(name, initialDate);
-  }, [initialDate, name, setValue]);
+    setValue(name, getConvertedDate(selectedDate));
+  }, [name, selectedDate, setValue, getConvertedDate]);
+
+  const toggleDatePicker = useCallback(() => {
+    if (!isDisabled) {
+      internalDatePickerRef.current?.setOpen(!internalDatePickerRef.current?.isCalendarOpen());
+    }
+  }, [isDisabled]);
+
+  const datePickerClassNames = classNames(className, "form-control", {
+    "border-start-0 rounded-0 rounded-end": !!addonLeft,
+    "border-end-0 rounded-0 rounded-start": !!addonRight,
+  });
 
   return (
     <Controller
       control={control}
       name={name}
       render={({ field, fieldState: { error } }) => (
-        <FormGroupLayout helpText={helpText} name={name} id={id} label={label} labelToolTip={labelToolTip}>
+        <FormGroupLayout<T, DatePickerRenderAddonProps>
+          helpText={helpText}
+          formGroupId={formGroupId.current}
+          name={props.name}
+          id={id}
+          label={label}
+          labelToolTip={labelToolTip}
+          addonLeft={addonLeft}
+          addonRight={addonRight}
+          addonProps={{ toggleDatePicker, isDisabled }}
+          inputGroupStyle={!!addonLeft || !!addonRight ? { ...inputGroupStyle, alignItems: "normal" } : inputGroupStyle}
+          hideValidationMessage={hideValidationMessage}
+        >
           <DatePicker
             {...datePickerProps}
             {...field}
             id={id}
-            disabled={disabled}
-            className="form-control"
-            dateFormat={dateFormat}
+            disabled={isDisabled}
+            className={`${datePickerClassNames} ${error ? "is-invalid" : ""}`}
+            dateFormat={effectiveDateFormat}
             calendarStartDay={calendarStartDay}
-            wrapperClassName={error ? "is-invalid" : ""}
+            autoComplete={autoComplete}
             selected={selectedDate}
             ref={(elem) => {
               // https://github.com/react-hook-form/react-hook-form/discussions/5413
               // https://codesandbox.io/s/react-hook-form-focus-forked-yyhsi?file=/src/index.js
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
-              elem && field.ref((elem as any).input);
+              if (elem) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
+                field.ref((elem as any).input);
+              }
+              internalDatePickerRef.current = elem as DatePicker<never>;
+
+              if (datePickerRef) {
+                datePickerRef.current = elem as DatePicker<never>;
+              }
             }}
             onBlur={(e) => {
               if (props.onBlur) props.onBlur(e);
@@ -60,17 +174,20 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
             onChange={(date) => {
               setSelectedDate(date);
 
-              const utcTimeZeroDate = date == null ? null : new Date(date.getTime());
+              const convertedDate = getConvertedDate(date);
 
-              // we set the time to utc 0 to avoid timezone issues, so it will be 0Z
-              // when JSON stringified
-              if (utcTimeZeroDate) {
-                setUtcTimeToZero(initialDate);
+              if (props.onChange) props.onChange(convertedDate);
+
+              field.onChange(convertedDate);
+            }}
+            onClickOutside={(e) => {
+              if (document.querySelector(`#${formGroupId.current}`)?.contains(e.target as HTMLElement) && !disabled && !formDisabled) {
+                internalDatePickerRef.current?.setOpen(true);
               }
 
-              if (props.onChange) props.onChange(utcTimeZeroDate);
-
-              field.onChange(utcTimeZeroDate);
+              if (datePickerProps.onClickOutside) {
+                datePickerProps.onClickOutside(e);
+              }
             }}
           />
         </FormGroupLayout>

@@ -8,26 +8,30 @@
     "cyo": "yarn cy open",
     "cyr": "yarn cy run --component",
     "dev": "next dev",
-    "lint": "eslint \"**/*.{ts,tsx}\" --cache --max-warnings 0",
+    "lint": "eslint --cache",
     "start": "next start"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.4.0",
+    "@fortawesome/free-solid-svg-icons": "^6.4.0",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "@hookform/resolvers": "^2.9.10",
-    "@types/node": "18.11.9",
-    "@types/react": "18.0.25",
-    "@types/react-dom": "18.0.8",
-    "eslint": "8.27.0",
-    "eslint-config-next": "13.0.2",
     "next": "13.0.2",
-    "react-hook-form-components": "link:../dist",
-    "typescript": "4.8.4",
-    "yup": "^0.32.11",
     "react": "link:../node_modules/react",
     "react-dom": "link:../node_modules/react-dom",
-    "react-hook-form": "link:../node_modules/react-hook-form"
+    "react-hook-form": "link:../node_modules/react-hook-form",
+    "react-hook-form-components": "link:../dist",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",
-    "cypress": "^11.0.0"
+    "@neolution-ch/eslint-config-neolution": "2.1.0",
+    "@types/node": "18.11.9",
+    "@types/react": "18.0.25",
+    "@types/react-dom": "18.0.8",
+    "cypress": "^11.0.0",
+    "eslint": "^9.18.0",
+    "jiti": "^2.4.2",
+    "typescript": "4.8.4"
   }
 }

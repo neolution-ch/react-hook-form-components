@@ -1,7 +1,7 @@
 const jsonIsoDateReviver = (_key: string, value: unknown) => {
   if (
-    typeof value == "string" &&
-    /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z?))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z?))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z?))/.exec(
+    typeof value === "string" &&
+    /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z?))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z?))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z?))/.test(
       value,
     )
   ) {
@@ -11,11 +11,11 @@ const jsonIsoDateReviver = (_key: string, value: unknown) => {
   return value;
 };
 
-const setUtcTimeToZero = (date: Date | null | undefined) => {
-  if (date && date instanceof Date) {
-    date.setHours(0, 0, 0, 0);
-    date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
-  }
+const getUtcTimeZeroDate = (date: Date) => {
+  const copy = new Date(date.getTime());
+  copy.setHours(0, 0, 0, 0);
+  copy.setMinutes(copy.getMinutes() - copy.getTimezoneOffset());
+  return copy;
 };
 
-export { jsonIsoDateReviver, setUtcTimeToZero };
+export { jsonIsoDateReviver, getUtcTimeZeroDate };

@@ -20,6 +20,7 @@ Supported input types:
 - [Typeahead](#typeahead)
 - [DatePicker](#datepicker)
 - [Numeric and Pattern Format](#numeric-and-pattern-format)
+- [Form Context](#form-context)
 - [Storybook](#storybook)
 
 ## Installation
@@ -79,12 +80,6 @@ const schema = yup.object({
 
 ## Typeahead
 
-To use typeahead you have to include their CSS file in your project:
-
-```jsx
-import "react-bootstrap-typeahead/css/Typeahead.css";
-```
-
 ### Static Typeahead
 
 Use the `StaticTypeaheadInput` component for a static list of options.
@@ -139,6 +134,43 @@ And also here you can have an array of `LabelValueOption` objects.
   }}
   label="Async Typeahead"
 />
+```
+
+You may need to set a default selected option
+
+```jsx
+<AsyncTypeaheadInput
+  name="inputName"
+  queryFn={async (query) => {
+    return [
+      { value: "one", label: "one" },
+      { value: "two", label: "two" },
+    ];
+  }}
+  defaultSelected={[{ value: "one", label: "one" }]}
+  label="Async Typeahead already filled with a selected option"
+/>
+```
+
+or to update with different selected options. The form value is updated consequently.
+
+```jsx
+const ref = useRef<AsyncTypeaheadInputRef | null>(null);
+
+<AsyncTypeaheadInput
+  name="inputName"
+  queryFn={async (query) => {
+    return [
+      { value: "one", label: "one" },
+      { value: "two", label: "two" },
+    ];
+  }}
+  inputRef={ref}
+  defaultSelected={[{ value: "one", label: "one" }]}
+  label="Async Typeahead already filled with a selected option"
+/>
+
+<button onClick={() => ref.current?.updateValues([{ value: "three", label: "three" }])}>Change</button>
 ```
 
 ## Datepicker
@@ -205,6 +237,25 @@ Refer to the [react-number-format](https://s-yadav.github.io/react-number-format
     mask: "_",
   }}
 />
+```
+
+## Form Context
+
+In order to correctly use the form context you have to import it like this:
+
+```jsx
+import { useFormContext } from "@neolution-ch/react-hook-form-components";
+```
+
+This is needed, as importing it directly from the `react-hook-form`, will produce runtime errors.
+In addition, our context will provide some additional properties for your form.
+
+## Tooltip
+
+To use the tooltip option of `FormGroupLayoutLabel` you have to import the package styles like this:
+
+```jsx
+import "@neolution-ch/react-hook-form-components/styles.css";
 ```
 
 ## Storybook

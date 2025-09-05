@@ -12,17 +12,53 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  depandabot-modify-changelog:
+    if: ${{ github.actor == 'dependabot[bot]' }}
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - run: |
+          insertText="### dependabot: \\\#${{ github.event.pull_request.number }} ${{ github.event.pull_request.title }}"
+
+          # check if file doesn't contain the text already
+          if ! grep -q "$insertText" CHANGELOG.md; then
+            echo "Changelog entry not found, adding it"
+            sed -i "/## \[Unreleased\]/a \
+            $insertText" CHANGELOG.md
+          else
+            echo "Changelog entry already exists, skipping"
+            exit 0
+          fi
+
+      - name: initialize mandatory git config
+        run: |
+          git config user.name "GitHub Changelog Bot"
+          git config user.email changelog-bot@neolution.ch
+
+      - run: npx prettier --write CHANGELOG.md
+
+      - name: commit and push
+        run: |
+          git add CHANGELOG.md
+          git commit -m "Add changelog entry for ${{ github.event.pull_request.title }}"
+          git push
+
   check-changelog:
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Get changed files
         id: changed-files
-        uses: tj-actions/changed-files@v31
+        uses: tj-actions/changed-files@v45
 
       - name: Check if changelog was touched
         run: |
@@ -37,12 +73,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [14.x, 16.x]
+        node-version: [20.x, 22.x]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: "yarn"
@@ -59,3 +95,13 @@ jobs:
       #   working-directory: ./cypress
       - run: yarn cypress run --component
         working-directory: ./cypress
+
+      # Upload screenshots/videos
+      - name: Upload snapshots
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: cypress-snapshots-${{ matrix.node-version }}
+          path: |
+            ./cypress/cypress/screenshots
+            ./cypress/cypress/videos

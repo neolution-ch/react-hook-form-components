@@ -1,58 +1,114 @@
-import { PropsWithChildren } from "react";
-import { FieldValues, useFormContext } from "react-hook-form";
-import { FormGroup, Label, FormFeedback, FormText, UncontrolledTooltip } from "reactstrap";
+import { PropsWithChildren, ReactNode, CSSProperties, useMemo } from "react";
+import { FieldError, FieldValues, get } from "react-hook-form";
+import { FormGroup, FormFeedback, FormText, InputGroup } from "reactstrap";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
-import { CommonInputProps } from "./types/CommonInputProps";
+import { CommonInputProps, MergedAddonProps } from "./types/CommonInputProps";
 import "./styles/FormGroupLayout.css";
+import { FormGroupLayoutLabel } from "./FormGroupLayoutLabel";
+import { useFormContext } from "./context/FormContext";
 
-interface FormGroupLayoutProps<T extends FieldValues>
-  extends PropsWithChildren<Pick<CommonInputProps<T>, "helpText" | "label" | "name" | "id" | "labelToolTip">> {
-  layout?: "checkbox" | "switch";
+interface FormGroupLayoutProps<T extends FieldValues, TRenderAddon>
+  extends PropsWithChildren<
+    Pick<CommonInputProps<T>, "helpText" | "label" | "name" | "id" | "labelToolTip" | "inputOnly" | "hideValidationMessage">
+  > {
+  layout?: "checkbox" | "switch" | "muiInput";
+  addonLeft?: ReactNode | ((props: TRenderAddon) => ReactNode);
+  addonRight?: ReactNode | ((props: TRenderAddon) => ReactNode);
+  addonProps?: MergedAddonProps<TRenderAddon>;
+  inputGroupStyle?: CSSProperties;
+  formGroupId?: string;
+  labelStyle?: CSSProperties;
 }
 
-const FormGroupLayout = <T extends FieldValues>(props: FormGroupLayoutProps<T>) => {
-  const { label, helpText, children, layout, labelToolTip } = props;
+// eslint-disable-next-line complexity
+const FormGroupLayout = <T extends FieldValues, TRenderAddon = unknown>(props: FormGroupLayoutProps<T, TRenderAddon>) => {
+  const {
+    label,
+    helpText,
+    children,
+    layout,
+    labelToolTip,
+    inputOnly,
+    addonLeft,
+    addonRight,
+    inputGroupStyle,
+    formGroupId,
+    addonProps,
+    hideValidationMessage = false,
+    labelStyle,
+  } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
   const {
     formState: { errors },
+    hideValidationMessages,
   } = useFormContext();
 
-  const fieldError = errors[name];
+  const fieldError = get(errors, name) as FieldError | undefined;
   const errorMessage = String(fieldError?.message);
 
   const switchLayout = layout === "switch";
   const checkboxLayout = layout === "checkbox";
+  const muiInputLayout = layout === "muiInput";
 
-  return (
-    <FormGroup switch={switchLayout ? true : undefined} check={checkboxLayout ? true : undefined}>
-      <Label check={checkboxLayout || switchLayout} for={id}>
-        {label}
-        {labelToolTip && (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            id={`Tooltip-${id}`}
-            className="tooltip--icon"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"
-            />
-          </svg>
-        )}
-      </Label>
-      {labelToolTip && (
-        <UncontrolledTooltip placement="top" target={`Tooltip-${id}`}>
-          {labelToolTip}
-        </UncontrolledTooltip>
-      )}
+  if (inputOnly && (switchLayout || checkboxLayout)) {
+    throw new Error("'inputOnly' is not possible with switches or checkboxes");
+  }
+
+  const effectiveAddonLeft = useMemo(
+    () =>
+      addonLeft instanceof Function && addonProps
+        ? (addonLeft as (props: TRenderAddon) => ReactNode)(addonProps)
+        : (addonLeft as ReactNode),
+    [addonLeft, addonProps],
+  );
+
+  const effectiveAddonRight = useMemo(
+    () =>
+      addonRight instanceof Function && addonProps
+        ? (addonRight as (props: TRenderAddon) => ReactNode)(addonProps)
+        : (addonRight as ReactNode),
+    [addonRight, addonProps],
+  );
+
+  const hideErrorMessage = useMemo(() => hideValidationMessages || hideValidationMessage, [hideValidationMessages, hideValidationMessage]);
+
+  return inputOnly ? (
+    <>
       {children}
-      <FormFeedback>{errorMessage}</FormFeedback>
-      {helpText && <FormText>{helpText}</FormText>}
+      {!hideErrorMessage && <FormFeedback>{errorMessage}</FormFeedback>}
+    </>
+  ) : (
+    <FormGroup id={formGroupId} switch={switchLayout ? true : undefined} check={checkboxLayout ? true : undefined}>
+      <FormGroupLayoutLabel<T>
+        label={label}
+        labelStyle={labelStyle}
+        fieldName={props.name}
+        fieldId={id}
+        tooltip={labelToolTip}
+        layout={layout}
+      />
+      {switchLayout || checkboxLayout || muiInputLayout ? (
+        children
+      ) : (
+        <InputGroup
+          style={{
+            flexWrap: "nowrap",
+            alignItems: "center",
+            ...inputGroupStyle,
+          }}
+          className={fieldError ? "is-invalid" : undefined}
+        >
+          {effectiveAddonLeft}
+          {children}
+          {effectiveAddonRight}
+        </InputGroup>
+      )}
+      {!muiInputLayout && (
+        <>
+          {!hideErrorMessage && <FormFeedback>{errorMessage}</FormFeedback>}
+          {helpText && <FormText>{helpText}</FormText>}
+        </>
+      )}
     </FormGroup>
   );
 };

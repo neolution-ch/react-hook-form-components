@@ -1,6 +1,13 @@
-interface LabelValueOption {
-  value: string;
-  label: string;
+interface LabelValueOptionGroup {
+  name: string;
+  disabled?: boolean;
 }
 
-export { LabelValueOption };
+interface LabelValueOption {
+  value?: string | number;
+  label: string;
+  disabled?: boolean;
+  group?: LabelValueOptionGroup;
+}
+
+export { LabelValueOption, LabelValueOptionGroup };
