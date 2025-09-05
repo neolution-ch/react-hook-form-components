@@ -31,6 +31,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
     minLength,
     maxLength,
     autoComplete,
+    autoFocus,
   } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
   const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
@@ -74,6 +75,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
         placeholder={placeholder}
         step={step}
         autoComplete={autoComplete}
+        autoFocus={autoFocus}
         {...rest}
         {...(value ? { value } : {})}
         onBlur={(e) => {
