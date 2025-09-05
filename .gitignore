@@ -30,3 +30,4 @@ storybook-static
 terraform
 
 .npmrc
+*storybook.log
