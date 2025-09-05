@@ -85,28 +85,16 @@ jobs:
           cache: "yarn"
 
       - run: yarn --frozen-lockfile
-      - run: yarn add react@${{ matrix.react-version }} react-dom@${{ matrix.react-version }} --dev --verbose
+      - run: yarn add react@${{ matrix.react-version }} react-dom@${{ matrix.react-version }} --dev
       - run: yarn lint
       - run: yarn build
       - run: yarn prettier-check
 
       # Run cypress tests
-      - run: yarn add next@^12.0.0
-        working-directory: ./cypress
-        if: ${{ matrix.react-version == '^16.0.0' || matrix.react-version == '^17.0.0' }}
-      - run: yarn add cypress@^13.0.0 --dev
-        working-directory: ./cypress
-        if: ${{ matrix.react-version == '^16.0.0' || matrix.react-version == '^17.0.0' }}
       - run: yarn --frozen-lockfile
         working-directory: ./cypress
       # - run: yarn lint
       #   working-directory: ./cypress
-      - name: Print Folder Tree
-        uses: jaywcjlove/github-action-folder-tree@main
-        with:
-          exclude: "node_modules|dist|.git|.husky"
-          path: .
-          depth: 4
       - run: yarn cypress run --component
         working-directory: ./cypress
 
