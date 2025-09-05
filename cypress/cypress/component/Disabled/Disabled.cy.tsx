@@ -9,6 +9,7 @@ import {
   useFormContext,
 } from "react-hook-form-components";
 import { Input as ReactstrapInput, Label } from "reactstrap";
+import { mount } from "cypress/react18";
 
 it("disable all fields when readonly attribute is set", () => {
   const inputName = faker.random.alpha(10);
@@ -17,7 +18,7 @@ it("disable all fields when readonly attribute is set", () => {
   const asyncTypeAheadInputName = faker.random.alpha(10);
   const staticTypeAheadInputName = faker.random.alpha(10);
 
-  cy.mount(
+  mount(
     <Form
       onSubmit={() => {
         // Nothing to do
@@ -42,7 +43,7 @@ it("disable all fields when readonly attribute is set", () => {
 it("exposing readonly through children function works", () => {
   const name = faker.random.alpha(10);
 
-  cy.mount(
+  mount(
     <Form
       onSubmit={() => {
         // Nothing to do
@@ -73,7 +74,7 @@ it("exposing readonly through context works", () => {
       </>
     );
   };
-  cy.mount(
+  mount(
     <Form
       onSubmit={() => {
         // Nothing to do

@@ -3,6 +3,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Form, Input } from "react-hook-form-components";
 import * as yup from "yup";
 import { generateOptions } from "../../helpers/typeahead";
+import { mount } from "cypress/react18";
 
 it("checkbox works", () => {
   const name = faker.random.alpha(10);
@@ -10,7 +11,7 @@ it("checkbox works", () => {
     [name]: yup.boolean(),
   });
 
-  cy.mount(
+  mount(
     <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
       <Input type="checkbox" name={name} label={name} />
 
@@ -35,7 +36,7 @@ it("multiple checkboxes pass their value", () => {
 
   const { objectOptions, randomSubset } = generateOptions();
 
-  cy.mount(
+  mount(
     <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
       {objectOptions.map((option, i) => (
         <Input type="checkbox" key={option.value} name={name} label={option.label} value={option.value} id={`${name}-${i}`} />
@@ -59,7 +60,7 @@ it("switch works", () => {
     [name]: yup.boolean(),
   });
 
-  cy.mount(
+  mount(
     <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
       <Input type="switch" name={name} label={name} />
 
@@ -81,7 +82,7 @@ it("has disabled checkbox variants", () => {
   const switchName = faker.random.word();
   const checkboxName = faker.random.word();
 
-  cy.mount(
+  mount(
     <Form
       onSubmit={() => {
         // Do nothing
