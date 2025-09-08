@@ -3,6 +3,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Form, Input } from "react-hook-form-components";
 import * as yup from "yup";
 import { generateOptions } from "../../helpers/typeahead";
+import { mount } from "cypress/react";
 
 it("text input label does not get rendered when undefined", () => {
   const name = faker.random.alpha(10);
@@ -12,7 +13,7 @@ it("text input label does not get rendered when undefined", () => {
 
   const randomText = faker.random.alphaNumeric(10);
 
-  cy.mount(
+  mount(
     <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)} autoSubmitConfig={{ wait: 500 }}>
       <Input type="text" name={name} />
     </Form>,
@@ -35,7 +36,7 @@ it("radio input label does not get rendered when undefined", () => {
   const { objectOptions } = generateOptions(5);
   const [firstOption] = objectOptions;
 
-  cy.mount(
+  mount(
     <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)} autoSubmitConfig={{ wait: 500 }}>
       <Input type="radio" name={name} options={objectOptions} />
     </Form>,
