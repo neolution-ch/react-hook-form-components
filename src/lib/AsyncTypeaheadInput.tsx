@@ -86,7 +86,9 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
 
   validateFixedOptions(fixedOptions, multiple, autocompleteProps, withFixedOptionsInValue, value);
 
-  const { field } = useController({
+  const {
+    field: { ref, ...field },
+  } = useController({
     name,
     control,
     rules: {
@@ -225,7 +227,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
             loadMoreOptions={loadMoreOptions}
             setPage={setPage}
             {...params}
-            inputRef={(elem) => field.ref(elem)}
+            inputRef={(elem) => ref(elem)}
           />
         )}
         renderTags={createTagRenderer(fixedOptions, autocompleteProps)}

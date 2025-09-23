@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- fix ref assignment for `StaticTypeaheadInput` and nd `AsyncTypeaheadInput`in order to redirect `input field` in case of error
+
 ## [3.10.1] - 2025-09-23
 
 ### Fixed
