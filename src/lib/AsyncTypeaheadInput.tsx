@@ -225,6 +225,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
             loadMoreOptions={loadMoreOptions}
             setPage={setPage}
             {...params}
+            inputRef={(elem) => field.ref(elem)}
           />
         )}
         renderTags={createTagRenderer(fixedOptions, autocompleteProps)}

@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { useEffect, useMemo, useState } from "react";
 import { FieldValues, useController } from "react-hook-form";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
@@ -189,6 +190,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
             loadMoreOptions={loadMoreOptions}
             setPage={setPage}
             {...params}
+            inputRef={(elem) => field.ref(elem)}
           />
         )}
         renderTags={createTagRenderer(fixedOptions, autocompleteProps)}

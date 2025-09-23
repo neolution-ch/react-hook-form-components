@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix for `StaticTypeaheadInput`, `ColorPicker` and `AsyncTypeaheadInput` to redirect to `input field` in case of error
+
 ## [3.10.0] - 2025-09-05
 
 ### Added
