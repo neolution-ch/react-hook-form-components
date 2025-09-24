@@ -8,7 +8,7 @@ const config: StorybookConfig = {
     name: "@storybook/react-webpack5",
     options: {},
   },
-  webpackFinal: async (config) => {
+  webpackFinal: (config) => {
     if (config && config.resolve) {
       config.resolve.plugins = [
         ...(config.resolve.plugins || []),
