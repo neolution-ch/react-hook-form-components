@@ -51,7 +51,9 @@ const ColorPicker = <T extends FieldValues>(props: ColorPickerInputProps<T>) => 
     hideValidationMessages,
   } = useFormContext();
   const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
-  const { field } = useController({
+  const {
+    field: { ref, ...field },
+  } = useController({
     name,
     control,
     rules: {
@@ -115,6 +117,7 @@ const ColorPicker = <T extends FieldValues>(props: ColorPickerInputProps<T>) => 
                 ),
               },
             }}
+            inputRef={ref}
           />
           <Popover
             {...bindPopover(popupState)}

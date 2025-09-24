@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { useEffect, useMemo, useState } from "react";
 import { FieldValues, useController } from "react-hook-form";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
@@ -71,7 +72,9 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
 
   const { name, id } = useSafeNameId(props.name ?? "", props.id);
   const { control, disabled: formDisabled, getFieldState, clearErrors, watch } = useFormContext();
-  const { field } = useController({
+  const {
+    field: { ref, ...field },
+  } = useController({
     name,
     control,
     rules: {
@@ -189,6 +192,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
             loadMoreOptions={loadMoreOptions}
             setPage={setPage}
             {...params}
+            inputRef={(elem) => ref(elem)}
           />
         )}
         renderTags={createTagRenderer(fixedOptions, autocompleteProps)}

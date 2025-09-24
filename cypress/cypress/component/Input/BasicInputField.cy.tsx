@@ -477,4 +477,20 @@ it("minlenght and maxlenght work", () => {
   cy.get(`input[name=${name}]`).clear();
   cy.get(`input[name=${name}]`).type(invalidInput);
   cy.get(`input[name=${name}]`).should("have.value", invalidInput.slice(0, maxLength));
+
+  it("is auto focused", () => {
+    const name = faker.random.word();
+
+    cy.mount(
+      <Form
+        onSubmit={() => {
+          // Do nothing
+        }}
+      >
+        <Input name={name} label={name} autoFocus={true} />
+      </Form>,
+    );
+
+    cy.get(`input[name=${name}]`).should("be.focused");
+  });
 });

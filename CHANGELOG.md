@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.10.2] - 2025-09-23
+
+### Fixed
+
+- fix ref assignment for `StaticTypeaheadInput` and nd `AsyncTypeaheadInput`in order to redirect `input field` in case of error
+
+## [3.10.1] - 2025-09-23
+
+### Fixed
+
+- Fix for `StaticTypeaheadInput`, `ColorPicker` and `AsyncTypeaheadInput` to redirect to `input field` in case of error
+
+## [3.10.0] - 2025-09-05
+
+### Added
+
+- Support for `autoFocus` for `input` fields
+
 ### Changed
 
 - move cypress declarations into type file
@@ -562,7 +580,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Created package :tada:
 
-[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/3.9.0...HEAD
+[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/3.10.2...HEAD
 [0.1.2]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.1...0.1.2
 [0.1.1]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.1.0
@@ -587,6 +605,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.4.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.3.0...0.4.0
 [0.3.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.2.0...0.3.0
 [0.2.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.2.0
+[3.10.2]: https://github.com/neolution-ch/react-hook-form-components/compare/3.10.1...3.10.2
+[3.10.1]: https://github.com/neolution-ch/react-hook-form-components/compare/3.10.0...3.10.1
+[3.10.0]: https://github.com/neolution-ch/react-hook-form-components/compare/3.9.0...3.10.0
 [3.9.0]: https://github.com/neolution-ch/react-hook-form-components/compare/3.8.0...3.9.0
 [3.8.0]: https://github.com/neolution-ch/react-hook-form-components/compare/3.7.1...3.8.0
 [3.7.1]: https://github.com/neolution-ch/react-hook-form-components/compare/3.7.0...3.7.1
