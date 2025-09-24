@@ -3,6 +3,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Form, FormattedInput } from "react-hook-form-components";
 import { PatternFormatProps, patternFormatter } from "react-number-format";
 import * as yup from "yup";
+import { mount } from "cypress/react";
 
 const patternFormat: PatternFormatProps = {
   format: "###-###-####",
@@ -18,7 +19,7 @@ it("pattern format works", () => {
 
   const randomDigits = faker.random.numeric(10).toString();
 
-  cy.mount(
+  mount(
     <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
       <FormattedInput name={name} label={name} patternFormat={patternFormat} />
 
@@ -36,7 +37,7 @@ it("pattern format works", () => {
 it("is disabled", () => {
   const name = faker.random.word();
 
-  cy.mount(
+  mount(
     <Form
       onSubmit={() => {
         // Do nothing
@@ -53,7 +54,7 @@ it("auto mark on focus", () => {
   const name = faker.random.word();
   const randomDigits = faker.random.numeric(10).toString();
 
-  cy.mount(
+  mount(
     <Form
       defaultValues={{ [name]: randomDigits }}
       onSubmit={() => {

@@ -12,11 +12,11 @@
     "start": "next start"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^6.4.0",
-    "@fortawesome/free-solid-svg-icons": "^6.4.0",
-    "@fortawesome/react-fontawesome": "^0.2.0",
+    "@fortawesome/fontawesome-svg-core": "^7.0.0",
+    "@fortawesome/free-solid-svg-icons": "^7.0.0",
+    "@fortawesome/react-fontawesome": "^0.2.3",
     "@hookform/resolvers": "^2.9.10",
-    "next": "13.0.2",
+    "next": "15.0.4",
     "react": "link:../node_modules/react",
     "react-dom": "link:../node_modules/react-dom",
     "react-hook-form": "link:../node_modules/react-hook-form",
@@ -25,13 +25,14 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",
-    "@neolution-ch/eslint-config-neolution": "2.1.0",
-    "@types/node": "18.11.9",
-    "@types/react": "18.0.25",
-    "@types/react-dom": "18.0.8",
-    "cypress": "^11.0.0",
+    "@neolution-ch/eslint-config-neolution": "2.2.0",
+    "@types/node": "^18.16.3",
+    "@types/react": "^19.1.9",
+    "@types/react-dom": "^19.1.7",
+    "cypress": "14.5.4",
     "eslint": "^9.18.0",
     "jiti": "^2.4.2",
+    "react-datepicker": "link:../node_modules/react-datepicker",
     "typescript": "4.8.4"
   }
 }

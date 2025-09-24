@@ -4,6 +4,7 @@ import { Form, FormattedInput } from "react-hook-form-components";
 import { NumericFormatProps, numericFormatter } from "react-number-format";
 import { useRef } from "react";
 import * as yup from "yup";
+import { mount } from "cypress/react";
 
 const numericFormat: NumericFormatProps = {
   thousandSeparator: faker.random.alpha(),
@@ -30,7 +31,7 @@ it("submitting through the ref works", () => {
       </Form>
     );
   };
-  cy.mount(<FormWithRef />);
+  mount(<FormWithRef />);
 
   cy.contains("label", name).click();
   cy.focused().type(randomNumber.toString());
@@ -60,7 +61,7 @@ it("submitting through the ref checks for yup errors", () => {
       </Form>
     );
   };
-  cy.mount(<FormWithRef />);
+  mount(<FormWithRef />);
 
   cy.contains("label", name).click();
   cy.focused().type(randomNumber.toString());
