@@ -5,9 +5,13 @@ import { AsyncTypeaheadAutocompleteProps, CommonTypeaheadProps, TypeaheadOption,
 import Autocomplete from "@mui/material/Autocomplete";
 import {
   convertAutoCompleteOptionsToStringArray,
+  createTagRenderer,
+  getOptionsFromValue,
   groupOptions,
   isDisabledGroup,
   renderHighlightedOptionFunction,
+  resolveInputValue,
+  validateFixedOptions,
 } from "./helpers/typeahead";
 import { useDebounceHook } from "./hooks/useDebounceHook";
 import { useSafeNameId } from "./hooks/useSafeNameId";
@@ -68,6 +72,8 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
     paginationIcon,
     useBootstrapStyle = false,
     autocompleteProps,
+    fixedOptions,
+    withFixedOptionsInValue = true,
   } = props;
 
   const [options, setOptions] = useState<TypeaheadOptions>(defaultOptions);
@@ -78,7 +84,11 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
   const { setDebounceSearch, isLoading } = useDebounceHook(queryFn, setOptions);
   const { control, disabled: formDisabled, getFieldState, setValue: setFormValue } = useFormContext();
 
-  const { field } = useController({
+  validateFixedOptions(fixedOptions, multiple, autocompleteProps, withFixedOptionsInValue, value);
+
+  const {
+    field: { ref, ...field },
+  } = useController({
     name,
     control,
     rules: {
@@ -138,7 +148,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
         multiple={multiple}
         loading={isLoading}
         options={paginatedOptions}
-        value={(multiple ? value : value[0]) || null}
+        value={resolveInputValue(multiple, fixedOptions, withFixedOptionsInValue, value)}
         filterSelectedOptions={autocompleteProps?.filterSelectedOptions ?? multiple}
         filterOptions={(currentOptions) => currentOptions}
         isOptionEqualToValue={
@@ -174,7 +184,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
         onChange={(_e, value) => {
           // value is typed as Autocomplete<Value> (aka TypeaheadOption) or an array of Autocomplete<Value> (aka TypeaheadOption[])
           // however, the component is not intended to be used with mixed types
-          const optionsArray = value ? ((Array.isArray(value) ? value : [value]) as TypeaheadOptions) : undefined;
+          const optionsArray = getOptionsFromValue(value, fixedOptions, withFixedOptionsInValue);
           setValue(optionsArray ?? []);
           const values = convertAutoCompleteOptionsToStringArray(optionsArray);
           const finalValue = multiple ? values : values[0];
@@ -217,8 +227,10 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
             loadMoreOptions={loadMoreOptions}
             setPage={setPage}
             {...params}
+            inputRef={(elem) => ref(elem)}
           />
         )}
+        renderTags={createTagRenderer(fixedOptions, autocompleteProps)}
       />
     </FormGroupLayout>
   );

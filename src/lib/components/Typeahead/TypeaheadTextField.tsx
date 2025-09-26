@@ -1,4 +1,4 @@
-﻿import TextField from "@mui/material/TextField";
+﻿import TextField, { BaseTextFieldProps } from "@mui/material/TextField";
 import { textFieldBootstrapStyle } from "../../helpers/mui";
 import InputAdornment from "@mui/material/InputAdornment";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -12,7 +12,8 @@ import { useFormContext } from "../../context/FormContext";
 
 interface TypeaheadTextFieldProps<T extends FieldValues, TRenderAddon>
   extends Omit<CommonTypeaheadProps<T>, "id" | "disabled" | "onChange">,
-    AutocompleteRenderInputParams {
+    AutocompleteRenderInputParams,
+    Pick<BaseTextFieldProps, "inputRef"> {
   isLoading: boolean;
   setPage: React.Dispatch<React.SetStateAction<number>>;
   loadMoreOptions: boolean;

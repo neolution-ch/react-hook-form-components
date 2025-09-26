@@ -75,11 +75,12 @@ const Form = <T extends FieldValues>({
     ? (JSON.parse(JSON.stringify(defaultValues), jsonIsoDateReviver) as DeepPartial<T>)
     : defaultValues;
 
+  const disableAriaAutocomplete = autoComplete === "off";
   const formMethods = useForm<T>({ resolver, defaultValues: revivedDefaultValues });
   const autoSubmitHandler = useAutoSubmit({ onSubmit, formMethods, autoSubmitConfig });
 
   return (
-    <FormContext.Provider value={{ requiredFields, disabled, hideValidationMessages, ...formMethods }}>
+    <FormContext.Provider value={{ requiredFields, disabled, hideValidationMessages, disableAriaAutocomplete, ...formMethods }}>
       <form
         ref={(elem) => {
           if (formRef) {
@@ -90,7 +91,9 @@ const Form = <T extends FieldValues>({
         method="POST"
         autoComplete={autoComplete}
       >
-        {children instanceof Function ? children({ ...formMethods, disabled, requiredFields, hideValidationMessages }) : children}
+        {children instanceof Function
+          ? children({ ...formMethods, disabled, requiredFields, hideValidationMessages, disableAriaAutocomplete })
+          : children}
       </form>
     </FormContext.Provider>
   );

@@ -1,12 +1,13 @@
 import { Form, ColorPickerInput } from "react-hook-form-components";
 import { faker } from "@faker-js/faker";
+import { mount } from "cypress/react18";
 
 it("select correct color by specific format", () => {
   const hexName = faker.random.alpha(10);
   const rgbName = faker.random.alpha(10);
   const whiteHex = "#ffffff";
   const whiteRgb = "rgb(255, 255, 255)";
-  cy.mount(
+  mount(
     <div className="p-4">
       <Form onSubmit={cy.spy().as("onSubmitSpy")}>
         <ColorPickerInput name={hexName} useBootstrapStyle label="hex" format="hex" convertColorToFormatOrUndefinedOnBlur={false} />
@@ -32,7 +33,7 @@ it("converts color specified in another format to provided format", () => {
   const rgbName = faker.random.alpha(10);
   const blackHex = "#000000";
   const blackRgb = "rgb(0, 0, 0)";
-  cy.mount(
+  mount(
     <div className="p-4">
       <Form onSubmit={cy.spy().as("onSubmitSpy")}>
         <ColorPickerInput name={hexName} useBootstrapStyle label="hex" format="hex" />
@@ -58,7 +59,7 @@ it("recognize color coming from default values (even if specified in different f
   const rgbName = faker.random.alpha(10);
   const blackHex = "#000000";
   const blackRgb = "rgb(0, 0, 0)";
-  cy.mount(
+  mount(
     <div className="p-4">
       <Form
         onSubmit={cy.spy().as("onSubmitSpy")}

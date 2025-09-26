@@ -249,6 +249,31 @@ describe("Input.cy.tsx", () => {
     cy.get("@onBlurSpy").should("be.calledWithMatch", { target: { value: randomWord } });
   });
 
+  it("on key down handler gets called", () => {
+    const name = faker.random.alpha(10);
+    const schema = yup.object().shape({
+      [name]: yup.string(),
+    });
+
+    const randomWord = faker.random.word();
+
+    cy.mount(
+      <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
+        {/* <Input name={name} label={name} onKeyDown={(e) => console.log("key down", e)} /> */}
+        <Input name={name} label={name} onKeyDown={cy.spy().as("onKeyDownSpy")} />
+
+        <input type={"submit"} />
+      </Form>,
+    );
+
+    cy.contains("label", name).click();
+    cy.focused().type(randomWord.toString());
+    for (const char of randomWord) {
+      cy.get("@onKeyDownSpy").should("be.calledWithMatch", { key: char });
+    }
+    cy.get("@onKeyDownSpy").should("have.callCount", randomWord.length);
+  });
+
   it("text area works", () => {
     const name = faker.random.alpha(10);
     const textAreaRows = faker.datatype.number({ min: 6, max: 10 });
@@ -451,4 +476,20 @@ it("minlenght and maxlenght work", () => {
   cy.get(`input[name=${name}]`).clear();
   cy.get(`input[name=${name}]`).type(invalidInput);
   cy.get(`input[name=${name}]`).should("have.value", invalidInput.slice(0, maxLength));
+
+  it("is auto focused", () => {
+    const name = faker.random.word();
+
+    cy.mount(
+      <Form
+        onSubmit={() => {
+          // Do nothing
+        }}
+      >
+        <Input name={name} label={name} autoFocus={true} />
+      </Form>,
+    );
+
+    cy.get(`input[name=${name}]`).should("be.focused");
+  });
 });

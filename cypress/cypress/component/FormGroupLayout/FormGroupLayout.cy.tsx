@@ -2,6 +2,7 @@ import { faker } from "@faker-js/faker";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Form, Input, StaticTypeaheadInput, AsyncTypeaheadInput, DatePickerInput, FormattedInput } from "react-hook-form-components";
 import * as yup from "yup";
+import { mount } from "cypress/react18";
 
 it("adding * character if string label works", () => {
   const name = faker.random.alpha(10);
@@ -9,7 +10,7 @@ it("adding * character if string label works", () => {
     [name]: yup.number(),
   });
 
-  cy.mount(
+  mount(
     <Form
       onSubmit={() => {
         // Nothing to do
@@ -31,7 +32,7 @@ it("ignore * character if label is not of string type works", () => {
     [name]: yup.number(),
   });
 
-  cy.mount(
+  mount(
     <Form
       onSubmit={() => {
         // Nothing to do
@@ -61,7 +62,7 @@ it("testing existing * on nested object", () => {
     [fakePerson.city.address.street]: yup.string(),
   });
 
-  cy.mount(
+  mount(
     <Form
       onSubmit={() => {
         // Nothing to do
@@ -105,7 +106,7 @@ const ValidationForm = (props: { hideValidationMessage?: boolean; hideValidation
 };
 
 it("show validation messages", () => {
-  cy.mount(<ValidationForm />);
+  mount(<ValidationForm />);
   cy.get(`button[type=submit]`).click();
   cy.get(`label[for=name`).parent().find(".invalid-feedback").should("exist");
   cy.get(`label[for=surname`).parent().find("#surname-helper-text").should("exist");
@@ -115,7 +116,7 @@ it("show validation messages", () => {
 });
 
 it("hide validation messages when hideValidationMessages is provided through the form", () => {
-  cy.mount(<ValidationForm hideValidationMessages />);
+  mount(<ValidationForm hideValidationMessages />);
 
   cy.get(`button[type=submit]`).click();
   cy.get(`label[for=name`).parent().find(".invalid-feedback").should("not.exist");
@@ -126,7 +127,7 @@ it("hide validation messages when hideValidationMessages is provided through the
 });
 
 it("hide validation message when hideValidationMessage is provided on the single input", () => {
-  cy.mount(<ValidationForm hideValidationMessage />);
+  mount(<ValidationForm hideValidationMessage />);
 
   cy.get(`button[type=submit]`).click();
   cy.get(`label[for=name`).parent().find(".invalid-feedback").should("not.exist");

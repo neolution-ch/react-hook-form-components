@@ -86,6 +86,13 @@ interface CommonInputProps<T extends FieldValues, TRenderAddon = unknown> {
    * @example <Input<T> type="text" maxlength={10} />
    */
   maxLength?: number;
+
+  /**
+   * Component prop that represents the onKeyDown event handler for the input element
+   * @type {(e: React.KeyboardEvent<HTMLInputElement>) => void}
+   * @example <Input<T> type="text" onKeyDown={(e) => console.log(e.key)} />
+   */
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 export { CommonInputProps };

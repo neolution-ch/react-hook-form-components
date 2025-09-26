@@ -14,6 +14,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
     type,
     onBlur,
     onChange,
+    onKeyDown,
     value,
     options,
     multiple,
@@ -30,6 +31,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
     minLength,
     maxLength,
     autoComplete,
+    autoFocus,
   } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
   const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
@@ -37,6 +39,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
     register,
     formState: { errors },
     disabled: formDisabled,
+    disableAriaAutocomplete,
   } = useFormContext();
 
   const { ref, ...rest } = register(name, {
@@ -59,6 +62,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
           }
           ref(elem);
         }}
+        aria-autocomplete={disableAriaAutocomplete ? "none" : undefined}
         min={rangeMin}
         max={rangeMax}
         minLength={minLength}
@@ -71,6 +75,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
         placeholder={placeholder}
         step={step}
         autoComplete={autoComplete}
+        autoFocus={autoFocus}
         {...rest}
         {...(value ? { value } : {})}
         onBlur={(e) => {
@@ -91,6 +96,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
             await rest.onChange(e);
           })();
         }}
+        onKeyDown={onKeyDown}
         onFocus={focusHandler}
         className={className}
       >
