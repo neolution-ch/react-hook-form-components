@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- `StaticTypeaheadInput` and  `AsyncTypeaheadInput` highlighted suggestions, in order to match the entire word of the input value.
+
 ## [3.11.0] - 2025-09-29
 
 ### Added
