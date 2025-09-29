@@ -9,7 +9,7 @@ it("rating selection works", () => {
     <Form onSubmit={cy.spy().as("onSubmitSpy")}>
       <RatingInput name={name} label={name} />
       <input type="submit" />
-    </Form>
+    </Form>,
   );
 
   // Click on a specific star
@@ -24,13 +24,10 @@ it("default rating value works", () => {
   const defaultRating = faker.datatype.number({ min: 1, max: 5 });
 
   cy.mount(
-    <Form 
-      defaultValues={{ [name]: defaultRating }}
-      onSubmit={cy.spy().as("onSubmitSpy")}
-    >
+    <Form defaultValues={{ [name]: defaultRating }} onSubmit={cy.spy().as("onSubmitSpy")}>
       <RatingInput name={name} label={name} />
       <input type="submit" />
-    </Form>
+    </Form>,
   );
 
   // Verify the default rating is selected
@@ -46,7 +43,7 @@ it("disabled rating works", () => {
   cy.mount(
     <Form onSubmit={() => {}}>
       <RatingInput name={name} label={name} disabled />
-    </Form>
+    </Form>,
   );
 
   // All radio buttons should be disabled
@@ -60,13 +57,10 @@ it("precision works with half stars", () => {
   const halfStarRating = 3.5;
 
   cy.mount(
-    <Form 
-      defaultValues={{ [name]: halfStarRating }}
-      onSubmit={cy.spy().as("onSubmitSpy")}
-    >
+    <Form defaultValues={{ [name]: halfStarRating }} onSubmit={cy.spy().as("onSubmitSpy")}>
       <RatingInput name={name} label={name} precision={0.5} />
       <input type="submit" />
-    </Form>
+    </Form>,
   );
 
   cy.get("input[type=submit]").click({ force: true });
@@ -78,12 +72,8 @@ it("onBlur handler gets called", () => {
 
   cy.mount(
     <Form onSubmit={() => {}}>
-      <RatingInput 
-        name={name} 
-        label={name} 
-        onBlur={cy.spy().as("onBlurSpy")} 
-      />
-    </Form>
+      <RatingInput name={name} label={name} onBlur={cy.spy().as("onBlurSpy")} />
+    </Form>,
   );
 
   cy.get(`input[value="3"]`).focus();
@@ -97,12 +87,8 @@ it("onChange handler gets called", () => {
 
   cy.mount(
     <Form onSubmit={() => {}}>
-      <RatingInput 
-        name={name} 
-        label={name} 
-        onChange={cy.spy().as("onChangeSpy")} 
-      />
-    </Form>
+      <RatingInput name={name} label={name} onChange={cy.spy().as("onChangeSpy")} />
+    </Form>,
   );
 
   cy.get(`input[value="${newRating}"]`).click({ force: true });
