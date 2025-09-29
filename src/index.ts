@@ -7,6 +7,7 @@ export * from "./lib/types/Typeahead";
 export * from "./lib/types/LabelValueOption";
 export * from "./lib/DatePickerInput";
 export * from "./lib/ColorPickerInput";
+export * from "./lib/RatingInput";
 export * from "./lib/helpers/dateUtils";
 export * from "./lib/helpers/mui";
 export * from "./lib/helpers/typeahead";
