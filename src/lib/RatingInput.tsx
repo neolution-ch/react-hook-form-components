@@ -51,8 +51,8 @@ const RatingInput = <T extends FieldValues>(props: RatingInputProps<T>) => {
             sx={{
               ...sx,
               label: {
-                // unset the inline-block set by reactstrap
-                // display: "unset",
+                // unset the inline-block set by reboot
+                display: "unset",
               },
             }}
             disabled={disabled || formDisabled}
