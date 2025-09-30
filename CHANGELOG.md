@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.11.1] - 2025-09-30
+
 ### Fixed
 
 - `StaticTypeaheadInput` and `AsyncTypeaheadInput` highlighted suggestions, in order to match the entire word of the input value.
@@ -592,7 +594,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Created package :tada:
 
-[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/3.11.0...HEAD
+[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/3.11.1...HEAD
 [0.1.2]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.1...0.1.2
 [0.1.1]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.1.0
@@ -617,6 +619,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.4.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.3.0...0.4.0
 [0.3.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.2.0...0.3.0
 [0.2.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.2.0
+[3.11.1]: https://github.com/neolution-ch/react-hook-form-components/compare/3.11.0...3.11.1
 [3.11.0]: https://github.com/neolution-ch/react-hook-form-components/compare/3.10.2...3.11.0
 [3.10.2]: https://github.com/neolution-ch/react-hook-form-components/compare/3.10.1...3.10.2
 [3.10.1]: https://github.com/neolution-ch/react-hook-form-components/compare/3.10.0...3.10.1
