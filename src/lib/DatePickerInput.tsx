@@ -1,8 +1,9 @@
+/* eslint-disable max-lines */
 import { Controller, FieldValues } from "react-hook-form";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";
 import { CommonInputProps } from "./types/CommonInputProps";
-import DatePicker, { ReactDatePickerProps } from "react-datepicker";
+import DatePicker, { DatePickerProps } from "react-datepicker";
 import { useCallback, useEffect, useState, MutableRefObject, useRef } from "react";
 import { toZonedTime, fromZonedTime } from "date-fns-tz";
 import { useFormContext } from "./context/FormContext";
@@ -18,7 +19,10 @@ interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputPr
   /**
    * The props for the date picker component: https://reactdatepicker.com/
    */
-  datePickerProps?: Omit<ReactDatePickerProps, "onChange" | "selected" | "id" | "className" | "onBlur" | "autoComplete">;
+  datePickerProps?: Omit<
+    DatePickerProps,
+    "onChange" | "selected" | "id" | "className" | "onBlur" | "autoComplete" | "selectsMultiple" | "selectsRange"
+  >;
 
   /**
    * The onChange handler for the date picker component.
@@ -37,7 +41,7 @@ interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputPr
   /**
    * The ref of the date picker component.
    */
-  datePickerRef?: MutableRefObject<DatePicker<never, undefined> | null>;
+  datePickerRef?: MutableRefObject<DatePicker | null>;
 
   /**
    * The autoComplete property for the date picker component.
@@ -55,11 +59,11 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
     disabled,
     label,
     helpText,
-    datePickerProps = {},
     labelToolTip,
     addonLeft,
     addonRight,
     ianaTimeZone,
+    datePickerProps = {},
     className = "",
     autoComplete = "off",
     inputGroupStyle,
@@ -71,7 +75,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
 
   const { id, name } = useSafeNameId(initialName, initialId);
   const { control, getValues, setValue, disabled: formDisabled } = useFormContext();
-  const internalDatePickerRef = useRef<DatePicker>();
+  const internalDatePickerRef = useRef<DatePicker | undefined>(undefined);
   const formGroupId = useRef(guidGen());
   const { calendarStartDay = 1, showTimeInput = false, showTimeSelect = false, dateFormat } = datePickerProps;
   const showTimeInputOrSelect = showTimeInput || showTimeSelect;
@@ -145,7 +149,10 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
           hideValidationMessage={hideValidationMessage}
         >
           <DatePicker
-            {...datePickerProps}
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            {...(datePickerProps as any)}
+            selectsMultiple={undefined}
+            selectsRange={undefined}
             {...field}
             id={id}
             disabled={isDisabled}
@@ -161,10 +168,10 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
                 field.ref((elem as any).input);
               }
-              internalDatePickerRef.current = elem as DatePicker<never>;
+              internalDatePickerRef.current = elem as DatePicker;
 
               if (datePickerRef) {
-                datePickerRef.current = elem as DatePicker<never>;
+                datePickerRef.current = elem as DatePicker;
               }
             }}
             onBlur={(e) => {

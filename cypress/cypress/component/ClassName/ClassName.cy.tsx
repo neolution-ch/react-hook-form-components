@@ -1,7 +1,7 @@
 import { Form, Input, DatePickerInput, AsyncTypeaheadInput, StaticTypeaheadInput, FormattedInput } from "react-hook-form-components";
 import { faker } from "@faker-js/faker";
 import { fetchMock, generateOptions } from "../../helpers/typeahead";
-import { mount } from "cypress/react18";
+import { mount } from "cypress/react";
 
 it("input has correct classname", () => {
   const name = faker.random.alpha(10);
