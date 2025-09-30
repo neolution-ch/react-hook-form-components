@@ -91,7 +91,7 @@ const renderHighlightedOptionFunction = (
 
 const getAutosuggestHighlightParts = (option: TypeaheadOption, inputValue: string): Array<{ text: string; highlight: boolean }> => {
   const finalOption = typeof option === "string" ? option : option.label;
-  const matches = AutosuggestHighlightMatch(finalOption, inputValue, { insideWords: true });
+  const matches = AutosuggestHighlightMatch(finalOption, inputValue, { insideWords: true, requireMatchAll: true });
   return AutosuggestHighlightParse(finalOption, matches);
 };
 
