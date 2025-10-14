@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- `RatingInput` controlled/uncontrolled state warning by ensuring value prop is always defined.
+
 ## [3.11.1] - 2025-09-30
 
 ### Fixed
