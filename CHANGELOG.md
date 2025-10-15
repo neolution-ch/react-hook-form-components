@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.11.2] - 2025-10-15
+
 ### Fixed
 
 - `RatingInput` controlled/uncontrolled state warning by ensuring value prop is always defined.
@@ -598,7 +600,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Created package :tada:
 
-[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/3.11.1...HEAD
+[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/3.11.2...HEAD
 [0.1.2]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.1...0.1.2
 [0.1.1]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.1.0
@@ -623,6 +625,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.4.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.3.0...0.4.0
 [0.3.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.2.0...0.3.0
 [0.2.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.2.0
+[3.11.2]: https://github.com/neolution-ch/react-hook-form-components/compare/3.11.1...3.11.2
 [3.11.1]: https://github.com/neolution-ch/react-hook-form-components/compare/3.11.0...3.11.1
 [3.11.0]: https://github.com/neolution-ch/react-hook-form-components/compare/3.10.2...3.11.0
 [3.10.2]: https://github.com/neolution-ch/react-hook-form-components/compare/3.10.1...3.10.2
