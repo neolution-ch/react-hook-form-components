@@ -70,7 +70,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
         maxLength={maxLength}
         rows={textAreaRows}
         multiple={multiple}
-        disabled={formDisabled || disabled} // this one just disables the input
+        // disabled={formDisabled || disabled} // this one just disables the input
         plaintext={plainText}
         style={plainText ? { color: "black", marginLeft: 10, ...style } : { ...style }}
         placeholder={placeholder}
