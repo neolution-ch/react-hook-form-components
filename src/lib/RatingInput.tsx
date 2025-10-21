@@ -21,8 +21,6 @@ const RatingInput = <T extends FieldValues>(props: RatingInputProps<T>) => {
     sx,
     disabled,
     readOnly,
-    onBlur,
-    onChange,
     ...rest
   } = props;
   const { name, id } = useSafeNameId(props.name, props.id);
@@ -32,7 +30,7 @@ const RatingInput = <T extends FieldValues>(props: RatingInputProps<T>) => {
     <Controller
       control={control}
       name={props.name}
-      render={({ field }) => (
+      render={({ field: { value, onBlur, onChange, ...fieldRest } }) => (
         <FormGroupLayout
           name={name}
           id={id}
@@ -46,8 +44,9 @@ const RatingInput = <T extends FieldValues>(props: RatingInputProps<T>) => {
           inputGroupStyle={inputGroupStyle}
         >
           <Rating
-            {...field}
             {...rest}
+            {...fieldRest}
+            value={value ?? null}
             sx={{
               ...sx,
               label: {
@@ -58,16 +57,16 @@ const RatingInput = <T extends FieldValues>(props: RatingInputProps<T>) => {
             disabled={disabled || formDisabled}
             readOnly={readOnly || formDisabled}
             onBlur={(e) => {
-              if (onBlur) {
-                onBlur(e);
+              if (props.onBlur) {
+                props.onBlur(e);
               }
-              field.onBlur();
+              onBlur();
             }}
             onChange={(e, value) => {
-              if (onChange) {
-                onChange(e, value);
+              if (props.onChange) {
+                props.onChange(e, value);
               }
-              field.onChange(value);
+              onChange(value);
             }}
           />
         </FormGroupLayout>
