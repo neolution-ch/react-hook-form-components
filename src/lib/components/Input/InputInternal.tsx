@@ -43,6 +43,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
   } = useFormContext();
 
   const { ref, ...rest } = register(name, {
+    disabled: formDisabled || disabled, // FIXME this one unregister on submit
     setValueAs: (value: string) => (value === UNDEFINED_OPTION_VALUE ? undefined : value),
   });
 
@@ -69,7 +70,7 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
         maxLength={maxLength}
         rows={textAreaRows}
         multiple={multiple}
-        disabled={formDisabled || disabled}
+        disabled={formDisabled || disabled} // this one just disables the input
         plaintext={plainText}
         style={plainText ? { color: "black", marginLeft: 10, ...style } : { ...style }}
         placeholder={placeholder}
