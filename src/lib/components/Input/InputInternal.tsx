@@ -89,11 +89,15 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
           })();
         }}
         onChange={(e) => {
+          console.log("event before the IIFE-->", e);
+
           void (async () => {
             if (onChange) {
               onChange(e);
             }
-            console.log("event-->", e);
+
+            console.log("event after the IIFE-->", e);
+
             await rest.onChange(e);
           })();
         }}
