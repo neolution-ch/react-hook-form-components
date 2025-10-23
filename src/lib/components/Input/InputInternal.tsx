@@ -92,13 +92,20 @@ const InputInternal = <T extends FieldValues>(props: InputProps<T>) => {
           console.log("event before the IIFE-->", e);
 
           void (async () => {
-            if (onChange) {
-              onChange(e);
-            }
+            // if (onChange) {
+            //   onChange(e);
+            // }
 
-            console.log("event after the IIFE-->", e);
+            // setTimeout(async () => {
+            //   console.log("event after the IIFE-->", e);
+            // }, 1000);
 
             await rest.onChange(e);
+
+            if (onChange) {
+              console.log("calling custom onChange", e);
+              onChange(e);
+            }
           })();
         }}
         onKeyDown={onKeyDown}
