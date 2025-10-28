@@ -5,6 +5,7 @@ import { StaticTypeaheadAutocompleteProps, TypeaheadOption, TypeaheadOptions } f
 import AutosuggestHighlightMatch from "autosuggest-highlight/match";
 import AutosuggestHighlightParse from "autosuggest-highlight/parse";
 import { Chip } from "@mui/material";
+import { JSX } from "react";
 
 const isStringArray = (options: TypeaheadOptions): boolean =>
   options.length > 0 && (options as TypeaheadOption[]).every((value) => typeof value === "string");

@@ -2,6 +2,7 @@ import { faker } from "@faker-js/faker";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LabelValueOption, Form, Input } from "react-hook-form-components";
 import * as yup from "yup";
+import { mount } from "cypress/react";
 
 it("select only works", () => {
   const name = faker.random.alpha(10);
@@ -12,7 +13,7 @@ it("select only works", () => {
   const options = faker.helpers.uniqueArray<LabelValueOption>(() => ({ value: faker.random.alpha(10), label: faker.random.alpha(10) }), 3);
   const randomOption = faker.helpers.arrayElement(options);
 
-  cy.mount(
+  mount(
     <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
       <Input type="select" name={name} label={name} options={options} inputOnly />
 
@@ -35,7 +36,7 @@ it("basic text input only works", () => {
 
   const randomWord = faker.random.word();
 
-  cy.mount(
+  mount(
     <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
       <Input name={name} inputOnly />
 
@@ -61,7 +62,7 @@ it("text area only works", () => {
 
   const randomWords = faker.random.words(25);
 
-  cy.mount(
+  mount(
     <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
       <Input type="textarea" name={name} label={name} textAreaRows={textAreaRows} inputOnly />
 
