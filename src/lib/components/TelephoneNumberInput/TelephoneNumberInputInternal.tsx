@@ -152,6 +152,7 @@ const TelephoneNumberInputInternal = <T extends FieldValues>(props: TelephoneNum
             inputRef={ref}
           />
           <Popover
+            aria-hidden={false}
             {...bindPopover(popupState)}
             anchorOrigin={{
               vertical: "bottom",
@@ -185,7 +186,6 @@ const TelephoneNumberInputInternal = <T extends FieldValues>(props: TelephoneNum
 
                     setValue(name, telephoneNumber as PathValue<T, Path<T>>);
                   }
-
                   popupState.close();
                 }}
               />,
