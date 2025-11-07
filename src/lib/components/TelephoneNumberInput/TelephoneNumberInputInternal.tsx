@@ -18,7 +18,7 @@ import {
 } from "../../helpers/telephoneNumber";
 import { isNullOrWhitespace } from "@neolution-ch/javascript-utils";
 import Autocomplete from "@mui/material/Autocomplete";
-import { TelephoneNumberInputAdornment } from "./TelephoneNumberInputButton";
+import { TelephoneNumberInputAdornment } from "./TelephoneNumberInputAdornment";
 
 const TelephoneNumberInputInternal = <T extends FieldValues>(props: TelephoneNumberInputProps<T>) => {
   const {
@@ -111,8 +111,8 @@ const TelephoneNumberInputInternal = <T extends FieldValues>(props: TelephoneNum
             value={nationalPhoneNumber || ""}
             id={id}
             fullWidth
-            className={`MuiColorInput-TextField ${className}`}
-            sx={{ ...(useBootstrapStyle && textFieldBootstrapStyle), m: 1 }}
+            className={className}
+            sx={{ ...(useBootstrapStyle && textFieldBootstrapStyle) }}
             style={style}
             error={hasError}
             label={useBootstrapStyle ? undefined : finalLabel}
