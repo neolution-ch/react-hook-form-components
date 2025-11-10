@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `google-libphonenumber` and `i18n-iso-countries` required peer dependencies.
+- `i18n-iso-countries` required peer dependencies.
 - `TelephoneNumberInput` which helps in order to select nationality and national number.
 
 1.  It's needed to include icons style.
