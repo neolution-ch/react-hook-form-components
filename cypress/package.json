@@ -16,6 +16,8 @@
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@hookform/resolvers": "^2.9.10",
+    "google-libphonenumber": "^3.2.22",
+    "i18n-iso-countries": "^7.14.0",
     "next": "13.0.2",
     "react": "link:../node_modules/react",
     "react-dom": "link:../node_modules/react-dom",
@@ -26,6 +28,7 @@
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",
     "@neolution-ch/eslint-config-neolution": "2.1.0",
+    "@types/google-libphonenumber": "^7.4.30",
     "@types/node": "18.11.9",
     "@types/react": "18.0.25",
     "@types/react-dom": "18.0.8",

@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `i18n-iso-countries` required peer dependencies.
+- `TelephoneNumberInput` which helps in order to select nationality and national number.
+
+1.  It's needed to include icons style.
+
+    ```tsx
+    import "node_modules/flag-icons/css/flag-icons.min.css";
+    ```
+
+2.  Labels are by default the country code. In order to use localized names, you need to register locale on your own
+    Locale is automatically recognized if only one is registered on your project. Otherwise you need to provide the `locale` property with the desidered locale.
+
+    ```tsx
+    import { registerLocale } from "i18n-iso-countries";
+    import countriesEn from "i18n-iso-countries/langs/en.json";
+
+    registerLocale(countriesEn);
+    ```
+
+3.  for `yup` validation, it's possible to use utilities from `google-libphonenumber`.
+
 ## [3.11.2] - 2025-10-15
 
 ### Fixed
