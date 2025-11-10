@@ -60,6 +60,7 @@
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
     "flag-icons": "^7.5.0",
+    "google-libphonenumber": "^3.2.43",
     "material-ui-popup-state": "^5.3.3",
     "react-datepicker": "^4.11.0",
     "react-number-format": "^5.1.4",
@@ -93,7 +94,6 @@
     "eslint": "^9.18.0",
     "eslint-plugin-storybook": "^0.10.0",
     "gh-pages": "^5.0.0",
-    "google-libphonenumber": "^3.2.43",
     "i18n-iso-countries": "^7.14.0",
     "nodemon": "^2.0.22",
     "prettier": "^3.4.2",
@@ -114,7 +114,6 @@
   },
   "peerDependencies": {
     "i18n-iso-countries": "^7.14.0",
-    "google-libphonenumber": "^3.2.43",
     "react": "^16.0.0 || ^17.0.0 || ^18.0.0",
     "react-dom": "^16.0.0 || ^17.0.0 || ^18.0.0",
     "react-hook-form": "^7.0.0",
