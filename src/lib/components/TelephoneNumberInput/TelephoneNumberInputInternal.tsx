@@ -1,24 +1,17 @@
 import TextField from "@mui/material/TextField";
 import PopupState, { bindPopover } from "material-ui-popup-state";
-import { FieldError, FieldValues, get, Path, PathValue, useController } from "react-hook-form";
+import { FieldError, FieldValues, get, useController } from "react-hook-form";
 import { useMarkOnFocusHandler } from "../../hooks/useMarkOnFocusHandler";
 import { textFieldBootstrapStyle } from "../../helpers/mui";
 import { useFormContext } from "../../context/FormContext";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Popover from "@mui/material/Popover";
 import { TelephoneNumberInputProps } from "../../TelephoneNumberInput";
-import { LabelValueOption } from "../../types/LabelValueOption";
-import { PhoneNumberUtil, RegionCode } from "google-libphonenumber";
-import { getName, langs } from "i18n-iso-countries";
-import {
-  Country,
-  extractCountryCodeFromTelephoneNumber,
-  extractNationalNumberFromTelephoneNumber,
-  getCountryFromCountryCode,
-} from "../../helpers/telephoneNumber";
-import { isNullOrWhitespace } from "@neolution-ch/javascript-utils";
-import Autocomplete from "@mui/material/Autocomplete";
+
+import { Country, extractCountryCodeFromTelephoneNumber, extractNationalNumberFromTelephoneNumber } from "../../helpers/telephoneNumber";
 import { TelephoneNumberInputAdornment } from "./TelephoneNumberInputAdornment";
+import { isNullOrWhitespace } from "@neolution-ch/javascript-utils";
+import { TelephoneNumberAutocomplete } from "./TelephoneNumberAutocomplete";
 
 const TelephoneNumberInputInternal = <T extends FieldValues>(props: TelephoneNumberInputProps<T>) => {
   const {
@@ -37,13 +30,11 @@ const TelephoneNumberInputInternal = <T extends FieldValues>(props: TelephoneNum
     useBootstrapStyle = false,
     hideValidationMessage,
     placeholder,
-    locale,
   } = props;
   const {
     control,
     disabled: formDisabled,
     getFieldState,
-    setValue,
     requiredFields,
     formState: { errors },
     hideValidationMessages,
@@ -69,22 +60,6 @@ const TelephoneNumberInputInternal = <T extends FieldValues>(props: TelephoneNum
   const errorMessage = useMemo(() => String(fieldError?.message), [fieldError]);
   const fieldIsRequired = label && typeof label === "string" && requiredFields.includes(name);
   const finalLabel = useMemo(() => (fieldIsRequired ? `${String(label)} *` : label), [fieldIsRequired, label]);
-
-  const countryOptions: LabelValueOption[] = useMemo(() => {
-    const phoneNumberUtil = new PhoneNumberUtil();
-    const registeredLocales = langs();
-    const internalLocale =
-      registeredLocales.length === 1
-        ? registeredLocales[0]
-        : !isNullOrWhitespace(locale) && registeredLocales.includes(locale as string)
-          ? locale
-          : undefined;
-
-    return phoneNumberUtil.getSupportedRegions().map((region) => ({
-      label: isNullOrWhitespace(internalLocale) ? region : getName(region, internalLocale as string) || region,
-      value: region,
-    }));
-  }, [locale]);
 
   // we need to control the country in the case the value inside the form is undefined
   const [country, setCountry] = useState<Country>(extractCountryCodeFromTelephoneNumber(field.value as string | undefined, defaultCountry));
@@ -160,34 +135,12 @@ const TelephoneNumberInputInternal = <T extends FieldValues>(props: TelephoneNum
             }}
           >
             {renderAutocompleteField(
-              <Autocomplete
-                options={countryOptions}
-                value={countryOptions.find((x) => x.value === country.region) || null}
-                disableClearable={false}
-                renderInput={(params) => <TextField {...params} />}
-                sx={{ ...(useBootstrapStyle && textFieldBootstrapStyle), width: 200 }}
-                onChange={(_, value, reason) => {
-                  // cannot be cleared
-                  if (value === null || reason === "clear") {
-                    return;
-                  }
-
-                  const country = getCountryFromCountryCode(value.value as RegionCode);
-                  setCountry(country);
-                  // the value in the form is probably undefined, therefore do not touch the form value
-                  if (isNullOrWhitespace(nationalPhoneNumber)) {
-                    // nothing to do, value in the form is not changing
-                  } else {
-                    const telephoneNumber = `+${country.code}${nationalPhoneNumber || ""}`;
-
-                    if (propsOnChange) {
-                      propsOnChange(telephoneNumber);
-                    }
-
-                    setValue(name, telephoneNumber as PathValue<T, Path<T>>);
-                  }
-                  popupState.close();
-                }}
+              <TelephoneNumberAutocomplete<T>
+                {...props}
+                popupState={popupState}
+                nationalPhoneNumber={nationalPhoneNumber}
+                country={country}
+                setCountry={setCountry}
               />,
             )}
           </Popover>

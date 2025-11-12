@@ -13,6 +13,7 @@ interface TelephoneNumberInputProps<T extends FieldValues>
   onChange?: (telephoneNumber: string) => void;
   onBlur?: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
   defaultCountry: RegionCode;
+  pinnedCountries?: RegionCode[];
   placeholder?: string;
   renderAutocompleteField?: (children: ReactNode) => ReactNode;
   locale?: string;
