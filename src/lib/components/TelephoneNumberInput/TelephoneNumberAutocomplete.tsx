@@ -49,7 +49,7 @@ const TelephoneNumberAutocomplete = <T extends FieldValues>(props: TelephoneNumb
       sx={{ ...(useBootstrapStyle && textFieldBootstrapStyle), width: 200 }}
       onInputChange={(_, _value, reason) => {
         if (reason === "clear") {
-          setIsOpen(true);
+          setTimeout(() => setIsOpen(true), 200);
         }
       }}
       onChange={(_, value, reason) => {
