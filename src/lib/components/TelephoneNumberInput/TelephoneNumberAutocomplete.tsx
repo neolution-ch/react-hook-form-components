@@ -50,17 +50,16 @@ const TelephoneNumberAutocomplete = <T extends FieldValues>(props: TelephoneNumb
       onInputChange={(_, _value, reason) => {
         if (reason === "clear") {
           setIsOpen(true);
-          return;
         }
       }}
       onChange={(_, value, reason) => {
-        // cannot be cleared
-        if (value === null) {
+        if (reason === "clear") {
+          setIsOpen(true);
           return;
         }
 
-        if (reason === "clear") {
-          setIsOpen(true);
+        // cannot be cleared
+        if (value === null) {
           return;
         }
 
