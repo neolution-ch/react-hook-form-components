@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- country labels in search country input for `TelephoneNumberInput` includes also national prefix.
+- Clicking on clear icon in search country input for `TelephoneNumberInput` will automatically open the select menu.
+
+### Added
+
+- `pinnedCountries` property in `TelephoneNumberInput` which allows to pin some countries in the top of the list.
+
 ## [3.12.0] - 2025-11-10
 
 ### Added

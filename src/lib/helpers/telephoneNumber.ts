@@ -1,5 +1,7 @@
 import { isNullOrWhitespace } from "@neolution-ch/javascript-utils";
 import { PhoneNumberUtil, RegionCode, RegionCodeUnknown } from "google-libphonenumber";
+import { getName, langs } from "i18n-iso-countries";
+import { LabelValueOption } from "../types/LabelValueOption";
 
 interface Country {
   region: RegionCode;
@@ -80,4 +82,43 @@ const extractNationalNumberFromTelephoneNumber = (number: string | undefined, co
   }
 };
 
-export { getCountryFromCountryCode, extractNationalNumberFromTelephoneNumber, extractCountryCodeFromTelephoneNumber, Country };
+const getCountriesOptions = (pinnedRegions: RegionCode[], locale?: string): LabelValueOption[] => {
+  const phoneNumberUtil = new PhoneNumberUtil();
+
+  const getLabelValueOption = (region: RegionCode, effectiveLocale?: string): LabelValueOption => {
+    return {
+      label: `${isNullOrWhitespace(effectiveLocale) ? region : getName(region, effectiveLocale as string) || region} (+${phoneNumberUtil.getCountryCodeForRegion(region)})`,
+      value: region,
+    };
+  };
+
+  const registeredLocales = langs();
+  const internalLocale =
+    registeredLocales.length === 1
+      ? registeredLocales[0]
+      : !isNullOrWhitespace(locale) && registeredLocales.includes(locale as string)
+        ? locale
+        : undefined;
+
+  const supportedRegions = phoneNumberUtil.getSupportedRegions().filter((x) => !pinnedRegions.includes(x));
+  let labelValueOptions = [];
+
+  if (pinnedRegions.length > 0) {
+    for (const region of pinnedRegions) {
+      labelValueOptions.push(getLabelValueOption(region, internalLocale));
+    }
+
+    labelValueOptions.push({ label: "────────────", value: "", disabled: true });
+  }
+
+  labelValueOptions = [...labelValueOptions, ...supportedRegions.map((region) => getLabelValueOption(region, internalLocale))];
+  return labelValueOptions;
+};
+
+export {
+  getCountryFromCountryCode,
+  extractNationalNumberFromTelephoneNumber,
+  extractCountryCodeFromTelephoneNumber,
+  getCountriesOptions,
+  Country,
+};
