@@ -47,13 +47,16 @@ const TelephoneNumberAutocomplete = <T extends FieldValues>(props: TelephoneNumb
       getOptionDisabled={(option) => option.disabled ?? false}
       renderInput={(params) => <TextField {...params} />}
       sx={{ ...(useBootstrapStyle && textFieldBootstrapStyle), width: 200 }}
-      onInputChange={(_, _value, reason) => {
+      onInputChange={(_, value, reason) => {
+        console.log(value, reason);
+
         if (reason === "clear") {
           setTimeout(() => setIsOpen(true), 200);
         }
       }}
       onChange={(_, value, reason) => {
         // cannot be cleared
+        console.log(value, reason);
         if (value === null || reason === "clear") {
           return;
         }
