@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Open menu on search country input clear for `TelephoneNumberInput`
+
 ## [3.13.0] - 2025-11-13
 
 ### Fixed

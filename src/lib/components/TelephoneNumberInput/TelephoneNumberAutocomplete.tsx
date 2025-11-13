@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useMemo, useState } from "react";
+import { Dispatch, SetStateAction, useMemo, useRef } from "react";
 import { FieldValues, Path, PathValue } from "react-hook-form";
 import { Country, getCountriesOptions, getCountryFromCountryCode } from "../../helpers/telephoneNumber";
 import { TelephoneNumberInputProps } from "../../TelephoneNumberInput";
@@ -32,35 +32,25 @@ const TelephoneNumberAutocomplete = <T extends FieldValues>(props: TelephoneNumb
     setCountry,
   } = props;
 
-  const [isOpen, setIsOpen] = useState(false);
   const countryOptions: LabelValueOption[] = useMemo(() => getCountriesOptions(pinnedCountries, locale), [locale, pinnedCountries]);
   const { setValue } = useFormContext<T>();
-
+  const inputRef = useRef<HTMLInputElement | null>(null);
   return (
     <Autocomplete
       options={countryOptions}
       value={countryOptions.find((x) => x.value === country.region) || null}
       disableClearable={false}
-      open={isOpen}
-      onOpen={() => setIsOpen(true)}
-      onClose={() => setIsOpen(false)}
       getOptionDisabled={(option) => option.disabled ?? false}
-      renderInput={(params) => <TextField {...params} />}
+      renderInput={(params) => <TextField {...params} inputRef={inputRef} />}
       sx={{ ...(useBootstrapStyle && textFieldBootstrapStyle), width: 200 }}
-      onInputChange={(_, _value, reason) => {
-        if (reason === "clear") {
-          setIsOpen(true);
-          return;
-        }
-      }}
       onChange={(_, value, reason) => {
         // cannot be cleared
-        if (value === null) {
+        if (reason === "clear") {
+          inputRef.current?.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
           return;
         }
 
-        if (reason === "clear") {
-          setIsOpen(true);
+        if (value === null) {
           return;
         }
 
