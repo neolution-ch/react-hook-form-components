@@ -129,6 +129,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
   return (
     <Controller
       control={control}
+      shouldUnregister={isDisabled}
       name={name}
       render={({ field, fieldState: { error } }) => (
         <FormGroupLayout<T, DatePickerRenderAddonProps>
