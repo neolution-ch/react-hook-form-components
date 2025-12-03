@@ -24,8 +24,8 @@ interface FormProps<T extends FieldValues> {
 
   /**
    * passed field names will be marked with "*"
-   * field paths for arrays are supported as 0-based indexes (e.g. "items.0", "items.0.name") in compliance with react-hook-form types
-   * @example ['firstName', 'address.street', 'items.0.name', 'items.0']
+   * field paths for arrays are supported as 0-indexed (e.g. "items.0.name" for "items.${number}.name" validation) in compliance with react-hook-form definition "items.${number}"
+   * @example ['address', 'address.street', 'address.0.street', 'address.0']
    */
   requiredFields?: FieldPath<T>[];
 
