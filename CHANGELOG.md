@@ -7,6 +7,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.13.1] - 2025-11-13
+
+### Fixed
+
+- Open menu on search country input clear for `TelephoneNumberInput`
+
+## [3.13.0] - 2025-11-13
+
+### Fixed
+
+- country labels in search country input for `TelephoneNumberInput` includes also national prefix.
+- Clicking on clear icon in search country input for `TelephoneNumberInput` will automatically open the select menu.
+
+### Added
+
+- `pinnedCountries` property in `TelephoneNumberInput` which allows to pin some countries in the top of the list.
+
+## [3.12.0] - 2025-11-10
+
+### Added
+
+- `i18n-iso-countries` required peer dependencies.
+- `TelephoneNumberInput` which helps in order to select nationality and national number.
+
+1.  It's needed to include icons style.
+
+    ```tsx
+    import "node_modules/flag-icons/css/flag-icons.min.css";
+    ```
+
+2.  Labels are by default the country code. In order to use localized names, you need to register locale on your own
+    Locale is automatically recognized if only one is registered on your project. Otherwise you need to provide the `locale` property with the desidered locale.
+
+    ```tsx
+    import { registerLocale } from "i18n-iso-countries";
+    import countriesEn from "i18n-iso-countries/langs/en.json";
+
+    registerLocale(countriesEn);
+    ```
+
+3.  for `yup` validation, it's possible to use utilities from `google-libphonenumber`.
+
 ## [3.11.2] - 2025-10-15
 
 ### Fixed
@@ -600,7 +642,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Created package :tada:
 
-[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/3.11.2...HEAD
+[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/3.13.1...HEAD
 [0.1.2]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.1...0.1.2
 [0.1.1]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.1.0
@@ -625,6 +667,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.4.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.3.0...0.4.0
 [0.3.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.2.0...0.3.0
 [0.2.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.2.0
+[3.13.1]: https://github.com/neolution-ch/react-hook-form-components/compare/3.13.0...3.13.1
+[3.13.0]: https://github.com/neolution-ch/react-hook-form-components/compare/3.12.0...3.13.0
+[3.12.0]: https://github.com/neolution-ch/react-hook-form-components/compare/3.11.2...3.12.0
 [3.11.2]: https://github.com/neolution-ch/react-hook-form-components/compare/3.11.1...3.11.2
 [3.11.1]: https://github.com/neolution-ch/react-hook-form-components/compare/3.11.0...3.11.1
 [3.11.0]: https://github.com/neolution-ch/react-hook-form-components/compare/3.10.2...3.11.0
