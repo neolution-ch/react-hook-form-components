@@ -2,6 +2,7 @@ import { CSSProperties, ReactNode } from "react";
 import { useFormContext } from "./context/FormContext";
 import { FieldPath, FieldValues } from "react-hook-form";
 import { Label, UncontrolledTooltip } from "reactstrap";
+import { getRequiredLabel } from "./helpers/form";
 
 interface FormGroupLayoutLabelProps<T extends FieldValues> {
   label: ReactNode;
@@ -24,9 +25,7 @@ const FormGroupLayoutLabel = <T extends FieldValues>(props: FormGroupLayoutLabel
     return null;
   }
 
-  const fieldIsRequired = typeof label === "string" && requiredFields.includes(fieldName);
-  const finalLabel = fieldIsRequired ? `${String(label)} *` : label;
-
+  const finalLabel = getRequiredLabel<T>(label, fieldName, requiredFields);
   const switchLayout = layout === "switch";
   const checkboxLayout = layout === "checkbox";
 
