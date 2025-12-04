@@ -19,19 +19,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   1. `requiredFields` can still accept a `FieldPath<T>[]`
   2. In order to be complaint with `FieldPath` react-hook-form type (`object.${number}.property`) array properties provide a wildcard:
 
-    ```tsx
-    requiredFields = [`object`, `object.nestedObjects`, `objects.*.property`, `object.nestedObject.property`, `object.nestedObjects.*.property`];
-    ```
+  ```tsx
+  requiredFields = [
+    `object`,
+    `object.nestedObjects`,
+    `objects.*.property`,
+    `object.nestedObject.property`,
+    `object.nestedObjects.*.property`,
+  ];
+  ```
 
-    is going to consider as required:
+  is going to consider as required:
 
-    ```tsx
-      name="object"
-      name="object.nestedObjects.0", "object.nestedObjects.1", etc.
-      name="objects.0.property", name="objects.1.property", etc.
-      name="object.nestedObject.property"
-      name="object.nestedObjects.0.property", name="object.nestedObjects.1.property", etc.
-    ```
+  ```tsx
+    name="object"
+    name="object.nestedObjects.0", "object.nestedObjects.1", etc.
+    name="objects.0.property", name="objects.1.property", etc.
+    name="object.nestedObject.property"
+    name="object.nestedObjects.0.property", name="object.nestedObjects.1.property", etc.
+  ```
 
 ## [3.13.1] - 2025-11-13
 
