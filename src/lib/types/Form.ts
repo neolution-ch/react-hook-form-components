@@ -11,4 +11,4 @@ type FieldPathArray<T> =
 
 type RequiredFieldPath<T extends FieldValues> = FieldPath<T> | FieldPathArray<T>;
 
-export { RequiredFieldPath };
+export { RequiredFieldPath, FieldPathArray };
