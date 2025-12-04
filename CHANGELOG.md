@@ -7,21 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- including support into `requiredFields` property of `Form` component, for nested objects and arrays.
+
 ### Fixed
 
 - Required field label on `FormGroupLayoutLabel`, `ColorPicker`, `TelephoneNumberInput`, `TypeaheadTextField` (hence `StaticTypeaheadInput` and `AsyncTypeaheadInput`) in order to display \* also on nested and array fields.
 
-  1. `requiredFields` still needs `FieldPath<T>[]`
-  2. Arrays need to provide an index notation in order to be complaint with `FieldPath` react-hook-form type (`object.${number}.property`). Example:
+  1. `requiredFields` can still accept a `FieldPath<T>[]`
+  2. In order to be complaint with `FieldPath` react-hook-form type (`object.${number}.property`) array properties provide a wildcard:
 
     ```tsx
-    requiredFields = [`object`, `objects.0.property`, `object.nestedObject.property`, `object.nestedObjects.1.property`];
+    requiredFields = [`object`, `object.nestedObjects`, `objects.*.property`, `object.nestedObject.property`, `object.nestedObjects.*.property`];
     ```
 
     is going to consider as required:
 
     ```tsx
       name="object"
+      name=" `object.nestedObjects.0",  `object.nestedObjects.1`, etc.
       name="objects.0.property", name="objects.1.property", etc.
       name="object.nestedObject.property"
       name="object.nestedObjects.0.property", name="object.nestedObjects.1.property", etc.

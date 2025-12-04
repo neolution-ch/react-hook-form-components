@@ -1,8 +1,9 @@
 import { ReactNode } from "react";
-import { DeepPartial, FieldPath, FieldValues, Resolver, SubmitHandler, useForm, UseFormReturn } from "react-hook-form";
+import { DeepPartial, FieldValues, Resolver, SubmitHandler, useForm, UseFormReturn } from "react-hook-form";
 import { jsonIsoDateReviver } from "./helpers/dateUtils";
 import { FormContext, FormContextProps } from "./context/FormContext";
 import { AutoSubmitConfig, useAutoSubmit } from "./hooks/useAutoSubmit";
+import { RequiredFieldPath } from "./types/Form";
 
 export interface FormMethods<T extends FieldValues> extends UseFormReturn<T, unknown>, FormContextProps<T> {}
 
@@ -24,10 +25,8 @@ interface FormProps<T extends FieldValues> {
 
   /**
    * passed field names will be marked with "*"
-   * field paths for arrays are supported as 0-indexed (e.g. "items.0.name" for "items.${number}.name" validation) in compliance with react-hook-form definition "items.${number}"
-   * @example ['address', 'address.street', 'address.0.street', 'address.0']
    */
-  requiredFields?: FieldPath<T>[];
+  requiredFields?: RequiredFieldPath<T>[];
 
   /**
    * disable all fields inside the form making it readonly

@@ -77,7 +77,7 @@ it("testing existing * on nested object", () => {
   cy.get(`label[for=${fakePerson.city.address.street}]`).should("have.text", `${fakePerson.city.address.street} *`);
 });
 
-it("testing existing * on array object", () => {
+it("testing existing * on arrays", () => {
   const fakePerson = {
     city: {
       address: {
@@ -94,6 +94,7 @@ it("testing existing * on array object", () => {
         streetsAsObject: yup.array().of(
           yup.object().shape({
             name: yup.string().required(),
+            code: yup.string(),
           }),
         ),
       }),
@@ -107,7 +108,7 @@ it("testing existing * on array object", () => {
       }}
       defaultValues={fakePerson}
       resolver={yupResolver(schema)}
-      requiredFields={["city.address.streetsAsString.0", "city.address.streetsAsObject.0.name"]}
+      requiredFields={["city.address.streetsAsString", "city.address.streetsAsObject.*.name"]}
     >
       <Input<typeof fakePerson> name="city.address.streetsAsObject.0.name" label="Street as object" />
       <Input<typeof fakePerson> name="city.address.streetsAsString.0" label="Street as string" />

@@ -6,6 +6,7 @@ export * from "./lib/TelephoneNumberInput";
 export * from "./lib/AsyncTypeaheadInput";
 export * from "./lib/types/Typeahead";
 export * from "./lib/types/LabelValueOption";
+export * from "./lib/types/Form";
 export * from "./lib/DatePickerInput";
 export * from "./lib/ColorPickerInput";
 export * from "./lib/RatingInput";
