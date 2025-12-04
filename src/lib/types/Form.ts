@@ -1,7 +1,8 @@
 ﻿import { FieldPath, FieldValues } from "react-hook-form";
 
-type FieldPathArray<T> =
-  T extends Array<infer U>
+type FieldPathArray<T> = T extends Date
+  ? never
+  : T extends Array<infer U>
     ? `*.${FieldPathArray<U>}`
     : T extends object
       ? {
