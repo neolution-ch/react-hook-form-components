@@ -23,7 +23,9 @@ interface FormProps<T extends FieldValues> {
   defaultValues?: DeepPartial<T>;
 
   /**
-   * passed fieldnames will be marked with "*"
+   * passed field names will be marked with "*"
+   * field paths for arrays are supported as 0-indexed (e.g. "items.0.name" for "items.${number}.name" validation) in compliance with react-hook-form definition "items.${number}"
+   * @example ['address', 'address.street', 'address.0.street', 'address.0']
    */
   requiredFields?: FieldPath<T>[];
 
