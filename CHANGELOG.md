@@ -12,10 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Required field label on `FormGroupLayoutLabel`, `ColorPicker`, `TelephoneNumberInput`, `TypeaheadTextField` (hence `StaticTypeaheadInput` and `AsyncTypeaheadInput`) in order to display \* also on nested and array fields.
 
   1. `requiredFields` still needs `FieldPath<T>[]`
-  2. Arrays need to provide a 0-based index notation in order to be complaint with `FieldPath` react-hook-form type (`object.${number}.property`). Example:
+  2. Arrays need to provide an index notation in order to be complaint with `FieldPath` react-hook-form type (`object.${number}.property`). Example:
 
     ```tsx
-    requiredFields = [`object`, `objects.0.property`, `object.nestedObject.property`, `object.nestedObjects.0.property`];
+    requiredFields = [`object`, `objects.0.property`, `object.nestedObject.property`, `object.nestedObjects.1.property`];
     ```
 
     is going to consider as required:
