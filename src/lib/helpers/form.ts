@@ -17,4 +17,4 @@ function isRequiredField<T extends FieldValues>(fieldPath: FieldPath<T>, require
 const getRequiredLabel = <T extends FieldValues>(label: ReactNode, fieldPath: FieldPath<T>, requiredFields?: FieldPath<T>[]): ReactNode =>
   typeof label === "string" ? (isRequiredField(fieldPath, requiredFields) ? `${String(label)} *` : label) : label;
 
-export { getRequiredLabel };
+export { getRequiredLabel, isRequiredField };
