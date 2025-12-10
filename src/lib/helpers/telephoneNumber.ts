@@ -100,7 +100,11 @@ const getCountriesOptions = (pinnedRegions: RegionCode[], locale?: string): Labe
         ? locale
         : undefined;
 
-  const supportedRegions = phoneNumberUtil.getSupportedRegions().filter((x) => !pinnedRegions.includes(x));
+  const supportedRegions = phoneNumberUtil
+    .getSupportedRegions()
+    .filter((x) => !pinnedRegions.includes(x))
+    .sort((a, b) => a.localeCompare(b));
+
   let labelValueOptions = [];
 
   if (pinnedRegions.length > 0) {
@@ -108,7 +112,7 @@ const getCountriesOptions = (pinnedRegions: RegionCode[], locale?: string): Labe
       labelValueOptions.push(getLabelValueOption(region, internalLocale));
     }
 
-    labelValueOptions.push({ label: "────────────", value: "", disabled: true });
+    labelValueOptions.sort((a, b) => a.label.localeCompare(b.label)).push({ label: "────────────", value: "", disabled: true });
   }
 
   labelValueOptions = [...labelValueOptions, ...supportedRegions.map((region) => getLabelValueOption(region, internalLocale))];
