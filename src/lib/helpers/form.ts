@@ -2,18 +2,19 @@
 import { FieldPath, FieldValues } from "react-hook-form";
 import { RequiredFieldPath } from "../types/Form";
 
-function isRequiredField<T extends FieldValues>(fieldPath: string, requiredFields?: RequiredFieldPath<T>[]): boolean {
-  if (!requiredFields) {
-    return false;
+const matchesWildcard = (rule: string, pathParts: string[]) => {
+  const ruleParts = rule.split(".");
+  // remove trailing index placeholder in case of primitive arrays
+  if (pathParts.length - ruleParts.length === 1 && pathParts.at(-1) === "*") {
+    pathParts = pathParts.slice(0, -1);
   }
+  return ruleParts.length === pathParts.length && pathParts.every((p, i) => ruleParts[i] === p);
+};
 
-  return requiredFields.some((reqPath) => {
-    // append wildcard at the end if required field might be an array (e.g., "object.array into object.array.*")
-    const regexPath = reqPath.replaceAll(/\.\d+/g, String.raw`\.\d+`).replaceAll(/\*+/g, String.raw`\d+`);
-    const finalRegex = new RegExp(`^${regexPath}(\\.\\d+)?$`);
-    return finalRegex.test(fieldPath);
-  });
-}
+const isRequiredField = <T extends FieldValues>(fieldPath: string, requiredFields?: RequiredFieldPath<T>[]) => {
+  const normalizedPathParts = fieldPath.split(".").map((x) => (Number.isNaN(Number(x)) ? x : "*"));
+  return !!requiredFields?.some((rule) => rule === fieldPath || matchesWildcard(rule, normalizedPathParts));
+};
 
 const getRequiredLabel = <T extends FieldValues>(
   label: ReactNode,

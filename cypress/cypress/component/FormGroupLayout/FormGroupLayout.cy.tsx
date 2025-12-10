@@ -82,7 +82,11 @@ it("testing existing * on arrays", () => {
     city: {
       address: {
         streetsAsString: [faker.random.alpha(10), faker.random.alpha(10), faker.random.alpha(10)],
-        streetsAsObject: [{ name: faker.random.alpha(10) }, { name: faker.random.alpha(10) }, { name: faker.random.alpha(10) }],
+        streetsAsObject: [
+          { name: faker.random.alpha(10), date: new Date() },
+          { name: faker.random.alpha(10), date: new Date() },
+          { name: faker.random.alpha(10), date: new Date() },
+        ],
       },
     },
   };
@@ -94,7 +98,7 @@ it("testing existing * on arrays", () => {
         streetsAsObject: yup.array().of(
           yup.object().shape({
             name: yup.string().required(),
-            code: yup.string(),
+            date: yup.date(),
           }),
         ),
       }),
@@ -108,15 +112,17 @@ it("testing existing * on arrays", () => {
       }}
       defaultValues={fakePerson}
       resolver={yupResolver(schema)}
-      requiredFields={["city.address.streetsAsString", "city.address.streetsAsObject.*.name"]}
+      requiredFields={["city.address.streetsAsString", "city.address.streetsAsObject.*.name", "city.address.streetsAsObject.*.date"]}
     >
       <Input<typeof fakePerson> name="city.address.streetsAsObject.0.name" label="Street as object" />
       <Input<typeof fakePerson> name="city.address.streetsAsString.0" label="Street as string" />
+      <DatePickerInput<typeof fakePerson> name="city.address.streetsAsObject.0.date" label="Date as object" />
     </Form>,
   );
 
   cy.get(`label[for="city.address.streetsAsObject.0.name"`).should("have.text", "Street as object *");
   cy.get(`label[for="city.address.streetsAsString.0"`).should("have.text", "Street as string *");
+  cy.get(`label[for="city.address.streetsAsObject.0.date"`).should("have.text", "Date as object *");
 });
 
 const ValidationForm = (props: { hideValidationMessage?: boolean; hideValidationMessages?: boolean }) => {

@@ -1,6 +1,6 @@
-﻿import { FieldPath, FieldValues } from "react-hook-form";
+﻿import { FieldPath, FieldValues, BrowserNativeObject } from "react-hook-form";
 
-type FieldPathArray<T> = T extends Date
+type FieldPathArray<T> = T extends Blob | BrowserNativeObject | Promise<unknown>
   ? never
   : T extends Array<infer U>
     ? `*.${FieldPathArray<U>}`
