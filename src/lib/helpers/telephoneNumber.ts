@@ -112,7 +112,7 @@ const getCountriesOptions = (pinnedRegions: RegionCode[], locale?: string): Labe
       labelValueOptions.push(getLabelValueOption(region, internalLocale));
     }
 
-    labelValueOptions.sort((a, b) => a.label.localeCompare(b.label)).push({ label: "────────────", value: "", disabled: true });
+    labelValueOptions.push({ label: "────────────", value: "", disabled: true });
   }
 
   labelValueOptions = [...labelValueOptions, ...supportedRegions.map((region) => getLabelValueOption(region, internalLocale))];
