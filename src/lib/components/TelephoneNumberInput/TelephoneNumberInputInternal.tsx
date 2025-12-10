@@ -7,7 +7,7 @@ import { useFormContext } from "../../context/FormContext";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Popover from "@mui/material/Popover";
 import { TelephoneNumberInputProps } from "../../TelephoneNumberInput";
-
+import { getRequiredLabel } from "../../helpers/form";
 import { Country, extractCountryCodeFromTelephoneNumber, extractNationalNumberFromTelephoneNumber } from "../../helpers/telephoneNumber";
 import { TelephoneNumberInputAdornment } from "./TelephoneNumberInputAdornment";
 import { isNullOrWhitespace } from "@neolution-ch/javascript-utils";
@@ -58,8 +58,7 @@ const TelephoneNumberInputInternal = <T extends FieldValues>(props: TelephoneNum
   const hideErrorMessage = useMemo(() => hideValidationMessages || hideValidationMessage, [hideValidationMessages, hideValidationMessage]);
   const hasError = useMemo(() => !!fieldError, [fieldError]);
   const errorMessage = useMemo(() => String(fieldError?.message), [fieldError]);
-  const fieldIsRequired = label && typeof label === "string" && requiredFields.includes(name);
-  const finalLabel = useMemo(() => (fieldIsRequired ? `${String(label)} *` : label), [fieldIsRequired, label]);
+  const finalLabel = useMemo(() => getRequiredLabel<T>(label, name, requiredFields), [label, name, requiredFields]);
 
   // we need to control the country in the case the value inside the form is undefined
   const [country, setCountry] = useState<Country>(extractCountryCodeFromTelephoneNumber(field.value as string | undefined, defaultCountry));
