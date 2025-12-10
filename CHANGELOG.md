@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- `TelephoneNumberInput` countries order, in order to be alphabetically sorted.
+
+### Added
+
+- `countryMenuWidth` property to `TelephoneNumberInput` in order to customize the country menu width.
+
 ## [3.13.1] - 2025-11-13
 
 ### Fixed

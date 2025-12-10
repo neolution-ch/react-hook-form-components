@@ -17,6 +17,7 @@ interface TelephoneNumberInputProps<T extends FieldValues>
   placeholder?: string;
   renderAutocompleteField?: (children: ReactNode) => ReactNode;
   locale?: string;
+  countryMenuWidth?: number;
 }
 
 const TelephoneNumberInput = <T extends FieldValues>(props: TelephoneNumberInputProps<T>) => {
