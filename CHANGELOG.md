@@ -10,10 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - support into `requiredFields` property of `Form` component, for nested objects and arrays.
-- `form` helper functions
+- `form` helper functions.
+- `countryMenuWidth` property to `TelephoneNumberInput` in order to customize the country menu width.
 
 ### Fixed
 
+- `TelephoneNumberInput` countries order, in order to be alphabetically sorted.
 - Required field label on `FormGroupLayoutLabel`, `ColorPicker`, `TelephoneNumberInput`, `TypeaheadTextField` (hence `StaticTypeaheadInput` and `AsyncTypeaheadInput`) in order to display \* also on nested and array fields.
 
   1. `requiredFields` can still accept a `FieldPath<T>[]`
