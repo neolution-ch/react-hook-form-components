@@ -9,6 +9,7 @@ import { CommonTypeaheadProps } from "../../types/Typeahead";
 import { FieldError, FieldValues, get } from "react-hook-form";
 import { MergedAddonProps } from "../../types/CommonInputProps";
 import { useFormContext } from "../../context/FormContext";
+import { getRequiredLabel } from "../../helpers/form";
 
 interface TypeaheadTextFieldProps<T extends FieldValues, TRenderAddon>
   extends Omit<CommonTypeaheadProps<T>, "id" | "disabled" | "onChange">,
@@ -47,15 +48,13 @@ const TypeaheadTextField = <T extends FieldValues, TRenderAddon = unknown>(props
     formState: { errors },
     requiredFields,
     hideValidationMessages,
-  } = useFormContext();
+  } = useFormContext<T>();
 
   const fieldError = get(errors, name) as FieldError | undefined;
   const hasError = useMemo(() => !!fieldError, [fieldError]);
   const errorMessage = useMemo(() => String(fieldError?.message), [fieldError]);
   const hideErrorMessage = useMemo(() => hideValidationMessages || hideValidationMessage, [hideValidationMessages, hideValidationMessage]);
-
-  const fieldIsRequired = label && typeof label === "string" && requiredFields.includes(name);
-  const finalLabel = useMemo(() => (fieldIsRequired ? `${String(label)} *` : label), [fieldIsRequired, label]);
+  const finalLabel = useMemo(() => getRequiredLabel<T>(label, name, requiredFields), [label, name, requiredFields]);
 
   const startAdornment = useMemo(
     () =>

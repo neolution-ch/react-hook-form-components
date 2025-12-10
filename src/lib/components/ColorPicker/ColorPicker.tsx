@@ -11,6 +11,7 @@ import { useMemo } from "react";
 import { TinyColor } from "@ctrl/tinycolor";
 import Popover from "@mui/material/Popover";
 import Colorful from "@uiw/react-color-colorful"; // must be imported as default, otherwise it will provide a runtime error in nextjs
+import { getRequiredLabel } from "../../helpers/form";
 
 const getColorByFormat = <T extends FieldValues>(color: TinyColor, format: ColorPickerInputProps<T>["format"]) => {
   switch (format) {
@@ -49,7 +50,7 @@ const ColorPicker = <T extends FieldValues>(props: ColorPickerInputProps<T>) => 
     requiredFields,
     formState: { errors },
     hideValidationMessages,
-  } = useFormContext();
+  } = useFormContext<T>();
   const focusHandler = useMarkOnFocusHandler(markAllOnFocus);
   const {
     field: { ref, ...field },
@@ -69,8 +70,7 @@ const ColorPicker = <T extends FieldValues>(props: ColorPickerInputProps<T>) => 
   const hideErrorMessage = useMemo(() => hideValidationMessages || hideValidationMessage, [hideValidationMessages, hideValidationMessage]);
   const hasError = useMemo(() => !!fieldError, [fieldError]);
   const errorMessage = useMemo(() => String(fieldError?.message), [fieldError]);
-  const fieldIsRequired = label && typeof label === "string" && requiredFields.includes(name);
-  const finalLabel = useMemo(() => (fieldIsRequired ? `${String(label)} *` : label), [fieldIsRequired, label]);
+  const finalLabel = useMemo(() => getRequiredLabel<T>(label, name, requiredFields), [label, name, requiredFields]);
 
   return (
     <PopupState variant="popover" popupId={`popover-${name}`}>
