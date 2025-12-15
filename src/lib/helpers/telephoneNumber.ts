@@ -100,7 +100,11 @@ const getCountriesOptions = (pinnedRegions: RegionCode[], locale?: string): Labe
         ? locale
         : undefined;
 
-  const supportedRegions = phoneNumberUtil.getSupportedRegions().filter((x) => !pinnedRegions.includes(x));
+  const supportedRegions = phoneNumberUtil
+    .getSupportedRegions()
+    .filter((x) => !pinnedRegions.includes(x))
+    .sort((a, b) => a.localeCompare(b));
+
   let labelValueOptions = [];
 
   if (pinnedRegions.length > 0) {

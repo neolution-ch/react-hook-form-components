@@ -7,13 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.14.0] - 2025-12-10
+
 ### Added
 
 - support into `requiredFields` property of `Form` component, for nested objects and arrays.
-- `form` helper functions
+- `form` helper functions.
+- `countryMenuWidth` property to `TelephoneNumberInput` in order to customize the country menu width.
 
 ### Fixed
 
+- `TelephoneNumberInput` countries order, in order to be alphabetically sorted.
 - Required field label on `FormGroupLayoutLabel`, `ColorPicker`, `TelephoneNumberInput`, `TypeaheadTextField` (hence `StaticTypeaheadInput` and `AsyncTypeaheadInput`) in order to display \* also on nested and array fields.
 
   1. `requiredFields` can still accept a `FieldPath<T>[]`
@@ -674,7 +678,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Created package :tada:
 
-[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/3.13.1...HEAD
+[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/3.14.0...HEAD
 [0.1.2]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.1...0.1.2
 [0.1.1]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.1.0
@@ -699,6 +703,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.4.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.3.0...0.4.0
 [0.3.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.2.0...0.3.0
 [0.2.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.2.0
+[3.14.0]: https://github.com/neolution-ch/react-hook-form-components/compare/3.13.1...3.14.0
 [3.13.1]: https://github.com/neolution-ch/react-hook-form-components/compare/3.13.0...3.13.1
 [3.13.0]: https://github.com/neolution-ch/react-hook-form-components/compare/3.12.0...3.13.0
 [3.12.0]: https://github.com/neolution-ch/react-hook-form-components/compare/3.11.2...3.12.0

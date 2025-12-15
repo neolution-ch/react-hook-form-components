@@ -12,7 +12,10 @@ import { TextField } from "@mui/material";
 import { textFieldBootstrapStyle } from "src/lib/helpers/mui";
 
 interface TelephoneNumberAutocompleteProps<T extends FieldValues>
-  extends Pick<TelephoneNumberInputProps<T>, "pinnedCountries" | "locale" | "useBootstrapStyle" | "name" | "onChange"> {
+  extends Pick<
+    TelephoneNumberInputProps<T>,
+    "pinnedCountries" | "locale" | "useBootstrapStyle" | "name" | "onChange" | "countryMenuWidth"
+  > {
   popupState: PopupState;
   nationalPhoneNumber: string | undefined;
   country: Country;
@@ -24,6 +27,7 @@ const TelephoneNumberAutocomplete = <T extends FieldValues>(props: TelephoneNumb
     pinnedCountries = [],
     locale,
     useBootstrapStyle,
+    countryMenuWidth = 200,
     name,
     onChange: propsOnChange,
     popupState,
@@ -42,7 +46,7 @@ const TelephoneNumberAutocomplete = <T extends FieldValues>(props: TelephoneNumb
       disableClearable={false}
       getOptionDisabled={(option) => option.disabled ?? false}
       renderInput={(params) => <TextField {...params} inputRef={inputRef} />}
-      sx={{ ...(useBootstrapStyle && textFieldBootstrapStyle), width: 200 }}
+      sx={{ ...(useBootstrapStyle && textFieldBootstrapStyle), width: countryMenuWidth }}
       onChange={(_, value, reason) => {
         // cannot be cleared
         if (reason === "clear") {
