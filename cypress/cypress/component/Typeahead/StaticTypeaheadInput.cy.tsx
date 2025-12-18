@@ -4,7 +4,7 @@ import { faker, Sex } from "@faker-js/faker";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { generateOptions } from "../../helpers/typeahead";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 const selectOption = (name: string, text: string) => {
   cy.get(`#${name}`).clear();
@@ -592,4 +592,30 @@ it("works with fixed options excluded", () => {
   cy.get("div.Mui-disabled span.MuiChip-label").should("have.text", defaultFixedOption).should("be.visible");
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: [] });
+});
+
+it("innerRef works correctly", () => {
+  const { simpleOptions } = generateOptions();
+  const name = faker.random.alpha(10);
+
+  const InputWithRef = () => {
+    const ref = useRef<HTMLInputElement>(null);
+      
+    return (
+      <div className="p-4">
+        <Form
+          onSubmit={() => {
+            // Nothing to do
+          }}
+        >
+          <StaticTypeaheadInput autocompleteProps={{ openOnFocus: true }} innerRef={ref} name={name} label={name} options={simpleOptions} />
+          <button title="focus" onClick={() => ref.current?.focus()}>Focus</button>
+        </Form>
+      </div>
+    );
+  }
+
+  cy.mount(<InputWithRef />);
+  cy.get("button[title=focus]").click();
+  cy.get(`#${name}`).should("be.focused");
 });

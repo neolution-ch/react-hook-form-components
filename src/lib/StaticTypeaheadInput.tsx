@@ -65,6 +65,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
     autocompleteProps,
     fixedOptions,
     withFixedOptionsInValue = true,
+    innerRef,
   } = props;
 
   const [page, setPage] = useState(1);
@@ -192,7 +193,12 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
             loadMoreOptions={loadMoreOptions}
             setPage={setPage}
             {...params}
-            inputRef={(elem) => ref(elem)}
+            inputRef={(elem) => {
+              if (innerRef) {
+                innerRef.current = elem as HTMLInputElement;
+              }
+              ref(elem);
+            }}
           />
         )}
         renderTags={createTagRenderer(fixedOptions, autocompleteProps)}
