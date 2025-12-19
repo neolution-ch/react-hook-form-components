@@ -600,7 +600,7 @@ it("innerRef works correctly", () => {
 
   const InputWithRef = () => {
     const ref = useRef<HTMLInputElement>(null);
-      
+
     return (
       <div className="p-4">
         <Form
@@ -609,11 +609,13 @@ it("innerRef works correctly", () => {
           }}
         >
           <StaticTypeaheadInput autocompleteProps={{ openOnFocus: true }} innerRef={ref} name={name} label={name} options={simpleOptions} />
-          <button title="focus" onClick={() => ref.current?.focus()}>Focus</button>
+          <button title="focus" onClick={() => ref.current?.focus()}>
+            Focus
+          </button>
         </Form>
       </div>
     );
-  }
+  };
 
   cy.mount(<InputWithRef />);
   cy.get("button[title=focus]").click();
