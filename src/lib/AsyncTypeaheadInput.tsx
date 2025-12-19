@@ -39,6 +39,7 @@ interface AsyncTypeaheadInputProps<T extends FieldValues> extends CommonTypeahea
 const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputProps<T>) => {
   const {
     inputRef,
+    innerRef,
     multiple,
     disabled,
     variant,
@@ -227,7 +228,12 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
             loadMoreOptions={loadMoreOptions}
             setPage={setPage}
             {...params}
-            inputRef={(elem) => ref(elem)}
+            inputRef={(elem) => {
+              if (innerRef) {
+                innerRef.current = elem as HTMLInputElement;
+              }
+              ref(elem);
+            }}
           />
         )}
         renderTags={createTagRenderer(fixedOptions, autocompleteProps)}

@@ -1,4 +1,4 @@
-import { ReactNode, SyntheticEvent } from "react";
+import { MutableRefObject, ReactNode, SyntheticEvent } from "react";
 import { FieldValues } from "react-hook-form";
 import { CommonInputProps } from "./CommonInputProps";
 import { LabelValueOption } from "./LabelValueOption";
@@ -24,6 +24,7 @@ interface CommonTypeaheadProps<T extends FieldValues>
   useBootstrapStyle?: boolean;
   fixedOptions?: TypeaheadOptions;
   withFixedOptionsInValue?: boolean;
+  innerRef?: MutableRefObject<HTMLInputElement | null>;
   getOptionDisabled?: (option: TypeaheadOption) => boolean;
   onChange?: (selected: string | string[]) => void;
   onInputChange?: (text: string, reason: AutocompleteInputChangeReason) => void;
@@ -53,6 +54,7 @@ type AsyncTypeaheadAutocompleteProps = Omit<
   | "getOptionDisabled"
   | "autoSelect"
   | "autoHighlight"
+  | "ref"
 >;
 
 type StaticTypeaheadAutocompleteProps = Omit<
@@ -76,6 +78,7 @@ type StaticTypeaheadAutocompleteProps = Omit<
   | "onChange"
   | "autoSelect"
   | "autoHighlight"
+  | "ref"
 >;
 
 export { CommonTypeaheadProps, AsyncTypeaheadAutocompleteProps, StaticTypeaheadAutocompleteProps };
