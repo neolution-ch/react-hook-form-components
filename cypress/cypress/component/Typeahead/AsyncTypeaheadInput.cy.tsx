@@ -929,3 +929,38 @@ it("works with fixed options excluded", () => {
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: [] });
 });
+
+it("innerRef works correctly", () => {
+  const { simpleOptions } = generateOptions();
+  const name = faker.random.alpha(10);
+  const options = generateOptions();
+
+  const InputWithRef = () => {
+    const ref = useRef<HTMLInputElement>(null);
+
+    return (
+      <div className="p-4">
+        <Form
+          onSubmit={() => {
+            // Nothing to do
+          }}
+        >
+          <AsyncTypeaheadInput
+            queryFn={async (query: string) => await fetchMock(options.objectOptions, query, false)}
+            autocompleteProps={{ openOnFocus: true }}
+            innerRef={ref}
+            name={name}
+            label={name}
+          />
+          <button title="focus" onClick={() => ref.current?.focus()}>
+            Focus
+          </button>
+        </Form>
+      </div>
+    );
+  };
+
+  cy.mount(<InputWithRef />);
+  cy.get("button[title=focus]").click();
+  cy.get(`#${name}`).should("be.focused");
+});
