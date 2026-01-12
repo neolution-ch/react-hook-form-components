@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fix
+
+- `*` visibility on a required field label, whether the label is empty.
+- `DatePickerInput` selector when `onClickOutside` function is triggered.
+
 ## [3.15.0] - 2025-12-19
 
 ### Added
