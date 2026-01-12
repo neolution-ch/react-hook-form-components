@@ -1,6 +1,7 @@
 ﻿import { ReactNode } from "react";
 import { FieldPath, FieldValues } from "react-hook-form";
 import { RequiredFieldPath } from "../types/Form";
+import { isNullOrWhitespace } from "@neolution-ch/javascript-utils";
 
 const matchesWildcard = (rule: string, pathParts: string[]) => {
   const ruleParts = rule.split(".");
@@ -20,6 +21,7 @@ const getRequiredLabel = <T extends FieldValues>(
   label: ReactNode,
   fieldPath: FieldPath<T>,
   requiredFields?: RequiredFieldPath<T>[],
-): ReactNode => (typeof label === "string" ? (isRequiredField(fieldPath, requiredFields) ? `${String(label)} *` : label) : label);
+): ReactNode =>
+  typeof label === "string" && !isNullOrWhitespace(label) && isRequiredField(fieldPath, requiredFields) ? `${String(label)} *` : label;
 
 export { getRequiredLabel, isRequiredField };
