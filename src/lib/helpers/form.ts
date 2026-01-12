@@ -22,6 +22,6 @@ const getRequiredLabel = <T extends FieldValues>(
   fieldPath: FieldPath<T>,
   requiredFields?: RequiredFieldPath<T>[],
 ): ReactNode =>
-  typeof label === "string" && !isNullOrWhitespace(label) && isRequiredField(fieldPath, requiredFields) ? `${String(label)} *` : label;
+  typeof label === "string" && !isNullOrWhitespace(label) && isRequiredField(fieldPath, requiredFields) ? `${label} *` : label;
 
 export { getRequiredLabel, isRequiredField };
