@@ -30,7 +30,7 @@ interface StaticTypeaheadInputProps<T extends FieldValues> extends CommonTypeahe
 }
 
 // eslint-disable-next-line complexity
-const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInputProps<T>) => {
+const AutoComplete = <T extends FieldValues>(props: StaticTypeaheadInputProps<T>) => {
   const {
     options,
     multiple,
@@ -66,13 +66,14 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
     fixedOptions,
     withFixedOptionsInValue = true,
     innerRef,
+    name,
+    id,
   } = props;
 
   const [page, setPage] = useState(1);
   const [loadMoreOptions, setLoadMoreOptions] = useState(limitResults !== undefined && limitResults < options.length);
 
-  const { name, id } = useSafeNameId(props.name ?? "", props.id);
-  const { control, disabled: formDisabled, getFieldState, clearErrors } = useFormContext();
+  const { control, disabled: formDisabled, getFieldState, clearErrors } = useFormContext<T>();
   const {
     field: { ref, ...field },
   } = useController({
@@ -108,7 +109,100 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
     }
   }, [options, page, limitResults]);
 
-  console.log("Rendering StaticTypeaheadInput:", { name, id, value, fieldValue, options });
+  return (
+    <Autocomplete<TypeaheadOption, boolean, boolean, boolean>
+      {...autocompleteProps}
+      id={id}
+      multiple={multiple}
+      groupBy={useGroupBy ? groupOptions : undefined}
+      options={useGroupBy ? sortOptionsByGroup(paginatedOptions) : paginatedOptions}
+      isOptionEqualToValue={
+        autocompleteProps?.isOptionEqualToValue ??
+        ((option, value) => (typeof option === "string" ? option === value : option.value === (value as LabelValueOption).value))
+      }
+      getOptionKey={
+        autocompleteProps?.getOptionKey ??
+        ((option: TypeaheadOption) => (typeof option === "string" ? option : `${option.label}-${option.value ?? ""}`))
+      }
+      disableCloseOnSelect={multiple}
+      value={resolveInputValue(multiple, fixedOptions, withFixedOptionsInValue, value)}
+      getOptionLabel={(option: TypeaheadOption) => (typeof option === "string" ? option : option.label)}
+      getOptionDisabled={(option) =>
+        getOptionDisabled?.(option) ||
+        (useGroupBy && isDisabledGroup(option)) ||
+        (typeof option === "string" ? false : (option.disabled ?? false))
+      }
+      disabled={isDisabled}
+      readOnly={readOnly}
+      selectOnFocus={markAllOnFocus}
+      style={inputGroupStyle}
+      className={className}
+      autoSelect={autoSelect}
+      autoHighlight={autoHighlight}
+      onClose={readOnly ? undefined : onClose}
+      onOpen={readOnly ? undefined : onOpen}
+      onBlur={() => {
+        if (onBlur) {
+          onBlur();
+        }
+        field.onBlur();
+      }}
+      onChange={(_, value) => {
+        // value is typed as Autocomplete<Value> (aka TypeaheadOption) or an array of Autocomplete<Value> (aka TypeaheadOption[])
+        // however, the component is not intended to be used with mixed types
+        const optionsArray = getOptionsFromValue(value, fixedOptions, withFixedOptionsInValue);
+        const values = convertAutoCompleteOptionsToStringArray(optionsArray);
+        const finalValue = multiple ? values : values[0];
+        clearErrors(field.name);
+        if (onChange) {
+          onChange(finalValue);
+        }
+        field.onChange(finalValue);
+      }}
+      onInputChange={(_e, value, reason) => {
+        if (onInputChange) {
+          onInputChange(value, reason);
+        }
+      }}
+      renderOption={highlightOptions ? renderHighlightedOptionFunction : undefined}
+      renderInput={(params) => (
+        <TypeaheadTextField
+          isLoading={isLoading}
+          name={name}
+          label={label}
+          addonLeft={addonLeft}
+          addonRight={addonRight}
+          addonProps={{
+            isDisabled,
+          }}
+          style={style}
+          hideValidationMessage={hideValidationMessage}
+          useBootstrapStyle={useBootstrapStyle}
+          helpText={helpText}
+          placeholder={multiple && value.length > 0 ? undefined : placeholder}
+          paginationIcon={paginationIcon}
+          paginationText={paginationText}
+          variant={variant}
+          limitResults={limitResults}
+          loadMoreOptions={loadMoreOptions}
+          setPage={setPage}
+          {...params}
+          inputRef={(elem) => {
+            if (innerRef) {
+              innerRef.current = elem as HTMLInputElement;
+            }
+            ref(elem);
+          }}
+        />
+      )}
+      renderTags={createTagRenderer(fixedOptions, autocompleteProps)}
+    />
+  );
+};
+
+const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInputProps<T>) => {
+  const { label, useBootstrapStyle = false } = props;
+  const { name, id } = useSafeNameId(props.name ?? "", props.id);
 
   return (
     <FormGroupLayout
@@ -117,93 +211,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
       labelStyle={useBootstrapStyle ? { color: "#8493A5", fontSize: 14 } : undefined}
       layout="muiInput"
     >
-      <Autocomplete<TypeaheadOption, boolean, boolean, boolean>
-        {...autocompleteProps}
-        id={id}
-        multiple={multiple}
-        groupBy={useGroupBy ? groupOptions : undefined}
-        options={useGroupBy ? sortOptionsByGroup(paginatedOptions) : paginatedOptions}
-        isOptionEqualToValue={
-          autocompleteProps?.isOptionEqualToValue ??
-          ((option, value) => (typeof option === "string" ? option === value : option.value === (value as LabelValueOption).value))
-        }
-        getOptionKey={
-          autocompleteProps?.getOptionKey ??
-          ((option: TypeaheadOption) => (typeof option === "string" ? option : `${option.label}-${option.value ?? ""}`))
-        }
-        disableCloseOnSelect={multiple}
-        value={resolveInputValue(multiple, fixedOptions, withFixedOptionsInValue, value)}
-        getOptionLabel={(option: TypeaheadOption) => (typeof option === "string" ? option : option.label)}
-        getOptionDisabled={(option) =>
-          getOptionDisabled?.(option) ||
-          (useGroupBy && isDisabledGroup(option)) ||
-          (typeof option === "string" ? false : (option.disabled ?? false))
-        }
-        disabled={isDisabled}
-        readOnly={readOnly}
-        selectOnFocus={markAllOnFocus}
-        style={inputGroupStyle}
-        className={className}
-        autoSelect={autoSelect}
-        autoHighlight={autoHighlight}
-        onClose={readOnly ? undefined : onClose}
-        onOpen={readOnly ? undefined : onOpen}
-        onBlur={() => {
-          if (onBlur) {
-            onBlur();
-          }
-          field.onBlur();
-        }}
-        onChange={(_, value) => {
-          // value is typed as Autocomplete<Value> (aka TypeaheadOption) or an array of Autocomplete<Value> (aka TypeaheadOption[])
-          // however, the component is not intended to be used with mixed types
-          const optionsArray = getOptionsFromValue(value, fixedOptions, withFixedOptionsInValue);
-          const values = convertAutoCompleteOptionsToStringArray(optionsArray);
-          const finalValue = multiple ? values : values[0];
-          clearErrors(field.name);
-          if (onChange) {
-            onChange(finalValue);
-          }
-          field.onChange(finalValue);
-        }}
-        onInputChange={(_e, value, reason) => {
-          if (onInputChange) {
-            onInputChange(value, reason);
-          }
-        }}
-        renderOption={highlightOptions ? renderHighlightedOptionFunction : undefined}
-        renderInput={(params) => (
-          <TypeaheadTextField
-            isLoading={isLoading}
-            name={name}
-            label={label}
-            addonLeft={addonLeft}
-            addonRight={addonRight}
-            addonProps={{
-              isDisabled,
-            }}
-            style={style}
-            hideValidationMessage={hideValidationMessage}
-            useBootstrapStyle={useBootstrapStyle}
-            helpText={helpText}
-            placeholder={multiple && value.length > 0 ? undefined : placeholder}
-            paginationIcon={paginationIcon}
-            paginationText={paginationText}
-            variant={variant}
-            limitResults={limitResults}
-            loadMoreOptions={loadMoreOptions}
-            setPage={setPage}
-            {...params}
-            inputRef={(elem) => {
-              if (innerRef) {
-                innerRef.current = elem as HTMLInputElement;
-              }
-              ref(elem);
-            }}
-          />
-        )}
-        renderTags={createTagRenderer(fixedOptions, autocompleteProps)}
-      />
+      <AutoComplete<T> {...props} id={id} name={props.name} />
     </FormGroupLayout>
   );
 };
