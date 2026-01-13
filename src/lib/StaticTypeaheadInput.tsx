@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 import { useEffect, useMemo, useState } from "react";
-import { FieldValues, useController } from "react-hook-form";
+import { FieldValues, Controller } from "react-hook-form";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { CommonTypeaheadProps, StaticTypeaheadAutocompleteProps, TypeaheadOption, TypeaheadOptions } from "./types/Typeahead";
 import { useFormContext } from "./context/FormContext";
@@ -29,7 +29,6 @@ interface StaticTypeaheadInputProps<T extends FieldValues> extends CommonTypeahe
   autocompleteProps?: StaticTypeaheadAutocompleteProps;
 }
 
-// eslint-disable-next-line complexity
 const AutoComplete = <T extends FieldValues>(props: StaticTypeaheadInputProps<T>) => {
   const {
     options,
@@ -73,18 +72,7 @@ const AutoComplete = <T extends FieldValues>(props: StaticTypeaheadInputProps<T>
   const [page, setPage] = useState(1);
   const [loadMoreOptions, setLoadMoreOptions] = useState(limitResults !== undefined && limitResults < options.length);
 
-  const { control, disabled: formDisabled, getFieldState, clearErrors } = useFormContext<T>();
-  const {
-    field: { ref, ...field },
-  } = useController({
-    name,
-    control,
-    rules: {
-      validate: {
-        required: () => getFieldState(name)?.error?.message,
-      },
-    },
-  });
+  const { control, disabled: formDisabled, clearErrors } = useFormContext<T>();
 
   const isDisabled = useMemo(() => formDisabled || disabled, [formDisabled, disabled]);
   const paginatedOptions = useMemo(
@@ -92,16 +80,10 @@ const AutoComplete = <T extends FieldValues>(props: StaticTypeaheadInputProps<T>
     [limitResults, page, options],
   );
 
-  const fieldValue = field.value as string | number | string[] | number[] | undefined;
-  const value = useMemo(
-    () =>
-      multiple
-        ? getMultipleAutoCompleteValue(combineOptions(options, fixedOptions), fieldValue as string[] | number[] | undefined)
-        : getSingleAutoCompleteValue(options, fieldValue as string | number | undefined),
-    [fieldValue, multiple, options, fixedOptions],
-  );
-
-  validateFixedOptions(fixedOptions, multiple, autocompleteProps, withFixedOptionsInValue, value);
+  // Validate fixed options upfront
+  useEffect(() => {
+    validateFixedOptions(fixedOptions, multiple, autocompleteProps, withFixedOptionsInValue, []);
+  }, [fixedOptions, multiple, autocompleteProps, withFixedOptionsInValue]);
 
   useEffect(() => {
     if (limitResults !== undefined) {
@@ -109,98 +91,107 @@ const AutoComplete = <T extends FieldValues>(props: StaticTypeaheadInputProps<T>
     }
   }, [options, page, limitResults]);
 
-  useEffect(() => {
-    console.log("Rendering StaticTypeaheadInput", { value });
-  }, [value]);
-
   return (
-    <Autocomplete<TypeaheadOption, boolean, boolean, boolean>
-      {...autocompleteProps}
-      id={id}
-      multiple={multiple}
-      groupBy={useGroupBy ? groupOptions : undefined}
-      options={useGroupBy ? sortOptionsByGroup(paginatedOptions) : paginatedOptions}
-      isOptionEqualToValue={
-        autocompleteProps?.isOptionEqualToValue ??
-        ((option, value) => (typeof option === "string" ? option === value : option.value === (value as LabelValueOption).value))
-      }
-      getOptionKey={
-        autocompleteProps?.getOptionKey ??
-        ((option: TypeaheadOption) => (typeof option === "string" ? option : `${option.label}-${option.value ?? ""}`))
-      }
-      disableCloseOnSelect={multiple}
-      value={resolveInputValue(multiple, fixedOptions, withFixedOptionsInValue, value)}
-      getOptionLabel={(option: TypeaheadOption) => (typeof option === "string" ? option : option.label)}
-      getOptionDisabled={(option) =>
-        getOptionDisabled?.(option) ||
-        (useGroupBy && isDisabledGroup(option)) ||
-        (typeof option === "string" ? false : (option.disabled ?? false))
-      }
-      disabled={isDisabled}
-      readOnly={readOnly}
-      selectOnFocus={markAllOnFocus}
-      style={inputGroupStyle}
-      className={className}
-      autoSelect={autoSelect}
-      autoHighlight={autoHighlight}
-      onClose={readOnly ? undefined : onClose}
-      onOpen={readOnly ? undefined : onOpen}
-      onBlur={() => {
-        if (onBlur) {
-          onBlur();
-        }
-        field.onBlur();
+    <Controller
+      name={name}
+      control={control}
+      rules={{
+        validate: {
+          required: () => {
+            const fieldState = control.getFieldState(name);
+            return fieldState?.error?.message;
+          },
+        },
       }}
-      onChange={(_, value) => {
-        // value is typed as Autocomplete<Value> (aka TypeaheadOption) or an array of Autocomplete<Value> (aka TypeaheadOption[])
-        // however, the component is not intended to be used with mixed types
-        const optionsArray = getOptionsFromValue(value, fixedOptions, withFixedOptionsInValue);
-        const values = convertAutoCompleteOptionsToStringArray(optionsArray);
-        const finalValue = multiple ? values : values[0];
-        clearErrors(field.name);
-        if (onChange) {
-          onChange(finalValue);
-        }
-        field.onChange(finalValue);
-      }}
-      onInputChange={(_e, value, reason) => {
-        if (onInputChange) {
-          onInputChange(value, reason);
-        }
-      }}
-      ref={ref}
-      renderOption={highlightOptions ? renderHighlightedOptionFunction : undefined}
-      renderInput={(params) => (
-        <TypeaheadTextField
-          isLoading={isLoading}
-          name={name}
-          label={label}
-          addonLeft={addonLeft}
-          addonRight={addonRight}
-          addonProps={{
-            isDisabled,
-          }}
-          style={style}
-          hideValidationMessage={hideValidationMessage}
-          useBootstrapStyle={useBootstrapStyle}
-          helpText={helpText}
-          placeholder={multiple && value.length > 0 ? undefined : placeholder}
-          paginationIcon={paginationIcon}
-          paginationText={paginationText}
-          variant={variant}
-          limitResults={limitResults}
-          loadMoreOptions={loadMoreOptions}
-          setPage={setPage}
-          {...params}
-          inputRef={(elem) => {
-            if (innerRef) {
-              innerRef.current = elem as HTMLInputElement;
+      render={({ field }) => {
+        const fieldValue = field.value;
+        const value = multiple
+          ? getMultipleAutoCompleteValue(combineOptions(options, fixedOptions), fieldValue as string[] | number[] | undefined)
+          : getSingleAutoCompleteValue(options, fieldValue as string | number | undefined);
+
+        return (
+          <Autocomplete<TypeaheadOption, boolean, boolean, boolean>
+            {...autocompleteProps}
+            {...field}
+            id={id}
+            multiple={multiple}
+            groupBy={useGroupBy ? groupOptions : undefined}
+            options={useGroupBy ? sortOptionsByGroup(paginatedOptions) : paginatedOptions}
+            isOptionEqualToValue={
+              autocompleteProps?.isOptionEqualToValue ??
+              ((option, value) => (typeof option === "string" ? option === value : option.value === (value as LabelValueOption).value))
             }
-            ref(elem);
-          }}
-        />
-      )}
-      renderTags={createTagRenderer(fixedOptions, autocompleteProps)}
+            getOptionKey={
+              autocompleteProps?.getOptionKey ??
+              ((option: TypeaheadOption) => (typeof option === "string" ? option : `${option.label}-${option.value ?? ""}`))
+            }
+            disableCloseOnSelect={multiple}
+            value={resolveInputValue(multiple, fixedOptions, withFixedOptionsInValue, value)}
+            getOptionLabel={(option: TypeaheadOption) => (typeof option === "string" ? option : option.label)}
+            getOptionDisabled={(option) =>
+              getOptionDisabled?.(option) ||
+              (useGroupBy && isDisabledGroup(option)) ||
+              (typeof option === "string" ? false : (option.disabled ?? false))
+            }
+            disabled={isDisabled}
+            readOnly={readOnly}
+            selectOnFocus={markAllOnFocus}
+            style={inputGroupStyle}
+            className={className}
+            autoSelect={autoSelect}
+            autoHighlight={autoHighlight}
+            onClose={readOnly ? undefined : onClose}
+            onOpen={readOnly ? undefined : onOpen}
+            onBlur={() => {
+              if (onBlur) {
+                onBlur();
+              }
+              field.onBlur();
+            }}
+            onChange={(_, selectedValue) => {
+              const optionsArray = getOptionsFromValue(selectedValue, fixedOptions, withFixedOptionsInValue);
+              const values = convertAutoCompleteOptionsToStringArray(optionsArray);
+              const finalValue = multiple ? values : values[0];
+              clearErrors(field.name);
+              if (onChange) {
+                onChange(finalValue);
+              }
+              field.onChange(finalValue);
+            }}
+            onInputChange={(_e, value, reason) => {
+              onInputChange?.(value, reason);
+            }}
+            renderOption={highlightOptions ? renderHighlightedOptionFunction : undefined}
+            renderInput={(params) => (
+              <TypeaheadTextField
+                {...params}
+                isLoading={isLoading}
+                name={name}
+                label={label}
+                addonLeft={addonLeft}
+                addonRight={addonRight}
+                addonProps={{ isDisabled }}
+                style={style}
+                hideValidationMessage={hideValidationMessage}
+                useBootstrapStyle={useBootstrapStyle}
+                helpText={helpText}
+                placeholder={multiple && value.length > 0 ? undefined : placeholder}
+                paginationIcon={paginationIcon}
+                paginationText={paginationText}
+                variant={variant}
+                limitResults={limitResults}
+                loadMoreOptions={loadMoreOptions}
+                setPage={setPage}
+                inputRef={(elem) => {
+                  if (innerRef) innerRef.current = elem as HTMLInputElement;
+                  field.ref(elem);
+                }}
+              />
+            )}
+            renderTags={createTagRenderer(fixedOptions, autocompleteProps)}
+          />
+        );
+      }}
     />
   );
 };
