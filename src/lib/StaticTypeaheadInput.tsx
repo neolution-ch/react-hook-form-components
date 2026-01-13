@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { FieldValues, useController } from "react-hook-form";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { CommonTypeaheadProps, StaticTypeaheadAutocompleteProps, TypeaheadOption, TypeaheadOptions } from "./types/Typeahead";
@@ -100,6 +100,22 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
     [fieldValue, multiple, options, fixedOptions],
   );
 
+  const handleOnChange = useCallback(
+    (value: string | LabelValueOption | TypeaheadOption[] | null) => {
+      // value is typed as Autocomplete<Value> (aka TypeaheadOption) or an array of Autocomplete<Value> (aka TypeaheadOption[])
+      // however, the component is not intended to be used with mixed types
+      const optionsArray = getOptionsFromValue(value, fixedOptions, withFixedOptionsInValue);
+      const values = convertAutoCompleteOptionsToStringArray(optionsArray);
+      const finalValue = multiple ? values : values[0];
+      clearErrors(field.name);
+      if (onChange) {
+        onChange(finalValue);
+      }
+      field.onChange(finalValue);
+    },
+    [clearErrors, field, fixedOptions, multiple, onChange, withFixedOptionsInValue],
+  );
+
   validateFixedOptions(fixedOptions, multiple, autocompleteProps, withFixedOptionsInValue, value);
 
   useEffect(() => {
@@ -107,6 +123,8 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
       setLoadMoreOptions(page * limitResults < options.length);
     }
   }, [options, page, limitResults]);
+
+  console.log("Rendering StaticTypeaheadInput:", { name, id, value, fieldValue, options });
 
   return (
     <FormGroupLayout
@@ -154,16 +172,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
           field.onBlur();
         }}
         onChange={(_, value) => {
-          // value is typed as Autocomplete<Value> (aka TypeaheadOption) or an array of Autocomplete<Value> (aka TypeaheadOption[])
-          // however, the component is not intended to be used with mixed types
-          const optionsArray = getOptionsFromValue(value, fixedOptions, withFixedOptionsInValue);
-          const values = convertAutoCompleteOptionsToStringArray(optionsArray);
-          const finalValue = multiple ? values : values[0];
-          clearErrors(field.name);
-          if (onChange) {
-            onChange(finalValue);
-          }
-          field.onChange(finalValue);
+          handleOnChange(value);
         }}
         onInputChange={(_e, value, reason) => {
           if (onInputChange) {
@@ -171,36 +180,40 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
           }
         }}
         renderOption={highlightOptions ? renderHighlightedOptionFunction : undefined}
-        renderInput={(params) => (
-          <TypeaheadTextField
-            isLoading={isLoading}
-            name={name}
-            label={label}
-            addonLeft={addonLeft}
-            addonRight={addonRight}
-            addonProps={{
-              isDisabled,
-            }}
-            style={style}
-            hideValidationMessage={hideValidationMessage}
-            useBootstrapStyle={useBootstrapStyle}
-            helpText={helpText}
-            placeholder={multiple && value.length > 0 ? undefined : placeholder}
-            paginationIcon={paginationIcon}
-            paginationText={paginationText}
-            variant={variant}
-            limitResults={limitResults}
-            loadMoreOptions={loadMoreOptions}
-            setPage={setPage}
-            {...params}
-            inputRef={(elem) => {
-              if (innerRef) {
-                innerRef.current = elem as HTMLInputElement;
-              }
-              ref(elem);
-            }}
-          />
-        )}
+        renderInput={(params) => {
+          console.log("re-render the renderInput with params:", params);
+
+          return (
+            <TypeaheadTextField
+              isLoading={isLoading}
+              name={name}
+              label={label}
+              addonLeft={addonLeft}
+              addonRight={addonRight}
+              addonProps={{
+                isDisabled,
+              }}
+              style={style}
+              hideValidationMessage={hideValidationMessage}
+              useBootstrapStyle={useBootstrapStyle}
+              helpText={helpText}
+              placeholder={multiple && value.length > 0 ? undefined : placeholder}
+              paginationIcon={paginationIcon}
+              paginationText={paginationText}
+              variant={variant}
+              limitResults={limitResults}
+              loadMoreOptions={loadMoreOptions}
+              setPage={setPage}
+              {...params}
+              inputRef={(elem) => {
+                if (innerRef) {
+                  innerRef.current = elem as HTMLInputElement;
+                }
+                ref(elem);
+              }}
+            />
+          );
+        }}
         renderTags={createTagRenderer(fixedOptions, autocompleteProps)}
       />
     </FormGroupLayout>
