@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useMemo } from "react";
 import { DeepPartial, FieldValues, Resolver, SubmitHandler, useForm, UseFormReturn } from "react-hook-form";
 import { jsonIsoDateReviver } from "./helpers/dateUtils";
 import { FormContext, FormContextProps } from "./context/FormContext";
@@ -80,8 +80,41 @@ const Form = <T extends FieldValues>({
   const formMethods = useForm<T>({ resolver, defaultValues: revivedDefaultValues });
   const autoSubmitHandler = useAutoSubmit({ onSubmit, formMethods, autoSubmitConfig });
 
+  // Memoize the object passed to function children to avoid creating new reference each render
+  const formPropsForChildren = useMemo(
+    () => ({
+      ...formMethods,
+      disabled,
+      requiredFields,
+      hideValidationMessages,
+      disableAriaAutocomplete,
+    }),
+    [formMethods, disabled, requiredFields, hideValidationMessages, disableAriaAutocomplete],
+  );
+
+  // Memoize context value to prevent unnecessary re-renders of context consumers
+  const contextValue = useMemo(
+    () => ({
+      requiredFields,
+      disabled,
+      hideValidationMessages,
+      disableAriaAutocomplete,
+      ...formMethods,
+    }),
+    [formMethods, requiredFields, disabled, hideValidationMessages, disableAriaAutocomplete],
+  );
+
+  // Only recompute children if the props object changes
+  const resolvedChildren = useMemo(
+    () => (typeof children === "function" ? children(formPropsForChildren) : children),
+    [children, formPropsForChildren],
+  );
+
+  console.log("Rendering Form", { contextValue });
+  console.log("Rendering Form", { formPropsForChildren });
+
   return (
-    <FormContext.Provider value={{ requiredFields, disabled, hideValidationMessages, disableAriaAutocomplete, ...formMethods }}>
+    <FormContext.Provider value={contextValue}>
       <form
         ref={(elem) => {
           if (formRef) {
@@ -92,9 +125,7 @@ const Form = <T extends FieldValues>({
         method="POST"
         autoComplete={autoComplete}
       >
-        {children instanceof Function
-          ? children({ ...formMethods, disabled, requiredFields, hideValidationMessages, disableAriaAutocomplete })
-          : children}
+        {resolvedChildren}
       </form>
     </FormContext.Provider>
   );
