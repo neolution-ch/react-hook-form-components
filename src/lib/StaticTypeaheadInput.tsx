@@ -109,6 +109,10 @@ const AutoComplete = <T extends FieldValues>(props: StaticTypeaheadInputProps<T>
     }
   }, [options, page, limitResults]);
 
+  useEffect(() => {
+    console.log("Rendering StaticTypeaheadInput", { value });
+  }, [value]);
+
   return (
     <Autocomplete<TypeaheadOption, boolean, boolean, boolean>
       {...autocompleteProps}
@@ -164,6 +168,7 @@ const AutoComplete = <T extends FieldValues>(props: StaticTypeaheadInputProps<T>
           onInputChange(value, reason);
         }
       }}
+      ref={ref}
       renderOption={highlightOptions ? renderHighlightedOptionFunction : undefined}
       renderInput={(params) => (
         <TypeaheadTextField
