@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 import { useEffect, useMemo, useState } from "react";
-import { FieldValues, Controller } from "react-hook-form";
+import { FieldValues, Controller, Path, PathValue } from "react-hook-form";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { CommonTypeaheadProps, StaticTypeaheadAutocompleteProps, TypeaheadOption, TypeaheadOptions } from "./types/Typeahead";
 import { useFormContext } from "./context/FormContext";
@@ -72,7 +72,7 @@ const AutoComplete = <T extends FieldValues>(props: StaticTypeaheadInputProps<T>
   const [page, setPage] = useState(1);
   const [loadMoreOptions, setLoadMoreOptions] = useState(limitResults !== undefined && limitResults < options.length);
 
-  const { control, disabled: formDisabled, clearErrors } = useFormContext<T>();
+  const { control, disabled: formDisabled, clearErrors, setValue } = useFormContext<T>();
 
   const isDisabled = useMemo(() => formDisabled || disabled, [formDisabled, disabled]);
   const paginatedOptions = useMemo(
@@ -156,7 +156,7 @@ const AutoComplete = <T extends FieldValues>(props: StaticTypeaheadInputProps<T>
               if (onChange) {
                 onChange(finalValue);
               }
-              field.onChange(finalValue);
+              setValue(field.name, finalValue as PathValue<T, Path<T>>, { shouldValidate: true });
             }}
             onInputChange={(_e, value, reason) => {
               onInputChange?.(value, reason);
