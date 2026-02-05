@@ -625,10 +625,7 @@ it("innerRef works correctly", () => {
 it("works with fitContentMenu", () => {
   const { simpleOptions } = generateOptions();
   const name = faker.random.alpha(10);
-  const specificOptions = [
-    "A Very Long Movie Title That Exceeds Normal Lengths",
-    "The Lord of the Rings: The Return of the King",
-  ];
+  const specificOptions = ["A Very Long Movie Title That Exceeds Normal Lengths", "The Lord of the Rings: The Return of the King"];
 
   cy.mount(
     <div className="p-4">
@@ -637,7 +634,14 @@ it("works with fitContentMenu", () => {
           // Nothing to do
         }}
       >
-        <StaticTypeaheadInput style={{ width: 300 }} multiple name={name} label={name} options={[...specificOptions, ...simpleOptions]} fitMenuContent />
+        <StaticTypeaheadInput
+          style={{ width: 300 }}
+          multiple
+          name={name}
+          label={name}
+          options={[...specificOptions, ...simpleOptions]}
+          fitMenuContent
+        />
       </Form>
     </div>,
   );
@@ -651,4 +655,3 @@ it("works with fitContentMenu", () => {
     expect(popperWidth).to.be.greaterThan(300);
   });
 });
-

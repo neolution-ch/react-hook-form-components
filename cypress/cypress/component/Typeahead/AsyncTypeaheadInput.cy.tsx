@@ -967,8 +967,8 @@ it("innerRef works correctly", () => {
 it("works with fitContentMenu", () => {
   const name = faker.random.alpha(10);
   const specificOptions = [
-    {label: "A Very Long Movie Title That Exceeds Normal Lengths", value: "1"},
-    {label: "The Lord of the Rings: The Return of the King", value: "2"},
+    { label: "A Very Long Movie Title That Exceeds Normal Lengths", value: "1" },
+    { label: "The Lord of the Rings: The Return of the King", value: "2" },
   ];
 
   cy.mount(
