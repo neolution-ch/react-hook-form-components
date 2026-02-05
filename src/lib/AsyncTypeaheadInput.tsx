@@ -19,7 +19,7 @@ import { useFormContext } from "./context/FormContext";
 import { TypeaheadTextField } from "./components/Typeahead/TypeaheadTextField";
 import { FormGroupLayout } from "./FormGroupLayout";
 import { LabelValueOption } from "./types/LabelValueOption";
-import { typeaheadFitContentMenuStyle } from "./helpers/mui";
+import { TypeaheadFitMenuPopper } from "./components/Typeahead/TypeaheadFitMenuPopper";
 
 interface AsyncTypeaheadInputRef {
   resetValues: () => void;
@@ -147,9 +147,9 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
       <Autocomplete<TypeaheadOption, boolean, boolean, boolean>
         {...autocompleteProps}
         {...field}
-        slotProps={{
-          ...(fitMenuContent ? { paper: typeaheadFitContentMenuStyle } : {}),
-          ...autocompleteProps?.slotProps,
+        slots={{
+          popper: fitMenuContent ? TypeaheadFitMenuPopper : undefined,
+          ...autocompleteProps?.slots,
         }}
         id={id}
         multiple={multiple}

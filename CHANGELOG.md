@@ -9,11 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- support to allow menu size to fit the longest option into `StaticTypeahead` and `AsyncTypeahead`.
-  1. Use `fitMenuContent` property, false by default.
-  2. The menu still fits the content of the input whether options length is shorter then the input length;
-  3. The menu breaks the option label whether composed by multiple words;
-  4. The menu fits the larger option label whether it is a single unbroken word.
+- support to allow menu size to fit the longest option into `StaticTypeahead` and `AsyncTypeahead`, via `fitMenuContent`.
 
 ## [3.15.1] - 2026-01-12
 

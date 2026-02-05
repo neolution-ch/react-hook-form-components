@@ -626,7 +626,7 @@ it("works with fitContentMenu", () => {
   const { simpleOptions } = generateOptions();
   const name = faker.random.alpha(10);
   const specificOptions = [
-    "AveryLongTitleForAMovieEspeciallyWithoutSpacesButWeWantToEnsureThatTheMenuFitsTheContent",
+    "A Very Long Movie Title That Exceeds Normal Lengths",
     "The Lord of the Rings: The Return of the King",
   ];
 
@@ -637,15 +637,18 @@ it("works with fitContentMenu", () => {
           // Nothing to do
         }}
       >
-        <StaticTypeaheadInput multiple name={name} label={name} options={[...specificOptions, ...simpleOptions]} fitMenuContent />
+        <StaticTypeaheadInput style={{ width: 300 }} multiple name={name} label={name} options={[...specificOptions, ...simpleOptions]} fitMenuContent />
       </Form>
     </div>,
   );
 
   cy.get(`#${name}`).click();
+  cy.get(".MuiInputBase-root").should("have.css", "width", "300px");
   cy.get("div[role='presentation']").should(($div) => {
     const popperWidth = $div.width() ?? 0;
     const paperWidth = $div.find("div.MuiPaper-root").width() ?? 0;
-    expect(paperWidth).to.be.greaterThan(popperWidth);
+    expect(paperWidth).to.be.equal(popperWidth);
+    expect(popperWidth).to.be.greaterThan(300);
   });
 });
+
