@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.16.0] - 2026-02-05
+
 ### Added
 
 - support to allow menu size to fit the longest option into `StaticTypeahead` and `AsyncTypeahead`, via `fitMenuContent`.
@@ -695,7 +697,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Created package :tada:
 
-[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/3.15.1...HEAD
+[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/3.16.0...HEAD
 [0.1.2]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.1...0.1.2
 [0.1.1]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.1.0
@@ -720,6 +722,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.4.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.3.0...0.4.0
 [0.3.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.2.0...0.3.0
 [0.2.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.2.0
+[3.16.0]: https://github.com/neolution-ch/react-hook-form-components/compare/3.15.1...3.16.0
 [3.15.1]: https://github.com/neolution-ch/react-hook-form-components/compare/3.15.0...3.15.1
 [3.15.0]: https://github.com/neolution-ch/react-hook-form-components/compare/3.14.0...3.15.0
 [3.14.0]: https://github.com/neolution-ch/react-hook-form-components/compare/3.13.1...3.14.0
