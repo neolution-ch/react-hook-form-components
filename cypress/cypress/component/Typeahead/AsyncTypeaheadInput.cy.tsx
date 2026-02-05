@@ -931,7 +931,6 @@ it("works with fixed options excluded", () => {
 });
 
 it("innerRef works correctly", () => {
-  const { simpleOptions } = generateOptions();
   const name = faker.random.alpha(10);
   const options = generateOptions();
 
@@ -963,4 +962,40 @@ it("innerRef works correctly", () => {
   cy.mount(<InputWithRef />);
   cy.get("button[title=focus]").click();
   cy.get(`#${name}`).should("be.focused");
+});
+
+it("works with fitContentMenu", () => {
+  const name = faker.random.alpha(10);
+  const specificOptions = [
+    { label: "A Very Long Movie Title That Exceeds Normal Lengths", value: "1" },
+    { label: "The Lord of the Rings: The Return of the King", value: "2" },
+  ];
+
+  cy.mount(
+    <div className="p-4">
+      <Form
+        onSubmit={() => {
+          // Nothing to do
+        }}
+      >
+        <AsyncTypeaheadInput
+          style={{ width: 300 }}
+          queryFn={async (query: string) => await fetchMock(specificOptions, query, true)}
+          name={name}
+          label={name}
+          fitMenuContent
+        />
+      </Form>
+    </div>,
+  );
+
+  cy.get(`#${name}`).click();
+  cy.focused().type(specificOptions[0].label);
+  cy.get(".MuiInputBase-root").should("have.css", "width", "300px");
+  cy.get("div[role='presentation']").should(($div) => {
+    const popperWidth = $div.width() ?? 0;
+    const paperWidth = $div.find("div.MuiPaper-root").width() ?? 0;
+    expect(paperWidth).to.be.equal(popperWidth);
+    expect(popperWidth).to.be.greaterThan(300);
+  });
 });
