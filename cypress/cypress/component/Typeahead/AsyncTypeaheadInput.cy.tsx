@@ -990,6 +990,7 @@ it("works with fitContentMenu", () => {
   );
 
   cy.get(`#${name}`).click();
+  cy.focused().type(specificOptions[0].label);
   cy.get(".MuiInputBase-root").should("have.css", "width", "300px");
   cy.get("div[role='presentation']").should(($div) => {
     const popperWidth = $div.width() ?? 0;
