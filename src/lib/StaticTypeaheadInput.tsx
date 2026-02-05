@@ -22,6 +22,7 @@ import {
 import { TypeaheadTextField } from "./components/Typeahead/TypeaheadTextField";
 import { FormGroupLayout } from "./FormGroupLayout";
 import { LabelValueOption } from "./types/LabelValueOption";
+import { typeaheadFitContentMenuStyle } from "./helpers/mui";
 
 interface StaticTypeaheadInputProps<T extends FieldValues> extends CommonTypeaheadProps<T> {
   options: TypeaheadOptions;
@@ -66,6 +67,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
     fixedOptions,
     withFixedOptionsInValue = true,
     innerRef,
+    fitMenuContent,
   } = props;
 
   const [page, setPage] = useState(1);
@@ -118,6 +120,10 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
       <Autocomplete<TypeaheadOption, boolean, boolean, boolean>
         {...autocompleteProps}
         {...field}
+        slotProps={{
+          ...(fitMenuContent ? { paper: typeaheadFitContentMenuStyle } : {}),
+          ...autocompleteProps?.slotProps,
+        }}
         id={id}
         multiple={multiple}
         groupBy={useGroupBy ? groupOptions : undefined}

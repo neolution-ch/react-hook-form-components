@@ -621,3 +621,31 @@ it("innerRef works correctly", () => {
   cy.get("button[title=focus]").click();
   cy.get(`#${name}`).should("be.focused");
 });
+
+it("works with fitContentMenu", () => {
+  const { simpleOptions } = generateOptions();
+  const name = faker.random.alpha(10);
+  const specificOptions = [
+    "AveryLongTitleForAMovieEspeciallyWithoutSpacesButWeWantToEnsureThatTheMenuFitsTheContent",
+    "The Lord of the Rings: The Return of the King",
+  ];
+
+  cy.mount(
+    <div className="p-4">
+      <Form
+        onSubmit={() => {
+          // Nothing to do
+        }}
+      >
+        <StaticTypeaheadInput multiple name={name} label={name} options={[...specificOptions, ...simpleOptions]} fitMenuContent />
+      </Form>
+    </div>,
+  );
+
+  cy.get(`#${name}`).click();
+  cy.get("div[role='presentation']").should(($div) => {
+    const popperWidth = $div.width() ?? 0;
+    const paperWidth = $div.find("div.MuiPaper-root").width() ?? 0;
+    expect(paperWidth).to.be.greaterThan(popperWidth);
+  });
+});

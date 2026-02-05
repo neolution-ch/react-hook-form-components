@@ -1,3 +1,4 @@
+import { PaperProps } from "@mui/material";
 import { SxProps } from "@mui/material/styles";
 
 const textFieldBootstrapStyle: SxProps = {
@@ -48,4 +49,11 @@ const textFieldBootstrapStyle: SxProps = {
   },
 };
 
-export { textFieldBootstrapStyle };
+const typeaheadFitContentMenuStyle: PaperProps = {
+  sx: {
+    width: "fit-content !important", // override fit the longest option
+    minWidth: "100%", // ensure it doesn't get smaller than the input
+  },
+};
+
+export { textFieldBootstrapStyle, typeaheadFitContentMenuStyle };
