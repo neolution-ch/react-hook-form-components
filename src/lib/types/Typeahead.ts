@@ -25,6 +25,7 @@ interface CommonTypeaheadProps<T extends FieldValues>
   fixedOptions?: TypeaheadOptions;
   withFixedOptionsInValue?: boolean;
   innerRef?: MutableRefObject<HTMLInputElement | null>;
+  fitMenuContent?: boolean;
   getOptionDisabled?: (option: TypeaheadOption) => boolean;
   onChange?: (selected: string | string[]) => void;
   onInputChange?: (text: string, reason: AutocompleteInputChangeReason) => void;
