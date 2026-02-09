@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- padding on `textFieldBootstrapStyle` in order to override MUI padding on `StaticTypeahead`, `AsyncTypeahead`, `ColorPickerInput` and `TelephoneNumberInput`.
+
 ## [3.16.0] - 2026-02-05
 
 ### Added

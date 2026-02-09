@@ -10,6 +10,17 @@ const textFieldBootstrapStyle: SxProps = {
     padding: "0px 12px",
     borderColor: "#E0E3E7",
     transition: "border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out",
+
+    // override padding for mui inputs to match bootstrap's default input padding
+    "& .MuiInputBase-input": {
+      padding: "0px 12px",
+    },
+
+    // override default padding when text-field is wrapped by autocomplete
+    ".MuiAutocomplete-root &": {
+      padding: "0px 12px",
+    },
+
     "&.Mui-focused": {
       borderColor: "#80bdff",
       boxShadow: "0 0 0 0.2rem rgba(0,123,255,.25)",
@@ -42,7 +53,7 @@ const textFieldBootstrapStyle: SxProps = {
   "& fieldset": {
     border: "none",
   },
-  "& .MuiFormHelperText-root ": {
+  "& .MuiFormHelperText-root": {
     marginLeft: "0.2rem",
     marginTop: "0.3rem",
   },
