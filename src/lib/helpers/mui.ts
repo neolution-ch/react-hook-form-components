@@ -11,7 +11,7 @@ const textFieldBootstrapStyle: SxProps = {
     borderColor: "#E0E3E7",
     transition: "border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out",
 
-    // override padding for color picker input
+    // override padding for mui inputs to match bootstrap's default input padding
     "& .MuiInputBase-input": {
       padding: "0px 12px",
     },
