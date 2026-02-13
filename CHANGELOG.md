@@ -7,6 +7,127 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.17.0] - 2026-02-09
+
+### Fixed
+
+- padding on `textFieldBootstrapStyle` in order to override MUI padding on `StaticTypeahead`, `AsyncTypeahead`, `ColorPickerInput` and `TelephoneNumberInput`.
+
+## [3.16.0] - 2026-02-05
+
+### Added
+
+- support to allow menu size to fit the longest option into `StaticTypeahead` and `AsyncTypeahead`, via `fitMenuContent`.
+
+## [3.15.1] - 2026-01-12
+
+### Fix
+
+- `*` visibility on a required field label, whether the label is empty.
+- `DatePickerInput` selector when `onClickOutside` function is triggered.
+
+## [3.15.0] - 2025-12-19
+
+### Added
+
+- support to specify `innerRef` into `StaticTypeaheadInput` and `AsyncTypeaheadInput`.
+
+## [3.14.0] - 2025-12-10
+
+### Added
+
+- support into `requiredFields` property of `Form` component, for nested objects and arrays.
+- `form` helper functions.
+- `countryMenuWidth` property to `TelephoneNumberInput` in order to customize the country menu width.
+
+### Fixed
+
+- `TelephoneNumberInput` countries order, in order to be alphabetically sorted.
+- Required field label on `FormGroupLayoutLabel`, `ColorPicker`, `TelephoneNumberInput`, `TypeaheadTextField` (hence `StaticTypeaheadInput` and `AsyncTypeaheadInput`) in order to display \* also on nested and array fields.
+
+  1. `requiredFields` can still accept a `FieldPath<T>[]`
+  2. In order to be complaint with `FieldPath` react-hook-form type (`object.${number}.property`) array properties provide a wildcard:
+
+  ```tsx
+  requiredFields = [
+    `object`,
+    `object.nestedObjects`,
+    `objects.*.property`,
+    `object.nestedObject.property`,
+    `object.nestedObjects.*.property`,
+  ];
+  ```
+
+  is going to consider as required:
+
+  ```tsx
+    name="object"
+    name="object.nestedObjects.0", "object.nestedObjects.1", etc.
+    name="objects.0.property", name="objects.1.property", etc.
+    name="object.nestedObject.property"
+    name="object.nestedObjects.0.property", name="object.nestedObjects.1.property", etc.
+  ```
+
+## [3.13.1] - 2025-11-13
+
+### Fixed
+
+- Open menu on search country input clear for `TelephoneNumberInput`
+
+## [3.13.0] - 2025-11-13
+
+### Fixed
+
+- country labels in search country input for `TelephoneNumberInput` includes also national prefix.
+- Clicking on clear icon in search country input for `TelephoneNumberInput` will automatically open the select menu.
+
+### Added
+
+- `pinnedCountries` property in `TelephoneNumberInput` which allows to pin some countries in the top of the list.
+
+## [3.12.0] - 2025-11-10
+
+### Added
+
+- `i18n-iso-countries` required peer dependencies.
+- `TelephoneNumberInput` which helps in order to select nationality and national number.
+
+1.  It's needed to include icons style.
+
+    ```tsx
+    import "node_modules/flag-icons/css/flag-icons.min.css";
+    ```
+
+2.  Labels are by default the country code. In order to use localized names, you need to register locale on your own
+    Locale is automatically recognized if only one is registered on your project. Otherwise you need to provide the `locale` property with the desidered locale.
+
+    ```tsx
+    import { registerLocale } from "i18n-iso-countries";
+    import countriesEn from "i18n-iso-countries/langs/en.json";
+
+    registerLocale(countriesEn);
+    ```
+
+3.  for `yup` validation, it's possible to use utilities from `google-libphonenumber`.
+
+## [3.11.2] - 2025-10-15
+
+### Fixed
+
+- `RatingInput` controlled/uncontrolled state warning by ensuring value prop is always defined.
+
+## [3.11.1] - 2025-09-30
+
+### Fixed
+
+- `StaticTypeaheadInput` and `AsyncTypeaheadInput` highlighted suggestions, in order to match the entire word of the input value.
+
+## [3.11.0] - 2025-09-29
+
+### Added
+
+- `RatingInput` component
+
 ## [3.10.2] - 2025-09-23
 
 ### Fixed
@@ -580,7 +701,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Created package :tada:
 
-[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/3.10.2...HEAD
+[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/3.17.0...HEAD
 [0.1.2]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.1...0.1.2
 [0.1.1]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.1.0
@@ -605,6 +726,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.4.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.3.0...0.4.0
 [0.3.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.2.0...0.3.0
 [0.2.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.2.0
+[3.17.0]: https://github.com/neolution-ch/react-hook-form-components/compare/3.16.0...3.17.0
+[3.16.0]: https://github.com/neolution-ch/react-hook-form-components/compare/3.15.1...3.16.0
+[3.15.1]: https://github.com/neolution-ch/react-hook-form-components/compare/3.15.0...3.15.1
+[3.15.0]: https://github.com/neolution-ch/react-hook-form-components/compare/3.14.0...3.15.0
+[3.14.0]: https://github.com/neolution-ch/react-hook-form-components/compare/3.13.1...3.14.0
+[3.13.1]: https://github.com/neolution-ch/react-hook-form-components/compare/3.13.0...3.13.1
+[3.13.0]: https://github.com/neolution-ch/react-hook-form-components/compare/3.12.0...3.13.0
+[3.12.0]: https://github.com/neolution-ch/react-hook-form-components/compare/3.11.2...3.12.0
+[3.11.2]: https://github.com/neolution-ch/react-hook-form-components/compare/3.11.1...3.11.2
+[3.11.1]: https://github.com/neolution-ch/react-hook-form-components/compare/3.11.0...3.11.1
+[3.11.0]: https://github.com/neolution-ch/react-hook-form-components/compare/3.10.2...3.11.0
 [3.10.2]: https://github.com/neolution-ch/react-hook-form-components/compare/3.10.1...3.10.2
 [3.10.1]: https://github.com/neolution-ch/react-hook-form-components/compare/3.10.0...3.10.1
 [3.10.0]: https://github.com/neolution-ch/react-hook-form-components/compare/3.9.0...3.10.0

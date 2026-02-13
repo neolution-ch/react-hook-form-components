@@ -22,6 +22,7 @@ import {
 import { TypeaheadTextField } from "./components/Typeahead/TypeaheadTextField";
 import { FormGroupLayout } from "./FormGroupLayout";
 import { LabelValueOption } from "./types/LabelValueOption";
+import { TypeaheadFitMenuPopper } from "./components/Typeahead/TypeaheadFitMenuPopper";
 
 interface StaticTypeaheadInputProps<T extends FieldValues> extends CommonTypeaheadProps<T> {
   options: TypeaheadOptions;
@@ -65,6 +66,8 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
     autocompleteProps,
     fixedOptions,
     withFixedOptionsInValue = true,
+    innerRef,
+    fitMenuContent,
   } = props;
 
   const [page, setPage] = useState(1);
@@ -117,6 +120,10 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
       <Autocomplete<TypeaheadOption, boolean, boolean, boolean>
         {...autocompleteProps}
         {...field}
+        slots={{
+          popper: fitMenuContent ? TypeaheadFitMenuPopper : undefined,
+          ...autocompleteProps?.slots,
+        }}
         id={id}
         multiple={multiple}
         groupBy={useGroupBy ? groupOptions : undefined}
@@ -192,7 +199,12 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
             loadMoreOptions={loadMoreOptions}
             setPage={setPage}
             {...params}
-            inputRef={(elem) => ref(elem)}
+            inputRef={(elem) => {
+              if (innerRef) {
+                innerRef.current = elem as HTMLInputElement;
+              }
+              ref(elem);
+            }}
           />
         )}
         renderTags={createTagRenderer(fixedOptions, autocompleteProps)}

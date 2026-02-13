@@ -4,8 +4,8 @@ import { faker, Sex } from "@faker-js/faker";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { generateOptions } from "../../helpers/typeahead";
-import { useState } from "react";
 import { mount } from "cypress/react";
+import { useRef, useState } from "react";
 
 const selectOption = (name: string, text: string) => {
   cy.get(`#${name}`).clear();
@@ -593,4 +593,66 @@ it("works with fixed options excluded", () => {
   cy.get("div.Mui-disabled span.MuiChip-label").should("have.text", defaultFixedOption).should("be.visible");
   cy.get("input[type=submit]").click({ force: true });
   cy.get("@onSubmitSpy").should("be.calledOnceWith", { [name]: [] });
+});
+
+it("innerRef works correctly", () => {
+  const { simpleOptions } = generateOptions();
+  const name = faker.random.alpha(10);
+
+  const InputWithRef = () => {
+    const ref = useRef<HTMLInputElement>(null);
+
+    return (
+      <div className="p-4">
+        <Form
+          onSubmit={() => {
+            // Nothing to do
+          }}
+        >
+          <StaticTypeaheadInput autocompleteProps={{ openOnFocus: true }} innerRef={ref} name={name} label={name} options={simpleOptions} />
+          <button title="focus" onClick={() => ref.current?.focus()}>
+            Focus
+          </button>
+        </Form>
+      </div>
+    );
+  };
+
+  cy.mount(<InputWithRef />);
+  cy.get("button[title=focus]").click();
+  cy.get(`#${name}`).should("be.focused");
+});
+
+it("works with fitContentMenu", () => {
+  const { simpleOptions } = generateOptions();
+  const name = faker.random.alpha(10);
+  const specificOptions = ["A Very Long Movie Title That Exceeds Normal Lengths", "The Lord of the Rings: The Return of the King"];
+
+  cy.mount(
+    <div className="p-4">
+      <Form
+        onSubmit={() => {
+          // Nothing to do
+        }}
+      >
+        <StaticTypeaheadInput
+          style={{ width: 300 }}
+          multiple
+          name={name}
+          label={name}
+          options={[...specificOptions, ...simpleOptions]}
+          fitMenuContent
+        />
+      </Form>
+    </div>,
+  );
+
+  cy.get(`#${name}`).click();
+  cy.get(".MuiInputBase-root").should("have.css", "width", "300px");
+  cy.get("div[role='presentation']").should(($div) => {
+    const popperWidth = $div.width() ?? 0;
+    const paperWidth = $div.find("div.MuiPaper-root").width() ?? 0;
+    expect(paperWidth).to.be.equal(popperWidth);
+    expect(popperWidth).to.be.greaterThan(300);
+  });
 });

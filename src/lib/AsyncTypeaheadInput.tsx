@@ -19,6 +19,7 @@ import { useFormContext } from "./context/FormContext";
 import { TypeaheadTextField } from "./components/Typeahead/TypeaheadTextField";
 import { FormGroupLayout } from "./FormGroupLayout";
 import { LabelValueOption } from "./types/LabelValueOption";
+import { TypeaheadFitMenuPopper } from "./components/Typeahead/TypeaheadFitMenuPopper";
 
 interface AsyncTypeaheadInputRef {
   resetValues: () => void;
@@ -39,6 +40,7 @@ interface AsyncTypeaheadInputProps<T extends FieldValues> extends CommonTypeahea
 const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputProps<T>) => {
   const {
     inputRef,
+    innerRef,
     multiple,
     disabled,
     variant,
@@ -74,6 +76,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
     autocompleteProps,
     fixedOptions,
     withFixedOptionsInValue = true,
+    fitMenuContent,
   } = props;
 
   const [options, setOptions] = useState<TypeaheadOptions>(defaultOptions);
@@ -144,6 +147,10 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
       <Autocomplete<TypeaheadOption, boolean, boolean, boolean>
         {...autocompleteProps}
         {...field}
+        slots={{
+          popper: fitMenuContent ? TypeaheadFitMenuPopper : undefined,
+          ...autocompleteProps?.slots,
+        }}
         id={id}
         multiple={multiple}
         loading={isLoading}
@@ -227,7 +234,12 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
             loadMoreOptions={loadMoreOptions}
             setPage={setPage}
             {...params}
-            inputRef={(elem) => ref(elem)}
+            inputRef={(elem) => {
+              if (innerRef) {
+                innerRef.current = elem as HTMLInputElement;
+              }
+              ref(elem);
+            }}
           />
         )}
         renderTags={createTagRenderer(fixedOptions, autocompleteProps)}

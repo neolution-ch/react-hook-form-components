@@ -1,8 +1,9 @@
 import { createContext, useContext } from "react";
-import { FieldPath, FieldValues, UseFormReturn } from "react-hook-form";
+import { FieldValues, UseFormReturn } from "react-hook-form";
+import { RequiredFieldPath } from "../types/Form";
 
 export interface FormContextProps<T extends FieldValues> extends UseFormReturn<T, unknown> {
-  requiredFields: FieldPath<T>[];
+  requiredFields: RequiredFieldPath<T>[];
   disabled: boolean;
   hideValidationMessages: boolean;
   disableAriaAutocomplete: boolean;

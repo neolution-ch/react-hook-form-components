@@ -188,7 +188,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
               field.onChange(convertedDate);
             }}
             onClickOutside={(e) => {
-              if (document.querySelector(`#${formGroupId.current}`)?.contains(e.target as HTMLElement) && !disabled && !formDisabled) {
+              if (document.getElementById(formGroupId.current)?.contains(e.target as HTMLElement) && !disabled && !formDisabled) {
                 internalDatePickerRef.current?.setOpen(true);
               }
 
