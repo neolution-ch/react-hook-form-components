@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- updated most packages to newest possible version
+
 ## [3.17.0] - 2026-02-09
 
 ### Fixed
@@ -44,7 +48,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `TelephoneNumberInput` countries order, in order to be alphabetically sorted.
 - Required field label on `FormGroupLayoutLabel`, `ColorPicker`, `TelephoneNumberInput`, `TypeaheadTextField` (hence `StaticTypeaheadInput` and `AsyncTypeaheadInput`) in order to display \* also on nested and array fields.
-
   1. `requiredFields` can still accept a `FieldPath<T>[]`
   2. In order to be complaint with `FieldPath` react-hook-form type (`object.${number}.property`) array properties provide a wildcard:
 
