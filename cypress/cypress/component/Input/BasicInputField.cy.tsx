@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { Form, Input } from "react-hook-form-components";
 import { faker } from "@faker-js/faker";
 import * as yup from "yup";
@@ -7,6 +6,7 @@ import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { InputGroupText } from "reactstrap";
 import { useRef } from "react";
+import { mount } from "cypress/react";
 
 describe("Input.cy.tsx", () => {
   it("basic text input works", () => {
@@ -17,7 +17,7 @@ describe("Input.cy.tsx", () => {
 
     const randomWord = faker.random.word();
 
-    cy.mount(
+    mount(
       <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
         <Input name={name} label={name} />
 
@@ -64,7 +64,7 @@ describe("Input.cy.tsx", () => {
       );
     };
 
-    cy.mount(<InputWithRef />);
+    mount(<InputWithRef />);
 
     cy.get("input[type=number]").should("have.value", randomNumber);
     cy.get("button").click({ force: true });
@@ -79,7 +79,7 @@ describe("Input.cy.tsx", () => {
 
     const randomNumber = faker.datatype.number();
 
-    cy.mount(
+    mount(
       <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
         <Input type="number" name={name} label={name} />
 
@@ -104,7 +104,7 @@ describe("Input.cy.tsx", () => {
     const randomNumber = faker.datatype.number();
     const expectedResult = randomNumber + step - (randomNumber % step);
 
-    cy.mount(
+    mount(
       <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
         <Input type="number" name={name} label={name} step={step} />
 
@@ -130,7 +130,7 @@ describe("Input.cy.tsx", () => {
 
     const helpText = faker.random.words();
 
-    cy.mount(
+    mount(
       <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
         <Input name={name} label={name} helpText={helpText} />
 
@@ -150,7 +150,7 @@ describe("Input.cy.tsx", () => {
 
     const randomWord = faker.random.word();
 
-    cy.mount(
+    mount(
       <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
         <Input name={name} label={name} />
 
@@ -184,7 +184,7 @@ describe("Input.cy.tsx", () => {
     const name = `${objectName}.${propertyName}`;
     const randomWord = faker.random.word();
 
-    cy.mount(
+    mount(
       <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
         <Input name={name} label={name} />
 
@@ -213,7 +213,7 @@ describe("Input.cy.tsx", () => {
 
     const randomWord = faker.random.word();
 
-    cy.mount(
+    mount(
       <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
         <Input name={name} label={name} onChange={cy.spy().as("onChangeSpy")} />
 
@@ -235,7 +235,7 @@ describe("Input.cy.tsx", () => {
 
     const randomWord = faker.random.word();
 
-    cy.mount(
+    mount(
       <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
         <Input name={name} label={name} onBlur={cy.spy().as("onBlurSpy")} />
 
@@ -257,7 +257,7 @@ describe("Input.cy.tsx", () => {
 
     const randomWord = faker.random.word();
 
-    cy.mount(
+    mount(
       <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
         {/* <Input name={name} label={name} onKeyDown={(e) => console.log("key down", e)} /> */}
         <Input name={name} label={name} onKeyDown={cy.spy().as("onKeyDownSpy")} />
@@ -284,7 +284,7 @@ describe("Input.cy.tsx", () => {
 
     const randomWords = faker.random.words(25);
 
-    cy.mount(
+    mount(
       <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
         <Input type="textarea" name={name} label={name} textAreaRows={textAreaRows} />
 
@@ -309,7 +309,7 @@ describe("Input.cy.tsx", () => {
     const invalidEmail = faker.random.word();
     const validEmail = faker.internet.email();
 
-    cy.mount(
+    mount(
       <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
         <Input type="email" name={name} label={name} />
 
@@ -336,7 +336,7 @@ describe("Input.cy.tsx", () => {
 
     const randomWord = faker.random.word();
 
-    cy.mount(
+    mount(
       <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
         <Input type="password" name={name} label={name} />
 
@@ -359,7 +359,7 @@ describe("Input.cy.tsx", () => {
 
     const [min, selectedValue, max] = faker.helpers.uniqueArray(faker.datatype.number, 3).sort((a, b) => a - b);
 
-    cy.mount(
+    mount(
       <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
         <Input type="range" name={name} label={name} rangeMin={min} rangeMax={max} />
 
@@ -375,7 +375,7 @@ describe("Input.cy.tsx", () => {
   it("is disabled", () => {
     const name = faker.random.word();
 
-    cy.mount(
+    mount(
       <Form
         onSubmit={() => {
           // Do nothing
@@ -392,7 +392,7 @@ describe("Input.cy.tsx", () => {
     const name = faker.random.word();
     const placeholder = faker.random.word();
 
-    cy.mount(
+    mount(
       <Form
         onSubmit={() => {
           // Do nothing
@@ -409,7 +409,7 @@ describe("Input.cy.tsx", () => {
     const name = faker.random.word();
     const value = faker.random.word();
 
-    cy.mount(
+    mount(
       <Form
         defaultValues={{ [name]: value }}
         onSubmit={() => {
@@ -430,7 +430,7 @@ describe("Input.cy.tsx", () => {
       [name]: yup.date(),
     });
 
-    cy.mount(
+    mount(
       <Form
         onSubmit={() => {
           // Nothing to do
@@ -460,7 +460,7 @@ it("minlenght and maxlenght work", () => {
   const validInput = faker.random.alpha({ count: minLength });
   const invalidInput = faker.random.alpha({ count: maxLength + 1 });
 
-  cy.mount(
+  mount(
     <Form
       onSubmit={() => {
         // Do nothing

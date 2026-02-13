@@ -103,7 +103,7 @@ const getCountriesOptions = (pinnedRegions: RegionCode[], locale?: string): Labe
   const supportedRegions = phoneNumberUtil
     .getSupportedRegions()
     .filter((x) => !pinnedRegions.includes(x))
-    .sort((a, b) => a.localeCompare(b));
+    .toSorted((a, b) => a.localeCompare(b));
 
   let labelValueOptions = [];
 

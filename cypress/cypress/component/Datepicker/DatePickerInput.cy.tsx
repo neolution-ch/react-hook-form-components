@@ -1,12 +1,12 @@
-/* eslint-disable max-lines */
 import { DatePickerInput, Form, getUtcTimeZeroDate } from "react-hook-form-components";
-import "react-datepicker/dist/react-datepicker.css";
+import "react-hook-form-components/styles.css";
 import { faker } from "@faker-js/faker";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { faCalendar } from "@fortawesome/free-solid-svg-icons";
+import { faCalendar, faClock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, InputGroupText } from "reactstrap";
+import { mount } from "cypress/react";
 
 import { SinonSpy } from "cypress/types/sinon";
 import { useRef, useEffect, FC } from "react";
@@ -19,7 +19,7 @@ it("selecting today works", () => {
     [name]: yup.date().required(),
   });
 
-  cy.mount(
+  mount(
     <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
       <DatePickerInput name={name} label={name} />
 
@@ -51,7 +51,7 @@ it("setting intial value as iso string works", () => {
     console.log(JSON.stringify(values));
   };
 
-  cy.mount(
+  mount(
     <Form
       onSubmit={cy.spy(x).as("onSubmitSpy")}
       resolver={yupResolver(schema)}
@@ -80,7 +80,7 @@ it("setting intial value as date object works", () => {
     [name]: yup.date().required(),
   });
 
-  cy.mount(
+  mount(
     <Form
       onSubmit={cy.spy().as("onSubmitSpy")}
       resolver={yupResolver(schema)}
@@ -104,7 +104,7 @@ it("setting intial value as date object works", () => {
 it("is disabled", () => {
   const name = faker.random.word();
 
-  cy.mount(
+  mount(
     <Form
       onSubmit={() => {
         // Do nothing
@@ -123,7 +123,7 @@ it("contains calendar icon if provided in DateInput", () => {
     [name]: yup.date(),
   });
 
-  cy.mount(
+  mount(
     <Form
       onSubmit={() => {
         // Nothing to do
@@ -133,14 +133,14 @@ it("contains calendar icon if provided in DateInput", () => {
       <DatePickerInput
         name={name}
         label={name}
-        addonLeft={
+        addonRight={
           <InputGroupText>
             <FontAwesomeIcon icon={faCalendar} />
           </InputGroupText>
         }
-        addonRight={
+        addonLeft={
           <InputGroupText>
-            <FontAwesomeIcon icon={faCalendar} />
+            <FontAwesomeIcon icon={faClock} />
           </InputGroupText>
         }
       />
@@ -148,6 +148,7 @@ it("contains calendar icon if provided in DateInput", () => {
   );
 
   cy.get(`label[for=${name}]`).parent().find("svg[data-icon=calendar]");
+  cy.get(`label[for=${name}]`).parent().find("svg[data-icon=clock]");
 });
 
 it("not contains calendar icon if not provided in DateInput", () => {
@@ -156,7 +157,7 @@ it("not contains calendar icon if not provided in DateInput", () => {
     [name]: yup.date(),
   });
 
-  cy.mount(
+  mount(
     <Form
       onSubmit={() => {
         // Nothing to do
@@ -186,7 +187,7 @@ it("passing an IANA timezone works", () => {
   const fixedDate = new Date(isoInputDate);
   const inputJsonString = JSON.stringify(fixedDate);
 
-  cy.mount(
+  mount(
     <Form<FormFields>
       defaultValues={{
         [name]: fixedDate,
@@ -225,7 +226,7 @@ it("passing the ref works", () => {
   });
 
   const DatePickerWithRef: FC = () => {
-    const ref = useRef<ReactDatePickers<never, undefined>>(null);
+    const ref = useRef<ReactDatePickers>(null);
 
     useEffect(() => {
       if (ref && ref.current) {
@@ -248,7 +249,7 @@ it("passing the ref works", () => {
     );
   };
 
-  cy.mount(<DatePickerWithRef />);
+  mount(<DatePickerWithRef />);
 
   cy.get(".react-datepicker-popper").should("be.visible");
 });
@@ -259,7 +260,7 @@ it("addon works as a function (with onClick)", () => {
     [name]: yup.date(),
   });
 
-  cy.mount(
+  mount(
     <Form
       onSubmit={() => {
         // Nothing to do

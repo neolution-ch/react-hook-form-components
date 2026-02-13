@@ -27,7 +27,6 @@ interface InputProps<T extends FieldValues> extends CommonInputProps<T> {
   autoFocus?: boolean;
 }
 
-// eslint-disable-next-line complexity
 const Input = <T extends FieldValues>(props: InputProps<T>) => {
   const {
     type,
@@ -116,7 +115,6 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
       }}
     >
       {type === "radio" ? (
-        // eslint-disable-next-line react/jsx-no-useless-fragment
         <>
           {options?.map((option, i) => {
             const optionId = `${safeId}-${i}`;

@@ -9,7 +9,7 @@ import {
   useFormContext,
 } from "react-hook-form-components";
 import { Input as ReactstrapInput, Label } from "reactstrap";
-import { mount } from "cypress/react18";
+import { mount } from "cypress/react";
 
 it("disable all fields when readonly attribute is set", () => {
   const inputName = faker.random.alpha(10);

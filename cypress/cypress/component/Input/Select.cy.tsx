@@ -2,6 +2,7 @@ import { faker } from "@faker-js/faker";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { LabelValueOption, Form, Input } from "react-hook-form-components";
 import * as yup from "yup";
+import { mount } from "cypress/react";
 
 it("select works", () => {
   const name = faker.random.alpha(10);
@@ -12,7 +13,7 @@ it("select works", () => {
   const options = faker.helpers.uniqueArray<LabelValueOption>(() => ({ value: faker.random.alpha(10), label: faker.random.alpha(10) }), 3);
   const randomOption = faker.helpers.arrayElement(options);
 
-  cy.mount(
+  mount(
     <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
       <Input type="select" name={name} label={name} options={options} />
 
@@ -34,7 +35,7 @@ it("select multiple works", () => {
     .sort((a, b) => a.label.localeCompare(b.label));
   const randomOptions = faker.helpers.arrayElements(options).sort((a, b) => a.label.localeCompare(b.label));
 
-  cy.mount(
+  mount(
     <Form onSubmit={cy.spy().as("onSubmitSpy")}>
       <Input type="select" multiple name={name} label={name} options={options} />
 
@@ -56,7 +57,7 @@ it("input is disabled", () => {
     return { label: randomVal, value: randomVal };
   });
 
-  cy.mount(
+  mount(
     <Form
       onSubmit={() => {
         // Do nothing
@@ -77,7 +78,7 @@ it("option is disabled", () => {
   });
   options.push({ label: "DisabledOption", value: "DisabledOption", disabled: true });
 
-  cy.mount(
+  mount(
     <Form
       onSubmit={() => {
         // Do nothing
@@ -99,7 +100,7 @@ it("undefined option value is working", () => {
 
   options[0].value = undefined;
 
-  cy.mount(
+  mount(
     <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
       <Input type="select" name={name} label={name} options={options} />
       <input type={"submit"} />

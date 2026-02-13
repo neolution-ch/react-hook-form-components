@@ -5,7 +5,8 @@ import { useSafeNameId } from "./hooks/useSafeNameId";
 import { useFormContext } from "./context/FormContext";
 
 interface RatingInputProps<T extends FieldValues>
-  extends Omit<RatingProps, "name">,
+  extends
+    Omit<RatingProps, "name">,
     Omit<FormGroupLayoutProps<T, never>, "onBlur" | "onChange" | "onKeyDown" | "layout" | "addonLeft" | "addonRight" | "addonProps"> {}
 
 const RatingInput = <T extends FieldValues>(props: RatingInputProps<T>) => {
