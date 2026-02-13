@@ -75,11 +75,14 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
 
   const { name, id } = useSafeNameId(props.name ?? "", props.id);
   const { control, disabled: formDisabled, getFieldState, clearErrors, watch } = useFormContext();
+  const isDisabled = useMemo(() => formDisabled || disabled, [formDisabled, disabled]);
+
   const {
     field: { ref, ...field },
   } = useController({
     name,
     control,
+    shouldUnregister: isDisabled,
     rules: {
       validate: {
         required: () => getFieldState(name)?.error?.message,
@@ -87,7 +90,6 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
     },
   });
 
-  const isDisabled = useMemo(() => formDisabled || disabled, [formDisabled, disabled]);
   const paginatedOptions = useMemo(
     () => (limitResults === undefined ? options : options.slice(0, page * limitResults)),
     [limitResults, page, options],

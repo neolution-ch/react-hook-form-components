@@ -29,6 +29,7 @@ const RatingInput = <T extends FieldValues>(props: RatingInputProps<T>) => {
   return (
     <Controller
       control={control}
+      shouldUnregister={disabled || formDisabled}
       name={props.name}
       render={({ field: { value, onBlur, onChange, ...fieldRest } }) => (
         <FormGroupLayout
