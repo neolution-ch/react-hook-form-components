@@ -12,7 +12,7 @@ const jsonIsoDateReviver = (_key: string, value: unknown) => {
 };
 
 const getUtcTimeZeroDate = (date: Date) => {
-  const copy = new Date(date.getTime());
+  const copy = new Date(date);
   copy.setHours(0, 0, 0, 0);
   copy.setMinutes(copy.getMinutes() - copy.getTimezoneOffset());
   return copy;

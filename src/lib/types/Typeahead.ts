@@ -8,8 +8,10 @@ import { AutocompleteInputChangeReason, AutocompleteProps } from "@mui/material/
 export type TypeaheadOptions = LabelValueOption[] | string[];
 export type TypeaheadOption = LabelValueOption | string;
 
-interface CommonTypeaheadProps<T extends FieldValues>
-  extends Omit<CommonInputProps<T>, "onChange" | "inputOnly" | "labelTooltip" | "minLength" | "maxLength"> {
+interface CommonTypeaheadProps<T extends FieldValues> extends Omit<
+  CommonInputProps<T>,
+  "onChange" | "inputOnly" | "labelTooltip" | "minLength" | "maxLength"
+> {
   multiple?: boolean;
   placeholder?: string;
   useGroupBy?: boolean;

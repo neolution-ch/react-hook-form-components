@@ -1,9 +1,8 @@
-/* eslint-disable max-lines */
 import { Controller, FieldValues } from "react-hook-form";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";
 import { CommonInputProps } from "./types/CommonInputProps";
-import DatePicker, { DatePickerProps } from "react-datepicker";
+import DatePickerDefault, { DatePickerProps } from "react-datepicker";
 import { useCallback, useEffect, useState, MutableRefObject, useRef } from "react";
 import { toZonedTime, fromZonedTime } from "date-fns-tz";
 import { useFormContext } from "./context/FormContext";
@@ -41,7 +40,7 @@ interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputPr
   /**
    * The ref of the date picker component.
    */
-  datePickerRef?: MutableRefObject<DatePicker | null>;
+  datePickerRef?: MutableRefObject<DatePickerDefault | null>;
 
   /**
    * The autoComplete property for the date picker component.
@@ -53,7 +52,6 @@ interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputPr
 const DEFAULT_DATE_FORMAT = "dd.MM.yyyy";
 const DEFAULT_DATE_TIME_FORMAT = "dd.MM.yyyy HH:mm";
 
-// eslint-disable-next-line complexity
 const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) => {
   const {
     disabled,
@@ -75,7 +73,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
 
   const { id, name } = useSafeNameId(initialName, initialId);
   const { control, getValues, setValue, disabled: formDisabled } = useFormContext();
-  const internalDatePickerRef = useRef<DatePicker | undefined>(undefined);
+  const internalDatePickerRef = useRef<DatePickerDefault | undefined>(undefined);
   const formGroupId = useRef(guidGen());
   const { calendarStartDay = 1, showTimeInput = false, showTimeSelect = false, dateFormat } = datePickerProps;
   const showTimeInputOrSelect = showTimeInput || showTimeSelect;
@@ -148,7 +146,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
           inputGroupStyle={!!addonLeft || !!addonRight ? { ...inputGroupStyle, alignItems: "normal" } : inputGroupStyle}
           hideValidationMessage={hideValidationMessage}
         >
-          <DatePicker
+          <DatePickerDefault
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             {...(datePickerProps as any)}
             selectsMultiple={undefined}
@@ -165,13 +163,12 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
               // https://github.com/react-hook-form/react-hook-form/discussions/5413
               // https://codesandbox.io/s/react-hook-form-focus-forked-yyhsi?file=/src/index.js
               if (elem) {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
-                field.ref((elem as any).input);
+                field.ref(elem.input);
               }
-              internalDatePickerRef.current = elem as DatePicker;
+              internalDatePickerRef.current = elem as DatePickerDefault;
 
               if (datePickerRef) {
-                datePickerRef.current = elem as DatePicker;
+                datePickerRef.current = elem as DatePickerDefault;
               }
             }}
             onBlur={(e) => {

@@ -92,7 +92,7 @@ const Form = <T extends FieldValues>({
         method="POST"
         autoComplete={autoComplete}
       >
-        {children instanceof Function
+        {typeof children === "function"
           ? children({ ...formMethods, disabled, requiredFields, hideValidationMessages, disableAriaAutocomplete })
           : children}
       </form>

@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { DatePickerInput, Form, getUtcTimeZeroDate } from "react-hook-form-components";
 import "react-hook-form-components/styles.css";
 import { faker } from "@faker-js/faker";

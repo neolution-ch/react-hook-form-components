@@ -12,10 +12,10 @@
     "start": "next start"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^7.0.0",
-    "@fortawesome/free-solid-svg-icons": "^7.0.0",
-    "@fortawesome/react-fontawesome": "^0.2.3",
-    "@hookform/resolvers": "^2.9.10",
+    "@fortawesome/fontawesome-svg-core": "^7.2.0",
+    "@fortawesome/free-solid-svg-icons": "^7.2.0",
+    "@fortawesome/react-fontawesome": "^0.2.6",
+    "@hookform/resolvers": "^2.9.11",
     "next": "13.0.2",
     "react": "link:../node_modules/react",
     "react-dom": "link:../node_modules/react-dom",
@@ -25,13 +25,13 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",
-    "@neolution-ch/eslint-config-neolution": "2.1.0",
+    "@neolution-ch/eslint-config-neolution": "2.3.0",
     "@types/node": "18.11.9",
     "@types/react": "18.0.25",
     "@types/react-dom": "18.0.8",
     "cypress": "^11.0.0",
-    "eslint": "^9.18.0",
-    "jiti": "^2.4.2",
+    "eslint": "^9.39.0",
+    "jiti": "^2.6.1",
     "react-datepicker": "link:../node_modules/react-datepicker",
     "typescript": "4.8.4"
   }

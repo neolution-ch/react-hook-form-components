@@ -45,6 +45,7 @@ const useDebounceHook = (queryFn: (query: string) => Promise<TypeaheadOptions>, 
           }
         })();
 
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setDebounceSearch(undefined);
       } else {
         setIsLoading(true);

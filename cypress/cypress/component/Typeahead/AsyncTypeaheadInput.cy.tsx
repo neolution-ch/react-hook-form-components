@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { AsyncTypeaheadInput, AsyncTypeaheadInputRef, Form } from "react-hook-form-components";
 import { faker, Sex } from "@faker-js/faker";
 import { fetchMock, generateOptions } from "../../helpers/typeahead";

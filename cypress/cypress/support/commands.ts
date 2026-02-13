@@ -75,4 +75,5 @@ Cypress.Commands.add("getSelectedText", { prevSubject: "element" }, (subject) =>
 //   },
 // );
 
+// eslint-disable-next-line @unicorn/require-module-specifiers
 export {};

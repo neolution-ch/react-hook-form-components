@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { Form, StaticTypeaheadInput } from "react-hook-form-components";
 import { faker, Sex } from "@faker-js/faker";
 import * as yup from "yup";

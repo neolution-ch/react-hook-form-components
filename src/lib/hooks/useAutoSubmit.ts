@@ -47,6 +47,7 @@ const useAutoSubmit = <T extends FieldValues>({ onSubmit, formMethods, autoSubmi
       e?.preventDefault();
 
       if (isSubmitting.current) {
+        // eslint-disable-next-line react-hooks/immutability
         debouncedSubmitHandler(e);
         return;
       }
