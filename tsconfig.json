@@ -8,6 +8,7 @@
     "jsx": "react-jsx",
     "sourceMap": true,
     "declaration": true,
+    "declarationDir": "./dist/types",
     "esModuleInterop": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,

@@ -32,8 +32,8 @@ it("select multiple works", () => {
 
   const options = faker.helpers
     .uniqueArray<LabelValueOption>(() => ({ value: faker.random.alpha(10), label: faker.random.alpha(10) }), 10)
-    .sort((a, b) => a.label.localeCompare(b.label));
-  const randomOptions = faker.helpers.arrayElements(options).sort((a, b) => a.label.localeCompare(b.label));
+    .toSorted((a, b) => a.label.localeCompare(b.label));
+  const randomOptions = faker.helpers.arrayElements(options).toSorted((a, b) => a.label.localeCompare(b.label));
 
   mount(
     <Form onSubmit={cy.spy().as("onSubmitSpy")}>
