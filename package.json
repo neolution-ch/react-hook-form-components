@@ -64,7 +64,6 @@
     "material-ui-popup-state": "^5.3.6",
     "react-datepicker": "^8.0.0",
     "react-number-format": "^5.4.4",
-    "rollup-plugin-dts": "^6.3.0",
     "use-debounce": "^10.0.5",
     "uuid": "^11.1.0"
   },
@@ -102,6 +101,7 @@
     "reactstrap": "^9.2.3",
     "release-it": "^19.0.4",
     "rollup": "^4.46.2",
+    "rollup-plugin-dts": "^6.3.0",
     "rollup-plugin-import-css": "^4.0.1",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-typescript2": "^0.36.0",
