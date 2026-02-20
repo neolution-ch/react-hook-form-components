@@ -11,7 +11,7 @@ interface UseAutoSubmitProps<T extends FieldValues> {
   /**
    * the form methods of the form
    */
-  formMethods: UseFormReturn<T, object>;
+  formMethods: UseFormReturn<T, unknown, T>;
 
   /**
    * enables the form to do an autosubmit on values changed
@@ -47,6 +47,7 @@ const useAutoSubmit = <T extends FieldValues>({ onSubmit, formMethods, autoSubmi
       e?.preventDefault();
 
       if (isSubmitting.current) {
+        // eslint-disable-next-line react-hooks/immutability
         debouncedSubmitHandler(e);
         return;
       }

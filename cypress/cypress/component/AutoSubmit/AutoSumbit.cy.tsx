@@ -3,6 +3,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Form, Input } from "react-hook-form-components";
 import * as yup from "yup";
 import { generateOptions } from "../../helpers/typeahead";
+import { mount } from "cypress/react";
 
 it("radio button multiple autosave works", () => {
   const name1 = faker.random.alpha(10);
@@ -17,7 +18,7 @@ it("radio button multiple autosave works", () => {
   const { objectOptions: options1 } = generateOptions(faker.datatype.number({ min: 1, max: 10 }));
   const { objectOptions: options2 } = generateOptions(faker.datatype.number({ min: 1, max: 10 }));
 
-  cy.mount(
+  mount(
     <>
       <Form onSubmit={cy.spy().as("onSubmitSpy1")} resolver={yupResolver(schema1)} autoSubmitConfig={{ wait: 500 }}>
         <Input type="radio" label="hello" name={name1} helpText="help" options={options1} />
@@ -59,7 +60,7 @@ it("radio button autosave only once", () => {
 
   const { objectOptions: options } = generateOptions(faker.datatype.number({ min: 1, max: 10 }));
 
-  cy.mount(
+  mount(
     <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)} autoSubmitConfig={{ wait: 500 }}>
       <Input type="radio" label="hello" name={name} helpText="help" options={options} />
     </Form>,
@@ -83,7 +84,7 @@ it("text input autosave only once", () => {
 
   const randomText = faker.random.alphaNumeric(10);
 
-  cy.mount(
+  mount(
     <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)} autoSubmitConfig={{ wait: 500 }}>
       <Input type="text" label={name} name={name} />
     </Form>,

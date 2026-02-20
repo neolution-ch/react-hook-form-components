@@ -2,7 +2,7 @@ import { faker } from "@faker-js/faker";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Form, Input, StaticTypeaheadInput, AsyncTypeaheadInput, DatePickerInput, FormattedInput } from "react-hook-form-components";
 import * as yup from "yup";
-import { mount } from "cypress/react18";
+import { mount } from "cypress/react";
 
 it("adding * character if string label works", () => {
   const name = faker.random.alpha(10);

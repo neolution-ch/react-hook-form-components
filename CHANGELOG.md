@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- updated most dependencies to newest possible version
+
 ## [3.17.0] - 2026-02-09
 
 ### Fixed
@@ -44,7 +48,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `TelephoneNumberInput` countries order, in order to be alphabetically sorted.
 - Required field label on `FormGroupLayoutLabel`, `ColorPicker`, `TelephoneNumberInput`, `TypeaheadTextField` (hence `StaticTypeaheadInput` and `AsyncTypeaheadInput`) in order to display \* also on nested and array fields.
-
   1. `requiredFields` can still accept a `FieldPath<T>[]`
   2. In order to be complaint with `FieldPath` react-hook-form type (`object.${number}.property`) array properties provide a wildcard:
 
@@ -250,7 +253,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - :boom: `AsyncTypeAheadInput` based on MUI Autocomplete component.
 - :boom: renamed `AsyncTypeaheadProps` to `AsyncTypeaheadInputProps`.
-
   1. The component is by default **form** controlled. However, updating values using form methods could lead to an unexpected behavior because MUI library requires consistency between options and value. In order to manually to control the input, a ref is exposed which allows to mutually modify input value and form value.
   2. `inputRef` is exposed to clear, reset or set new selected options, as mentioned in point 1.
   3. `defaultSelected` options is still needed as in previous version.
@@ -260,7 +262,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   7. `onInputChange` exposes the reason why the input-text changes. Check whether reason is `input` for checking only the typing event.
 
 - :boom: `StaticTypeAheadInput` based on MUI Autocomplete component.
-
   1. The component is fully **form** controlled.
   2. In order to control input value, use form methods being sure to be consistent between the set value and available options. Therefore, any input ref is exposed anymore.
   3. No need to specify a `defaultSelected` option according to point 1. The input automatically select options based on form value.

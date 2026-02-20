@@ -11,11 +11,10 @@ import { PopupState } from "material-ui-popup-state/hooks";
 import { TextField } from "@mui/material";
 import { textFieldBootstrapStyle } from "src/lib/helpers/mui";
 
-interface TelephoneNumberAutocompleteProps<T extends FieldValues>
-  extends Pick<
-    TelephoneNumberInputProps<T>,
-    "pinnedCountries" | "locale" | "useBootstrapStyle" | "name" | "onChange" | "countryMenuWidth"
-  > {
+interface TelephoneNumberAutocompleteProps<T extends FieldValues> extends Pick<
+  TelephoneNumberInputProps<T>,
+  "pinnedCountries" | "locale" | "useBootstrapStyle" | "name" | "onChange" | "countryMenuWidth"
+> {
   popupState: PopupState;
   nationalPhoneNumber: string | undefined;
   country: Country;

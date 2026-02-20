@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { useEffect, useMemo, useState } from "react";
 import { FieldValues, useController } from "react-hook-form";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
@@ -30,7 +29,6 @@ interface StaticTypeaheadInputProps<T extends FieldValues> extends CommonTypeahe
   autocompleteProps?: StaticTypeaheadAutocompleteProps;
 }
 
-// eslint-disable-next-line complexity
 const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInputProps<T>) => {
   const {
     options,
@@ -106,6 +104,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
 
   useEffect(() => {
     if (limitResults !== undefined) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setLoadMoreOptions(page * limitResults < options.length);
     }
   }, [options, page, limitResults]);

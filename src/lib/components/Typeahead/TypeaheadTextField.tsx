@@ -12,7 +12,8 @@ import { useFormContext } from "../../context/FormContext";
 import { getRequiredLabel } from "../../helpers/form";
 
 interface TypeaheadTextFieldProps<T extends FieldValues, TRenderAddon>
-  extends Omit<CommonTypeaheadProps<T>, "id" | "disabled" | "onChange">,
+  extends
+    Omit<CommonTypeaheadProps<T>, "id" | "disabled" | "onChange">,
     AutocompleteRenderInputParams,
     Pick<BaseTextFieldProps, "inputRef"> {
   isLoading: boolean;
@@ -21,7 +22,6 @@ interface TypeaheadTextFieldProps<T extends FieldValues, TRenderAddon>
   addonProps?: MergedAddonProps<TRenderAddon>;
 }
 
-// eslint-disable-next-line complexity
 const TypeaheadTextField = <T extends FieldValues, TRenderAddon = unknown>(props: TypeaheadTextFieldProps<T, TRenderAddon>) => {
   const {
     name,
@@ -58,7 +58,7 @@ const TypeaheadTextField = <T extends FieldValues, TRenderAddon = unknown>(props
 
   const startAdornment = useMemo(
     () =>
-      addonLeft instanceof Function && addonProps
+      typeof addonLeft === "function" && addonProps
         ? (addonLeft as unknown as (props: TRenderAddon) => ReactNode)(addonProps)
         : (addonLeft as ReactNode),
     [addonLeft, addonProps],
@@ -66,7 +66,7 @@ const TypeaheadTextField = <T extends FieldValues, TRenderAddon = unknown>(props
 
   const endAdornment = useMemo(
     () =>
-      addonRight instanceof Function && addonProps
+      typeof addonRight === "function" && addonProps
         ? (addonRight as unknown as (props: TRenderAddon) => ReactNode)(addonProps)
         : (addonRight as ReactNode),
     [addonRight, addonProps],
