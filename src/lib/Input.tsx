@@ -1,5 +1,5 @@
 import { FieldValues } from "react-hook-form";
-import { FormGroup, Label } from "reactstrap";
+import { FormGroup, Label } from "@neolution-ch/reactstrap";
 import { InputType } from "reactstrap/types/lib/Input";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";

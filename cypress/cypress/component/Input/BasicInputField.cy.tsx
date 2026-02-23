@@ -4,7 +4,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { faPencil } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { InputGroupText } from "reactstrap";
+import { InputGroupText } from "@neolution-ch/reactstrap";
 import { useRef } from "react";
 import { mount } from "cypress/react";
 

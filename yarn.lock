@@ -1081,6 +1081,26 @@
     date-fns "^2.30.0"
     uuid "^9.0.1"
 
+"@neolution-ch/react-popper@3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@neolution-ch/react-popper/-/react-popper-3.0.1.tgz#17f825420ee63d148ea6fb7b1d7aec9d0a8add2b"
+  integrity sha512-X9SvNk+D1H+XF2y6JFIxlA657qrGw25KdzeabCi4kGCuKQJgTlE5SvQu9Ovs+eyYiHVzqH8DyIPuVauTHYcSAA==
+  dependencies:
+    react-fast-compare "^3.0.1"
+    warning "^4.0.2"
+
+"@neolution-ch/reactstrap@^10.0.0-rc.0":
+  version "10.0.0-rc.0"
+  resolved "https://registry.yarnpkg.com/@neolution-ch/reactstrap/-/reactstrap-10.0.0-rc.0.tgz#e41a64bbab4a60a83ffffbb80b37a20d51ab2f81"
+  integrity sha512-msG33PBir/6pgfc8MIAaz3Rp/o6H3wWmlAPbteE6erQU7n+DN4Ta9Ji5FdxvZ5n4OYGzlZXaOwTNI1DvWhCu5Q==
+  dependencies:
+    "@babel/runtime" "^7.12.5"
+    "@neolution-ch/react-popper" "3.0.1"
+    "@popperjs/core" "^2.6.0"
+    classnames "^2.2.3"
+    prop-types "^15.5.8"
+    react-transition-group "^4.4.5"
+
 "@next/eslint-plugin-next@^15.5.5":
   version "15.5.12"
   resolved "https://registry.yarnpkg.com/@next/eslint-plugin-next/-/eslint-plugin-next-15.5.12.tgz#f9acf0895169c8699bd2759d362c1ddd973fc2a2"
@@ -6192,15 +6212,7 @@ react-number-format@^5.4.4:
   resolved "https://registry.yarnpkg.com/react-number-format/-/react-number-format-5.4.4.tgz#d31f0e260609431500c8d3f81bbd3ae1fb7cacad"
   integrity sha512-wOmoNZoOpvMminhifQYiYSTCLUDOiUbBunrMrMjA+dV52sY+vck1S4UhR6PkgnoCquvvMSeJjErXZ4qSaWCliA==
 
-react-popper@^2.2.4:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/react-popper/-/react-popper-2.3.0.tgz#17891c620e1320dce318bad9fede46a5f71c70ba"
-  integrity sha512-e1hj8lL3uM+sgSR4Lxzn5h1GxBlpa4CQz0XLF8kx4MDrDRWY0Ena4c97PUeSX9i5W3UAfDP0z0FXCTQkoXUl3Q==
-  dependencies:
-    react-fast-compare "^3.0.1"
-    warning "^4.0.2"
-
-react-transition-group@^4.4.2, react-transition-group@^4.4.5:
+react-transition-group@^4.4.5:
   version "4.4.5"
   resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-4.4.5.tgz#e53d4e3f3344da8521489fbef8f2581d42becdd1"
   integrity sha512-pZcd1MCJoiKiBR2NRxeCRg13uCXbydPnmB4EOeRrY7480qNWO8IIgQG6zlDkm6uRMsURXPuKq0GWtiM59a5Q6g==
@@ -6219,18 +6231,6 @@ react@^19.1.1:
   version "19.2.4"
   resolved "https://registry.yarnpkg.com/react/-/react-19.2.4.tgz#438e57baa19b77cb23aab516cf635cd0579ee09a"
   integrity sha512-9nfp2hYpCwOjAN+8TZFGhtWEwgvWHXqESH8qT89AT/lWklpLON22Lc8pEtnpsZz7VmawabSU0gCjnj8aC0euHQ==
-
-reactstrap@^9.2.3:
-  version "9.2.3"
-  resolved "https://registry.yarnpkg.com/reactstrap/-/reactstrap-9.2.3.tgz#45f04617f996177081516a2376a0efc17c4f09f5"
-  integrity sha512-1nXy7FIBIoOgXr3AIHOpgzcZXdj6rZE5YvNSPd1hYgwv8X64m6TAJsU0ExlieJdlRXhaRfTYRSZoTWa127b0gw==
-  dependencies:
-    "@babel/runtime" "^7.12.5"
-    "@popperjs/core" "^2.6.0"
-    classnames "^2.2.3"
-    prop-types "^15.5.8"
-    react-popper "^2.2.4"
-    react-transition-group "^4.4.2"
 
 readdirp@^5.0.0:
   version "5.0.0"

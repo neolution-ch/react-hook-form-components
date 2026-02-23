@@ -1,7 +1,7 @@
 import React from "react";
 import { StoryFn, Meta } from "@storybook/react-webpack5";
 import { Form, FormattedInput, FormattedInputProps } from "../../src";
-import { Button } from "reactstrap";
+import { Button } from "@neolution-ch/reactstrap";
 
 export default {
   title: "Components",

@@ -1,6 +1,6 @@
 import { PropsWithChildren, ReactNode, CSSProperties, useMemo } from "react";
 import { FieldError, FieldValues, get } from "react-hook-form";
-import { FormGroup, FormFeedback, FormText, InputGroup } from "reactstrap";
+import { FormGroup, FormFeedback, FormText, InputGroup } from "@neolution-ch/reactstrap";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { CommonInputProps, MergedAddonProps } from "./types/CommonInputProps";
 import "./styles/FormGroupLayout.css";

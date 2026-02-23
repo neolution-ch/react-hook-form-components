@@ -4,7 +4,7 @@ import { Form, Input } from "react-hook-form-components";
 import styles from "../styles/Home.module.css";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Col, Row } from "reactstrap";
+import { Col, Row } from "@neolution-ch/reactstrap";
 
 // https://justin.poehnelt.com/posts/strongly-typed-yup-schema-typescript/
 type ConditionalSchema<T> = T extends string

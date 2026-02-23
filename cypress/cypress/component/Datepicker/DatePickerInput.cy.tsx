@@ -5,7 +5,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { faCalendar, faClock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, InputGroupText } from "reactstrap";
+import { Button, InputGroupText } from "@neolution-ch/reactstrap";
 import { mount } from "cypress/react";
 
 import { SinonSpy } from "cypress/types/sinon";

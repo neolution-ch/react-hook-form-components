@@ -5,7 +5,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { faCalendar, faPencil } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { InputGroupText } from "reactstrap";
+import { InputGroupText } from "@neolution-ch/reactstrap";
 import { fetchMock, generateOptions } from "../../helpers/typeahead";
 import { mount } from "cypress/react";
 

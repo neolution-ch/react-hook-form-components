@@ -8,7 +8,7 @@ import {
   StaticTypeaheadInput,
   useFormContext,
 } from "react-hook-form-components";
-import { Input as ReactstrapInput, Label } from "reactstrap";
+import { Input as ReactstrapInput, Label } from "@neolution-ch/reactstrap";
 import { mount } from "cypress/react";
 
 it("disable all fields when readonly attribute is set", () => {
