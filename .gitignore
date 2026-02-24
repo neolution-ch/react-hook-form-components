@@ -30,6 +30,7 @@ storybook-static
 terraform
 
 .npmrc
+*storybook.log
 
 # Ignore vs folder
 .vs

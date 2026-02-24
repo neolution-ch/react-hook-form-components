@@ -3,6 +3,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Form, FormattedInput } from "react-hook-form-components";
 import { NumericFormatProps, numericFormatter } from "react-number-format";
 import * as yup from "yup";
+import { mount } from "cypress/react";
 
 const numericFormat: NumericFormatProps = {
   thousandSeparator: faker.random.alpha(),
@@ -18,7 +19,7 @@ it("numeric format works", () => {
     min: 10_000,
   });
 
-  cy.mount(
+  mount(
     <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
       <FormattedInput name={name} label={name} numericFormat={numericFormat} />
 
@@ -36,7 +37,7 @@ it("numeric format works", () => {
 it("is disabled", () => {
   const name = faker.random.word();
 
-  cy.mount(
+  mount(
     <Form
       onSubmit={() => {
         // Do nothing
@@ -55,7 +56,7 @@ it("auto mark on focus", () => {
     min: 10_000_000,
   });
 
-  cy.mount(
+  mount(
     <Form
       defaultValues={{ [name]: randomNumber }}
       onSubmit={() => {
@@ -94,7 +95,7 @@ it("validation works", () => {
     min: 10_000,
   });
 
-  cy.mount(
+  mount(
     <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
       <FormattedInput name={name} label={name} numericFormat={numericFormat} />
 
@@ -132,7 +133,7 @@ it("validation works for nested fields", () => {
     min: 10_000,
   });
 
-  cy.mount(
+  mount(
     <Form onSubmit={cy.spy().as("onSubmitSpy")} resolver={yupResolver(schema)}>
       <FormattedInput name={name} label={name} numericFormat={numericFormat} />
 
@@ -155,7 +156,7 @@ it("validation works for nested fields", () => {
 it("style is correcly applied", () => {
   const name = faker.random.word();
   const style = "background-color: red;";
-  cy.mount(
+  mount(
     <Form
       onSubmit={() => {
         // Do nothing
@@ -172,7 +173,7 @@ it("has placeholder", () => {
   const name = faker.random.word();
   const placeholder = faker.random.words(5);
 
-  cy.mount(
+  mount(
     <Form
       onSubmit={() => {
         // Do nothing

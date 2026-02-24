@@ -1,7 +1,7 @@
 import { CSSProperties, ReactNode } from "react";
 import { useFormContext } from "./context/FormContext";
 import { FieldPath, FieldValues } from "react-hook-form";
-import { Label, UncontrolledTooltip } from "reactstrap";
+import { Label, UncontrolledTooltip } from "@neolution-ch/reactstrap";
 import { getRequiredLabel } from "./helpers/form";
 
 interface FormGroupLayoutLabelProps<T extends FieldValues> {

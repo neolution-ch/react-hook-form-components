@@ -5,8 +5,10 @@ import { CommonInputProps } from "./types/CommonInputProps";
 import { ColorPicker } from "./components/ColorPicker/ColorPicker";
 import { FocusEventHandler } from "react";
 
-interface ColorPickerInputProps<T extends FieldValues>
-  extends Omit<CommonInputProps<T>, "minLength" | "maxLength" | "addonLeft" | "addonRight" | "name" | "onChange" | "onBlur"> {
+interface ColorPickerInputProps<T extends FieldValues> extends Omit<
+  CommonInputProps<T>,
+  "minLength" | "maxLength" | "addonLeft" | "addonRight" | "name" | "onChange" | "onBlur"
+> {
   useBootstrapStyle?: boolean;
   name: FieldPathByValue<T, string | undefined>;
   convertColorToFormatOrUndefinedOnBlur?: boolean;

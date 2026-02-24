@@ -1,13 +1,13 @@
 import { FieldValues } from "react-hook-form";
-import { FormGroup, Label } from "reactstrap";
-import { InputType } from "reactstrap/types/lib/Input";
+import { FormGroup, Label } from "@neolution-ch/reactstrap";
+import { InputType } from "@neolution-ch/reactstrap/types/lib/Input";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";
 import { InputInternal } from "./components/Input/InputInternal";
 import { CommonInputProps } from "./types/CommonInputProps";
 import { LabelValueOption } from "./types/LabelValueOption";
 import { useFormContext } from "./context/FormContext";
-import { MutableRefObject } from "react";
+import { RefObject } from "react";
 
 const invalidAddonTypes = new Set(["switch", "radio", "checkbox"]);
 
@@ -23,11 +23,10 @@ interface InputProps<T extends FieldValues> extends CommonInputProps<T> {
   placeholder?: string;
   step?: number;
   autoComplete?: string;
-  innerRef?: MutableRefObject<HTMLInputElement | HTMLTextAreaElement | null>;
+  innerRef?: RefObject<HTMLInputElement | HTMLTextAreaElement | null>;
   autoFocus?: boolean;
 }
 
-// eslint-disable-next-line complexity
 const Input = <T extends FieldValues>(props: InputProps<T>) => {
   const {
     type,
@@ -116,7 +115,6 @@ const Input = <T extends FieldValues>(props: InputProps<T>) => {
       }}
     >
       {type === "radio" ? (
-        // eslint-disable-next-line react/jsx-no-useless-fragment
         <>
           {options?.map((option, i) => {
             const optionId = `${safeId}-${i}`;

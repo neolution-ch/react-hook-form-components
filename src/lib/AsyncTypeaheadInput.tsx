@@ -1,5 +1,4 @@
-/* eslint-disable max-lines */
-import { useEffect, useMemo, useState, MutableRefObject, useImperativeHandle } from "react";
+import { useEffect, useMemo, useState, RefObject, useImperativeHandle } from "react";
 import { FieldValues, useController } from "react-hook-form";
 import { AsyncTypeaheadAutocompleteProps, CommonTypeaheadProps, TypeaheadOption, TypeaheadOptions } from "./types/Typeahead";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -32,11 +31,10 @@ interface AsyncTypeaheadInputProps<T extends FieldValues> extends CommonTypeahea
   delay?: number;
   defaultOptions?: TypeaheadOptions;
   defaultSelected?: TypeaheadOptions;
-  inputRef?: MutableRefObject<AsyncTypeaheadInputRef | null>;
+  inputRef?: RefObject<AsyncTypeaheadInputRef | null>;
   autocompleteProps?: AsyncTypeaheadAutocompleteProps;
 }
 
-// eslint-disable-next-line complexity
 const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputProps<T>) => {
   const {
     inputRef,
@@ -133,6 +131,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
 
   useEffect(() => {
     if (limitResults !== undefined) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setLoadMoreOptions(page * limitResults < options.length);
     }
   }, [options, page, limitResults]);
