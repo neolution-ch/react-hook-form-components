@@ -1,4 +1,4 @@
-import { MutableRefObject, ReactNode, SyntheticEvent } from "react";
+import { RefObject, ReactNode, SyntheticEvent } from "react";
 import { FieldValues } from "react-hook-form";
 import { CommonInputProps } from "./CommonInputProps";
 import { LabelValueOption } from "./LabelValueOption";
@@ -26,7 +26,7 @@ interface CommonTypeaheadProps<T extends FieldValues> extends Omit<
   useBootstrapStyle?: boolean;
   fixedOptions?: TypeaheadOptions;
   withFixedOptionsInValue?: boolean;
-  innerRef?: MutableRefObject<HTMLInputElement | null>;
+  innerRef?: RefObject<HTMLInputElement | null>;
   fitMenuContent?: boolean;
   getOptionDisabled?: (option: TypeaheadOption) => boolean;
   onChange?: (selected: string | string[]) => void;

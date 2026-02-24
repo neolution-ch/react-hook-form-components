@@ -9,7 +9,7 @@ export type MergedAddonProps<TRenderAddon> = TRenderAddon & DefaultAddonProps;
 
 interface CommonInputProps<T extends FieldValues, TRenderAddon = unknown> {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onBlur?: (e: React.FocusEvent<HTMLElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   label?: ReactNode;
   name: FieldPath<T>;
   id?: string;

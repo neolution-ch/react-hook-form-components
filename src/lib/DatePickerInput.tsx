@@ -3,7 +3,7 @@ import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";
 import { CommonInputProps } from "./types/CommonInputProps";
 import DatePickerDefault, { DatePickerProps } from "react-datepicker";
-import { useCallback, useEffect, useState, MutableRefObject, useRef } from "react";
+import { useCallback, useEffect, useState, RefObject, useRef, ComponentType } from "react";
 import { toZonedTime, fromZonedTime } from "date-fns-tz";
 import { useFormContext } from "./context/FormContext";
 import { v4 as guidGen } from "uuid";
@@ -14,7 +14,10 @@ interface DatePickerRenderAddonProps {
   toggleDatePicker: () => void;
 }
 
-interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputProps<T, DatePickerRenderAddonProps>, "onChange" | "style"> {
+interface DatePickerInputProps<T extends FieldValues> extends Omit<
+  CommonInputProps<T, DatePickerRenderAddonProps>,
+  "onChange" | "style" | "onBlur"
+> {
   /**
    * The props for the date picker component: https://reactdatepicker.com/
    */
@@ -29,6 +32,8 @@ interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputPr
    */
   onChange?: (value: Date | null) => void;
 
+  onBlur?: (e: React.FocusEvent<HTMLElement>) => void;
+
   /**
    * The IANA time zone identifier, e.g. "Europe/Berlin" for which the date should be displayed.
    * By default the date is displayed in the local time zone of the user / browser.
@@ -40,7 +45,7 @@ interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputPr
   /**
    * The ref of the date picker component.
    */
-  datePickerRef?: MutableRefObject<DatePickerDefault | null>;
+  datePickerRef?: RefObject<DatePickerDefault | null>;
 
   /**
    * The autoComplete property for the date picker component.
@@ -147,8 +152,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
           hideValidationMessage={hideValidationMessage}
         >
           <DatePickerDefault
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            {...(datePickerProps as any)}
+            {...(datePickerProps as ComponentType<typeof DatePickerDefault>)}
             selectsMultiple={undefined}
             selectsRange={undefined}
             {...field}

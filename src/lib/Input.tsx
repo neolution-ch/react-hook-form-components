@@ -7,7 +7,7 @@ import { InputInternal } from "./components/Input/InputInternal";
 import { CommonInputProps } from "./types/CommonInputProps";
 import { LabelValueOption } from "./types/LabelValueOption";
 import { useFormContext } from "./context/FormContext";
-import { MutableRefObject } from "react";
+import { RefObject } from "react";
 
 const invalidAddonTypes = new Set(["switch", "radio", "checkbox"]);
 
@@ -23,7 +23,7 @@ interface InputProps<T extends FieldValues> extends CommonInputProps<T> {
   placeholder?: string;
   step?: number;
   autoComplete?: string;
-  innerRef?: MutableRefObject<HTMLInputElement | HTMLTextAreaElement | null>;
+  innerRef?: RefObject<HTMLInputElement | HTMLTextAreaElement | null>;
   autoFocus?: boolean;
 }
 
