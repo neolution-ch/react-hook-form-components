@@ -1089,10 +1089,10 @@
     react-fast-compare "^3.0.1"
     warning "^4.0.2"
 
-"@neolution-ch/reactstrap@^10.0.0-rc.0":
-  version "10.0.0-rc.0"
-  resolved "https://registry.yarnpkg.com/@neolution-ch/reactstrap/-/reactstrap-10.0.0-rc.0.tgz#e41a64bbab4a60a83ffffbb80b37a20d51ab2f81"
-  integrity sha512-msG33PBir/6pgfc8MIAaz3Rp/o6H3wWmlAPbteE6erQU7n+DN4Ta9Ji5FdxvZ5n4OYGzlZXaOwTNI1DvWhCu5Q==
+"@neolution-ch/reactstrap@^10.0.0":
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/@neolution-ch/reactstrap/-/reactstrap-10.0.0.tgz#5e88b4c4e81e122215a42631786532b50a493f52"
+  integrity sha512-/54HuEEkBS6YhKJEgDk7zDasAm7eaWGJHCFnKb1ubJ0KwlyKfp2ZG9UElNpIeajDL4a1rnFYiiOoWCOTll4n/w==
   dependencies:
     "@babel/runtime" "^7.12.5"
     "@neolution-ch/react-popper" "3.0.1"
