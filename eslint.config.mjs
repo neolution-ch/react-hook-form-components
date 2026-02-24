@@ -7,4 +7,12 @@ export default [
   },
   ...neolutionEslintConfig.configs.flat["react-library"],
   ...storybook.configs["flat/recommended"],
+  {
+    files: [".storybook/**/*.ts", ".storybook/**/*.tsx"],
+    languageOptions: {
+      parserOptions: {
+        project: "./tsconfig.eslint.json",
+      },
+    },
+  },
 ];
