@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.0] - 2026-02-24
+
 ### Changed
 
 - updated most dependencies to newest possible version
@@ -49,7 +51,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `TelephoneNumberInput` countries order, in order to be alphabetically sorted.
 - Required field label on `FormGroupLayoutLabel`, `ColorPicker`, `TelephoneNumberInput`, `TypeaheadTextField` (hence `StaticTypeaheadInput` and `AsyncTypeaheadInput`) in order to display \* also on nested and array fields.
-
   1. `requiredFields` can still accept a `FieldPath<T>[]`
   2. In order to be complaint with `FieldPath` react-hook-form type (`object.${number}.property`) array properties provide a wildcard:
 
@@ -255,7 +256,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - :boom: `AsyncTypeAheadInput` based on MUI Autocomplete component.
 - :boom: renamed `AsyncTypeaheadProps` to `AsyncTypeaheadInputProps`.
-
   1. The component is by default **form** controlled. However, updating values using form methods could lead to an unexpected behavior because MUI library requires consistency between options and value. In order to manually to control the input, a ref is exposed which allows to mutually modify input value and form value.
   2. `inputRef` is exposed to clear, reset or set new selected options, as mentioned in point 1.
   3. `defaultSelected` options is still needed as in previous version.
@@ -707,7 +707,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Created package :tada:
 
-[unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/3.17.0...HEAD
+[Unreleased]: https://github.com/neolution-ch/react-hook-form-components/compare/4.0.0...HEAD
 [0.1.2]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.1...0.1.2
 [0.1.1]: https://github.com/neolution-ch/react-hook-form-components/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.1.0
@@ -732,6 +732,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [0.4.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.3.0...0.4.0
 [0.3.0]: https://github.com/neolution-ch/react-hook-form-components/compare/0.2.0...0.3.0
 [0.2.0]: https://github.com/neolution-ch/react-hook-form-components/releases/tag/0.2.0
+[4.0.0]: https://github.com/neolution-ch/react-hook-form-components/compare/3.17.0...4.0.0
 [3.17.0]: https://github.com/neolution-ch/react-hook-form-components/compare/3.16.0...3.17.0
 [3.16.0]: https://github.com/neolution-ch/react-hook-form-components/compare/3.15.1...3.16.0
 [3.15.1]: https://github.com/neolution-ch/react-hook-form-components/compare/3.15.0...3.15.1
