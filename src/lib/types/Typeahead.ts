@@ -1,4 +1,4 @@
-import { MutableRefObject, ReactNode, SyntheticEvent } from "react";
+import { RefObject, ReactNode, SyntheticEvent } from "react";
 import { FieldValues } from "react-hook-form";
 import { CommonInputProps } from "./CommonInputProps";
 import { LabelValueOption } from "./LabelValueOption";
@@ -8,8 +8,10 @@ import { AutocompleteInputChangeReason, AutocompleteProps } from "@mui/material/
 export type TypeaheadOptions = LabelValueOption[] | string[];
 export type TypeaheadOption = LabelValueOption | string;
 
-interface CommonTypeaheadProps<T extends FieldValues>
-  extends Omit<CommonInputProps<T>, "onChange" | "inputOnly" | "labelTooltip" | "minLength" | "maxLength"> {
+interface CommonTypeaheadProps<T extends FieldValues> extends Omit<
+  CommonInputProps<T>,
+  "onChange" | "inputOnly" | "labelTooltip" | "minLength" | "maxLength"
+> {
   multiple?: boolean;
   placeholder?: string;
   useGroupBy?: boolean;
@@ -24,7 +26,7 @@ interface CommonTypeaheadProps<T extends FieldValues>
   useBootstrapStyle?: boolean;
   fixedOptions?: TypeaheadOptions;
   withFixedOptionsInValue?: boolean;
-  innerRef?: MutableRefObject<HTMLInputElement | null>;
+  innerRef?: RefObject<HTMLInputElement | null>;
   fitMenuContent?: boolean;
   getOptionDisabled?: (option: TypeaheadOption) => boolean;
   onChange?: (selected: string | string[]) => void;

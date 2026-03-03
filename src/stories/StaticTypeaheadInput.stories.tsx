@@ -1,7 +1,7 @@
 import React from "react";
-import { Story, Meta } from "@storybook/react";
+import { StoryFn, Meta } from "@storybook/react-webpack5";
 import { Form, StaticTypeaheadInput, StaticTypeaheadInputProps } from "../../src";
-import { Button } from "reactstrap";
+import { Button } from "@neolution-ch/reactstrap";
 
 export default {
   title: "Components",
@@ -12,7 +12,7 @@ interface FormInterface {
   name: string;
 }
 
-const Template: Story<StaticTypeaheadInputProps<FormInterface>> = (args) => (
+const Template: StoryFn<StaticTypeaheadInputProps<FormInterface>> = (args) => (
   // eslint-disable-next-line react/jsx-no-useless-fragment
   <React.Fragment>
     <Form onSubmit={(data) => alert(JSON.stringify(data, null, 2))}>

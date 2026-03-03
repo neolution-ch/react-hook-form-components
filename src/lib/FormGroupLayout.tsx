@@ -1,16 +1,15 @@
 import { PropsWithChildren, ReactNode, CSSProperties, useMemo } from "react";
 import { FieldError, FieldValues, get } from "react-hook-form";
-import { FormGroup, FormFeedback, FormText, InputGroup } from "reactstrap";
+import { FormGroup, FormFeedback, FormText, InputGroup } from "@neolution-ch/reactstrap";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { CommonInputProps, MergedAddonProps } from "./types/CommonInputProps";
 import "./styles/FormGroupLayout.css";
 import { FormGroupLayoutLabel } from "./FormGroupLayoutLabel";
 import { useFormContext } from "./context/FormContext";
 
-interface FormGroupLayoutProps<T extends FieldValues, TRenderAddon>
-  extends PropsWithChildren<
-    Pick<CommonInputProps<T>, "helpText" | "label" | "name" | "id" | "labelToolTip" | "inputOnly" | "hideValidationMessage">
-  > {
+interface FormGroupLayoutProps<T extends FieldValues, TRenderAddon> extends PropsWithChildren<
+  Pick<CommonInputProps<T>, "helpText" | "label" | "name" | "id" | "labelToolTip" | "inputOnly" | "hideValidationMessage">
+> {
   layout?: "checkbox" | "switch" | "muiInput";
   addonLeft?: ReactNode | ((props: TRenderAddon) => ReactNode);
   addonRight?: ReactNode | ((props: TRenderAddon) => ReactNode);
@@ -20,7 +19,6 @@ interface FormGroupLayoutProps<T extends FieldValues, TRenderAddon>
   labelStyle?: CSSProperties;
 }
 
-// eslint-disable-next-line complexity
 const FormGroupLayout = <T extends FieldValues, TRenderAddon = unknown>(props: FormGroupLayoutProps<T, TRenderAddon>) => {
   const {
     label,
@@ -56,7 +54,7 @@ const FormGroupLayout = <T extends FieldValues, TRenderAddon = unknown>(props: F
 
   const effectiveAddonLeft = useMemo(
     () =>
-      addonLeft instanceof Function && addonProps
+      typeof addonLeft === "function" && addonProps
         ? (addonLeft as (props: TRenderAddon) => ReactNode)(addonProps)
         : (addonLeft as ReactNode),
     [addonLeft, addonProps],
@@ -64,7 +62,7 @@ const FormGroupLayout = <T extends FieldValues, TRenderAddon = unknown>(props: F
 
   const effectiveAddonRight = useMemo(
     () =>
-      addonRight instanceof Function && addonProps
+      typeof addonRight === "function" && addonProps
         ? (addonRight as (props: TRenderAddon) => ReactNode)(addonProps)
         : (addonRight as ReactNode),
     [addonRight, addonProps],

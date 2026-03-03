@@ -2,8 +2,8 @@ import { Controller, FieldValues } from "react-hook-form";
 import { useSafeNameId } from "src/lib/hooks/useSafeNameId";
 import { FormGroupLayout } from "./FormGroupLayout";
 import { CommonInputProps } from "./types/CommonInputProps";
-import DatePicker, { ReactDatePickerProps } from "react-datepicker";
-import { useCallback, useEffect, useState, MutableRefObject, useRef } from "react";
+import DatePickerDefault, { DatePickerProps } from "react-datepicker";
+import { useCallback, useEffect, useState, RefObject, useRef, ComponentType } from "react";
 import { toZonedTime, fromZonedTime } from "date-fns-tz";
 import { useFormContext } from "./context/FormContext";
 import { v4 as guidGen } from "uuid";
@@ -14,17 +14,25 @@ interface DatePickerRenderAddonProps {
   toggleDatePicker: () => void;
 }
 
-interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputProps<T, DatePickerRenderAddonProps>, "onChange" | "style"> {
+interface DatePickerInputProps<T extends FieldValues> extends Omit<
+  CommonInputProps<T, DatePickerRenderAddonProps>,
+  "onChange" | "style" | "onBlur"
+> {
   /**
    * The props for the date picker component: https://reactdatepicker.com/
    */
-  datePickerProps?: Omit<ReactDatePickerProps, "onChange" | "selected" | "id" | "className" | "onBlur" | "autoComplete">;
+  datePickerProps?: Omit<
+    DatePickerProps,
+    "onChange" | "selected" | "id" | "className" | "onBlur" | "autoComplete" | "selectsMultiple" | "selectsRange"
+  >;
 
   /**
    * The onChange handler for the date picker component.
    * @param value The selected date or null if the user cleared the date.
    */
   onChange?: (value: Date | null) => void;
+
+  onBlur?: (e: React.FocusEvent<HTMLElement>) => void;
 
   /**
    * The IANA time zone identifier, e.g. "Europe/Berlin" for which the date should be displayed.
@@ -37,7 +45,7 @@ interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputPr
   /**
    * The ref of the date picker component.
    */
-  datePickerRef?: MutableRefObject<DatePicker<never, undefined> | null>;
+  datePickerRef?: RefObject<DatePickerDefault | null>;
 
   /**
    * The autoComplete property for the date picker component.
@@ -49,17 +57,16 @@ interface DatePickerInputProps<T extends FieldValues> extends Omit<CommonInputPr
 const DEFAULT_DATE_FORMAT = "dd.MM.yyyy";
 const DEFAULT_DATE_TIME_FORMAT = "dd.MM.yyyy HH:mm";
 
-// eslint-disable-next-line complexity
 const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) => {
   const {
     disabled,
     label,
     helpText,
-    datePickerProps = {},
     labelToolTip,
     addonLeft,
     addonRight,
     ianaTimeZone,
+    datePickerProps = {},
     className = "",
     autoComplete = "off",
     inputGroupStyle,
@@ -71,7 +78,7 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
 
   const { id, name } = useSafeNameId(initialName, initialId);
   const { control, getValues, setValue, disabled: formDisabled } = useFormContext();
-  const internalDatePickerRef = useRef<DatePicker>();
+  const internalDatePickerRef = useRef<DatePickerDefault | undefined>(undefined);
   const formGroupId = useRef(guidGen());
   const { calendarStartDay = 1, showTimeInput = false, showTimeSelect = false, dateFormat } = datePickerProps;
   const showTimeInputOrSelect = showTimeInput || showTimeSelect;
@@ -144,8 +151,10 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
           inputGroupStyle={!!addonLeft || !!addonRight ? { ...inputGroupStyle, alignItems: "normal" } : inputGroupStyle}
           hideValidationMessage={hideValidationMessage}
         >
-          <DatePicker
-            {...datePickerProps}
+          <DatePickerDefault
+            {...(datePickerProps as ComponentType<typeof DatePickerDefault>)}
+            selectsMultiple={undefined}
+            selectsRange={undefined}
             {...field}
             id={id}
             disabled={isDisabled}
@@ -158,13 +167,12 @@ const DatePickerInput = <T extends FieldValues>(props: DatePickerInputProps<T>) 
               // https://github.com/react-hook-form/react-hook-form/discussions/5413
               // https://codesandbox.io/s/react-hook-form-focus-forked-yyhsi?file=/src/index.js
               if (elem) {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
-                field.ref((elem as any).input);
+                field.ref(elem.input);
               }
-              internalDatePickerRef.current = elem as DatePicker<never>;
+              internalDatePickerRef.current = elem as DatePickerDefault;
 
               if (datePickerRef) {
-                datePickerRef.current = elem as DatePicker<never>;
+                datePickerRef.current = elem as DatePickerDefault;
               }
             }}
             onBlur={(e) => {

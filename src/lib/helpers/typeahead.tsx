@@ -1,10 +1,10 @@
-/* eslint-disable max-lines */
 import { AutocompleteOwnerState, AutocompleteRenderGetTagProps, AutocompleteRenderOptionState } from "@mui/material/Autocomplete";
 import { LabelValueOption } from "../types/LabelValueOption";
 import { StaticTypeaheadAutocompleteProps, TypeaheadOption, TypeaheadOptions } from "../types/Typeahead";
 import AutosuggestHighlightMatch from "autosuggest-highlight/match";
 import AutosuggestHighlightParse from "autosuggest-highlight/parse";
 import { Chip } from "@mui/material";
+import { JSX } from "react";
 
 const isStringArray = (options: TypeaheadOptions): boolean =>
   options.length > 0 && (options as TypeaheadOption[]).every((value) => typeof value === "string");
@@ -62,7 +62,7 @@ const combineOptions = (options?: TypeaheadOptions, options2?: TypeaheadOptions)
 };
 
 const sortOptionsByGroup = (options: TypeaheadOptions): TypeaheadOptions =>
-  options.sort((x, y) =>
+  options.toSorted((x, y) =>
     (typeof x === "string" ? x : (x.group?.name ?? "")).localeCompare(typeof y === "string" ? y : (y.group?.name ?? "")),
   );
 

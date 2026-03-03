@@ -3,8 +3,16 @@ import storybook from "eslint-plugin-storybook";
 
 export default [
   {
-    ignores: ["**/cypress/"],
+    ignores: ["**/cypress/", "**/storybook-static/"],
   },
   ...neolutionEslintConfig.configs.flat["react-library"],
   ...storybook.configs["flat/recommended"],
+  {
+    files: [".storybook/**/*.ts", ".storybook/**/*.tsx"],
+    languageOptions: {
+      parserOptions: {
+        project: "./tsconfig.eslint.json",
+      },
+    },
+  },
 ];

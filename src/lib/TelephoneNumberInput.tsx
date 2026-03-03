@@ -6,8 +6,10 @@ import { FocusEventHandler, ReactNode } from "react";
 import { TelephoneNumberInputInternal } from "./components/TelephoneNumberInput/TelephoneNumberInputInternal";
 import { RegionCode } from "google-libphonenumber";
 
-interface TelephoneNumberInputProps<T extends FieldValues>
-  extends Omit<CommonInputProps<T>, "minLength" | "maxLength" | "addonLeft" | "addonRight" | "name" | "onChange" | "onBlur"> {
+interface TelephoneNumberInputProps<T extends FieldValues> extends Omit<
+  CommonInputProps<T>,
+  "minLength" | "maxLength" | "addonLeft" | "addonRight" | "name" | "onChange" | "onBlur"
+> {
   useBootstrapStyle?: boolean;
   name: FieldPathByValue<T, string | undefined>;
   onChange?: (telephoneNumber: string) => void;

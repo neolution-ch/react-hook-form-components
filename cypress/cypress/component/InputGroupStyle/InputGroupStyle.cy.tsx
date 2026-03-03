@@ -1,12 +1,13 @@
 import { DatePickerInput, Form, Input, AsyncTypeaheadInput, StaticTypeaheadInput } from "react-hook-form-components";
-import "react-datepicker/dist/react-datepicker.css";
+import "react-hook-form-components/styles.css";
 import { faker } from "@faker-js/faker";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { faCalendar, faPencil } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { InputGroupText } from "reactstrap";
+import { InputGroupText } from "@neolution-ch/reactstrap";
 import { fetchMock, generateOptions } from "../../helpers/typeahead";
+import { mount } from "cypress/react";
 
 it("contains pencil icon and inputGroup has correct style", () => {
   const name = faker.random.alpha(10);
@@ -17,7 +18,7 @@ it("contains pencil icon and inputGroup has correct style", () => {
   const defaultStyle = "flex-wrap: nowrap; align-items: center; ";
   const style = defaultStyle.concat(inputGroupStyle);
 
-  cy.mount(
+  mount(
     <Form
       onSubmit={() => {
         // Nothing to do
@@ -50,7 +51,7 @@ it("contains calendar icon and inputGroup has correct style", () => {
   const defaultStyle = "flex-wrap: nowrap; align-items: normal; ";
   const style = defaultStyle.concat(inputGroupStyle);
 
-  cy.mount(
+  mount(
     <Form
       onSubmit={() => {
         // Nothing to do
@@ -85,7 +86,7 @@ it("async typeahead input contains pencil icon and inputGroup has correct style"
 
   const customStyle = "background-color: black;";
 
-  cy.mount(
+  mount(
     <Form
       onSubmit={() => {
         // Do nothing
@@ -116,7 +117,7 @@ it("static typeahead input contains pencil icon and inputGroup has correct style
 
   const customStyle = "background-color: black;";
 
-  cy.mount(
+  mount(
     <Form
       onSubmit={() => {
         // Do nothing

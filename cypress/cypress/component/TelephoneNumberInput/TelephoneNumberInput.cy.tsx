@@ -1,6 +1,6 @@
 import { Form, TelephoneNumberInput } from "react-hook-form-components";
 import { faker } from "@faker-js/faker";
-import { mount } from "cypress/react18";
+import { mount } from "cypress/react";
 
 it("correctly set telephone number", () => {
   const name = faker.random.alpha(10);
