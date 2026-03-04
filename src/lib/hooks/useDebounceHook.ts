@@ -60,7 +60,7 @@ const useDebounceHook = (queryFn: (query: string) => Promise<TypeaheadOptions>, 
     return;
   }, [queryFn, setOptions, debounceSearch]);
 
-  return { setDebounceSearch, isLoading };
+  return { setDebounceSearch, isLoading, queryRef };
 };
 
 export { useDebounceHook };

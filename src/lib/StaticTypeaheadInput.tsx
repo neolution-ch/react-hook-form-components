@@ -166,7 +166,9 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
           const finalValue = multiple ? values : values[0];
           clearErrors(field.name);
           if (onChange) {
-            onChange(finalValue);
+            void (async () => {
+              await onChange(finalValue);
+            })();
           }
           field.onChange(finalValue);
         }}

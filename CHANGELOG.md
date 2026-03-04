@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- `onChange` into `StaticTypeaheadInput` and `AsyncTypeaheadInput` to support async functions.
+
 ## [4.0.0] - 2026-02-24
 
 ### Changed
