@@ -166,13 +166,13 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
           const finalValue = multiple ? values : values[0];
           clearErrors(field.name);
           if (onChange) {
-            onChange(finalValue);
+            void (async () => await onChange(finalValue))();
           }
           field.onChange(finalValue);
         }}
         onInputChange={(_e, value, reason) => {
           if (onInputChange) {
-            onInputChange(value, reason);
+            void (async () => await onInputChange(value, reason))();
           }
         }}
         renderOption={highlightOptions ? renderHighlightedOptionFunction : undefined}

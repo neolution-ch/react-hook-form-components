@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- `onChange` into `StaticTypeaheadInput` and `AsyncTypeaheadInput` to support async functions.
+- `onInputChange` into `StaticTypeaheadInput` and `AsyncTypeaheadInput` to support async functions.
+- `useDebounceHook` in order to expose the `queryRef` (which keeps track of the search input value)
+
 ## [4.0.0] - 2026-02-24
 
 ### Changed
