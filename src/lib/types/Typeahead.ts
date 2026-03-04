@@ -30,7 +30,7 @@ interface CommonTypeaheadProps<T extends FieldValues> extends Omit<
   fitMenuContent?: boolean;
   getOptionDisabled?: (option: TypeaheadOption) => boolean;
   onChange?: (selected: string | string[]) => void | Promise<void>;
-  onInputChange?: (text: string, reason: AutocompleteInputChangeReason) => void;
+  onInputChange?: (text: string, reason: AutocompleteInputChangeReason) => void | Promise<void>;
   onClose?: (event: SyntheticEvent, reason: AutocompleteCloseReason) => void;
   onOpen?: (event: SyntheticEvent) => void;
   onBlur?: () => void;
