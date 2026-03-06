@@ -57,6 +57,7 @@ const ColorPicker = <T extends FieldValues>(props: ColorPickerInputProps<T>) => 
   } = useController({
     name,
     control,
+    shouldUnregister: true,
     rules: {
       validate: {
         required: () => getFieldState(name)?.error?.message,
