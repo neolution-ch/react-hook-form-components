@@ -95,7 +95,7 @@ it("setting a max lenght works", () => {
 
   mount(
     <div className="p-4">
-      <Form onSubmit={cy.spy().as("onSubmitSpy")}>
+      <Form onSubmit={() => true}>
         <TelephoneNumberInput
           name={name}
           useBootstrapStyle
