@@ -104,7 +104,6 @@ it("setting a max lenght works", () => {
           pinnedCountries={["GB", "IT"]}
           maxLength={9}
         />
-        <input type="submit" className="mt-4" />
       </Form>
     </div>,
   );
