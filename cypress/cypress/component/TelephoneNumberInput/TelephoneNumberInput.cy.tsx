@@ -88,3 +88,28 @@ it("pinning contries works", () => {
   cy.get(`.MuiAutocomplete-listbox`).children().eq(1).should("contain", "+39");
   cy.get(`.MuiAutocomplete-listbox`).children().eq(2).should("contain", "──");
 });
+
+it("setting a max lenght works", () => {
+  const phoneNumber = faker.phone.number("79#######");
+  const name = faker.random.alpha(10);
+
+  mount(
+    <div className="p-4">
+      <Form onSubmit={cy.spy().as("onSubmitSpy")}>
+        <TelephoneNumberInput
+          name={name}
+          useBootstrapStyle
+          label="Phone Number"
+          defaultCountry="CH"
+          pinnedCountries={["GB", "IT"]}
+          maxLength={9}
+        />
+        <input type="submit" className="mt-4" />
+      </Form>
+    </div>,
+  );
+
+  cy.get(`.MuiInputBase-input`).clear();
+  cy.get(`.MuiInputBase-input`).type(`${phoneNumber} 1`);
+  cy.get(`.MuiInputBase-input`).should("have.value", phoneNumber);
+});
