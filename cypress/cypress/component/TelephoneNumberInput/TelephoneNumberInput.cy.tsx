@@ -102,7 +102,7 @@ it("setting a max lenght works", () => {
           label="Phone Number"
           defaultCountry="CH"
           pinnedCountries={["GB", "IT"]}
-          maxLength={9}
+          maxLength={phoneNumber.length}
         />
       </Form>
     </div>,
