@@ -91,32 +91,25 @@ const ColorPicker = <T extends FieldValues>(props: ColorPickerInputProps<T>) => 
             disabled={isDisabled}
             onFocus={focusHandler}
             onChange={(e) => {
-              if (propsOnChange) {
-                propsOnChange(e.target.value);
-              }
+              const raw = e.target.value;
+              propsOnChange?.(raw);
 
-              field.onChange(e);
+              if (isNullOrWhitespace(raw)) {
+                setValue(name, undefined as never, { shouldDirty: true });
+              } else {
+                field.onChange(e);
+              }
             }}
             onBlur={(e) => {
               if (convertColorToFormatOrUndefinedOnBlur) {
-                const currentValue = e.target.value;
-                const currentColor = new TinyColor(currentValue);
-
-                if (isNullOrWhitespace(currentValue) || !currentColor.isValid) {
-                  setValue(name, undefined as never, { shouldDirty: true, shouldTouch: true });
-                } else {
-                  // Need to cast as never as type is too complex
-                  setValue(name, getColorByFormat(currentColor, format) as never, { shouldDirty: true, shouldTouch: true });
-                }
-              } else {
-                field.onBlur();
+                const raw = e.target.value;
+                const color = new TinyColor(raw);
+                const value = isNullOrWhitespace(raw) || !color.isValid ? undefined : getColorByFormat(color, format);
+                setValue(name, value as never, { shouldDirty: true, shouldTouch: true });
               }
-
-              if (propsOnBlur) {
-                propsOnBlur(e);
-              }
+              propsOnBlur?.(e);
             }}
-            value={field.value || ""}
+            value={field.value ?? ""}
             slotProps={{
               input: {
                 startAdornment: (
