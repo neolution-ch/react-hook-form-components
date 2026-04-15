@@ -12,7 +12,6 @@ import { TinyColor } from "@ctrl/tinycolor";
 import Popover from "@mui/material/Popover";
 import Colorful from "@uiw/react-color-colorful"; // must be imported as default, otherwise it will provide a runtime error in nextjs
 import { getRequiredLabel } from "../../helpers/form";
-import { isNullOrWhitespace } from "@neolution-ch/javascript-utils";
 
 const getColorByFormat = <T extends FieldValues>(color: TinyColor, format: ColorPickerInputProps<T>["format"]) => {
   switch (format) {
@@ -91,23 +90,22 @@ const ColorPicker = <T extends FieldValues>(props: ColorPickerInputProps<T>) => 
             disabled={isDisabled}
             onFocus={focusHandler}
             onChange={(e) => {
-              const raw = e.target.value;
-              propsOnChange?.(raw);
-
-              if (isNullOrWhitespace(raw)) {
-                setValue(name, undefined as never, { shouldDirty: true });
-              } else {
-                field.onChange(e);
+              if (propsOnChange) {
+                propsOnChange(e.target.value);
               }
+
+              field.onChange(e);
             }}
             onBlur={(e) => {
               if (convertColorToFormatOrUndefinedOnBlur) {
-                const raw = e.target.value;
-                const color = new TinyColor(raw);
-                const value = isNullOrWhitespace(raw) || !color.isValid ? undefined : getColorByFormat(color, format);
-                setValue(name, value as never, { shouldDirty: true, shouldTouch: true });
+                setValue(name, (color.isValid ? getColorByFormat(color, format) : undefined) as never); // Need to cast as never as type is too complex
               }
-              propsOnBlur?.(e);
+
+              if (propsOnBlur) {
+                propsOnBlur(e);
+              }
+
+              field.onBlur();
             }}
             value={field.value ?? ""}
             slotProps={{
