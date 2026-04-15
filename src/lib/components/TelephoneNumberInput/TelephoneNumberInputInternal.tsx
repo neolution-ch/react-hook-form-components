@@ -30,6 +30,7 @@ const TelephoneNumberInputInternal = <T extends FieldValues>(props: TelephoneNum
     useBootstrapStyle = false,
     hideValidationMessage,
     placeholder,
+    maxLength,
   } = props;
   const {
     control,
@@ -118,6 +119,9 @@ const TelephoneNumberInputInternal = <T extends FieldValues>(props: TelephoneNum
               field.onBlur();
             }}
             slotProps={{
+              htmlInput: {
+                maxLength,
+              },
               input: {
                 inputMode: "tel",
                 startAdornment: <TelephoneNumberInputAdornment disabled={isDisabled} country={country} popupState={popupState} />,
