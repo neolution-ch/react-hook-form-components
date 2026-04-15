@@ -107,7 +107,7 @@ const ColorPicker = <T extends FieldValues>(props: ColorPickerInputProps<T>) => 
 
               field.onBlur();
             }}
-            value={field.value}
+            value={field.value ?? null}
             slotProps={{
               input: {
                 startAdornment: (
