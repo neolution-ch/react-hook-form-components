@@ -47,6 +47,7 @@ const ColorPicker = <T extends FieldValues>(props: ColorPickerInputProps<T>) => 
     disabled: formDisabled,
     getFieldState,
     setValue,
+    watch,
     requiredFields,
     formState: { errors },
     hideValidationMessages,
@@ -65,7 +66,8 @@ const ColorPicker = <T extends FieldValues>(props: ColorPickerInputProps<T>) => 
   });
 
   const isDisabled = formDisabled || disabled;
-  const color = useMemo(() => new TinyColor(field.value), [field.value]);
+  const fieldValue = watch(name) as string | undefined;
+  const color = useMemo(() => new TinyColor(fieldValue), [fieldValue]);
   const fieldError = get(errors, name) as FieldError | undefined;
   const hideErrorMessage = useMemo(() => hideValidationMessages || hideValidationMessage, [hideValidationMessages, hideValidationMessage]);
   const hasError = useMemo(() => !!fieldError, [fieldError]);
