@@ -98,6 +98,7 @@ const ColorPicker = <T extends FieldValues>(props: ColorPickerInputProps<T>) => 
             }}
             onBlur={(e) => {
               if (convertColorToFormatOrUndefinedOnBlur) {
+                const color = new TinyColor(e.target.value);
                 setValue(name, (color.isValid ? getColorByFormat(color, format) : undefined) as never); // Need to cast as never as type is too complex
               }
 

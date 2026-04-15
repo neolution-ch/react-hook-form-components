@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - `ColorPicker` controlled/uncontrolled state warning by ensuring value prop is always defined.
+- `ColorPicker` reset value when `convertColorToFormatOrUndefinedOnBlur` is enabled.
 
 ## [4.1.0] - 2026-03-16
 
