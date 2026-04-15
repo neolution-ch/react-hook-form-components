@@ -98,14 +98,18 @@ const ColorPicker = <T extends FieldValues>(props: ColorPickerInputProps<T>) => 
             }}
             onBlur={(e) => {
               if (convertColorToFormatOrUndefinedOnBlur) {
-                setValue(name, (color.isValid ? getColorByFormat(color, format) : undefined) as never); // Need to cast as never as type is too complex
+                // Need to cast as never as type is too complex
+                setValue(name, (color.isValid ? getColorByFormat(color, format) : undefined) as never, {
+                  shouldDirty: true,
+                  shouldTouch: true,
+                });
+              } else {
+                field.onBlur();
               }
 
               if (propsOnBlur) {
                 propsOnBlur(e);
               }
-
-              field.onBlur();
             }}
             value={field.value ?? ""}
             slotProps={{
