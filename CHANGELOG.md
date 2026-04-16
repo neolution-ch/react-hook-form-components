@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- `ColorPicker` controlled/uncontrolled state warning by ensuring value prop is always defined.
+- `ColorPicker` clear value when field value is already set.
+
 ## [4.1.0] - 2026-03-16
 
 ### Added
