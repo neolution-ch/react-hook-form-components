@@ -84,6 +84,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
   const { name, id } = useSafeNameId(props.name ?? "", props.id);
   const { setDebounceSearch, isLoading } = useDebounceHook(queryFn, setOptions);
   const { control, disabled: formDisabled, getFieldState, setValue: setFormValue } = useFormContext();
+  const isDisabled = useMemo(() => formDisabled || disabled, [formDisabled, disabled]);
 
   validateFixedOptions(fixedOptions, multiple, autocompleteProps, withFixedOptionsInValue, value);
 
@@ -92,6 +93,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
   } = useController({
     name,
     control,
+    shouldUnregister: isDisabled,
     rules: {
       validate: {
         required: () => getFieldState(name)?.error?.message,
@@ -99,7 +101,6 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
     },
   });
 
-  const isDisabled = useMemo(() => formDisabled || disabled, [formDisabled, disabled]);
   const paginatedOptions = useMemo(
     () => (limitResults === undefined ? options : options.slice(0, page * limitResults)),
     [limitResults, page, options],
