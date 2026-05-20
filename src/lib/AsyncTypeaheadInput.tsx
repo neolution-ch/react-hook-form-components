@@ -195,7 +195,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
           const values = convertAutoCompleteOptionsToStringArray(optionsArray);
           const finalValue = multiple ? values : values[0];
           if (onChange) {
-            onChange(finalValue);
+            onChange(finalValue, value as TypeaheadOption | TypeaheadOptions | null);
           }
           field.onChange(finalValue);
         }}

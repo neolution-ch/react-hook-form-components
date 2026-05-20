@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- `AsyncTypeaheadInput` and `StaticTypeaheadInput` expose raw selected option via optional second parameter in `onChange` callaback
+
 ## [4.2.0] - 2026-04-16
 
 ### Fixed

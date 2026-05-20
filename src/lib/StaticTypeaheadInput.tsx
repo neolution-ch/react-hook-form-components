@@ -166,7 +166,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
           const finalValue = multiple ? values : values[0];
           clearErrors(field.name);
           if (onChange) {
-            onChange(finalValue);
+            onChange(finalValue, value as TypeaheadOption | TypeaheadOptions | null);
           }
           field.onChange(finalValue);
         }}
