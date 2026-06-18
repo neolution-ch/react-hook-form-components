@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Licence information added
+
 ## [4.3.0] - 2026-05-20
 
 ### Added
@@ -814,9 +818,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [1.1.1]: https://github.com/neolution-ch/react-hook-form-components/compare/1.1.0...1.1.1
 [1.1.0]: https://github.com/neolution-ch/react-hook-form-components/compare/1.0.1...1.1.0
 [1.0.1]: https://github.com/neolution-ch/react-hook-form-components/compare/0.16.2...1.0.1
-
-## [0.1.1] - 2026-16-18
-
-### Changed
-
-- Licence information added
