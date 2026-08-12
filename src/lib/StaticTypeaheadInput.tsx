@@ -27,6 +27,7 @@ interface StaticTypeaheadInputProps<T extends FieldValues> extends CommonTypeahe
   options: TypeaheadOptions;
   isLoading?: boolean;
   autocompleteProps?: StaticTypeaheadAutocompleteProps;
+  preSelectSingleOption?: boolean;
 }
 
 const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInputProps<T>) => {
@@ -66,6 +67,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
     withFixedOptionsInValue = true,
     innerRef,
     fitMenuContent,
+    preSelectSingleOption = false,
   } = props;
 
   const [page, setPage] = useState(1);
@@ -91,13 +93,19 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
     [limitResults, page, options],
   );
 
+  const [defaultSelected, setDefaultSelected] = useState<TypeaheadOptions>(preSelectSingleOption && options.length === 1 ? options : []);
+
   const fieldValue = watch(name) as string | number | string[] | number[] | undefined;
   const value = useMemo(
     () =>
       multiple
-        ? getMultipleAutoCompleteValue(combineOptions(options, fixedOptions), fieldValue as string[] | number[] | undefined)
-        : getSingleAutoCompleteValue(options, fieldValue as string | number | undefined),
-    [fieldValue, multiple, options, fixedOptions],
+        ? getMultipleAutoCompleteValue(
+            combineOptions(options, fixedOptions),
+            fieldValue as string[] | number[] | undefined,
+            defaultSelected,
+          )
+        : getSingleAutoCompleteValue(options, fieldValue as string | number | undefined, defaultSelected),
+    [fieldValue, multiple, options, fixedOptions, defaultSelected],
   );
 
   validateFixedOptions(fixedOptions, multiple, autocompleteProps, withFixedOptionsInValue, value);
@@ -164,6 +172,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
           const optionsArray = getOptionsFromValue(value, fixedOptions, withFixedOptionsInValue);
           const values = convertAutoCompleteOptionsToStringArray(optionsArray);
           const finalValue = multiple ? values : values[0];
+          setDefaultSelected([]);
           clearErrors(field.name);
           if (onChange) {
             const finalOption = multiple ? optionsArray : optionsArray?.at(0);
