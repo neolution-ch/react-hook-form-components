@@ -33,7 +33,7 @@ interface AsyncTypeaheadInputProps<T extends FieldValues> extends CommonTypeahea
   defaultSelected?: TypeaheadOptions;
   inputRef?: RefObject<AsyncTypeaheadInputRef | null>;
   autocompleteProps?: AsyncTypeaheadAutocompleteProps;
-  preSelectSingleOption?: false;
+  preSelectSingleOption?: boolean;
 }
 
 const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputProps<T>) => {
