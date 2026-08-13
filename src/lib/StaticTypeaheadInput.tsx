@@ -93,12 +93,11 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
     [limitResults, page, options],
   );
 
-  const fieldValue = watch(name, preSelectSingleOption && options.length === 1 ? options : []) as
-    | string
-    | number
-    | string[]
-    | number[]
-    | undefined;
+  const defaultValue = useMemo(
+    () => (preSelectSingleOption && options.length === 1 ? (typeof options[0] === "string" ? options[0] : options[0]?.value) : undefined),
+    [preSelectSingleOption, options],
+  );
+  const fieldValue = watch(name, defaultValue) as string | number | string[] | number[] | undefined;
   const value = useMemo(
     () =>
       multiple
