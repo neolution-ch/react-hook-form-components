@@ -40,16 +40,8 @@ const getSingleAutoCompleteValue = (
   ) as TypeaheadOptions;
 };
 
-const getMultipleAutoCompleteValue = (
-  options: TypeaheadOptions,
-  fieldValue: (string | number)[] | undefined,
-  defaultOption: TypeaheadOptions = [],
-): TypeaheadOptions => {
+const getMultipleAutoCompleteValue = (options: TypeaheadOptions, fieldValue: (string | number)[] | undefined): TypeaheadOptions => {
   if (fieldValue === undefined) {
-    if (defaultOption.length > 0) {
-      return defaultOption;
-    }
-
     return [];
   }
   return (options as TypeaheadOption[]).filter((x) =>
