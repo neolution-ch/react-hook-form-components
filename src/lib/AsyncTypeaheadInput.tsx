@@ -43,6 +43,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
     disabled,
     variant,
     label,
+    labelToolTip,
     helpText,
     hideValidationMessage,
     onBlur,
@@ -139,6 +140,7 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
   return (
     <FormGroupLayout
       name={name}
+      labelToolTip={labelToolTip}
       label={useBootstrapStyle ? label : undefined}
       labelStyle={useBootstrapStyle ? { color: "#8493A5", fontSize: 14 } : undefined}
       layout="muiInput"

@@ -36,6 +36,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
     disabled,
     variant,
     label,
+    labelToolTip,
     helpText,
     hideValidationMessage,
     onChange,
@@ -112,6 +113,7 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
   return (
     <FormGroupLayout
       name={name}
+      labelToolTip={labelToolTip}
       label={useBootstrapStyle ? label : undefined}
       labelStyle={useBootstrapStyle ? { color: "#8493A5", fontSize: 14 } : undefined}
       layout="muiInput"
