@@ -82,7 +82,7 @@ const FormGroupLayout = <T extends FieldValues, TRenderAddon = unknown>(props: F
         labelStyle={labelStyle}
         fieldName={props.name}
         fieldId={id}
-        tooltip={labelToolTip}
+        labelToolTip={labelToolTip}
         layout={layout}
       />
       {switchLayout || checkboxLayout || muiInputLayout ? (

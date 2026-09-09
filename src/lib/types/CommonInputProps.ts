@@ -15,7 +15,7 @@ interface CommonInputProps<T extends FieldValues, TRenderAddon = unknown> {
   id?: string;
   helpText?: ReactNode;
   disabled?: boolean;
-  labelToolTip?: string;
+  labelToolTip?: ReactNode;
   markAllOnFocus?: boolean;
   inputOnly?: boolean;
 
