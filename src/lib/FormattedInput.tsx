@@ -46,6 +46,7 @@ const FormattedInput = <T extends FieldValues>(props: FormattedInputProps<T>) =>
     <Controller
       control={control}
       name={name}
+      shouldUnregister={isDisabled}
       render={({ field: { name, onBlur, onChange, ref, value }, fieldState: { error } }) => {
         const commonProps: NumericFormatProps = {
           name: name,
