@@ -14,6 +14,7 @@ it("correctly set telephone number", () => {
     </div>,
   );
 
+  cy.get(`#${name}`).should("have.attr", "inputmode", "tel");
   cy.get("input[type=submit]").click();
   cy.get("@onSubmitSpy").should("be.calledWith", { [name]: undefined });
 
