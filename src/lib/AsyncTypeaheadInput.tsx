@@ -33,6 +33,7 @@ interface AsyncTypeaheadInputProps<T extends FieldValues> extends CommonTypeahea
   defaultSelected?: TypeaheadOptions;
   inputRef?: RefObject<AsyncTypeaheadInputRef | null>;
   autocompleteProps?: AsyncTypeaheadAutocompleteProps;
+  preSelectSingleOption?: boolean;
 }
 
 const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputProps<T>) => {
@@ -76,10 +77,13 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
     fixedOptions,
     withFixedOptionsInValue = true,
     fitMenuContent,
+    preSelectSingleOption = false,
   } = props;
 
   const [options, setOptions] = useState<TypeaheadOptions>(defaultOptions);
-  const [value, setValue] = useState<TypeaheadOptions>(defaultSelected);
+  const [value, setValue] = useState<TypeaheadOptions>(
+    defaultSelected.length > 0 ? defaultSelected : preSelectSingleOption && defaultOptions.length === 1 ? defaultOptions : [],
+  );
   const [page, setPage] = useState(1);
   const [loadMoreOptions, setLoadMoreOptions] = useState(limitResults !== undefined && limitResults < defaultOptions.length);
   const { name, id } = useSafeNameId(props.name ?? "", props.id);
