@@ -121,9 +121,9 @@ const TelephoneNumberInputInternal = <T extends FieldValues>(props: TelephoneNum
             slotProps={{
               htmlInput: {
                 maxLength,
+                inputMode: "tel",
               },
               input: {
-                inputMode: "tel",
                 startAdornment: <TelephoneNumberInputAdornment disabled={isDisabled} country={country} popupState={popupState} />,
               },
             }}
