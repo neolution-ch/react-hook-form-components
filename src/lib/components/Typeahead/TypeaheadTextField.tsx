@@ -1,6 +1,5 @@
 ﻿import TextField, { BaseTextFieldProps } from "@mui/material/TextField";
 import { textFieldBootstrapStyle } from "../../helpers/mui";
-import InputAdornment from "@mui/material/InputAdornment";
 import CircularProgress from "@mui/material/CircularProgress";
 import DownloadingSharpIcon from "@mui/icons-material/DownloadingSharp";
 import { AutocompleteRenderInputParams, IconButton } from "@mui/material";
@@ -86,35 +85,22 @@ const TypeaheadTextField = <T extends FieldValues, TRenderAddon = unknown>(props
         input: {
           ...params.InputProps,
           startAdornment: (
-            <>
-              {startAdornment && (
-                <InputAdornment position="start" disablePointerEvents={addonProps?.isDisabled}>
-                  {startAdornment}
-                </InputAdornment>
-              )}
+            <div style={{ pointerEvents: addonProps?.isDisabled ? "none" : "auto" }}>
+              {startAdornment}
               {params.InputProps.startAdornment}
-            </>
+            </div>
           ),
           endAdornment: (
-            <>
-              {isLoading ? (
-                <InputAdornment position="end">
-                  <CircularProgress color="inherit" size={20} />
-                </InputAdornment>
-              ) : (
-                endAdornment && (
-                  <InputAdornment position="end" disablePointerEvents={addonProps?.isDisabled}>
-                    {endAdornment}
-                  </InputAdornment>
-                )
-              )}
+            <div style={{ pointerEvents: addonProps?.isDisabled ? "none" : "auto" }}>
+              {params.InputProps.endAdornment}
+              {isLoading && <CircularProgress color="inherit" size={30} />}
+              {endAdornment}
               {loadMoreOptions && limitResults && (
                 <IconButton title={paginationText ?? `Load ${limitResults} more`} size="small" onClick={() => setPage((prev) => prev + 1)}>
                   {paginationIcon ?? <DownloadingSharpIcon fontSize="small" />}
                 </IconButton>
               )}
-              {params.InputProps.endAdornment}
-            </>
+            </div>
           ),
         },
       }}

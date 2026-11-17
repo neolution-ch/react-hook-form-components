@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- position of addons in `TypeaheadTextField` so the custom addon right is displayed on the far right (after MUI defaults)
+- `MUI` icon button padding to MUI default.
+
 ## [4.4.0] - 2026-09-08
 
 ### Added

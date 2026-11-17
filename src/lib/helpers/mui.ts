@@ -46,9 +46,6 @@ const textFieldBootstrapStyle: SxProps = {
       color: "#495057",
       fontSize: "0.875rem",
     },
-    "& .MuiIconButton-root": {
-      padding: 0,
-    },
   },
   "& fieldset": {
     border: "none",
