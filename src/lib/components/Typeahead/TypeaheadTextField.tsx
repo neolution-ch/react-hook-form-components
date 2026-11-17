@@ -85,13 +85,13 @@ const TypeaheadTextField = <T extends FieldValues, TRenderAddon = unknown>(props
         input: {
           ...params.InputProps,
           startAdornment: (
-            <div style={{ pointerEvents: addonProps?.isDisabled ? "none" : "auto" }}>
+            <>
               {startAdornment}
               {params.InputProps.startAdornment}
-            </div>
+            </>
           ),
           endAdornment: (
-            <div style={{ pointerEvents: addonProps?.isDisabled ? "none" : "auto" }}>
+            <>
               {params.InputProps.endAdornment}
               {isLoading && <CircularProgress color="inherit" size={30} />}
               {endAdornment}
@@ -100,7 +100,7 @@ const TypeaheadTextField = <T extends FieldValues, TRenderAddon = unknown>(props
                   {paginationIcon ?? <DownloadingSharpIcon fontSize="small" />}
                 </IconButton>
               )}
-            </div>
+            </>
           ),
         },
       }}
