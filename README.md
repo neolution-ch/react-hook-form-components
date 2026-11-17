@@ -262,4 +262,4 @@ import "@neolution-ch/react-hook-form-components/styles.css";
 
 The storybook is a visual testing tool that makes it easy to test and tinker with the components.
 
-It can be found at https://neolution-ch.github.io/react-hook-form-components
+It can be found at https://collana-solutions.github.io/react-hook-form-components
