@@ -21,8 +21,16 @@ const convertAutoCompleteOptionsToStringArray = (options: TypeaheadOptions | und
   return (options as LabelValueOption[]).map((option) => option.value) as string[];
 };
 
-const getSingleAutoCompleteValue = (options: TypeaheadOptions, fieldValue: string | number | undefined): TypeaheadOptions => {
+const getSingleAutoCompleteValue = (
+  options: TypeaheadOptions,
+  fieldValue: string | number | undefined,
+  defaultOption: TypeaheadOptions = [],
+): TypeaheadOptions => {
   if (fieldValue === undefined) {
+    if (defaultOption.length > 0) {
+      return defaultOption;
+    }
+
     return [];
   }
 
