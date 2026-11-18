@@ -7,9 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `getTypeaheadAddonLayoutStyle` helper to lay out a typeahead text field as addon start, values and input, addon end.
+
 ### Changed
 
-- position of addons in `TypeaheadTextField` so the custom addon right is displayed on the far right (after MUI defaults)
+- layout of `TypeaheadTextField`: the selected values (chips) and the input are grouped between the addons, and the custom addon right, the clear icon and the popup icon are rendered together as one end addon on the far right, both for single and multiple selection.
 - `MUI` icon button padding to MUI default.
 
 ## [4.5.0] - 2026-11-11

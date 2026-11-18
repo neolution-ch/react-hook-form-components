@@ -1,5 +1,5 @@
 ﻿import TextField, { BaseTextFieldProps } from "@mui/material/TextField";
-import { textFieldBootstrapStyle } from "../../helpers/mui";
+import { textFieldBootstrapStyle, getTypeaheadAddonLayoutStyle } from "../../helpers/mui";
 import CircularProgress from "@mui/material/CircularProgress";
 import DownloadingSharpIcon from "@mui/icons-material/DownloadingSharp";
 import { AutocompleteRenderInputParams, IconButton, InputAdornment } from "@mui/material";
@@ -75,7 +75,10 @@ const TypeaheadTextField = <T extends FieldValues, TRenderAddon = unknown>(props
     <TextField
       {...params}
       style={style}
-      sx={{ ...(useBootstrapStyle && textFieldBootstrapStyle) }}
+      sx={{
+        ...(useBootstrapStyle && textFieldBootstrapStyle),
+        ...getTypeaheadAddonLayoutStyle(useBootstrapStyle ? "bootstrap" : (variant ?? "outlined")),
+      }}
       variant={useBootstrapStyle ? undefined : variant}
       error={hasError}
       label={useBootstrapStyle ? undefined : finalLabel}
@@ -86,23 +89,25 @@ const TypeaheadTextField = <T extends FieldValues, TRenderAddon = unknown>(props
           ...params.InputProps,
           startAdornment: (
             <>
-              {startAdornment}
-              {params.InputProps.startAdornment}
+              {startAdornment && (
+                <InputAdornment position="start" className="typeahead-addon-start">
+                  {startAdornment}
+                </InputAdornment>
+              )}
+              {params.InputProps.startAdornment && <div className="typeahead-values">{params.InputProps.startAdornment}</div>}
             </>
           ),
           endAdornment: (
-            <>
-              <InputAdornment position="end">
-                {isLoading && <CircularProgress color="inherit" size={20} />}
-                {endAdornment}
-                {loadMoreOptions && limitResults && (
-                  <IconButton title={paginationText ?? `Load ${limitResults} more`} onClick={() => setPage((prev) => prev + 1)}>
-                    {paginationIcon ?? <DownloadingSharpIcon fontSize="small" />}
-                  </IconButton>
-                )}
-              </InputAdornment>
+            <InputAdornment position="end" className="typeahead-addon-end">
+              {isLoading && <CircularProgress color="inherit" size={20} />}
+              {endAdornment}
+              {loadMoreOptions && limitResults && (
+                <IconButton title={paginationText ?? `Load ${limitResults} more`} onClick={() => setPage((prev) => prev + 1)}>
+                  {paginationIcon ?? <DownloadingSharpIcon fontSize="small" />}
+                </IconButton>
+              )}
               {params.InputProps.endAdornment}
-            </>
+            </InputAdornment>
           ),
         },
       }}
