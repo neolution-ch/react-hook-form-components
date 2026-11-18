@@ -2,7 +2,7 @@
 import { textFieldBootstrapStyle } from "../../helpers/mui";
 import CircularProgress from "@mui/material/CircularProgress";
 import DownloadingSharpIcon from "@mui/icons-material/DownloadingSharp";
-import { AutocompleteRenderInputParams, IconButton } from "@mui/material";
+import { AutocompleteRenderInputParams, IconButton, InputAdornment } from "@mui/material";
 import { ReactNode, useMemo } from "react";
 import { CommonTypeaheadProps } from "../../types/Typeahead";
 import { FieldError, FieldValues, get } from "react-hook-form";
@@ -92,14 +92,16 @@ const TypeaheadTextField = <T extends FieldValues, TRenderAddon = unknown>(props
           ),
           endAdornment: (
             <>
+              <InputAdornment position="end">
+                {isLoading && <CircularProgress color="inherit" size={20} />}
+                {endAdornment}
+                {loadMoreOptions && limitResults && (
+                  <IconButton title={paginationText ?? `Load ${limitResults} more`} onClick={() => setPage((prev) => prev + 1)}>
+                    {paginationIcon ?? <DownloadingSharpIcon fontSize="small" />}
+                  </IconButton>
+                )}
+              </InputAdornment>
               {params.InputProps.endAdornment}
-              {isLoading && <CircularProgress color="inherit" size={30} />}
-              {endAdornment}
-              {loadMoreOptions && limitResults && (
-                <IconButton title={paginationText ?? `Load ${limitResults} more`} size="small" onClick={() => setPage((prev) => prev + 1)}>
-                  {paginationIcon ?? <DownloadingSharpIcon fontSize="small" />}
-                </IconButton>
-              )}
             </>
           ),
         },
