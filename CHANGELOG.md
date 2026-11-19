@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - `getTypeaheadAddonLayoutStyle` helper to lay out a typeahead text field as addon start, values and input, addon end.
+- export of `CommonInputProps` and `MergedAddonProps` types.
 
 ### Changed
 
