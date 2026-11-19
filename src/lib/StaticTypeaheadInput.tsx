@@ -34,7 +34,6 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
     options,
     multiple,
     disabled,
-    variant,
     label,
     labelToolTip,
     helpText,
@@ -196,7 +195,6 @@ const StaticTypeaheadInput = <T extends FieldValues>(props: StaticTypeaheadInput
             placeholder={multiple && value.length > 0 ? undefined : placeholder}
             paginationIcon={paginationIcon}
             paginationText={paginationText}
-            variant={variant}
             limitResults={limitResults}
             loadMoreOptions={loadMoreOptions}
             setPage={setPage}

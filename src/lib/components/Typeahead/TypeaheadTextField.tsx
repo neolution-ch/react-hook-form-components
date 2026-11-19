@@ -1,9 +1,8 @@
 ﻿import TextField, { BaseTextFieldProps } from "@mui/material/TextField";
-import { textFieldBootstrapStyle } from "../../helpers/mui";
-import InputAdornment from "@mui/material/InputAdornment";
+import { textFieldBootstrapStyle, getTypeaheadAddonLayoutStyle } from "../../helpers/mui";
 import CircularProgress from "@mui/material/CircularProgress";
 import DownloadingSharpIcon from "@mui/icons-material/DownloadingSharp";
-import { AutocompleteRenderInputParams, IconButton } from "@mui/material";
+import { AutocompleteRenderInputParams, IconButton, InputAdornment } from "@mui/material";
 import { ReactNode, useMemo } from "react";
 import { CommonTypeaheadProps } from "../../types/Typeahead";
 import { FieldError, FieldValues, get } from "react-hook-form";
@@ -36,7 +35,6 @@ const TypeaheadTextField = <T extends FieldValues, TRenderAddon = unknown>(props
     placeholder,
     paginationIcon,
     paginationText,
-    variant,
     limitResults,
     isLoading,
     loadMoreOptions,
@@ -76,8 +74,11 @@ const TypeaheadTextField = <T extends FieldValues, TRenderAddon = unknown>(props
     <TextField
       {...params}
       style={style}
-      sx={{ ...(useBootstrapStyle && textFieldBootstrapStyle) }}
-      variant={useBootstrapStyle ? undefined : variant}
+      sx={{
+        ...(useBootstrapStyle && textFieldBootstrapStyle),
+        ...getTypeaheadAddonLayoutStyle(useBootstrapStyle),
+      }}
+      variant="outlined"
       error={hasError}
       label={useBootstrapStyle ? undefined : finalLabel}
       helperText={hasError && !hideErrorMessage ? errorMessage : helpText}
@@ -88,33 +89,27 @@ const TypeaheadTextField = <T extends FieldValues, TRenderAddon = unknown>(props
           startAdornment: (
             <>
               {startAdornment && (
-                <InputAdornment position="start" disablePointerEvents={addonProps?.isDisabled}>
+                <InputAdornment
+                  position="start"
+                  className={`typeahead-addon-start${params.InputProps.startAdornment ? "" : " typeahead-addon-start--no-values"}`}
+                >
                   {startAdornment}
                 </InputAdornment>
               )}
-              {params.InputProps.startAdornment}
+              {params.InputProps.startAdornment && <div className="typeahead-values">{params.InputProps.startAdornment}</div>}
             </>
           ),
           endAdornment: (
-            <>
-              {isLoading ? (
-                <InputAdornment position="end">
-                  <CircularProgress color="inherit" size={20} />
-                </InputAdornment>
-              ) : (
-                endAdornment && (
-                  <InputAdornment position="end" disablePointerEvents={addonProps?.isDisabled}>
-                    {endAdornment}
-                  </InputAdornment>
-                )
-              )}
+            <InputAdornment position="end" className="typeahead-addon-end">
+              {isLoading && <CircularProgress color="inherit" size={20} />}
+              {endAdornment}
               {loadMoreOptions && limitResults && (
-                <IconButton title={paginationText ?? `Load ${limitResults} more`} size="small" onClick={() => setPage((prev) => prev + 1)}>
+                <IconButton title={paginationText ?? `Load ${limitResults} more`} onClick={() => setPage((prev) => prev + 1)}>
                   {paginationIcon ?? <DownloadingSharpIcon fontSize="small" />}
                 </IconButton>
               )}
               {params.InputProps.endAdornment}
-            </>
+            </InputAdornment>
           ),
         },
       }}

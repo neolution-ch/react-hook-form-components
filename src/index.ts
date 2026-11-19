@@ -4,6 +4,7 @@ export * from "./lib/FormattedInput";
 export * from "./lib/StaticTypeaheadInput";
 export * from "./lib/TelephoneNumberInput";
 export * from "./lib/AsyncTypeaheadInput";
+export * from "./lib/types/CommonInputProps";
 export * from "./lib/types/Typeahead";
 export * from "./lib/types/LabelValueOption";
 export * from "./lib/types/Form";
