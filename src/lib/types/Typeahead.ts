@@ -2,7 +2,7 @@ import { RefObject, ReactNode, SyntheticEvent } from "react";
 import { FieldValues } from "react-hook-form";
 import { CommonInputProps } from "./CommonInputProps";
 import { LabelValueOption } from "./LabelValueOption";
-import { AutocompleteCloseReason, TextFieldVariants } from "@mui/material";
+import { AutocompleteCloseReason } from "@mui/material";
 import { AutocompleteInputChangeReason, AutocompleteProps } from "@mui/material/Autocomplete";
 
 export type TypeaheadOptions = LabelValueOption[] | string[];
@@ -19,7 +19,6 @@ interface CommonTypeaheadProps<T extends FieldValues> extends Omit<
   limitResults?: number;
   paginationText?: string;
   paginationIcon?: ReactNode;
-  variant?: TextFieldVariants;
   highlightOptions?: boolean;
   autoSelect?: boolean;
   autoHighlight?: boolean;

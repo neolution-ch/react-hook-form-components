@@ -41,7 +41,6 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
     innerRef,
     multiple,
     disabled,
-    variant,
     label,
     labelToolTip,
     helpText,
@@ -231,7 +230,6 @@ const AsyncTypeaheadInput = <T extends FieldValues>(props: AsyncTypeaheadInputPr
             placeholder={multiple && value.length > 0 ? undefined : placeholder}
             paginationIcon={paginationIcon}
             paginationText={paginationText}
-            variant={variant}
             limitResults={limitResults}
             loadMoreOptions={loadMoreOptions}
             setPage={setPage}

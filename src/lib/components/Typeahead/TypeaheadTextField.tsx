@@ -35,7 +35,6 @@ const TypeaheadTextField = <T extends FieldValues, TRenderAddon = unknown>(props
     placeholder,
     paginationIcon,
     paginationText,
-    variant,
     limitResults,
     isLoading,
     loadMoreOptions,
@@ -77,9 +76,9 @@ const TypeaheadTextField = <T extends FieldValues, TRenderAddon = unknown>(props
       style={style}
       sx={{
         ...(useBootstrapStyle && textFieldBootstrapStyle),
-        ...getTypeaheadAddonLayoutStyle(useBootstrapStyle ? "bootstrap" : (variant ?? "outlined")),
+        ...getTypeaheadAddonLayoutStyle(useBootstrapStyle),
       }}
-      variant={useBootstrapStyle ? undefined : variant}
+      variant="outlined"
       error={hasError}
       label={useBootstrapStyle ? undefined : finalLabel}
       helperText={hasError && !hideErrorMessage ? errorMessage : helpText}

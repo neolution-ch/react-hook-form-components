@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - layout of `TypeaheadTextField`: the selected values (chips) and the input are grouped between the addons, and the custom addon right, the clear icon and the popup icon are rendered together as one end addon on the far right, both for single and multiple selection.
 - `MUI` icon button padding to MUI default.
 
+### Removed
+
+- `variant` from `TypeaheadTextField`: `outlined` is used by default, `useBootstrapStyle` for bootstrap css otherwise.
+
 ## [4.5.0] - 2026-11-11
 
 ### Fixed

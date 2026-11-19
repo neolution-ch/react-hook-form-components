@@ -56,28 +56,21 @@ const textFieldBootstrapStyle: SxProps = {
   },
 };
 
-const typeaheadEndPadding = {
-  bootstrap: "12px",
-  outlined: "9px",
-  filled: "8px",
-  standard: "0px",
-} as const;
-
 /**
  * Lays out an autocomplete text field as [addon start] [values + input] [addon end].
  * MUI positions its clear/popup icons absolutely and reserves space with a fixed padding-right;
  * here they are rendered inside the end addon group as regular flex items instead.
- * @param variant the text field variant, or "bootstrap" when the bootstrap style is used
+ * @param useBootstrapStyle whether the bootstrap style is used
  * @returns the sx props for the text field
  */
-const getTypeaheadAddonLayoutStyle = (variant: keyof typeof typeaheadEndPadding = "outlined") => ({
+const getTypeaheadAddonLayoutStyle = (useBootstrapStyle?: boolean) => ({
   "& .MuiAutocomplete-inputRoot.MuiInputBase-root": {
     flexWrap: "nowrap",
     alignItems: "center",
   },
   // higher specificity than the MUI `.MuiAutocomplete-hasPopupIcon.MuiAutocomplete-hasClearIcon` padding rule
   "& .MuiAutocomplete-inputRoot.MuiInputBase-root.MuiInputBase-formControl.MuiInputBase-adornedEnd": {
-    paddingRight: typeaheadEndPadding[variant],
+    paddingRight: useBootstrapStyle ? "12px" : "9px",
   },
   "& .typeahead-addon-start, & .typeahead-addon-end": {
     flexShrink: 0,
