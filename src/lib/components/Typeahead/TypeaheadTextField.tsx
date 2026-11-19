@@ -89,7 +89,10 @@ const TypeaheadTextField = <T extends FieldValues, TRenderAddon = unknown>(props
           startAdornment: (
             <>
               {startAdornment && (
-                <InputAdornment position="start" className="typeahead-addon-start">
+                <InputAdornment
+                  position="start"
+                  className={`typeahead-addon-start${params.InputProps.startAdornment ? "" : " typeahead-addon-start--no-values"}`}
+                >
                   {startAdornment}
                 </InputAdornment>
               )}

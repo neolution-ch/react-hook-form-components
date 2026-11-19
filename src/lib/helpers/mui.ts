@@ -83,8 +83,8 @@ const getTypeaheadAddonLayoutStyle = (useBootstrapStyle?: boolean) => ({
     alignItems: "center",
     minWidth: 0,
   },
-  "& .typeahead-addon-start": {
-    // adjust the start addon to align with the input field
+  "& .typeahead-addon-start.typeahead-addon-start--no-values": {
+    // adjust the start addon to align with the input field when no chips are rendered
     marginLeft: "-8px",
   },
   "& .typeahead-addon-end": {
