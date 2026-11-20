@@ -29,7 +29,6 @@ storybook-static
 .terraform
 terraform
 
-.npmrc
 *storybook.log
 
 # Ignore vs folder

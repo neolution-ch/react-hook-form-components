@@ -1,10 +1,43 @@
+# The Dependabot Changeset workflow auto-generates a changeset for every PR opened here,
+# so these updates flow through the normal release process.
 version: 2
 updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
+    # Wait a month before updating, to minimize the risk of supply chain attacks.
+    cooldown:
+      default-days: 30
     groups:
       github-actions:
+        patterns:
+          - "*"
+      # Groups default to `applies-to: version-updates`, so security PRs need their own
+      # entry. Cooldown does not apply to security updates, they land immediately.
+      github-actions-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+
+  # The repository root is the published package and holds the tooling as well. The
+  # Cypress test app in cypress/ is not listed. Refresh lockfiles re-resolves its
+  # lockfile within the ranges of its package.json.
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    # 14 days, matching the minimumReleaseAge floor in pnpm-workspace.yaml.
+    cooldown:
+      default-days: 14
+    # Keeps Dependabot from needlessly narrowing peer and dependency ranges, which
+    # matters for a library where a wide range is the point.
+    versioning-strategy: increase-if-necessary
+    groups:
+      npm-ecosystem:
+        patterns:
+          - "*"
+      npm-ecosystem-security:
+        applies-to: security-updates
         patterns:
           - "*"

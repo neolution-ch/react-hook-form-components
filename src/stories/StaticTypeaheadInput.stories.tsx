@@ -23,7 +23,7 @@ const Template: StoryFn<StaticTypeaheadInputProps<FormInterface>> = (args) => (
   </React.Fragment>
 );
 
-export const StaticTypeaheadInputExample = Template.bind({});
+export const StaticTypeaheadInputExample: StoryFn<StaticTypeaheadInputProps<FormInterface>> = Template.bind({});
 StaticTypeaheadInputExample.args = {
   name: "name",
   label: "StaticTypeaheadInput Label",

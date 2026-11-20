@@ -1,0 +1,18 @@
+# No `packages` list: the repository root is the only package, and the one that is published.
+
+# Dependencies allowed to run install/build scripts. pnpm blocks every other one and
+# fails the install when a dependency with a build script is not listed here.
+allowBuilds:
+  "@swc/core": false
+  esbuild: false
+  unrs-resolver: false
+
+# Reject package versions published less than 14 days ago (14 * 24 * 60 = 20160 minutes).
+# Mitigates supply-chain attacks by giving freshly published (potentially malicious) versions
+# time to be detected and pulled before they can be installed.
+minimumReleaseAge: 20160
+
+# Fail the install rather than silently recording an exception. Without this, pnpm appends
+# offending versions to minimumReleaseAgeExclude by itself, which would let the scheduled
+# Refresh lockfiles job quietly bypass the policy it is supposed to respect.
+minimumReleaseAgeStrict: true

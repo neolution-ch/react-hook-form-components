@@ -23,7 +23,7 @@ const Template: StoryFn<DatePickerInputProps<FormInterface>> = (args) => (
   </React.Fragment>
 );
 
-export const DatePickerExample = Template.bind({});
+export const DatePickerExample: StoryFn<DatePickerInputProps<FormInterface>> = Template.bind({});
 DatePickerExample.args = {
   name: "name",
   label: "DatePickerInput Label",

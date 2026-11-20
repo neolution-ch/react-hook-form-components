@@ -1,5 +1,5 @@
 {
-  "name": "@neolution-ch/react-hook-form-components",
+  "name": "@collana-solutions/react-hook-form-components",
   "version": "4.5.0",
   "description": "a collection of react hook form components to reduce boilerplate and figuring out how to integrate react hook form with other libraries",
   "homepage": "https://collana-solutions.github.io/react-hook-form-components",
@@ -8,7 +8,7 @@
     "url": "git+https://github.com/collana-solutions/react-hook-form-components"
   },
   "license": "MIT",
-  "author": "Neolution",
+  "author": "collana solutions AG",
   "sideEffects": false,
   "exports": {
     "./package.json": "./package.json",
@@ -34,18 +34,21 @@
     "dist"
   ],
   "scripts": {
-    "build": "yarn rollup -c",
+    "build": "rollup -c",
     "build-storybook": "storybook build",
-    "che": "yarn --check-files && yarn eslint && yarn build",
+    "che": "pnpm install && pnpm exec eslint && pnpm run build",
     "lint": "eslint --cache",
-    "prepack": "yarn build",
-    "prepare-pr": "yarn prettier . --write && yarn lint && yarn build",
+    "prepack": "pnpm run build",
+    "prepare-pr": "pnpm exec prettier . --write && pnpm run lint && pnpm run build",
     "prettier-check": "prettier --check .",
     "prettier-write": "prettier --write .",
-    "start": "yarn rollup -c -w",
-    "start-all": "concurrently \"yarn start\" \"yarn start-yalc\"",
-    "start-yalc": "yarn nodemon --watch dist -x \"yarn yalc push\"",
-    "storybook": "storybook dev -p 6006"
+    "start": "rollup -c -w",
+    "start-all": "concurrently \"pnpm run start\" \"pnpm run start-yalc\"",
+    "start-yalc": "nodemon --watch dist -x \"yalc push\"",
+    "storybook": "storybook dev -p 6006",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "changeset publish"
   },
   "dependencies": {
     "@babel/runtime": "^7.28.6",
@@ -69,9 +72,12 @@
   },
   "devDependencies": {
     "@babel/core": "^7.29.0",
+    "@changesets/changelog-github": "^1.0.1",
+    "@changesets/cli": "^3.0.3",
+    "@eslint/compat": "^1.4.1",
     "@neolution-ch/eslint-config-neolution": "2.3.0",
+    "@neolution-ch/reactstrap": "^10.0.0",
     "@popperjs/core": "^2.11.8",
-    "@release-it/keep-a-changelog": "^7.0.1",
     "@rollup/plugin-commonjs": "^24.1.0",
     "@rollup/plugin-node-resolve": "^15.0.2",
     "@rollup/plugin-terser": "^0.4.4",
@@ -85,6 +91,7 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@types/uuid": "^9.0.4",
+    "@uiw/react-color-colorful": "^2.9.5",
     "bootstrap": "^5.3.8",
     "concurrently": "^8.0.1",
     "cross-env": "^7.0.3",
@@ -94,12 +101,11 @@
     "google-libphonenumber": "^3.2.43",
     "i18n-iso-countries": "^7.14.0",
     "nodemon": "^2.0.22",
+    "pkg-pr-new": "^0.0.93",
     "prettier": "^3.4.2",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-hook-form": "^7.61.1",
-    "@neolution-ch/reactstrap": "^10.0.0",
-    "release-it": "^19.0.4",
     "rollup": "^4.57.1",
     "rollup-plugin-import-css": "^4.2.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
@@ -112,12 +118,12 @@
     "yalc": "^1.0.0-pre.53"
   },
   "peerDependencies": {
-    "i18n-iso-countries": "^7.14.0",
+    "@neolution-ch/reactstrap": "^10.0.0",
     "google-libphonenumber": "^3.0.0",
+    "i18n-iso-countries": "^7.14.0",
     "react": "^18.0.0 || ^19.0.0",
     "react-dom": "^18.0.0 || ^19.0.0",
-    "react-hook-form": "^7.0.0",
-    "@neolution-ch/reactstrap": "^10.0.0"
+    "react-hook-form": "^7.0.0"
   },
   "engines": {
     "node": ">=18"
@@ -125,5 +131,6 @@
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
-  }
+  },
+  "packageManager": "pnpm@11.22.0"
 }
