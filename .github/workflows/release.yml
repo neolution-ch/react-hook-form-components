@@ -256,10 +256,11 @@ jobs:
             if (!published.length) return;
 
             const newVersion = published[0].version;
-            const newMajor = parseInt(newVersion.split('.')[0], 10);
+            const [newMajor, newMinor, newPatch] = newVersion.split('.').map((part) => parseInt(part, 10));
 
-            // Only act on stable major bumps (not prereleases)
-            if (newVersion.includes('-') || newMajor < 1) return;
+            // Only act on stable major releases (N.0.0). The release tags of this repo go back to
+            // 0.1.0, so a minor or patch release would otherwise branch off the previous major.
+            if (newVersion.includes('-') || newMajor < 1 || newMinor !== 0 || newPatch !== 0) return;
 
             const prevMajor = newMajor - 1;
             const branchName = `release/v${prevMajor}.x`;
