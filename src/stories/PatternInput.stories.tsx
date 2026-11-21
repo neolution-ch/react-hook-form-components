@@ -23,7 +23,7 @@ const Template: StoryFn<FormattedInputProps<FormInterface>> = (args) => (
   </React.Fragment>
 );
 
-export const PatternInputExample = Template.bind({});
+export const PatternInputExample: StoryFn<FormattedInputProps<FormInterface>> = Template.bind({});
 PatternInputExample.args = {
   name: "name",
   label: "FormattedInput Label",

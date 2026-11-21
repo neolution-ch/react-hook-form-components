@@ -1,29 +1,61 @@
-﻿name: PKG PR New
+name: PKG PR New
+
+# Publishes an installable preview build of the package per commit, so a consuming
+# application can be pointed at a branch and validated end to end before anything is
+# released to a permanently version-burned npm version.
+#
+# Needs the pkg.pr.new GitHub App on the repository (https://github.com/apps/pkg-pr-new).
+# Without it the publish step fails with `There is no workflow defined for <id>` (HTTP 404).
 on:
   workflow_dispatch:
   pull_request:
-    types: [opened, synchronize, ready_for_review]
+    types: [opened, synchronize, reopened, ready_for_review]
   push:
-    branches:
-      - main
+    branches: [main]
+
+# A newer push to the same PR supersedes the preview in flight. Runs on main are kept.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions: {}
 
 jobs:
   build:
+    name: Publish preview packages
+    # Only pull requests carry a draft flag. A push to main or a manual run always publishes.
+    if: github.event_name != 'pull_request' || !github.event.pull_request.draft
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: read
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          node-version: 20
+          persist-credentials: false
 
-      - run: yarn --frozen-lockfile
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
 
-      # append the git commit to the package.json version.
-      # We do this because some cache mechanisms (like nextjs) don't work well with the same version and ignore the changes
-      # until you manually delete the cache
-      - run: jq '.version = .version + "-" + env.GITHUB_SHA' package.json > package.json.tmp && mv package.json.tmp package.json
+      - name: Enable Corepack
+        run: corepack enable
 
-      - run: npx pkg-pr-new publish
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm run build
+
+      # Appends the commit to the preview's version. Caches such as the one of Next.js
+      # keep serving the old build of a package whose version did not change.
+      - name: Add commit to version
+        run: jq '.version = .version + "-" + env.GITHUB_SHA' package.json > package.json.tmp && mv package.json.tmp package.json
+
+      # Publishes an installable tarball of the root package for this commit. pkg-pr-new
+      # is a locked dev dependency, so it is subject to the lockfile and the
+      # minimumReleaseAge floor like every other tool. No --compact: compact URLs resolve
+      # through npm, so they fail for a package that has never been released.
+      - name: Publish preview
+        run: pnpm exec pkg-pr-new publish --pnpm # zizmor: ignore[use-trusted-publishing] publishes previews to pkg.pr.new, not to npm

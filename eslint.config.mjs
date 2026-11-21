@@ -3,7 +3,8 @@ import storybook from "eslint-plugin-storybook";
 
 export default [
   {
-    ignores: ["**/cypress/", "**/storybook-static/"],
+    // scripts/ holds release tooling taken from the release playbook and kept in sync with it.
+    ignores: ["**/cypress/", "**/storybook-static/", "scripts/"],
   },
   ...neolutionEslintConfig.configs.flat["react-library"],
   ...storybook.configs["flat/recommended"],

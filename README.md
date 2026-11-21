@@ -26,8 +26,8 @@ Supported input types:
 ## Installation
 
 ```bash
-npm install @neolution-ch/react-hook-form-components
-yarn add @neolution-ch/react-hook-form-components
+npm install @collana-solutions/react-hook-form-components
+yarn add @collana-solutions/react-hook-form-components
 ```
 
 ## Getting started
@@ -244,7 +244,7 @@ Refer to the [react-number-format](https://s-yadav.github.io/react-number-format
 In order to correctly use the form context you have to import it like this:
 
 ```jsx
-import { useFormContext } from "@neolution-ch/react-hook-form-components";
+import { useFormContext } from "@collana-solutions/react-hook-form-components";
 ```
 
 This is needed, as importing it directly from the `react-hook-form`, will produce runtime errors.
@@ -255,7 +255,7 @@ In addition, our context will provide some additional properties for your form.
 To use the tooltip option of `FormGroupLayoutLabel` you have to import the package styles like this:
 
 ```jsx
-import "@neolution-ch/react-hook-form-components/styles.css";
+import "@collana-solutions/react-hook-form-components/styles.css";
 ```
 
 ## Storybook

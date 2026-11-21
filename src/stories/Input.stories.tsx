@@ -23,7 +23,7 @@ const Template: StoryFn<InputProps<FormInterface>> = (args) => (
   </React.Fragment>
 );
 
-export const InputExample = Template.bind({});
+export const InputExample: StoryFn<InputProps<FormInterface>> = Template.bind({});
 InputExample.args = {
   name: "name",
   label: "Input Label",

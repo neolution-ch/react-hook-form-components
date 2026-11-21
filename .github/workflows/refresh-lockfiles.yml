@@ -1,0 +1,91 @@
+name: Refresh lockfiles
+
+# Dependabot only bumps direct dependencies, and pnpm-workspace.yaml holds transitives back
+# behind a 14-day minimumReleaseAge floor. Without a periodic full re-resolve the lockfiles
+# ossify and never pick up patched transitive versions.
+on:
+  workflow_dispatch:
+  schedule:
+    # 04:00 UTC on the first day of each month.
+    - cron: "0 4 1 * *"
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  refresh:
+    name: Refresh pnpm lockfiles
+    runs-on: ubuntu-latest
+    # The PR is opened with the App token, so GITHUB_TOKEN only reads for the checkout.
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      # Delete and re-resolve so the lockfiles move to the newest versions the semver
+      # ranges allow. pnpm always picks the highest match, so a plain install would not
+      # move anything already recorded. --lockfile-only writes the lockfile without
+      # installing any package or running any script, so no dependency code runs before
+      # the App token is created. The Cypress test app is a workspace of its own with
+      # its own lockfile.
+      - name: Refresh pnpm lockfiles
+        run: |
+          rm -f pnpm-lock.yaml cypress/pnpm-lock.yaml
+          pnpm install --lockfile-only
+          pnpm --dir cypress install --lockfile-only
+
+      # The repository root is the published package, so the Changeset Check counts the
+      # refreshed lockfiles as a change to it. They are not published, so the
+      # Dependabot changeset script writes an empty changeset that satisfies the check
+      # without a release.
+      - name: Add changeset
+        env:
+          PR_TITLE: "chore: refresh lockfiles (transitive dependency update)"
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "The lockfiles did not change, so no changeset is needed"
+            exit 0
+          fi
+          node scripts/generate-dependabot-changeset.mjs
+
+      # GitHub does not start pull_request workflows for a push made with GITHUB_TOKEN.
+      # With the App token, CI runs on the refresh PR.
+      - name: Generate App Token
+        id: app-token
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          client-id: ${{ secrets.CHANGESETS_BOT_CLIENT_ID }}
+          private-key: ${{ secrets.CHANGESETS_BOT_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          branch: chore/refresh-lockfiles
+          delete-branch: true
+          title: "chore: refresh lockfiles (transitive dependency update)"
+          commit-message: "chore: refresh lockfiles"
+          body: |
+            Regenerates `pnpm-lock.yaml` and `cypress/pnpm-lock.yaml` so transitive
+            dependencies pick up the newest versions allowed by the ranges already
+            in the manifests.
+
+            No manifest is edited, so nothing here changes the published package.
+            The empty changeset only satisfies the Changeset Check.
+          labels: dependencies
