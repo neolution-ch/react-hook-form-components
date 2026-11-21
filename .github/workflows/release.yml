@@ -253,73 +253,86 @@ jobs:
           github-token: ${{ steps.app-token.outputs.token }}
           script: |
             const published = JSON.parse(process.env.PUBLISHED_PACKAGES);
-            if (!published.length) return;
 
-            const newVersion = published[0].version;
-            const [newMajor, newMinor, newPatch] = newVersion.split('.').map((part) => parseInt(part, 10));
-
-            // Only act on stable major releases (N.0.0). The release tags of this repo go back to
-            // 0.1.0, so a minor or patch release would otherwise branch off the previous major.
-            if (newVersion.includes('-') || newMajor < 1 || newMinor !== 0 || newPatch !== 0) return;
-
-            const prevMajor = newMajor - 1;
-            const branchName = `release/v${prevMajor}.x`;
-
-            // Check if the branch already exists
-            try {
-                await github.rest.repos.getBranch({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    branch: branchName,
-                });
-                console.log(`Branch ${branchName} already exists, skipping.`);
-                return;
-            } catch (e) {
-                if (e.status !== 404) throw e;
+            // Only a stable N.0.0 release starts a new major. Prereleases, 0.x versions and
+            // every later release of the same major leave the release branches alone. With
+            // several fixed groups, packages can reach different majors in one release, so
+            // each new major is handled with the packages that reached it.
+            const newMajors = new Map();
+            for (const p of published) {
+                const match = p.version.match(/^(\d+)\.(\d+)\.(\d+)$/);
+                if (!match) continue;
+                const [major, minor, patch] = match.slice(1).map(Number);
+                if (major < 1 || minor !== 0 || patch !== 0) continue;
+                if (!newMajors.has(major)) newMajors.set(major, new Set());
+                newMajors.get(major).add(p.name);
             }
+            if (!newMajors.size) return;
 
-            // Find the last tag for the previous major version
             const tags = await github.paginate(github.rest.repos.listTags, {
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 per_page: 100,
             });
 
-            // Newest stable release of the previous major. Only tags of the packages just
-            // published (or bare vX.Y.Z tags) count, and versions are compared numerically
-            // because the tag list API does not return tags in version order.
-            const publishedNames = new Set(published.map(p => p.name));
-            const prevTag = tags
-                .map(t => {
-                    const match = t.name.match(/^(?:(.+)@|v)?(\d+)\.(\d+)\.(\d+)$/);
-                    if (!match || (match[1] !== undefined && !publishedNames.has(match[1]))) return null;
-                    return { tag: t, version: [match[2], match[3], match[4]].map(Number) };
-                })
-                .filter(c => c && c.version[0] === prevMajor)
-                .sort((a, b) => b.version[1] - a.version[1] || b.version[2] - a.version[2])[0]?.tag;
+            // changesets tags <package>@X.Y.Z in a workspace and vX.Y.Z when the root is the
+            // only package. The tags of this release show which form the repo uses, so only
+            // that form counts. In a single-package repo, an earlier release tool's vX.Y.Z tags
+            // match as well, which at worst ends in the 403 warning below.
+            const tagNames = new Set(tags.map(t => t.name));
+            const packageTags = published.some(p => tagNames.has(`${p.name}@${p.version}`));
 
-            if (!prevTag) {
-                console.log(`No tag found for v${prevMajor}, skipping branch creation.`);
-                return;
-            }
+            for (const [newMajor, names] of newMajors) {
+                const prevMajor = newMajor - 1;
+                const branchName = `release/v${prevMajor}.x`;
 
-            // Create the branch from the previous major's last tag
-            try {
-                await github.rest.git.createRef({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    ref: `refs/heads/${branchName}`,
-                    sha: prevTag.commit.sha,
-                });
-                console.log(`Created ${branchName} from tag ${prevTag.name} (${prevTag.commit.sha}).`);
-            } catch (e) {
-                // GitHub can refuse to create a branch on an older commit (403). The
-                // release itself already succeeded, so warn with the manual command instead of failing.
-                if (e.status !== 403) throw e;
-                core.warning(
-                    `Could not create ${branchName} from ${prevTag.name}: ${e.message}. ` +
-                        `Create it by hand: git push origin ${prevTag.commit.sha}:refs/heads/${branchName}`,
-                );
+                try {
+                    await github.rest.repos.getBranch({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        branch: branchName,
+                    });
+                    console.log(`Branch ${branchName} already exists, skipping.`);
+                    continue;
+                } catch (e) {
+                    if (e.status !== 404) throw e;
+                }
+
+                // Newest stable release of the previous major among the packages that reached
+                // this one. Versions are compared numerically because the tag list API does not
+                // return tags in version order.
+                const prevTag = tags
+                    .map(t => {
+                        const match = t.name.match(/^(?:(.+)@|v)(\d+)\.(\d+)\.(\d+)$/);
+                        if (!match) return null;
+                        if (packageTags ? !names.has(match[1]) : match[1] !== undefined) return null;
+                        return { tag: t, version: [match[2], match[3], match[4]].map(Number) };
+                    })
+                    .filter(c => c && c.version[0] === prevMajor)
+                    .sort((a, b) => b.version[1] - a.version[1] || b.version[2] - a.version[2])[0]?.tag;
+
+                if (!prevTag) {
+                    console.log(`No tag found for v${prevMajor}, skipping ${branchName}.`);
+                    continue;
+                }
+
+                try {
+                    await github.rest.git.createRef({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        ref: `refs/heads/${branchName}`,
+                        sha: prevTag.commit.sha,
+                    });
+                    console.log(`Created ${branchName} from tag ${prevTag.name} (${prevTag.commit.sha}).`);
+                } catch (e) {
+                    // GitHub can refuse to create a branch on an older commit (403). The
+                    // release itself already succeeded, so warn with the manual command instead of failing.
+                    if (e.status !== 403) throw e;
+                    core.warning(
+                        `Could not create ${branchName} from ${prevTag.name}: ${e.message}. ` +
+                            `Create it by hand: git push origin ${prevTag.commit.sha}:refs/heads/${branchName}`,
+                    );
+                }
             }
 
   backport:
